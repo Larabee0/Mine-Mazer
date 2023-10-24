@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//VOIDLYNX. 2022. 'Unity Script: FPS Player Camera'. Voidlynx March 2022. Available at: https://www.voidlynx.com/2022/03/unity-script-fps-player-camera.html [accessed 24 October 2023].
 public class Camera_Movement : MonoBehaviour
 {
     public float mouseSensitivity = 100f;
