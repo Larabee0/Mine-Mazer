@@ -14,8 +14,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
 {
     [SerializeField] private List<TunnelSection> tunnelSections;
 
-
-
     [SerializeField] private TunnelSection nextNextPlayerSection;
     [SerializeField] private TunnelSection nextPlayerSection;
 
@@ -24,6 +22,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     [SerializeField] private TunnelSection prevPlayerSection;
     [SerializeField] private TunnelSection prevPrevPlayerSection;
 
+    [SerializeField, Min(1000)]private int maxInterations = 1000000000;
 
     private TunnelSection lastEnter;
     private TunnelSection lastExit;
@@ -134,9 +133,47 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             primary.ExcludePrefabConnections.ForEach(item => nextSections.RemoveAll(element => element == item));
         }
-
+        int iterations = maxInterations;
+        TunnelSection targetSection = null;
+        while(targetSection == null)
+        {
+            targetSection = nextSections.ElementAt(Random.Range(0, nextSections.Count));
+            if (IntersectionTest(targetSection))
+            {
+                break;
+            }
+            iterations--;
+            if(iterations <= 0)
+            {
+                throw new System.StackOverflowException("Failed to find section that passed Intersection Test");
+            }
+        }
 
         return InstinateSection(nextSections.ElementAt(Random.Range(0, nextSections.Count)));
+    }
+
+    private bool IntersectionTest(TunnelSection target)
+    {
+        Vector3 pos = Vector3.zero;
+        Quaternion rot = Quaternion.identity;
+        for (int i = 0; i < target.BoundingBoxes.Length; i++)
+        {
+            BoxBounds boxBounds = target.BoundingBoxes[i];
+            if(Physics.CheckBox(pos + boxBounds.center, boxBounds.size, rot))
+            {
+                return false;
+            }
+        }
+
+        for (int i = 0; i < target.BoundingCaps.Length; i++)
+        {
+            CapsuleBounds capBounds = target.BoundingCaps[i];
+            if (Physics.CheckCapsule(pos + capBounds.center,pos,capBounds.radius))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private TunnelSection InstinateSection(int index)

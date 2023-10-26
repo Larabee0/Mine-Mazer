@@ -13,7 +13,10 @@ public class TunnelSection : MonoBehaviour
     [SerializeField] private Transform endPos;
 
     [SerializeField] private BoxBounds[] boundingBoxes;
-    [SerializeField] private CapsuleBounds[] capsuleBounds;
+    [SerializeField] private CapsuleBounds[] boundingCaps;
+
+    public BoxBounds[] BoundingBoxes => boundingBoxes;
+    public CapsuleBounds[] BoundingCaps=> boundingCaps;
 
     public Transform StartPos => startPos;
     public Transform EndPos => endPos;
@@ -40,6 +43,14 @@ public class TunnelSection : MonoBehaviour
         }
     }
 
+    private void OnValidate()
+    {
+        for (int i = 0; i < boundingCaps.Length; i++)
+        {
+            boundingCaps[i].height = boundingCaps[i].height >= (2 * boundingCaps[i].radius) ? boundingCaps[i].height : 2 * boundingCaps[i].radius;
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Matrix4x4 angleMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Handles.matrix.lossyScale);
@@ -47,13 +58,25 @@ public class TunnelSection : MonoBehaviour
         Handles.matrix = angleMatrix;
         Handles.color = Color.red;
         Gizmos.color = Color.red;
-        for (int i = 0; i < boundingBoxes.Length; i++)
+        if(boundingBoxes != null)
         {
-            Gizmos.DrawWireCube(boundingBoxes[i].center, boundingBoxes[i].size);
+            for (int i = 0; i < boundingBoxes.Length; i++)
+            {
+                angleMatrix = Matrix4x4.TRS(transform.position, transform.rotation * Quaternion.Euler(boundingBoxes[i].oreintation), Handles.matrix.lossyScale);
+                Gizmos.matrix = angleMatrix;
+                Handles.matrix = angleMatrix;
+                Gizmos.DrawWireCube(boundingBoxes[i].center, boundingBoxes[i].size);
+            }
         }
-        for (int i = 0; i < capsuleBounds.Length; i++)
+        if(boundingCaps != null)
         {
-            ExtraUtilities.DrawWireCapsule(capsuleBounds[i].center,capsuleBounds[i].radius, capsuleBounds[i].hieght);
+            for (int i = 0; i < boundingCaps.Length; i++)
+            {
+                angleMatrix = Matrix4x4.TRS(transform.position+ boundingCaps[i].center, transform.rotation * Quaternion.Euler(boundingCaps[i].oreintation), Handles.matrix.lossyScale);
+                Gizmos.matrix = angleMatrix;
+                Handles.matrix = angleMatrix;
+                ExtraUtilities.DrawWireCapsule(boundingCaps[i].radius, boundingCaps[i].height);
+            }
         }
     }
 

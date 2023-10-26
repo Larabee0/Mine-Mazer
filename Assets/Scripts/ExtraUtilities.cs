@@ -5,8 +5,9 @@ using UnityEngine;
 
 public static class ExtraUtilities
 {
-    public static void DrawWireCapsule(Vector3 center,float _radius, float _height)
+    public static void DrawWireCapsule(float _radius, float _height)
     {
+        Vector3 center = Vector3.zero;
         var pointOffset = (_height - (_radius * 2)) / 2;
         
         //draw sideways
