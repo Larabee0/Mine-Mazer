@@ -21,3 +21,13 @@ public struct BoxBounds
     public Vector3 oreintation;
     public Vector3 size;
 }
+
+[System.Serializable]
+public struct Connector
+{
+    public static Connector Empty = new() { localPosition = Vector3.zero, localRotation = Quaternion.identity };
+    public Vector3 localPosition;
+    public Quaternion localRotation;
+
+    public Matrix4x4 Matrix => Matrix4x4.TRS(localPosition, localRotation, Vector3.one);
+}

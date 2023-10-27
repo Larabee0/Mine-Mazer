@@ -9,17 +9,15 @@ public class TunnelSection : MonoBehaviour
 
     [SerializeField] private StartEnd lastUsed = StartEnd.Unused;
 
-    [SerializeField] private Transform startPos;
-    [SerializeField] private Transform endPos;
+    public Connector startConnector = Connector.Empty;
+    public Connector endConnector = Connector.Empty;
 
-    [SerializeField] private BoxBounds[] boundingBoxes;
-    [SerializeField] private CapsuleBounds[] boundingCaps;
+    public BoxBounds[] boundingBoxes;
+    public CapsuleBounds[] boundingCaps;
 
     public BoxBounds[] BoundingBoxes => boundingBoxes;
     public CapsuleBounds[] BoundingCaps=> boundingCaps;
 
-    public Transform StartPos => startPos;
-    public Transform EndPos => endPos;
     public StartEnd LastUsed
     {
         get => lastUsed;
@@ -28,8 +26,29 @@ public class TunnelSection : MonoBehaviour
 
     public List<TunnelSection> ExcludePrefabConnections => excludePrefabConnections;
 
+    public Vector3 GetConnectorWorldPos(Connector connector, out Quaternion rotation)
+    {
+        return GetWorldPosFromMatrix(GetLTWConnectorMatrix(connector), out rotation);
+    }
+
+    public static Vector3 GetWorldPosFromMatrix(Matrix4x4 matrix,out Quaternion rotation)
+    {
+        rotation = matrix.rotation;
+        return matrix.GetPosition();
+    }
+
+    public Matrix4x4 GetLTWConnectorMatrix(Connector connector)
+    {
+        return GetLTWConnectorMatrix(transform.localToWorldMatrix, connector);
+    }
+    public static Matrix4x4 GetLTWConnectorMatrix(Matrix4x4 ltw,Connector connector)
+    {
+        return ltw * connector.Matrix;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.CompareTag("Player"))
         {
             GetComponentInParent<SpatialParadoxGenerator>().PlayerEnterSection(this);
@@ -45,17 +64,27 @@ public class TunnelSection : MonoBehaviour
 
     private void OnValidate()
     {
-        for (int i = 0; i < boundingCaps.Length; i++)
+        if (boundingCaps != null)
         {
-            boundingCaps[i].height = boundingCaps[i].height >= (2 * boundingCaps[i].radius) ? boundingCaps[i].height : 2 * boundingCaps[i].radius;
+            for (int i = 0; i < boundingCaps.Length; i++)
+            {
+                boundingCaps[i].height = boundingCaps[i].height >= (2 * boundingCaps[i].radius) ? boundingCaps[i].height : 2 * boundingCaps[i].radius;
+            }
         }
     }
 
     private void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.cyan;
+        Gizmos.matrix = GetLTWConnectorMatrix(transform.localToWorldMatrix, startConnector);
+        Gizmos.DrawCube(Vector3.zero, 0.5f * Vector3.one);
+        Gizmos.matrix = GetLTWConnectorMatrix(transform.localToWorldMatrix, endConnector);
+        Gizmos.DrawCube(Vector3.zero, 0.5f * Vector3.one);
+
+
         Matrix4x4 angleMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Handles.matrix.lossyScale);
-        Gizmos.matrix = angleMatrix;
         Handles.matrix = angleMatrix;
+        Gizmos.matrix = angleMatrix;
         Handles.color = Color.red;
         Gizmos.color = Color.red;
         if(boundingBoxes != null)
