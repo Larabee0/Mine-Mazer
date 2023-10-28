@@ -7,10 +7,7 @@ public class TunnelSection : MonoBehaviour
 {
     [SerializeField] private List<TunnelSection> excludePrefabConnections = new();
 
-    [SerializeField] private StartEnd lastUsed = StartEnd.Unused;
-
-    public Connector startConnector = Connector.Empty;
-    public Connector endConnector = Connector.Empty;
+    public Connector[] connectors;
 
     public BoxBounds[] boundingBoxes;
     public CapsuleBounds[] boundingCaps;
@@ -18,33 +15,10 @@ public class TunnelSection : MonoBehaviour
     public BoxBounds[] BoundingBoxes => boundingBoxes;
     public CapsuleBounds[] BoundingCaps=> boundingCaps;
 
-    public StartEnd LastUsed
-    {
-        get => lastUsed;
-        set => lastUsed = value;
-    }
+    public HashSet<int> InUse = new();
+    public Dictionary<int, System.Tuple<TunnelSection, int>> connectorPairs = new();
 
     public List<TunnelSection> ExcludePrefabConnections => excludePrefabConnections;
-
-    public Vector3 GetConnectorWorldPos(Connector connector, out Quaternion rotation)
-    {
-        return GetWorldPosFromMatrix(GetLTWConnectorMatrix(connector), out rotation);
-    }
-
-    public static Vector3 GetWorldPosFromMatrix(Matrix4x4 matrix,out Quaternion rotation)
-    {
-        rotation = matrix.rotation;
-        return matrix.GetPosition();
-    }
-
-    public Matrix4x4 GetLTWConnectorMatrix(Connector connector)
-    {
-        return GetLTWConnectorMatrix(transform.localToWorldMatrix, connector);
-    }
-    public static Matrix4x4 GetLTWConnectorMatrix(Matrix4x4 ltw,Connector connector)
-    {
-        return ltw * connector.Matrix;
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -73,13 +47,23 @@ public class TunnelSection : MonoBehaviour
         }
     }
 
+    public static Matrix4x4 GetLTWConnectorMatrix(Matrix4x4 ltw, Connector connector)
+    {
+        return ltw * connector.Matrix;
+    }
+
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.cyan;
-        Gizmos.matrix = GetLTWConnectorMatrix(transform.localToWorldMatrix, startConnector);
-        Gizmos.DrawCube(Vector3.zero, 0.5f * Vector3.one);
-        Gizmos.matrix = GetLTWConnectorMatrix(transform.localToWorldMatrix, endConnector);
-        Gizmos.DrawCube(Vector3.zero, 0.5f * Vector3.one);
+        if (connectors != null)
+        {
+            Gizmos.color = Color.cyan;
+            for (int i = 0; i < connectors.Length; i++)
+            {
+                Gizmos.matrix = GetLTWConnectorMatrix(transform.localToWorldMatrix, connectors[i]);
+                Gizmos.DrawCube(Vector3.zero, 0.5f * Vector3.one);
+            }
+        }
+
 
 
         Matrix4x4 angleMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Handles.matrix.lossyScale);

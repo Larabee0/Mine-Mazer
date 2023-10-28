@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [CustomEditor(typeof(SectionBaker))]
 public class SectionBakerEditor : Editor
@@ -57,27 +59,28 @@ public class SectionBakerEditor : Editor
             Destroy(section);
         }
 
-
-
         section = prefab.AddComponent<TunnelSection>();
+        if (baker.ConnectorObjects != null)
+        {
+            section.connectors = new Connector[baker.ConnectorObjects.Length];
+
+            section.connectorPairs = new(section.connectors.Length);
+            for (int i = 0; i < baker.ConnectorObjects.Length; i++)
+            {
+                section.connectors[i] = new Connector()
+                {
+                    internalIndex = i,
+                    localPosition = baker.ConnectorObjects[i].transform.localPosition,
+                    localRotation = baker.ConnectorObjects[i].transform.localRotation
+                };
+                section.connectorPairs.Add(i,null);
+            }
+        }
+
         section.boundingBoxes = boxBounds.ToArray();
         section.boundingCaps = capBounds.ToArray();
-        if (baker.SectionStart != null)
-        {
-            section.startConnector = new Connector()
-            {
-                localPosition = baker.SectionStart.transform.localPosition,
-                localRotation = baker.SectionStart.transform.localRotation
-            };
-        }
-        if (baker.SectionEnd != null)
-        {
-            section.endConnector = new Connector()
-            {
-                localPosition = baker.SectionEnd.transform.localPosition,
-                localRotation = baker.SectionEnd.transform.localRotation
-            };
-        }
+
+
         
     }
 }

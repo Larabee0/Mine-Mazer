@@ -28,6 +28,23 @@ public struct Connector
     public static Connector Empty = new() { localPosition = Vector3.zero, localRotation = Quaternion.identity };
     public Vector3 localPosition;
     public Quaternion localRotation;
+    public Vector3 position;
+    public Quaternion rotation;
+
+    public Vector3 parentPos;
+    public int internalIndex;
 
     public Matrix4x4 Matrix => Matrix4x4.TRS(localPosition, localRotation, Vector3.one);
+
+    public Vector3 Forward => rotation * Vector3.forward;
+    public Vector3 Back => rotation * Vector3.back;
+
+
+    public void UpdateWorldPos(Matrix4x4 transform)
+    {
+        parentPos = transform.GetPosition();
+        Matrix4x4 ltw = transform * Matrix;
+        position = ltw.GetPosition();
+        rotation = ltw.rotation;
+    }
 }

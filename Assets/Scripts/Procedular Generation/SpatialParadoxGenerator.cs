@@ -3,24 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum StartEnd
-{
-    Unused,
-    Start,
-    End
-}
-
 public class SpatialParadoxGenerator : MonoBehaviour
 {
     [SerializeField] private List<TunnelSection> tunnelSections;
 
-    [SerializeField] private TunnelSection nextNextPlayerSection;
-    [SerializeField] private TunnelSection nextPlayerSection;
+    [SerializeField] private List<TunnelSection> nextNextPlayerSections=new();
+    [SerializeField] private List<TunnelSection> nextPlayerSections = new();
 
     [SerializeField] private TunnelSection curPlayerSection;
 
-    [SerializeField] private TunnelSection prevPlayerSection;
-    [SerializeField] private TunnelSection prevPrevPlayerSection;
+    [SerializeField] private List<TunnelSection> prevPlayerSections = new();
+    [SerializeField] private List<TunnelSection> prevPrevPlayerSections = new();
 
     [SerializeField, Min(1000)] private int maxInterations = 1000000000;
 
@@ -39,17 +32,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
         curPlayerSection = InstinateSection(spawnIndex);
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
 
-        nextPlayerSection = PickSection(curPlayerSection, out StartEnd priPref, out StartEnd secPref);
-        TransformSection(curPlayerSection, nextPlayerSection, priPref, secPref);
+        int nextIters = curPlayerSection.connectors.Length / 2;
+        int prevIters = curPlayerSection.connectors.Length - nextIters;
+        
+        FillOneDstList(nextPlayerSections, curPlayerSection, nextIters);
+        FillOneDstList(prevPlayerSections, curPlayerSection, prevIters);
 
-        nextNextPlayerSection = PickSection(nextPlayerSection, out priPref, out secPref);
-        TransformSection(nextPlayerSection, nextNextPlayerSection, priPref, secPref);
-        
-        prevPlayerSection = PickSection(curPlayerSection, out priPref, out secPref);
-        TransformSection(curPlayerSection, prevPlayerSection, priPref, secPref);
-        
-        prevPrevPlayerSection = PickSection(prevPlayerSection, out priPref, out secPref);
-        TransformSection(prevPlayerSection, prevPrevPlayerSection, priPref, secPref);
+        FillTwoDstList(nextPlayerSections, nextNextPlayerSections);
+        FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
     }
 
     public void PlayerExitSection(TunnelSection section)
@@ -76,59 +66,126 @@ public class SpatialParadoxGenerator : MonoBehaviour
     {
         if (lastExit == curPlayerSection && lastEnter != curPlayerSection)
         {
-            if (lastEnter == nextPlayerSection)
+            if (nextPlayerSections.Contains(lastEnter))
             {
-                Destroy(prevPrevPlayerSection.gameObject);
-
-                prevPrevPlayerSection = null;
-
-                prevPrevPlayerSection = prevPlayerSection;
-                prevPlayerSection = curPlayerSection;
-                curPlayerSection = lastEnter;
-                nextPlayerSection = nextNextPlayerSection;
-                nextNextPlayerSection = PickSection(nextPlayerSection,out StartEnd priPref, out StartEnd secPref);
-                TransformSection(nextPlayerSection, nextNextPlayerSection, priPref, secPref);
+                IncrementForward();
             }
-            else if (lastEnter == prevPlayerSection)
+            else if (prevPlayerSections.Contains(lastEnter))
             {
-                Destroy(nextNextPlayerSection.gameObject);
-                nextNextPlayerSection = null;
-
-                nextNextPlayerSection = nextPlayerSection;
-                nextPlayerSection = curPlayerSection;
-                curPlayerSection = lastEnter;
-                prevPlayerSection = prevPrevPlayerSection;
-                prevPrevPlayerSection = PickSection(prevPlayerSection, out StartEnd priPref, out StartEnd secPref);
-                TransformSection(prevPlayerSection, prevPrevPlayerSection, priPref, secPref);
+                IncrementBackward();
             }
         }
         lastEnter = null;
         lastExit = null;
     }
 
-    private void TransformSection(TunnelSection primary, TunnelSection secondary, StartEnd primaryPreference, StartEnd secondaryPreference)
+    private void IncrementForward()
     {
-        switch (primaryPreference)
+        // destroy sections now 3 sections back.
+        prevPrevPlayerSections.ForEach(section => DestroySection(section));
+        prevPrevPlayerSections.Clear();
+
+        // add sections that were 1 section back to the 2 back list.
+        prevPrevPlayerSections.AddRange(prevPlayerSections);
+        prevPlayerSections.Clear(); // clear the 1 back list
+
+        prevPlayerSections.Add(curPlayerSection); // add the old currentSection to the 1 back list
+
+        curPlayerSection = lastEnter; // update to new currentSection
+
+        nextPlayerSections.Remove(curPlayerSection); // remove the new curSection from the 1 foward list
+        // for each remaining item
+        nextPlayerSections.ForEach(section =>
         {
-            case StartEnd.Start when secondaryPreference == StartEnd.Start:
-                TransformSectionStartToStart(primary, secondary);
-                break;
-            case StartEnd.Start when secondaryPreference == StartEnd.End:
-                TransformSectionStartToEnd(primary, secondary);
-                break;
-            case StartEnd.End when secondaryPreference == StartEnd.Start:
-                TransformSectionEndToStart(primary, secondary);
-                break;
-            case StartEnd.End when secondaryPreference == StartEnd.End:
-                TransformSectionEndToEnd(primary, secondary);
-                break;
+            prevPlayerSections.Add(section); // add it to the 1 back list
+
+            // for any links it has to 2 foward sections
+            List<System.Tuple<TunnelSection, int>> links = new(section.connectorPairs.Values);
+            links.ForEach(link =>
+            {
+                if (link.Item1 != curPlayerSection) // exclude connection to the new currentSection
+                {
+                    nextNextPlayerSections.Remove(link.Item1); // remove it from 2 forward
+                    prevPrevPlayerSections.Add(link.Item1); // add it to 2 back
+                }
+            });
+        });
+        nextPlayerSections.Clear(); // clear 1 forward list
+        nextPlayerSections.AddRange(nextNextPlayerSections); // add remaining items of 2 forward list
+        nextNextPlayerSections.Clear(); // clear 2 forward list
+
+        FillTwoDstList(nextPlayerSections, nextNextPlayerSections);
+    }
+
+    private void IncrementBackward()
+    {
+        // destroy sections now 3 sections forward.
+        nextNextPlayerSections.ForEach(section => DestroySection(section));
+        nextNextPlayerSections.Clear();
+
+        // add sections that were 1 section forward to the 2 back list.
+        nextNextPlayerSections.AddRange(nextPlayerSections);
+        nextPlayerSections.Clear(); // clear the 1 forward list
+
+        nextPlayerSections.Add(curPlayerSection); // add the old currentSection to the 1 forward list
+
+        curPlayerSection = lastEnter; // update to new currentSection
+
+        prevPlayerSections.Remove(curPlayerSection); // remove the new curSection from the 1 back list
+                                                     // for each remaining item
+        prevPlayerSections.ForEach(section =>
+        {
+            nextPlayerSections.Add(section); // add it to the 1 forward list
+
+            // for any links it has to 2 foward sections
+            List<System.Tuple<TunnelSection, int>> links = new(section.connectorPairs.Values);
+            links.ForEach(link =>
+            {
+                if (link.Item1 != curPlayerSection) // exclude connection to the new currentSection
+                {
+                    prevPrevPlayerSections.Remove(link.Item1); // remove it from 2 back
+                    nextNextPlayerSections.Add(link.Item1); // add it to 2 forward
+                }
+            });
+        });
+        prevPlayerSections.Clear(); // clear 1 back list
+        prevPlayerSections.AddRange(prevPrevPlayerSections); // add remaining items of 2 back list
+        prevPrevPlayerSections.Clear(); // clear 2 back list
+
+        FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
+    }
+
+    private void FillOneDstList(List<TunnelSection> oneDstList, TunnelSection primarySection, int iterations)
+    {
+        for (int j = 0; j < iterations; j++)
+        {
+            // pick a new section to connect to
+            TunnelSection newSection = PickSection(primarySection, out Connector priPref, out Connector secPref);
+            oneDstList.Add(newSection);
+            TransformSection(primarySection, newSection, priPref, secPref); // position new section
         }
     }
 
-    private TunnelSection PickSection(TunnelSection primary, out StartEnd primaryPreference, out StartEnd secondaryPreference)
+    private void FillTwoDstList(List<TunnelSection> oneDstList, List<TunnelSection> twoDstList)
     {
-        primaryPreference = StartEnd.Unused;
-        secondaryPreference = StartEnd.Unused;
+        for (int i = 0; i < oneDstList.Count; i++) // for each item in 1 back
+        {
+            TunnelSection section = oneDstList[i];
+            // for each connector -1 (exlucde connection to current section)
+            for (int j = 0; j < section.connectors.Length - 1; j++)
+            {
+                // pick a new section to connect to
+                TunnelSection newSection = PickSection(section, out Connector priPref, out Connector secPref);
+                twoDstList.Add(newSection); // add this to 2 back
+                TransformSection(section, newSection, priPref, secPref); // position new section
+            }
+        }
+    }
+
+    private TunnelSection PickSection(TunnelSection primary, out Connector primaryPreference, out Connector secondaryPreference)
+    {
+        primaryPreference = Connector.Empty;
+        secondaryPreference = Connector.Empty;
         List<TunnelSection> nextSections = new(tunnelSections);
 
         if (primary.ExcludePrefabConnections.Count > 0)
@@ -140,7 +197,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         while (targetSection == null)
         {
             targetSection = nextSections.ElementAt(Random.Range(0, nextSections.Count));
-            if (IntersectionTest(primary,targetSection, out primaryPreference, out secondaryPreference))
+            if (IntersectionTest(primary, targetSection, out primaryPreference, out secondaryPreference))
             {
                 break;
             }
@@ -154,29 +211,17 @@ public class SpatialParadoxGenerator : MonoBehaviour
         return InstinateSection(nextSections.ElementAt(Random.Range(0, nextSections.Count)));
     }
 
-    private bool IntersectionTest(TunnelSection primary, TunnelSection target, out StartEnd primaryPreference, out StartEnd secondaryPreference)
+    private bool IntersectionTest(TunnelSection primary, TunnelSection target, out Connector primaryConnector, out Connector secondaryConnector)
     {
-        GetPreference(primary, target,out primaryPreference,out secondaryPreference);
+
+        primaryConnector = GetConnectorFromSection(primary);
+        secondaryConnector = GetConnectorFromSection(target);
+
+        primaryConnector.UpdateWorldPos(primary.transform.localToWorldMatrix);
+        secondaryConnector.UpdateWorldPos(target.transform.localToWorldMatrix);
 
 
-        Vector3 pos = Vector3.zero;
-        Quaternion rot = Quaternion.identity;
-
-        switch (primaryPreference)
-        {
-            case StartEnd.Start when secondaryPreference == StartEnd.Start:
-                CalculateSectionStartToStart(primary, target, out pos, out rot);
-                break;
-            case StartEnd.Start when secondaryPreference == StartEnd.End:
-                CalculateSectionStartToEnd(primary, target, out pos, out rot);
-                break;
-            case StartEnd.End when secondaryPreference == StartEnd.Start:
-                CalculateSectionEndToStart(primary, target, out pos, out rot);
-                break;
-            case StartEnd.End when secondaryPreference == StartEnd.End:
-                CalculateSectionEndToEnd(primary, target, out pos, out rot);
-                break;
-        }
+        CalculateSectionTransform(primaryConnector, secondaryConnector, out Vector3 pos, out Quaternion rot);
 
         for (int i = 0; i < target.BoundingBoxes.Length; i++)
         {
@@ -199,22 +244,23 @@ public class SpatialParadoxGenerator : MonoBehaviour
         return true;
     }
 
-    private void GetPreference(TunnelSection primary, TunnelSection secondary, out StartEnd primaryPreference, out StartEnd secondaryPreference)
+    public Connector GetConnectorFromSection(TunnelSection section)
     {
-        primaryPreference = primary.LastUsed switch
+        int iterations = maxInterations;
+        while (true)
         {
-            StartEnd.Start => StartEnd.End,
-            StartEnd.End => StartEnd.Start,
-            _ => Random.value < 0.5f ? StartEnd.End : StartEnd.Start,
-        };
-        secondaryPreference = secondary.LastUsed switch
-        {
-            StartEnd.Start => StartEnd.End,
-            StartEnd.End => StartEnd.Start,
-            _ => Random.value > 0.5f ? StartEnd.End : StartEnd.Start,
-        };
-
-
+            iterations--;
+            if(iterations <= 0)
+            {
+                throw new System.StackOverflowException("Failed to find avalible connector");
+            }
+            int connectorIndex = Random.Range(0,section.connectors.Length);
+            if (section.InUse.Contains(connectorIndex))
+            {
+                continue;
+            }
+            return section.connectors[connectorIndex];
+        }
     }
 
     private TunnelSection InstinateSection(int index)
@@ -230,97 +276,39 @@ public class SpatialParadoxGenerator : MonoBehaviour
         return section;
     }
 
-    private static void TransformSectionStartToEnd(TunnelSection primary, TunnelSection secondary)
+    private void DestroySection(TunnelSection section)
     {
-        CalculateSectionStartToEnd(primary, secondary,out Vector3 pos, out Quaternion rot);
-        secondary.transform.SetPositionAndRotation(pos, rot);
-        primary.LastUsed = StartEnd.Start;
-        secondary.LastUsed = StartEnd.End;
+        List<int> pairKeys = new(section.connectorPairs.Keys);
+        pairKeys.ForEach(key =>
+        {
+            System.Tuple<TunnelSection, int> sectionTwin = section.connectorPairs[key];
+            if (sectionTwin != null && sectionTwin.Item1 != null)
+            {
+                sectionTwin.Item1.connectorPairs[sectionTwin.Item2] = null;
+                sectionTwin.Item1.InUse.Remove(sectionTwin.Item2);
+            }
+        });
+        Destroy(section.gameObject);
     }
 
-    private static void CalculateSectionStartToEnd(TunnelSection primary, TunnelSection secondary, out  Vector3 position, out Quaternion rotation)
+    private static void TransformSection(TunnelSection primary, TunnelSection secondary, Connector primaryConnector, Connector secondaryConnector)
     {
-        Connector priStart = primary.startConnector;
-        Connector secEnd = secondary.endConnector;
-        Vector3 priStartConnPos = primary.GetConnectorWorldPos(priStart, out Quaternion priStartConnRot);
-        Vector3 secEndConnPos = secondary.GetConnectorWorldPos(secEnd, out Quaternion secEndConnRot);
+        CalculateSectionTransform(primaryConnector, secondaryConnector, out Vector3 pos, out Quaternion rot);
+        secondary.transform.SetPositionAndRotation(pos, rot);
 
-        Vector3 offset = secEnd.localPosition;
-        rotation = ExtraUtilities.BetweenDirections(secEndConnRot * Vector3.back, priStartConnRot * Vector3.forward);
+        primary.connectorPairs[primaryConnector.internalIndex] = new(secondary, secondaryConnector.internalIndex);
+        secondary.connectorPairs[secondaryConnector.internalIndex] = new(primary, primaryConnector.internalIndex);
+        primary.InUse.Add(primaryConnector.internalIndex);
+        secondary.InUse.Add(secondaryConnector.internalIndex);
+    }
+
+    private static void CalculateSectionTransform(Connector primary, Connector secondary, out Vector3 position, out Quaternion rotation)
+    {
+        Vector3 offset = secondary.localPosition;
+        rotation = ExtraUtilities.BetweenDirections(secondary.Back, primary.Forward);
         offset = rotation.RotatePosition(offset);
 
-        position = priStartConnPos - offset;
-        position.y = primary.transform.position.y + (priStartConnPos.y - secEndConnPos.y);
-    }
-
-
-    private static void TransformSectionStartToStart(TunnelSection primary, TunnelSection secondary)
-    {
-        CalculateSectionStartToStart(primary, secondary, out Vector3 pos, out Quaternion rot);
-        secondary.transform.SetPositionAndRotation(pos, rot);
-        primary.LastUsed = StartEnd.Start;
-        secondary.LastUsed = StartEnd.Start;
-    }
-    
-    private static void CalculateSectionStartToStart(TunnelSection primary, TunnelSection secondary, out Vector3 position, out Quaternion rotation)
-    {
-        Connector priStart = primary.startConnector;
-        Connector secStart = secondary.startConnector;
-        Vector3 priStartConnPos = primary.GetConnectorWorldPos(priStart, out Quaternion priStartConnRot);
-        Vector3 secStartConnPos = secondary.GetConnectorWorldPos(secStart, out Quaternion secStartConnRot);
-
-        Vector3 offset = secStart.localPosition;
-        rotation = ExtraUtilities.BetweenDirections(secStartConnRot * Vector3.back, priStartConnRot * Vector3.forward);
-        offset = rotation.RotatePosition(offset);
-
-
-        position = priStartConnPos - offset;
-        position.y = primary.transform.position.y + (priStartConnPos.y - secStartConnPos.y);
-    }
-
-    private static void TransformSectionEndToEnd(TunnelSection primary, TunnelSection secondary)
-    {
-        CalculateSectionEndToEnd(primary, secondary, out Vector3 pos,out Quaternion rot);
-        secondary.transform.SetPositionAndRotation(pos, rot);
-        primary.LastUsed = StartEnd.End;
-        secondary.LastUsed = StartEnd.End;
-    }
-
-    private static void CalculateSectionEndToEnd(TunnelSection primary, TunnelSection secondary, out Vector3 position, out Quaternion rotation)
-    {
-        Connector priEnd = primary.endConnector;
-        Connector secEnd = secondary.endConnector;
-        Vector3 priEndConnPos = primary.GetConnectorWorldPos(priEnd, out Quaternion priEndConnRot);
-        Vector3 secEndConnPos = secondary.GetConnectorWorldPos(secEnd, out Quaternion secEndConnRot);
-
-        Vector3 offset = secEnd.localPosition;
-        rotation = ExtraUtilities.BetweenDirections(secEndConnRot * Vector3.back, priEndConnRot * Vector3.forward);
-        offset = rotation.RotatePosition(offset);
-
-        position = priEndConnPos - offset;
-        position.y = primary.transform.position.y + (priEndConnPos.y - secEndConnPos.y);
-    }
-
-    private static void TransformSectionEndToStart(TunnelSection primary, TunnelSection secondary)
-    {
-        CalculateSectionEndToStart(primary, secondary, out Vector3 pos,out Quaternion rot);
-        secondary.transform.SetPositionAndRotation(pos, rot);
-        primary.LastUsed = StartEnd.End;
-        secondary.LastUsed = StartEnd.Start;
-    }
-    
-    private static void CalculateSectionEndToStart(TunnelSection primary, TunnelSection secondary, out Vector3 position, out Quaternion rotation)
-    {
-        Connector priEnd = primary.endConnector;
-        Connector secStart = secondary.startConnector;
-        Vector3 priEndConnPos = primary.GetConnectorWorldPos(priEnd, out Quaternion priEndConnRot);
-        Vector3 secStartConnPos = secondary.GetConnectorWorldPos(secStart, out Quaternion secStartConnRot);
-
-        Vector3 offset = secStart.localPosition;
-        rotation = ExtraUtilities.BetweenDirections(secStartConnRot * Vector3.back, priEndConnRot * Vector3.forward);
-        offset = rotation.RotatePosition(offset);
-
-        position = priEndConnPos - offset;
-        position.y = primary.transform.position.y + (priEndConnPos.y - secStartConnPos.y);
+        position = primary.position - offset;
+        position.y = primary.parentPos.y + (primary.position.y - secondary.position.y);
     }
 }
