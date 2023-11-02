@@ -20,6 +20,7 @@ public struct BoxBounds
     public Vector3 center;
     public Vector3 oreintation;
     public Vector3 size;
+    public Matrix4x4 Matrix => Matrix4x4.TRS(center, Quaternion.Euler(oreintation), Vector3.one);
 }
 
 [System.Serializable]

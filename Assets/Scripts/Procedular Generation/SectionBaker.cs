@@ -10,5 +10,6 @@ public class SectionBaker : MonoBehaviour
     [SerializeField] private GameObject[] connectorObjects;
     public GameObject[] ConnectorObjects => connectorObjects;
 
+    public LayerMask tunnelSectionLayerMask;
     public GameObject SectionModel;
 }

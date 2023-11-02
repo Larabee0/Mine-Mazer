@@ -56,11 +56,14 @@ public class TunnelSection : MonoBehaviour
     {
         if (connectors != null)
         {
-            Gizmos.color = Color.cyan;
             for (int i = 0; i < connectors.Length; i++)
             {
                 Gizmos.matrix = GetLTWConnectorMatrix(transform.localToWorldMatrix, connectors[i]);
+
+                Gizmos.color = Color.cyan;
                 Gizmos.DrawCube(Vector3.zero, 0.5f * Vector3.one);
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawRay(Vector3.zero, Vector3.forward);
             }
         }
 

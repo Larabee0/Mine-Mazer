@@ -14,19 +14,24 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     [SerializeField] private List<TunnelSection> prevPlayerSections = new();
     [SerializeField] private List<TunnelSection> prevPrevPlayerSections = new();
-
+    [SerializeField] private LayerMask tunnelSectionLayerMask;
+    private int tunnelSectionLayerIndex;
     [SerializeField, Min(1000)] private int maxInterations = 1000000000;
 
     private TunnelSection lastEnter;
     private TunnelSection lastExit;
 
+    [SerializeField] private GameObject santiziedCube;
+    [SerializeField] private GameObject santiziedCap;
+
     private void Start()
     {
+        tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
-        GenerateInitialArea();
+        StartCoroutine(GenerateInitialArea());
     }
 
-    private void GenerateInitialArea()
+    private IEnumerator GenerateInitialArea()
     {
         int spawnIndex = Random.Range(0, tunnelSections.Count);
         curPlayerSection = InstinateSection(spawnIndex);
@@ -34,12 +39,15 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
         int nextIters = curPlayerSection.connectors.Length / 2;
         int prevIters = curPlayerSection.connectors.Length - nextIters;
-        
-        FillOneDstList(nextPlayerSections, curPlayerSection, nextIters);
-        FillOneDstList(prevPlayerSections, curPlayerSection, prevIters);
 
-        FillTwoDstList(nextPlayerSections, nextNextPlayerSections);
-        FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
+        yield return new WaitForSeconds(5);
+        yield return FillOneDstListDebug(nextPlayerSections, curPlayerSection, nextIters);
+        yield return new WaitForSeconds(5);
+        yield return FillOneDstListDebug(prevPlayerSections, curPlayerSection, prevIters);
+        yield return new WaitForSeconds(5);
+        yield return FillTwoDstListDebug(nextPlayerSections, nextNextPlayerSections);
+        yield return new WaitForSeconds(5);
+        yield return FillTwoDstListDebug(prevPlayerSections, prevPrevPlayerSections);
     }
 
     public void PlayerExitSection(TunnelSection section)
@@ -166,6 +174,19 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
+    private IEnumerator FillOneDstListDebug(List<TunnelSection> oneDstList, TunnelSection primarySection, int iterations)
+    {
+        for (int j = 0; j < iterations; j++)
+        {
+            // pick a new section to connect to
+            yield return PickSection(primarySection);
+            TunnelSection sectionInstance = InstinateSection(targetSectionDebug);
+            oneDstList.Add(sectionInstance);
+            TransformSection(primarySection, sectionInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // position new section
+        }
+        yield return null;
+    }
+
     private void FillTwoDstList(List<TunnelSection> oneDstList, List<TunnelSection> twoDstList)
     {
         for (int i = 0; i < oneDstList.Count; i++) // for each item in 1 back
@@ -182,7 +203,26 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
-    private TunnelSection PickSection(TunnelSection primary, out Connector primaryPreference, out Connector secondaryPreference)
+    private IEnumerator FillTwoDstListDebug(List<TunnelSection> oneDstList, List<TunnelSection> twoDstList)
+    {
+        for (int i = 0; i < oneDstList.Count; i++) // for each item in 1 back
+        {
+            TunnelSection section = oneDstList[i];
+            // for each connector -1 (exlucde connection to current section)
+            for (int j = 0; j < section.connectors.Length - 1; j++)
+            {
+                // pick a new section to connect to
+                yield return PickSection(section);
+
+                TunnelSection sectionInstance = InstinateSection(targetSectionDebug);
+
+                twoDstList.Add(sectionInstance); // add this to 2 back
+                TransformSection(section, sectionInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // position new section
+            }
+        }
+    }
+
+    private TunnelSection PickSection(TunnelSection primary,  out Connector primaryPreference, out Connector secondaryPreference)
     {
         primaryPreference = Connector.Empty;
         secondaryPreference = Connector.Empty;
@@ -201,6 +241,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             {
                 break;
             }
+            targetSection = null;
             iterations--;
             if (iterations <= 0)
             {
@@ -208,54 +249,184 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
         }
 
-        return InstinateSection(nextSections.ElementAt(Random.Range(0, nextSections.Count)));
+        return targetSection;
+    }
+
+    private TunnelSection targetSectionDebug;
+    private Connector primaryPreferenceDebug;
+    private Connector secondaryPreferenceDebug;
+    private bool intersectionTest;
+
+    private IEnumerator PickSection(TunnelSection primary)
+    {
+        primaryPreferenceDebug = Connector.Empty;
+        secondaryPreferenceDebug = Connector.Empty;
+        List<TunnelSection> nextSections = new(tunnelSections);
+
+        if (primary.ExcludePrefabConnections.Count > 0)
+        {
+            primary.ExcludePrefabConnections.ForEach(item => nextSections.RemoveAll(element => element == item));
+        }
+        int iterations = maxInterations;
+        targetSectionDebug = null;
+        while (targetSectionDebug == null)
+        {
+            targetSectionDebug = nextSections.ElementAt(Random.Range(0, nextSections.Count));
+            yield return IntersectionTestDebug(primary, targetSectionDebug);
+            if (intersectionTest)
+            {
+                break;
+            }
+            targetSectionDebug = null;
+            iterations--;
+            if (iterations <= 0)
+            {
+                throw new System.StackOverflowException("Failed to find section that passed Intersection Test");
+            }
+        }
+
+        yield return null;
     }
 
     private bool IntersectionTest(TunnelSection primary, TunnelSection target, out Connector primaryConnector, out Connector secondaryConnector)
     {
-
-        primaryConnector = GetConnectorFromSection(primary);
-        secondaryConnector = GetConnectorFromSection(target);
-
-        primaryConnector.UpdateWorldPos(primary.transform.localToWorldMatrix);
-        secondaryConnector.UpdateWorldPos(target.transform.localToWorldMatrix);
-
-
-        CalculateSectionTransform(primaryConnector, secondaryConnector, out Vector3 pos, out Quaternion rot);
-
-        for (int i = 0; i < target.BoundingBoxes.Length; i++)
+        primaryConnector = Connector.Empty;
+        secondaryConnector = Connector.Empty;
+        HashSet<int> primaryConnectors = new();
+        HashSet<int> secondaryConnectors = new();
+        while (secondaryConnectors.Count != target.connectors.Length)
         {
-            BoxBounds boxBounds = target.BoundingBoxes[i];
-            if (Physics.CheckBox(pos + boxBounds.center, boxBounds.size, rot))
+            primaryConnector = GetConnectorFromSection(primary, primaryConnectors);
+            secondaryConnector = GetConnectorFromSection(target, secondaryConnectors);
+
+            primaryConnector.UpdateWorldPos(primary.transform.localToWorldMatrix);
+            secondaryConnector.UpdateWorldPos(target.transform.localToWorldMatrix);
+
+
+            CalculateSectionTransform(primaryConnector, secondaryConnector, out Vector3 pos, out Quaternion rot);
+            bool noIntersections = true;
+            for (int i = 0; i < target.BoundingBoxes.Length; i++)
             {
-                return false;
+                BoxBounds boxBounds = target.BoundingBoxes[i];
+                if (Physics.CheckBox(pos + boxBounds.center, boxBounds.size, rot, tunnelSectionLayerIndex))
+                {
+                    noIntersections = false;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < target.BoundingCaps.Length; i++)
+            {
+                CapsuleBounds capBounds = target.BoundingCaps[i];
+                if (Physics.CheckCapsule(pos + capBounds.center, pos, capBounds.radius, tunnelSectionLayerIndex))
+                {
+                    noIntersections = false;
+                    break;
+                }
+            }
+            if (noIntersections)
+            {
+                return true;
+            }
+            else
+            {
+                secondaryConnectors.Add(secondaryConnector.internalIndex);
+            }
+        }
+        
+
+        return false;
+    }
+    private IEnumerator IntersectionTestDebug(TunnelSection primary, TunnelSection target)
+    {
+        primaryPreferenceDebug = Connector.Empty;
+        secondaryPreferenceDebug = Connector.Empty;
+        HashSet<int> primaryConnectors = new();
+        HashSet<int> secondaryConnectors = new();
+        while (secondaryConnectors.Count != target.connectors.Length)
+        {
+            primaryPreferenceDebug = GetConnectorFromSection(primary, primaryConnectors);
+            secondaryPreferenceDebug = GetConnectorFromSection(target, secondaryConnectors);
+
+            primaryPreferenceDebug.UpdateWorldPos(primary.transform.localToWorldMatrix);
+            secondaryPreferenceDebug.UpdateWorldPos(target.transform.localToWorldMatrix);
+
+
+            List<GameObject> objects = new();
+            CalculateSectionTransform(primaryPreferenceDebug, secondaryPreferenceDebug, out Vector3 pos, out Quaternion rot);
+
+            Matrix4x4  parentTransform = Matrix4x4.TRS(pos,rot, Vector3.one);
+
+            //objects.Add(Instantiate(target,pos,rot).gameObject);
+
+            bool noIntersections = true;
+            for (int i = 0; i < target.BoundingBoxes.Length; i++)
+            {
+                BoxBounds boxBounds = target.BoundingBoxes[i];
+                objects.Add(Instantiate(santiziedCube));
+
+                Matrix4x4 m = parentTransform * target.boundingBoxes[i].Matrix;
+
+                objects[^1].transform.SetPositionAndRotation( m.GetPosition(),m.rotation);
+                objects[^1].transform.localScale = boxBounds.size;
+                objects[^1].GetComponent<MeshRenderer>().material.color = Color.green;
+                if (Physics.CheckBox(m.GetPosition(), boxBounds.size*0.5f, m.rotation, tunnelSectionLayerIndex,QueryTriggerInteraction.Ignore))
+                {
+                    objects[^1].GetComponent<MeshRenderer>().material.color = Color.red;
+                    noIntersections = false;
+                }
+            }
+
+            for (int i = 0; i < target.BoundingCaps.Length; i++)
+            {
+                CapsuleBounds capBounds = target.BoundingCaps[i];
+                objects.Add(Instantiate(santiziedCap));
+                objects[^1].transform.SetPositionAndRotation(pos + capBounds.center, rot);
+                objects[^1].transform.localScale = new Vector3(capBounds.radius,capBounds.height,capBounds.radius);
+                objects[^1].GetComponent<MeshRenderer>().material.color = Color.green;
+                if (Physics.CheckCapsule(pos + capBounds.center, pos, capBounds.radius))
+                {
+                    objects[^1].GetComponent<MeshRenderer>().material.color = Color.red;
+                    noIntersections = false;
+                }
+            }
+
+            //objects[0].SetActive(true);
+            yield return new WaitForSeconds(2.5f);
+            objects.ForEach(ob=>Destroy(ob));
+
+            if (noIntersections)
+            {
+                intersectionTest = true;
+                yield break;
+            }
+            else
+            {
+                secondaryConnectors.Add(secondaryPreferenceDebug.internalIndex);
             }
         }
 
-        for (int i = 0; i < target.BoundingCaps.Length; i++)
-        {
-            CapsuleBounds capBounds = target.BoundingCaps[i];
-            if (Physics.CheckCapsule(pos + capBounds.center, pos, capBounds.radius))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        intersectionTest = false;
+        yield break;
     }
 
-    public Connector GetConnectorFromSection(TunnelSection section)
+    public Connector GetConnectorFromSection(TunnelSection section,HashSet<int> excludedConnectors)
     {
+        
         int iterations = maxInterations;
         while (true)
         {
+            if (excludedConnectors.Count == section.connectors.Length)
+            {
+                return Connector.Empty;
+            }
             iterations--;
             if(iterations <= 0)
             {
                 throw new System.StackOverflowException("Failed to find avalible connector");
             }
             int connectorIndex = Random.Range(0,section.connectors.Length);
-            if (section.InUse.Contains(connectorIndex))
+            if (section.InUse.Contains(connectorIndex) || excludedConnectors.Contains(connectorIndex))
             {
                 continue;
             }

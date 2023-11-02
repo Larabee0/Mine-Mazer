@@ -58,7 +58,6 @@ public class SectionBakerEditor : Editor
         {
             Destroy(section);
         }
-
         section = prefab.AddComponent<TunnelSection>();
         if (baker.ConnectorObjects != null)
         {
@@ -76,6 +75,28 @@ public class SectionBakerEditor : Editor
                 section.connectorPairs.Add(i,null);
             }
         }
+
+
+        boxBounds.ForEach(box =>
+        {
+            GameObject empty = new("BoundingBox");
+            empty.transform.SetParent(section.transform, false);
+            empty.transform.SetLocalPositionAndRotation(box.center, Quaternion.Euler(box.oreintation));
+            BoxCollider collider = empty.AddComponent<BoxCollider>();
+            collider.size = box.size;
+            empty.layer = (int)Mathf.Log(baker.tunnelSectionLayerMask.value, 2);
+        });
+        
+        capBounds.ForEach(cap =>
+        {
+            GameObject empty = new("BoundingCap");
+            empty.transform.SetParent(section.transform, false);
+            empty.transform.SetLocalPositionAndRotation(cap.center, Quaternion.Euler(cap.oreintation));
+            CapsuleCollider collider = empty.AddComponent<CapsuleCollider>();
+            collider.radius = cap.radius;
+            collider.height = cap.height;
+            empty.layer = (int)Mathf.Log(baker.tunnelSectionLayerMask.value, 2);
+        });
 
         section.boundingBoxes = boxBounds.ToArray();
         section.boundingCaps = capBounds.ToArray();
