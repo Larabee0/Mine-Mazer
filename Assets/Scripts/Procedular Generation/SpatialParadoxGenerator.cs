@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpatialParadoxGenerator : MonoBehaviour
 {
@@ -23,12 +25,51 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     [SerializeField] private GameObject santiziedCube;
     [SerializeField] private GameObject santiziedCap;
+    private GameObject primaryObj;
+    private GameObject secondaryObj;
 
     private void Start()
     {
         tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
         StartCoroutine(GenerateInitialArea());
+    }
+
+
+    private IEnumerator TransformDebugging()
+    {
+        curPlayerSection = InstinateSection(1);
+        curPlayerSection.transform.position = new Vector3(0, 0, 0);
+        TunnelSection newSection = InstinateSection(1);
+
+        yield return new WaitForSeconds(2.5f);
+        primaryObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        secondaryObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        while (true)
+        {
+            for (int i = 0; i < curPlayerSection.connectors.Length; i++)
+            {
+                Connector primaryConnector = curPlayerSection.connectors[i];
+                
+                curPlayerSection.connectors[i] = primaryConnector;
+                for (int j = 0; j < newSection.connectors.Length; j++)
+                {
+                    Connector secondaryConnector = newSection.connectors[j];
+                    primaryConnector.UpdateWorldPos(curPlayerSection.transform.localToWorldMatrix);
+                    secondaryConnector.UpdateWorldPos(curPlayerSection.transform.localToWorldMatrix);
+                    newSection.connectors[j] = secondaryConnector;
+                    CalculateSectionTransform(primaryConnector, secondaryConnector, out Vector3 pos, out Quaternion rot);
+                    newSection.transform.SetPositionAndRotation(pos, rot);
+                    Debug.LogFormat("i = {0} j = {1}", i, j);
+                    primaryObj.transform.SetPositionAndRotation(primaryConnector.position, primaryConnector.localRotation);
+                    yield return new WaitForSeconds(2.5f);
+                    newSection.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                }
+            }
+            newSection.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+        }
+        Destroy(newSection.gameObject);
+        yield break;
     }
 
     private IEnumerator GenerateInitialArea()
@@ -354,10 +395,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
             List<GameObject> objects = new();
             CalculateSectionTransform(primaryPreferenceDebug, secondaryPreferenceDebug, out Vector3 pos, out Quaternion rot);
-
+            
             Matrix4x4  parentTransform = Matrix4x4.TRS(pos,rot, Vector3.one);
 
-            //objects.Add(Instantiate(target,pos,rot).gameObject);
+            objects.Add(Instantiate(target,pos,rot).gameObject);
 
             bool noIntersections = true;
             for (int i = 0; i < target.BoundingBoxes.Length; i++)
@@ -391,9 +432,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 }
             }
 
-            //objects[0].SetActive(true);
+            objects[0].SetActive(true);
+
             yield return new WaitForSeconds(2.5f);
-            objects.ForEach(ob=>Destroy(ob));
+            objects.ForEach(ob => Destroy(ob));
 
             if (noIntersections)
             {
@@ -462,7 +504,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         Destroy(section.gameObject);
     }
 
-    private static void TransformSection(TunnelSection primary, TunnelSection secondary, Connector primaryConnector, Connector secondaryConnector)
+    private void TransformSection(TunnelSection primary, TunnelSection secondary, Connector primaryConnector, Connector secondaryConnector)
     {
         CalculateSectionTransform(primaryConnector, secondaryConnector, out Vector3 pos, out Quaternion rot);
         secondary.transform.SetPositionAndRotation(pos, rot);
@@ -473,13 +515,17 @@ public class SpatialParadoxGenerator : MonoBehaviour
         secondary.InUse.Add(secondaryConnector.internalIndex);
     }
 
-    private static void CalculateSectionTransform(Connector primary, Connector secondary, out Vector3 position, out Quaternion rotation)
+    private void CalculateSectionTransform(Connector primary, Connector secondary, out Vector3 position, out Quaternion rotation)
     {
-        Vector3 offset = secondary.localPosition;
-        rotation = ExtraUtilities.BetweenDirections(secondary.Back, primary.Forward);
-        offset = rotation.RotatePosition(offset);
+        rotation = Quaternion.Inverse(secondary.rotation) * (primary.rotation*Quaternion.Euler(0,180,0));
+        secondary.UpdateWorldPos(float4x4.TRS(primary.position, rotation, Vector3.one));
 
-        position = primary.position - offset;
+        position = primary.position + (primary.position - secondary.position);
         position.y = primary.parentPos.y + (primary.position.y - secondary.position.y);
+        position.y = 0;
+
+        //secondary.UpdateWorldPos(float4x4.TRS(position, rotation, Vector3.one));
+
+        //secondaryObj.transform.SetPositionAndRotation(secondary.position, secondary.localRotation);
     }
 }

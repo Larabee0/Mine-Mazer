@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -47,9 +48,9 @@ public class TunnelSection : MonoBehaviour
         }
     }
 
-    public static Matrix4x4 GetLTWConnectorMatrix(Matrix4x4 ltw, Connector connector)
+    public static float4x4 GetLTWConnectorMatrix(float4x4 ltw, Connector connector)
     {
-        return ltw * connector.Matrix;
+        return math.mul(ltw, connector.Matrix);
     }
 
     private void OnDrawGizmosSelected()
@@ -69,7 +70,7 @@ public class TunnelSection : MonoBehaviour
 
 
 
-        Matrix4x4 angleMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Handles.matrix.lossyScale);
+        float4x4 angleMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Handles.matrix.lossyScale);
         Handles.matrix = angleMatrix;
         Gizmos.matrix = angleMatrix;
         Handles.color = Color.red;

@@ -7,6 +7,12 @@ using UnityEngine;
 
 public static class ExtraUtilities
 {
+    public static float3 Translation(this in float4x4 m) => new(m.c3.x, m.c3.y, m.c3.z);
+    public static quaternion Rotation(this in float4x4 m) => new(math.orthonormalize(new float3x3(m)));
+    public static float3 Up(in this float4x4 m) => new(m.c1.x, m.c1.y, m.c1.z);
+    public static float3 Down(in this float4x4 m) => -Up(m);
+    public static float3 Right(in this float4x4 m) => new(m.c0.x, m.c0.y, m.c0.z);
+    public static float3 Left(in this float4x4 m) => -Right(m);
     public static Quaternion BetweenDirections(Vector3 source, Vector3 target)
     {
         Quaternion result;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 [System.Serializable]
@@ -35,17 +36,19 @@ public struct Connector
     public Vector3 parentPos;
     public int internalIndex;
 
-    public Matrix4x4 Matrix => Matrix4x4.TRS(localPosition, localRotation, Vector3.one);
+    public float4x4 Matrix => float4x4.TRS(localPosition, localRotation, Vector3.one);
 
     public Vector3 Forward => rotation * Vector3.forward;
     public Vector3 Back => rotation * Vector3.back;
 
+    public Vector3 Left => rotation * Vector3.left;
+    public Vector3 Right => rotation * Vector3.right;
 
-    public void UpdateWorldPos(Matrix4x4 transform)
+    public void UpdateWorldPos(float4x4 transform)
     {
-        parentPos = transform.GetPosition();
-        Matrix4x4 ltw = transform * Matrix;
-        position = ltw.GetPosition();
-        rotation = ltw.rotation;
+        parentPos = transform.Translation();
+        float4x4 ltw =  math.mul(transform,Matrix);
+        position = ltw.Translation();
+        rotation = ltw.Rotation();
     }
 }
