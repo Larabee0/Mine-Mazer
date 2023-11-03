@@ -277,10 +277,13 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
         FillOneDstList(nextPlayerSections, curPlayerSection, nextIters);
 
+        Physics.SyncTransforms();
         FillOneDstList(prevPlayerSections, curPlayerSection, prevIters);
 
+        Physics.SyncTransforms();
         FillTwoDstList(nextPlayerSections, nextNextPlayerSections);
 
+        Physics.SyncTransforms();
         FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
     }
 
@@ -604,7 +607,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
         secondary.connectorPairs[secondaryConnector.internalIndex] = new(primary, primaryConnector.internalIndex);
         primary.InUse.Add(primaryConnector.internalIndex);
         secondary.InUse.Add(secondaryConnector.internalIndex);
-        Physics.SyncTransforms();
     }
 
     private float4x4 CalculateSectionMatrix(Connector primary, Connector secondary)
