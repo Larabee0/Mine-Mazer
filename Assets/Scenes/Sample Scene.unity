@@ -361,7 +361,6 @@ MonoBehaviour:
   - center: {x: -2.86, y: 1.446, z: -7.6937}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 2.147955, y: 3.892, z: 2.0913045}
-  boundingCaps: []
 --- !u!65 &213246286
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -921,11 +920,6 @@ MonoBehaviour:
   - center: {x: 0, y: 0, z: 0}
     oreintation: {x: 0, y: 0, z: -36.74}
     size: {x: 4, y: 3.83, z: 4.93}
-  boundingCaps:
-  - center: {x: 1.14, y: 2.97, z: 0.68}
-    oreintation: {x: 61.7, y: -30.84, z: 0}
-    radius: 0.33
-    height: 1.37
 --- !u!1 &600470634
 GameObject:
   m_ObjectHideFlags: 0
@@ -1428,7 +1422,6 @@ MonoBehaviour:
   - center: {x: -0.0257, y: 1.6324, z: -2.5989}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 3.9191604, y: 3.3981233, z: 4.5841374}
-  boundingCaps: []
 --- !u!65 &945997910
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1446,7 +1439,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 3.7179413, y: 3.3618305, z: 0.29483986}
   m_Center: {x: 0.0038375854, y: 1.6970075, z: -5.05}
@@ -1467,7 +1460,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 3.7179413, y: 3.3618305, z: 0.29483986}
   m_Center: {x: 0.0038375854, y: 1.6970075, z: -0.07586378}
@@ -2701,8 +2694,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   maxInterations: 10000000
+  RandomSeed: 0
+  seed:
+    s0: -327159958
+    s1: -126098709
+    s2: 996236964
+    s3: 1367127049
+  debugging: 0
+  initialAreaDebugging: 0
+  transformDebugging: 0
+  prefab1: {fileID: 213246285}
+  prefab2: {fileID: 213246285}
   santiziedCube: {fileID: 1200272413}
-  santiziedCap: {fileID: 435246562}
 --- !u!1 &2056687763
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,38 +9,88 @@ public class SpatialParadoxGenerator : MonoBehaviour
 {
     [SerializeField] private List<TunnelSection> tunnelSections;
 
-    [SerializeField] private List<TunnelSection> nextNextPlayerSections=new();
+    [SerializeField] private List<TunnelSection> nextNextPlayerSections = new();
     [SerializeField] private List<TunnelSection> nextPlayerSections = new();
 
     [SerializeField] private TunnelSection curPlayerSection;
 
     [SerializeField] private List<TunnelSection> prevPlayerSections = new();
     [SerializeField] private List<TunnelSection> prevPrevPlayerSections = new();
+    
     [SerializeField] private LayerMask tunnelSectionLayerMask;
+    [SerializeField, Min(1000)] private int maxInterations = 1000000;
+    [SerializeField] private bool RandomSeed = true;
+    [SerializeField] private Random.State seed;
     private int tunnelSectionLayerIndex;
-    [SerializeField, Min(1000)] private int maxInterations = 1000000000;
-
     private TunnelSection lastEnter;
     private TunnelSection lastExit;
 
-    [SerializeField] private GameObject santiziedCube;
-    [SerializeField] private GameObject santiziedCap;
+#if UNITY_EDITOR
+    [Header("Transform Debugging")]
+    [HideInInspector] public bool debugging = false;
+    [HideInInspector] public bool initialAreaDebugging = false;
+    [HideInInspector] public bool transformDebugging = false;
+    public TunnelSection prefab1;
+    public TunnelSection prefab2;
+    public GameObject santiziedCube;
     private GameObject primaryObj;
     private GameObject secondaryObj;
 
+    private TunnelSection targetSectionDebug;
+    private Connector primaryPreferenceDebug;
+    private Connector secondaryPreferenceDebug;
+    private bool intersectionTest;
+
+#endif
+
     private void Start()
     {
+
         tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
-        StartCoroutine(GenerateInitialArea());
+#if UNITY_EDITOR
+        if (debugging)
+        {
+            Random.state = seed;
+            Debugging();
+            return;
+        }
+#endif
+        if (!RandomSeed)
+        {
+            Random.state = seed;
+        }
+        GenerateInitialArea();
     }
 
 
+#if UNITY_EDITOR
+
+    private void Debugging()
+    {
+        if(santiziedCube == null)
+        {
+            Debug.LogWarning("Santizied cube unassigned!");
+        }
+        if (initialAreaDebugging)
+        {
+            StartCoroutine(GenerateInitialAreaDebug());
+        }
+        if (transformDebugging)
+        {
+            if (prefab1 == null || prefab2 == null)
+            {
+                Debug.LogWarning("prefab not assigned!");
+            }
+            StartCoroutine(TransformDebugging());
+        }
+    }
+
     private IEnumerator TransformDebugging()
     {
-        curPlayerSection = InstinateSection(1);
+        curPlayerSection = InstinateSection(prefab1);
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
-        TunnelSection newSection = InstinateSection(1);
+        TunnelSection newSection = InstinateSection(prefab2);
 
         yield return new WaitForSeconds(2.5f);
         primaryObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -50,7 +100,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             for (int i = 0; i < curPlayerSection.connectors.Length; i++)
             {
                 Connector primaryConnector = curPlayerSection.connectors[i];
-                
+
                 curPlayerSection.connectors[i] = primaryConnector;
                 for (int j = 0; j < newSection.connectors.Length; j++)
                 {
@@ -58,8 +108,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
                     primaryConnector.UpdateWorldPos(curPlayerSection.transform.localToWorldMatrix);
                     secondaryConnector.UpdateWorldPos(curPlayerSection.transform.localToWorldMatrix);
                     newSection.connectors[j] = secondaryConnector;
-                    CalculateSectionTransform(primaryConnector, secondaryConnector, out Vector3 pos, out Quaternion rot);
-                    newSection.transform.SetPositionAndRotation(pos, rot);
+                    float4x4 matix = CalculateSectionMatrix(primaryConnector, secondaryConnector);
+                    newSection.transform.SetPositionAndRotation(matix.Translation(), matix.Rotation());
                     Debug.LogFormat("i = {0} j = {1}", i, j);
                     primaryObj.transform.SetPositionAndRotation(primaryConnector.position, primaryConnector.localRotation);
                     yield return new WaitForSeconds(2.5f);
@@ -68,11 +118,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
             newSection.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         }
-        Destroy(newSection.gameObject);
-        yield break;
     }
 
-    private IEnumerator GenerateInitialArea()
+    private IEnumerator GenerateInitialAreaDebug()
     {
         int spawnIndex = Random.Range(0, tunnelSections.Count);
         curPlayerSection = InstinateSection(spawnIndex);
@@ -89,6 +137,151 @@ public class SpatialParadoxGenerator : MonoBehaviour
         yield return FillTwoDstListDebug(nextPlayerSections, nextNextPlayerSections);
         yield return new WaitForSeconds(5);
         yield return FillTwoDstListDebug(prevPlayerSections, prevPrevPlayerSections);
+    }
+
+    private IEnumerator FillOneDstListDebug(List<TunnelSection> oneDstList, TunnelSection primarySection, int iterations)
+    {
+        for (int j = 0; j < iterations; j++)
+        {
+            // pick a new section to connect to
+            yield return PickSectionDebug(primarySection);
+            TunnelSection sectionInstance = InstinateSection(targetSectionDebug);
+            oneDstList.Add(sectionInstance);
+            TransformSection(primarySection, sectionInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // position new section
+        }
+        yield return null;
+    }
+
+    private IEnumerator FillTwoDstListDebug(List<TunnelSection> oneDstList, List<TunnelSection> twoDstList)
+    {
+        for (int i = 0; i < oneDstList.Count; i++) // for each item in 1 back
+        {
+            TunnelSection section = oneDstList[i];
+            // for each connector -1 (exlucde connection to current section)
+            for (int j = 0; j < section.connectors.Length - 1; j++)
+            {
+                // pick a new section to connect to
+                yield return PickSectionDebug(section);
+
+                TunnelSection sectionInstance = InstinateSection(targetSectionDebug);
+
+                twoDstList.Add(sectionInstance); // add this to 2 back
+                TransformSection(section, sectionInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // position new section
+            }
+        }
+    }
+
+    private IEnumerator PickSectionDebug(TunnelSection primary)
+    {
+        primaryPreferenceDebug = Connector.Empty;
+        secondaryPreferenceDebug = Connector.Empty;
+        List<TunnelSection> nextSections = FilterSections(primary);
+        int iterations = maxInterations;
+        targetSectionDebug = null;
+        while (targetSectionDebug == null)
+        {
+            targetSectionDebug = nextSections.ElementAt(Random.Range(0, nextSections.Count));
+            yield return IntersectionTestDebug(primary, targetSectionDebug);
+            if (intersectionTest)
+            {
+                break;
+            }
+            targetSectionDebug = null;
+            iterations--;
+            if (iterations <= 0)
+            {
+                throw new System.StackOverflowException("Failed to find section that passed Intersection Test");
+            }
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator IntersectionTestDebug(TunnelSection primary, TunnelSection target)
+    {
+        primaryPreferenceDebug = Connector.Empty;
+        secondaryPreferenceDebug = Connector.Empty;
+        List<Connector> primaryConnectors = FilterConnectors(primary);
+        List<Connector> secondaryConnectors = FilterConnectors(target);
+
+        while (primaryConnectors.Count > 0)
+        {
+            primaryPreferenceDebug = GetConnectorFromSection(primaryConnectors, out int priIndex);
+            while (secondaryConnectors.Count > 0)
+            {
+                secondaryPreferenceDebug = GetConnectorFromSection(secondaryConnectors, out int secIndex);
+
+                yield return DebugIntersectionTest(primary, target);
+                if (intersectionTest)
+                {
+                    yield break;
+                }
+                secondaryConnectors.RemoveAt(secIndex);
+            }
+            secondaryConnectors = FilterConnectors(target);
+            primaryConnectors.RemoveAt(priIndex);
+        }
+
+        intersectionTest = false;
+        yield break;
+    }
+
+    private IEnumerator DebugIntersectionTest(TunnelSection primary, TunnelSection target)
+    {
+        primaryPreferenceDebug.UpdateWorldPos(primary.transform.localToWorldMatrix);
+        secondaryPreferenceDebug.UpdateWorldPos(target.transform.localToWorldMatrix);
+
+        List<GameObject> objects = new();
+
+        float4x4 secondaryTransform = CalculateSectionMatrix(primaryPreferenceDebug, secondaryPreferenceDebug);
+
+        //objects.Add(Instantiate(target,pos,rot).gameObject);
+
+        bool noIntersections = true;
+        for (int i = 0; i < target.BoundingBoxes.Length; i++)
+        {
+            BoxBounds boxBounds = target.BoundingBoxes[i];
+            objects.Add(Instantiate(santiziedCube));
+
+            float4x4 m = math.mul(secondaryTransform, target.boundingBoxes[i].Matrix);
+
+            objects[^1].transform.SetPositionAndRotation(m.Translation(), m.Rotation());
+            objects[^1].transform.localScale = boxBounds.size;
+            objects[^1].GetComponent<MeshRenderer>().material.color = Color.green;
+            if (Physics.CheckBox(m.Translation(), boxBounds.size * 0.5f, m.Rotation(), tunnelSectionLayerIndex, QueryTriggerInteraction.Ignore))
+            {
+                objects[^1].GetComponent<MeshRenderer>().material.color = Color.red;
+                noIntersections = false;
+            }
+        }
+
+        //objects[0].SetActive(true);
+
+        yield return new WaitForSeconds(2.5f);
+        objects.ForEach(ob => Destroy(ob));
+
+        intersectionTest = noIntersections;
+    }
+
+#endif
+
+    private void GenerateInitialArea()
+    {
+        seed = Random.state;
+        int spawnIndex = Random.Range(0, tunnelSections.Count);
+        curPlayerSection = InstinateSection(spawnIndex);
+        curPlayerSection.transform.position = new Vector3(0, 0, 0);
+
+        int nextIters = curPlayerSection.connectors.Length / 2;
+        int prevIters = curPlayerSection.connectors.Length - nextIters;
+
+        FillOneDstList(nextPlayerSections, curPlayerSection, nextIters);
+
+        FillOneDstList(prevPlayerSections, curPlayerSection, prevIters);
+
+        FillTwoDstList(nextPlayerSections, nextNextPlayerSections);
+
+        FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
     }
 
     public void PlayerExitSection(TunnelSection section)
@@ -204,276 +397,174 @@ public class SpatialParadoxGenerator : MonoBehaviour
         FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
     }
 
+    /// <summary>
+    /// Picks and connects new section to the given tunnel Section primarySection.
+    /// This runs as many times as iterations to allow some sections to count as "Backwards".
+    /// </summary>
+    /// <param name="oneDstList"></param>
+    /// <param name="primarySection"></param>
+    /// <param name="iterations"></param>
     private void FillOneDstList(List<TunnelSection> oneDstList, TunnelSection primarySection, int iterations)
     {
         for (int j = 0; j < iterations; j++)
         {
-            // pick a new section to connect to
-            TunnelSection newSection = PickSection(primarySection, out Connector priPref, out Connector secPref);
-            oneDstList.Add(newSection);
-            TransformSection(primarySection, newSection, priPref, secPref); // position new section
-        }
-    }
-
-    private IEnumerator FillOneDstListDebug(List<TunnelSection> oneDstList, TunnelSection primarySection, int iterations)
-    {
-        for (int j = 0; j < iterations; j++)
-        {
-            // pick a new section to connect to
-            yield return PickSection(primarySection);
-            TunnelSection sectionInstance = InstinateSection(targetSectionDebug);
+            // pick & Instinate a new section to connect to
+            TunnelSection sectionInstance = InstinateSection(PickSection(primarySection, out Connector priPref, out Connector secPref));
             oneDstList.Add(sectionInstance);
-            TransformSection(primarySection, sectionInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // position new section
+            TransformSection(primarySection, sectionInstance, priPref, secPref); // transform the new section
         }
-        yield return null;
     }
 
+    /// <summary>
+    /// Picks and connects new sections to sections stored in the 1 distance list.
+    /// Adds them to the 2 distance list as these sections will be the 2nd section away from the current.
+    /// </summary>
+    /// <param name="oneDstList"></param>
+    /// <param name="twoDstList"></param>
     private void FillTwoDstList(List<TunnelSection> oneDstList, List<TunnelSection> twoDstList)
     {
-        for (int i = 0; i < oneDstList.Count; i++) // for each item in 1 back
+        for (int i = 0; i < oneDstList.Count; i++)
         {
             TunnelSection section = oneDstList[i];
             // for each connector -1 (exlucde connection to current section)
             for (int j = 0; j < section.connectors.Length - 1; j++)
             {
-                // pick a new section to connect to
-                TunnelSection newSection = PickSection(section, out Connector priPref, out Connector secPref);
-                twoDstList.Add(newSection); // add this to 2 back
-                TransformSection(section, newSection, priPref, secPref); // position new section
+                // pick & Instinate a new section to connect to
+                TunnelSection sectionInstance = InstinateSection(PickSection(section, out Connector priPref, out Connector secPref));
+                twoDstList.Add(sectionInstance); // add this new section to the 2 distance list
+                TransformSection(section, sectionInstance, priPref, secPref); // transform the new section
             }
         }
     }
 
-    private IEnumerator FillTwoDstListDebug(List<TunnelSection> oneDstList, List<TunnelSection> twoDstList)
-    {
-        for (int i = 0; i < oneDstList.Count; i++) // for each item in 1 back
-        {
-            TunnelSection section = oneDstList[i];
-            // for each connector -1 (exlucde connection to current section)
-            for (int j = 0; j < section.connectors.Length - 1; j++)
-            {
-                // pick a new section to connect to
-                yield return PickSection(section);
-
-                TunnelSection sectionInstance = InstinateSection(targetSectionDebug);
-
-                twoDstList.Add(sectionInstance); // add this to 2 back
-                TransformSection(section, sectionInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // position new section
-            }
-        }
-    }
-
-    private TunnelSection PickSection(TunnelSection primary,  out Connector primaryPreference, out Connector secondaryPreference)
+    private TunnelSection PickSection(TunnelSection primary, out Connector primaryPreference, out Connector secondaryPreference)
     {
         primaryPreference = Connector.Empty;
         secondaryPreference = Connector.Empty;
-        List<TunnelSection> nextSections = new(tunnelSections);
-
-        if (primary.ExcludePrefabConnections.Count > 0)
-        {
-            primary.ExcludePrefabConnections.ForEach(item => nextSections.RemoveAll(element => element == item));
-        }
+        List<TunnelSection> nextSections = FilterSections(primary);
         int iterations = maxInterations;
         TunnelSection targetSection = null;
-        while (targetSection == null)
+        while (targetSection == null && nextSections.Count > 0)
         {
             targetSection = nextSections.ElementAt(Random.Range(0, nextSections.Count));
-            if (IntersectionTest(primary, targetSection, out primaryPreference, out secondaryPreference))
+            if (RunIntersectionTests(primary, targetSection, out primaryPreference, out secondaryPreference))
             {
                 break;
             }
+            nextSections.Remove(targetSection);
             targetSection = null;
             iterations--;
             if (iterations <= 0)
             {
-                throw new System.StackOverflowException("Failed to find section that passed Intersection Test");
+                Debug.LogException(new System.StackOverflowException("Failed to find section that passed Intersection Test"), this);
             }
         }
-
+        if(targetSection == null)
+        {
+            throw new System.NullReferenceException("targetSections is null, must return valid prefab");
+        }
         return targetSection;
     }
 
-    private TunnelSection targetSectionDebug;
-    private Connector primaryPreferenceDebug;
-    private Connector secondaryPreferenceDebug;
-    private bool intersectionTest;
-
-    private IEnumerator PickSection(TunnelSection primary)
+    private List<TunnelSection> FilterSections(TunnelSection primary)
     {
-        primaryPreferenceDebug = Connector.Empty;
-        secondaryPreferenceDebug = Connector.Empty;
         List<TunnelSection> nextSections = new(tunnelSections);
 
         if (primary.ExcludePrefabConnections.Count > 0)
         {
             primary.ExcludePrefabConnections.ForEach(item => nextSections.RemoveAll(element => element == item));
         }
-        int iterations = maxInterations;
-        targetSectionDebug = null;
-        while (targetSectionDebug == null)
-        {
-            targetSectionDebug = nextSections.ElementAt(Random.Range(0, nextSections.Count));
-            yield return IntersectionTestDebug(primary, targetSectionDebug);
-            if (intersectionTest)
-            {
-                break;
-            }
-            targetSectionDebug = null;
-            iterations--;
-            if (iterations <= 0)
-            {
-                throw new System.StackOverflowException("Failed to find section that passed Intersection Test");
-            }
-        }
 
-        yield return null;
+        return nextSections;
     }
 
-    private bool IntersectionTest(TunnelSection primary, TunnelSection target, out Connector primaryConnector, out Connector secondaryConnector)
+    /// <summary>
+    /// Systematically runs through all connector cominbations of the given sections.
+    /// Projects the bounding boxes of the new section into the current map to see if it will fit.
+    /// Runs until all a valid combination is made or all connectors are tested.
+    /// </summary>
+    /// <param name="primary"></param>
+    /// <param name="target"></param>
+    /// <param name="primaryConnector"></param>
+    /// <param name="secondaryConnector"></param>
+    /// <returns></returns>
+    private bool RunIntersectionTests(TunnelSection primary, TunnelSection target, out Connector primaryConnector, out Connector secondaryConnector)
     {
         primaryConnector = Connector.Empty;
         secondaryConnector = Connector.Empty;
-        HashSet<int> primaryConnectors = new();
-        HashSet<int> secondaryConnectors = new();
-        while (secondaryConnectors.Count != target.connectors.Length)
+        List<Connector> primaryConnectors = FilterConnectors(primary);
+        List<Connector> secondaryConnectors = FilterConnectors(target);
+
+        while (primaryConnectors.Count > 0)
         {
-            primaryConnector = GetConnectorFromSection(primary, primaryConnectors);
-            secondaryConnector = GetConnectorFromSection(target, secondaryConnectors);
-
-            primaryConnector.UpdateWorldPos(primary.transform.localToWorldMatrix);
-            secondaryConnector.UpdateWorldPos(target.transform.localToWorldMatrix);
-
-
-            CalculateSectionTransform(primaryConnector, secondaryConnector, out Vector3 pos, out Quaternion rot);
-            bool noIntersections = true;
-            for (int i = 0; i < target.BoundingBoxes.Length; i++)
+            primaryConnector = GetConnectorFromSection(primaryConnectors, out int priIndex);
+            while (secondaryConnectors.Count > 0)
             {
-                BoxBounds boxBounds = target.BoundingBoxes[i];
-                if (Physics.CheckBox(pos + boxBounds.center, boxBounds.size, rot, tunnelSectionLayerIndex))
+                secondaryConnector = GetConnectorFromSection(secondaryConnectors, out int secIndex);
+
+                bool noIntersections = IntersectionTest(primary, target, ref primaryConnector, ref secondaryConnector);
+
+                if (noIntersections)
                 {
-                    noIntersections = false;
-                    break;
+                    return true;
                 }
+                secondaryConnectors.RemoveAt(secIndex);
             }
-
-            for (int i = 0; i < target.BoundingCaps.Length; i++)
-            {
-                CapsuleBounds capBounds = target.BoundingCaps[i];
-                if (Physics.CheckCapsule(pos + capBounds.center, pos, capBounds.radius, tunnelSectionLayerIndex))
-                {
-                    noIntersections = false;
-                    break;
-                }
-            }
-            if (noIntersections)
-            {
-                return true;
-            }
-            else
-            {
-                secondaryConnectors.Add(secondaryConnector.internalIndex);
-            }
+            secondaryConnectors = FilterConnectors(target);
+            primaryConnectors.RemoveAt(priIndex);
         }
-        
-
         return false;
     }
-    private IEnumerator IntersectionTestDebug(TunnelSection primary, TunnelSection target)
+
+    private List<Connector> FilterConnectors(TunnelSection section)
     {
-        primaryPreferenceDebug = Connector.Empty;
-        secondaryPreferenceDebug = Connector.Empty;
-        HashSet<int> primaryConnectors = new();
-        HashSet<int> secondaryConnectors = new();
-        while (secondaryConnectors.Count != target.connectors.Length)
+        List<Connector> connectors = new(section.connectors);
+
+        if (section.InUse.Count > 0)
         {
-            primaryPreferenceDebug = GetConnectorFromSection(primary, primaryConnectors);
-            secondaryPreferenceDebug = GetConnectorFromSection(target, secondaryConnectors);
-
-            primaryPreferenceDebug.UpdateWorldPos(primary.transform.localToWorldMatrix);
-            secondaryPreferenceDebug.UpdateWorldPos(target.transform.localToWorldMatrix);
-
-
-            List<GameObject> objects = new();
-            CalculateSectionTransform(primaryPreferenceDebug, secondaryPreferenceDebug, out Vector3 pos, out Quaternion rot);
-            
-            Matrix4x4  parentTransform = Matrix4x4.TRS(pos,rot, Vector3.one);
-
-            objects.Add(Instantiate(target,pos,rot).gameObject);
-
-            bool noIntersections = true;
-            for (int i = 0; i < target.BoundingBoxes.Length; i++)
+            for (int i = connectors.Count - 1; i >= 0; i--)
             {
-                BoxBounds boxBounds = target.BoundingBoxes[i];
-                objects.Add(Instantiate(santiziedCube));
-
-                Matrix4x4 m = parentTransform * target.boundingBoxes[i].Matrix;
-
-                objects[^1].transform.SetPositionAndRotation( m.GetPosition(),m.rotation);
-                objects[^1].transform.localScale = boxBounds.size;
-                objects[^1].GetComponent<MeshRenderer>().material.color = Color.green;
-                if (Physics.CheckBox(m.GetPosition(), boxBounds.size*0.5f, m.rotation, tunnelSectionLayerIndex,QueryTriggerInteraction.Ignore))
+                if (section.InUse.Contains(connectors[i].internalIndex))
                 {
-                    objects[^1].GetComponent<MeshRenderer>().material.color = Color.red;
-                    noIntersections = false;
+                    connectors.RemoveAt(i);
                 }
-            }
-
-            for (int i = 0; i < target.BoundingCaps.Length; i++)
-            {
-                CapsuleBounds capBounds = target.BoundingCaps[i];
-                objects.Add(Instantiate(santiziedCap));
-                objects[^1].transform.SetPositionAndRotation(pos + capBounds.center, rot);
-                objects[^1].transform.localScale = new Vector3(capBounds.radius,capBounds.height,capBounds.radius);
-                objects[^1].GetComponent<MeshRenderer>().material.color = Color.green;
-                if (Physics.CheckCapsule(pos + capBounds.center, pos, capBounds.radius))
-                {
-                    objects[^1].GetComponent<MeshRenderer>().material.color = Color.red;
-                    noIntersections = false;
-                }
-            }
-
-            objects[0].SetActive(true);
-
-            yield return new WaitForSeconds(2.5f);
-            objects.ForEach(ob => Destroy(ob));
-
-            if (noIntersections)
-            {
-                intersectionTest = true;
-                yield break;
-            }
-            else
-            {
-                secondaryConnectors.Add(secondaryPreferenceDebug.internalIndex);
             }
         }
 
-        intersectionTest = false;
-        yield break;
+        return connectors;
     }
 
-    public Connector GetConnectorFromSection(TunnelSection section,HashSet<int> excludedConnectors)
+    public Connector GetConnectorFromSection(List<Connector> validConnectors, out int index)
     {
+        index = Random.Range(0, validConnectors.Count);
+        return validConnectors[index];
+    }
+
+    /// <summary>
+    /// Tests whether hte given target section will fit into the map with computed transform from the given connectors.
+    /// </summary>
+    /// <param name="primary"></param>
+    /// <param name="target"></param>
+    /// <param name="primaryConnector"></param>
+    /// <param name="secondaryConnector"></param>
+    /// <returns>True if the section will fit, false if not.</returns>
+    private bool IntersectionTest(TunnelSection primary, TunnelSection target, ref Connector primaryConnector, ref Connector secondaryConnector)
+    {
+        primaryConnector.UpdateWorldPos(primary.transform.localToWorldMatrix);
+        secondaryConnector.UpdateWorldPos(target.transform.localToWorldMatrix);
         
-        int iterations = maxInterations;
-        while (true)
+        float4x4 secondaryTransform = CalculateSectionMatrix(primaryConnector, secondaryConnector);
+
+        for (int i = 0; i < target.BoundingBoxes.Length; i++)
         {
-            if (excludedConnectors.Count == section.connectors.Length)
+            BoxBounds boxBounds = target.BoundingBoxes[i];
+            float4x4 m = math.mul(secondaryTransform, target.boundingBoxes[i].Matrix);
+            if (Physics.CheckBox(m.Translation(), boxBounds.size * 0.5f, m.Rotation(), tunnelSectionLayerIndex, QueryTriggerInteraction.Ignore))
             {
-                return Connector.Empty;
+                return false;
             }
-            iterations--;
-            if(iterations <= 0)
-            {
-                throw new System.StackOverflowException("Failed to find avalible connector");
-            }
-            int connectorIndex = Random.Range(0,section.connectors.Length);
-            if (section.InUse.Contains(connectorIndex) || excludedConnectors.Contains(connectorIndex))
-            {
-                continue;
-            }
-            return section.connectors[connectorIndex];
         }
+        return true;
     }
 
     private TunnelSection InstinateSection(int index)
@@ -506,26 +597,33 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void TransformSection(TunnelSection primary, TunnelSection secondary, Connector primaryConnector, Connector secondaryConnector)
     {
-        CalculateSectionTransform(primaryConnector, secondaryConnector, out Vector3 pos, out Quaternion rot);
-        secondary.transform.SetPositionAndRotation(pos, rot);
+        float4x4 transformMatrix = CalculateSectionMatrix(primaryConnector, secondaryConnector);
+        secondary.transform.SetPositionAndRotation(transformMatrix.Translation(), transformMatrix.Rotation());
 
         primary.connectorPairs[primaryConnector.internalIndex] = new(secondary, secondaryConnector.internalIndex);
         secondary.connectorPairs[secondaryConnector.internalIndex] = new(primary, primaryConnector.internalIndex);
         primary.InUse.Add(primaryConnector.internalIndex);
         secondary.InUse.Add(secondaryConnector.internalIndex);
+        Physics.SyncTransforms();
     }
 
-    private void CalculateSectionTransform(Connector primary, Connector secondary, out Vector3 position, out Quaternion rotation)
+    private float4x4 CalculateSectionMatrix(Connector primary, Connector secondary)
     {
-        rotation = Quaternion.Inverse(secondary.rotation) * (primary.rotation*Quaternion.Euler(0,180,0));
+        Quaternion rotation = Quaternion.Inverse(secondary.rotation) * (primary.rotation * Quaternion.Euler(0, 180, 0));
         secondary.UpdateWorldPos(float4x4.TRS(primary.position, rotation, Vector3.one));
 
-        position = primary.position + (primary.position - secondary.position);
+        Vector3 position = primary.position + (primary.position - secondary.position);
         position.y = primary.parentPos.y + (primary.position.y - secondary.position.y);
         position.y = 0;
 
-        //secondary.UpdateWorldPos(float4x4.TRS(position, rotation, Vector3.one));
+#if UNITY_EDITOR
+        if (debugging && transformDebugging)
+        {
+            secondary.UpdateWorldPos(float4x4.TRS(position, rotation, Vector3.one));
 
-        //secondaryObj.transform.SetPositionAndRotation(secondary.position, secondary.localRotation);
+            secondaryObj.transform.SetPositionAndRotation(secondary.position, secondary.localRotation);
+        }
+#endif
+        return float4x4.TRS(position, rotation, Vector3.one);
     }
 }

@@ -11,10 +11,8 @@ public class TunnelSection : MonoBehaviour
     public Connector[] connectors;
 
     public BoxBounds[] boundingBoxes;
-    public CapsuleBounds[] boundingCaps;
 
     public BoxBounds[] BoundingBoxes => boundingBoxes;
-    public CapsuleBounds[] BoundingCaps=> boundingCaps;
 
     public HashSet<int> InUse = new();
     public Dictionary<int, System.Tuple<TunnelSection, int>> connectorPairs = new();
@@ -23,7 +21,7 @@ public class TunnelSection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+
         if (other.CompareTag("Player"))
         {
             GetComponentInParent<SpatialParadoxGenerator>().PlayerEnterSection(this);
@@ -34,17 +32,6 @@ public class TunnelSection : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GetComponentInParent<SpatialParadoxGenerator>().PlayerExitSection(this);
-        }
-    }
-
-    private void OnValidate()
-    {
-        if (boundingCaps != null)
-        {
-            for (int i = 0; i < boundingCaps.Length; i++)
-            {
-                boundingCaps[i].height = boundingCaps[i].height >= (2 * boundingCaps[i].radius) ? boundingCaps[i].height : 2 * boundingCaps[i].radius;
-            }
         }
     }
 
@@ -68,35 +55,20 @@ public class TunnelSection : MonoBehaviour
             }
         }
 
-
-
-        float4x4 angleMatrix = Matrix4x4.TRS(transform.position, transform.rotation, Handles.matrix.lossyScale);
+        float4x4 angleMatrix = float4x4.TRS(transform.position, transform.rotation, Handles.matrix.lossyScale);
         Handles.matrix = angleMatrix;
         Gizmos.matrix = angleMatrix;
         Handles.color = Color.red;
         Gizmos.color = Color.red;
-        if(boundingBoxes != null)
+        if (boundingBoxes != null)
         {
             for (int i = 0; i < boundingBoxes.Length; i++)
             {
-                angleMatrix = Matrix4x4.TRS(transform.position, transform.rotation * Quaternion.Euler(boundingBoxes[i].oreintation), Handles.matrix.lossyScale);
+                angleMatrix = float4x4.TRS(transform.position, transform.rotation * Quaternion.Euler(boundingBoxes[i].oreintation), Handles.matrix.lossyScale);
                 Gizmos.matrix = angleMatrix;
                 Handles.matrix = angleMatrix;
                 Gizmos.DrawWireCube(boundingBoxes[i].center, boundingBoxes[i].size);
             }
         }
-        if(boundingCaps != null)
-        {
-            for (int i = 0; i < boundingCaps.Length; i++)
-            {
-                angleMatrix = Matrix4x4.TRS(transform.position+ boundingCaps[i].center, transform.rotation * Quaternion.Euler(boundingCaps[i].oreintation), Handles.matrix.lossyScale);
-                Gizmos.matrix = angleMatrix;
-                Handles.matrix = angleMatrix;
-                ExtraUtilities.DrawWireCapsule(boundingCaps[i].radius, boundingCaps[i].height);
-            }
-        }
     }
-
-    
-
 }
