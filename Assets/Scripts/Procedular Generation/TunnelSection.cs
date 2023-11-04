@@ -55,19 +55,13 @@ public class TunnelSection : MonoBehaviour
             }
         }
 
-        float4x4 angleMatrix = float4x4.TRS(transform.position, transform.rotation, Handles.matrix.lossyScale);
-        Handles.matrix = angleMatrix;
-        Gizmos.matrix = angleMatrix;
-        Handles.color = Color.red;
         Gizmos.color = Color.red;
         if (boundingBoxes != null)
         {
             for (int i = 0; i < boundingBoxes.Length; i++)
             {
-                angleMatrix = float4x4.TRS(transform.position, transform.rotation * Quaternion.Euler(boundingBoxes[i].oreintation), Handles.matrix.lossyScale);
-                Gizmos.matrix = angleMatrix;
-                Handles.matrix = angleMatrix;
-                Gizmos.DrawWireCube(boundingBoxes[i].center, boundingBoxes[i].size);
+                Gizmos.matrix = math.mul(float4x4.TRS(transform.position, transform.rotation, Vector3.one), boundingBoxes[i].Matrix);
+                Gizmos.DrawWireCube(Vector3.zero, boundingBoxes[i].size);
             }
         }
     }
