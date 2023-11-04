@@ -650,8 +650,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
         Vector3 position = primary.position + (primary.position - secondary.position);
         position.y = primary.parentPos.y + (primary.position.y - secondary.position.y);
-        position.y = 0;
-
+        position.y = 0f;
 #if UNITY_EDITOR
         if (debugging && transformDebugging)
         {
