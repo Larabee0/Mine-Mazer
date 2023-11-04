@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using static System.Collections.Specialized.BitVector32;
 using Random = UnityEngine.Random;
 
 public class SpatialParadoxGenerator : MonoBehaviour
 {
     [SerializeField] private List<TunnelSection> tunnelSections;
 
-    [SerializeField] private List<TunnelSection> nextNextPlayerSections = new();
-    [SerializeField] private List<TunnelSection> nextPlayerSections = new();
-
     [SerializeField] private TunnelSection curPlayerSection;
 
-    [SerializeField] private List<TunnelSection> prevPlayerSections = new();
-    [SerializeField] private List<TunnelSection> prevPrevPlayerSections = new();
-    
+    [SerializeField] private List<TunnelSection> twoDstSections = new();
+    [SerializeField] private List<TunnelSection> oneDstSections = new();
+
     [SerializeField] private LayerMask tunnelSectionLayerMask;
     [SerializeField, Min(1000)] private int maxInterations = 1000000;
     [SerializeField] private bool RandomSeed = true;
@@ -126,17 +124,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
         curPlayerSection = InstinateSection(spawnIndex);
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
 
-        int nextIters = curPlayerSection.connectors.Length / 2;
-        int prevIters = curPlayerSection.connectors.Length - nextIters;
-
         yield return new WaitForSeconds(5);
-        yield return FillOneDstListDebug(nextPlayerSections, curPlayerSection, nextIters);
+        yield return FillOneDstListDebug(oneDstSections, curPlayerSection, curPlayerSection.connectors.Length);
         yield return new WaitForSeconds(5);
-        yield return FillOneDstListDebug(prevPlayerSections, curPlayerSection, prevIters);
-        yield return new WaitForSeconds(5);
-        yield return FillTwoDstListDebug(nextPlayerSections, nextNextPlayerSections);
-        yield return new WaitForSeconds(5);
-        yield return FillTwoDstListDebug(prevPlayerSections, prevPrevPlayerSections);
+        yield return FillTwoDstListDebug(oneDstSections, twoDstSections);
     }
 
     private IEnumerator FillOneDstListDebug(List<TunnelSection> oneDstList, TunnelSection primarySection, int iterations)
@@ -158,7 +149,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             TunnelSection section = oneDstList[i];
             // for each connector -1 (exlucde connection to current section)
-            for (int j = 0; j < section.connectors.Length - 1; j++)
+            int iters = section.connectors.Length - section.InUse.Count;
+            for (int j = 0; j < iters; j++)
             {
                 // pick a new section to connect to
                 yield return PickSectionDebug(section);
@@ -272,19 +264,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
         curPlayerSection = InstinateSection(spawnIndex);
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
 
-        int nextIters = curPlayerSection.connectors.Length / 2;
-        int prevIters = curPlayerSection.connectors.Length - nextIters;
+        FillOneDstList(oneDstSections, curPlayerSection, curPlayerSection.connectors.Length);
 
-        FillOneDstList(nextPlayerSections, curPlayerSection, nextIters);
-
-        Physics.SyncTransforms();
-        FillOneDstList(prevPlayerSections, curPlayerSection, prevIters);
-
-        Physics.SyncTransforms();
-        FillTwoDstList(nextPlayerSections, nextNextPlayerSections);
-
-        Physics.SyncTransforms();
-        FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
+        FillTwoDstList(oneDstSections, twoDstSections);
     }
 
     public void PlayerExitSection(TunnelSection section)
@@ -311,94 +293,141 @@ public class SpatialParadoxGenerator : MonoBehaviour
     {
         if (lastExit == curPlayerSection && lastEnter != curPlayerSection)
         {
-            if (nextPlayerSections.Contains(lastEnter))
-            {
-                IncrementForward();
-            }
-            else if (prevPlayerSections.Contains(lastEnter))
-            {
-                IncrementBackward();
-            }
+            //if (oneDstSections.Contains(lastEnter))
+            //{
+            //    IncrementForward();
+            //}
+            //else if (prevPlayerSections.Contains(lastEnter))
+            //{
+            //    IncrementBackward();
+            //}
+            IncrementMap();
         }
         lastEnter = null;
         lastExit = null;
     }
 
-    private void IncrementForward()
+    private void IncrementMap()
     {
-        // destroy sections now 3 sections back.
-        prevPrevPlayerSections.ForEach(section => DestroySection(section));
-        prevPrevPlayerSections.Clear();
-
-        // add sections that were 1 section back to the 2 back list.
-        prevPrevPlayerSections.AddRange(prevPlayerSections);
-        prevPlayerSections.Clear(); // clear the 1 back list
-
-        prevPlayerSections.Add(curPlayerSection); // add the old currentSection to the 1 back list
-
-        curPlayerSection = lastEnter; // update to new currentSection
-
-        nextPlayerSections.Remove(curPlayerSection); // remove the new curSection from the 1 foward list
-        // for each remaining item
-        nextPlayerSections.ForEach(section =>
+        List<System.Tuple<TunnelSection, int>> links = new(lastEnter.connectorPairs.Values);
+        List<TunnelSection> newOneDst = new(links.Count);
+        links.ForEach(link => newOneDst.Add(link.Item1));
+        HashSet<TunnelSection> newTwoDst = new(links.Count);
+        for (int i = 0; i < newOneDst.Count; i++)
         {
-            prevPlayerSections.Add(section); // add it to the 1 back list
+            links = new(newOneDst[i].connectorPairs.Values);
+            links.ForEach(link => newTwoDst.Add(link.Item1));
+        }
+        //oneDst.ForEach(section =>
+        //{
+        //    List<System.Tuple<TunnelSection, int>> links = new(section.connectorPairs.Values);
+        //    links.ForEach(link => twoDst.Add(link.Item1));
+        //});
+        newTwoDst.ExceptWith(newOneDst);
+        newTwoDst.Remove(lastEnter);
+        HashSet<TunnelSection> oldTwoDst = new(twoDstSections);
+        oldTwoDst.ExceptWith(newTwoDst);
+        oldTwoDst.ExceptWith(newOneDst);
+        List<TunnelSection> cleanUpsections = new(oldTwoDst);
+        cleanUpsections.ForEach(section=>DestroySection(section));
+        Physics.SyncTransforms();
+        newOneDst.Remove(lastEnter);
+        oneDstSections.Clear();
+        twoDstSections.Clear();
+        oneDstSections.AddRange(newOneDst);
+        twoDstSections.AddRange(newTwoDst);
+        FillTwoDstList(oneDstSections, twoDstSections);
+        curPlayerSection = lastEnter;
 
-            // for any links it has to 2 foward sections
-            List<System.Tuple<TunnelSection, int>> links = new(section.connectorPairs.Values);
-            links.ForEach(link =>
+        TunnelSection[] allSections = GetComponentsInChildren<TunnelSection>();
+        for (int i = 0; i < allSections.Length; i++)
+        {
+            List<System.Tuple<TunnelSection, int>> newLinks = new(allSections[i].connectorPairs.Values);
+            for (int l = 0; l < newLinks.Count; l++)
             {
-                if (link.Item1 != curPlayerSection) // exclude connection to the new currentSection
+                if (newLinks[l] == null || newLinks[l].Item1 == null)
                 {
-                    nextNextPlayerSections.Remove(link.Item1); // remove it from 2 forward
-                    prevPrevPlayerSections.Add(link.Item1); // add it to 2 back
+                    Debug.LogWarning("Null link!");
                 }
-            });
-        });
-        nextPlayerSections.Clear(); // clear 1 forward list
-        nextPlayerSections.AddRange(nextNextPlayerSections); // add remaining items of 2 forward list
-        nextNextPlayerSections.Clear(); // clear 2 forward list
-
-        FillTwoDstList(nextPlayerSections, nextNextPlayerSections);
+            }
+        }
     }
 
-    private void IncrementBackward()
-    {
-        // destroy sections now 3 sections forward.
-        nextNextPlayerSections.ForEach(section => DestroySection(section));
-        nextNextPlayerSections.Clear();
+    ///private void IncrementForward()
+    ///{
+    ///    // destroy sections now 3 sections back.
+    ///    prevPrevPlayerSections.ForEach(section => DestroySection(section));
+    ///    prevPrevPlayerSections.Clear();
+    ///
+    ///    // add sections that were 1 section back to the 2 back list.
+    ///    prevPrevPlayerSections.AddRange(prevPlayerSections);
+    ///    prevPlayerSections.Clear(); // clear the 1 back list
+    ///
+    ///    prevPlayerSections.Add(curPlayerSection); // add the old currentSection to the 1 back list
+    ///
+    ///    curPlayerSection = lastEnter; // update to new currentSection
+    ///
+    ///    oneDstSections.Remove(curPlayerSection); // remove the new curSection from the 1 foward list
+    ///    // for each remaining item
+    ///    oneDstSections.ForEach(section =>
+    ///    {
+    ///        prevPlayerSections.Add(section); // add it to the 1 back list
+    ///
+    ///        // for any links it has to 2 foward sections
+    ///        List<System.Tuple<TunnelSection, int>> links = new(section.connectorPairs.Values);
+    ///        links.ForEach(link =>
+    ///        {
+    ///            if (link.Item1 != curPlayerSection) // exclude connection to the new currentSection
+    ///            {
+    ///                twoDstSections.Remove(link.Item1); // remove it from 2 forward
+    ///                prevPrevPlayerSections.Add(link.Item1); // add it to 2 back
+    ///            }
+    ///        });
+    ///    });
+    ///    oneDstSections.Clear(); // clear 1 forward list
+    ///    oneDstSections.AddRange(twoDstSections); // add remaining items of 2 forward list
+    ///    twoDstSections.Clear(); // clear 2 forward list
+    ///
+    ///    FillTwoDstList(oneDstSections, twoDstSections);
+    ///}
 
-        // add sections that were 1 section forward to the 2 back list.
-        nextNextPlayerSections.AddRange(nextPlayerSections);
-        nextPlayerSections.Clear(); // clear the 1 forward list
-
-        nextPlayerSections.Add(curPlayerSection); // add the old currentSection to the 1 forward list
-
-        curPlayerSection = lastEnter; // update to new currentSection
-
-        prevPlayerSections.Remove(curPlayerSection); // remove the new curSection from the 1 back list
-                                                     // for each remaining item
-        prevPlayerSections.ForEach(section =>
-        {
-            nextPlayerSections.Add(section); // add it to the 1 forward list
-
-            // for any links it has to 2 foward sections
-            List<System.Tuple<TunnelSection, int>> links = new(section.connectorPairs.Values);
-            links.ForEach(link =>
-            {
-                if (link.Item1 != curPlayerSection) // exclude connection to the new currentSection
-                {
-                    prevPrevPlayerSections.Remove(link.Item1); // remove it from 2 back
-                    nextNextPlayerSections.Add(link.Item1); // add it to 2 forward
-                }
-            });
-        });
-        prevPlayerSections.Clear(); // clear 1 back list
-        prevPlayerSections.AddRange(prevPrevPlayerSections); // add remaining items of 2 back list
-        prevPrevPlayerSections.Clear(); // clear 2 back list
-
-        FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
-    }
+    ///private void IncrementBackward()
+    ///{
+    ///    // destroy sections now 3 sections forward.
+    ///    twoDstSections.ForEach(section => DestroySection(section));
+    ///    twoDstSections.Clear();
+    ///
+    ///    // add sections that were 1 section forward to the 2 back list.
+    ///    twoDstSections.AddRange(oneDstSections);
+    ///    oneDstSections.Clear(); // clear the 1 forward list
+    ///
+    ///    oneDstSections.Add(curPlayerSection); // add the old currentSection to the 1 forward list
+    ///
+    ///    curPlayerSection = lastEnter; // update to new currentSection
+    ///
+    ///    prevPlayerSections.Remove(curPlayerSection); // remove the new curSection from the 1 back list
+    ///                                                 // for each remaining item
+    ///    prevPlayerSections.ForEach(section =>
+    ///    {
+    ///        oneDstSections.Add(section); // add it to the 1 forward list
+    ///
+    ///        // for any links it has to 2 foward sections
+    ///        List<System.Tuple<TunnelSection, int>> links = new(section.connectorPairs.Values);
+    ///        links.ForEach(link =>
+    ///        {
+    ///            if (link.Item1 != curPlayerSection) // exclude connection to the new currentSection
+    ///            {
+    ///                prevPrevPlayerSections.Remove(link.Item1); // remove it from 2 back
+    ///                twoDstSections.Add(link.Item1); // add it to 2 forward
+    ///            }
+    ///        });
+    ///    });
+    ///    prevPlayerSections.Clear(); // clear 1 back list
+    ///    prevPlayerSections.AddRange(prevPrevPlayerSections); // add remaining items of 2 back list
+    ///    prevPrevPlayerSections.Clear(); // clear 2 back list
+    ///
+    ///    FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
+    ///}
 
     /// <summary>
     /// Picks and connects new section to the given tunnel Section primarySection.
@@ -415,6 +444,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             TunnelSection sectionInstance = InstinateSection(PickSection(primarySection, out Connector priPref, out Connector secPref));
             oneDstList.Add(sectionInstance);
             TransformSection(primarySection, sectionInstance, priPref, secPref); // transform the new section
+            Physics.SyncTransforms();
         }
     }
 
@@ -430,12 +460,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             TunnelSection section = oneDstList[i];
             // for each connector -1 (exlucde connection to current section)
-            for (int j = 0; j < section.connectors.Length - 1; j++)
+            int iters = section.connectors.Length - section.InUse.Count;
+            for (int j = 0; j < iters; j++)
             {
                 // pick & Instinate a new section to connect to
                 TunnelSection sectionInstance = InstinateSection(PickSection(section, out Connector priPref, out Connector secPref));
                 twoDstList.Add(sectionInstance); // add this new section to the 2 distance list
                 TransformSection(section, sectionInstance, priPref, secPref); // transform the new section
+                Physics.SyncTransforms();
             }
         }
     }
@@ -464,6 +496,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
         if(targetSection == null)
         {
+            Debug.LogException(new System.NullReferenceException("targetSections is null, must return valid prefab"), primary);
             throw new System.NullReferenceException("targetSections is null, must return valid prefab");
         }
         return targetSection;
@@ -593,6 +626,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             {
                 sectionTwin.Item1.connectorPairs[sectionTwin.Item2] = null;
                 sectionTwin.Item1.InUse.Remove(sectionTwin.Item2);
+                sectionTwin.Item1.connectorPairs.Remove(sectionTwin.Item2);
             }
         });
         Destroy(section.gameObject);

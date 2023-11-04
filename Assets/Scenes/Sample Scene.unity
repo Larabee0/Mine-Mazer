@@ -376,12 +376,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 64
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 3.7494068, y: 3.9417243, z: 0.2948399}
-  m_Center: {x: -0.029761314, y: 1.385772, z: 0.29385567}
+  m_Center: {x: -0.029761314, y: 1.385772, z: -0.12}
 --- !u!65 &213246287
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -397,9 +397,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 64
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.2948399, y: 3.9417243, z: 3.4846172}
   m_Center: {x: -10.21, y: 1.385772, z: -10.37452}
@@ -418,9 +418,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 64
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.2948399, y: 3.9417243, z: 3.4846172}
   m_Center: {x: 10.21, y: 1.385772, z: -10.37452}
@@ -2685,8 +2685,8 @@ MonoBehaviour:
   tunnelSections:
   - {fileID: 945997909}
   - {fileID: 213246285}
-  nextNextPlayerSections: []
-  nextPlayerSections: []
+  twoDstSections: []
+  oneDstSections: []
   curPlayerSection: {fileID: 0}
   prevPlayerSections: []
   prevPrevPlayerSections: []
@@ -2694,7 +2694,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   maxInterations: 10000000
-  RandomSeed: 0
+  RandomSeed: 1
   seed:
     s0: -327159958
     s1: -126098709
