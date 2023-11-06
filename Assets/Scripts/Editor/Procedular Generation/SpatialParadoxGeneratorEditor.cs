@@ -17,7 +17,7 @@ public class SpatialParadoxGeneratorEditor : Editor
             bool2 cur = new(script.initialAreaDebugging, script.transformDebugging);
             script.initialAreaDebugging = GUILayout.Toggle(script.initialAreaDebugging, "Inital Area Debug");
             script.transformDebugging = GUILayout.Toggle(script.transformDebugging, "Transform Debug");
-
+            
             if (cur[0] != script.initialAreaDebugging && script.initialAreaDebugging && cur[1])
             {
                 script.transformDebugging = false;

@@ -3,34 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
-using static System.Collections.Specialized.BitVector32;
 using Random = UnityEngine.Random;
 
 public class SpatialParadoxGenerator : MonoBehaviour
 {
+    [Header("Prefabs")]
+    [SerializeField] private TunnelSection deadEndPlug;
     [SerializeField] private List<TunnelSection> tunnelSections;
 
+    [Header("Runtime Map")]
     [SerializeField] private TunnelSection curPlayerSection;
 
     [SerializeField] private List<TunnelSection> twoDstSections = new();
     [SerializeField] private List<TunnelSection> oneDstSections = new();
-
+    
+    [Header("Generation Settings")]
     [SerializeField] private LayerMask tunnelSectionLayerMask;
     [SerializeField, Min(1000)] private int maxInterations = 1000000;
-    [SerializeField] private bool RandomSeed = true;
+    [SerializeField] private bool randomSeed = true;
     [SerializeField] private Random.State seed;
+
     private int tunnelSectionLayerIndex;
     private TunnelSection lastEnter;
     private TunnelSection lastExit;
 
 #if UNITY_EDITOR
-    [Header("Transform Debugging")]
+    [Header("Debug")]
+    [SerializeField] private TunnelSection prefab1;
+    [SerializeField] private TunnelSection prefab2;
     [HideInInspector] public bool debugging = false;
     [HideInInspector] public bool initialAreaDebugging = false;
     [HideInInspector] public bool transformDebugging = false;
-    public TunnelSection prefab1;
-    public TunnelSection prefab2;
-    public GameObject santiziedCube;
+    [SerializeField, Min(0.5f)] private float intersectTestHoldTime = 2.5f;
+    [SerializeField, Min(0.5f)] private float distanceListPauseTime = 5f;
+    [SerializeField, Min(0.5f)] private float transformHoldTime = 2.5f;
+    [SerializeField] private GameObject santiziedCube;
     private GameObject primaryObj;
     private GameObject secondaryObj;
 
@@ -54,7 +61,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             return;
         }
 #endif
-        if (!RandomSeed)
+        if (!randomSeed)
         {
             Random.state = seed;
         }
@@ -90,7 +97,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
         TunnelSection newSection = InstinateSection(prefab2);
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(transformHoldTime);
         primaryObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
         secondaryObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
         while (true)
@@ -110,7 +117,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
                     newSection.transform.SetPositionAndRotation(matix.Translation(), matix.Rotation());
                     Debug.LogFormat("i = {0} j = {1}", i, j);
                     primaryObj.transform.SetPositionAndRotation(primaryConnector.position, primaryConnector.localRotation);
-                    yield return new WaitForSeconds(2.5f);
+                    yield return new WaitForSeconds(transformHoldTime);
                     newSection.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
                 }
             }
@@ -124,9 +131,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
         curPlayerSection = InstinateSection(spawnIndex);
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
 
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(distanceListPauseTime);
         yield return FillOneDstListDebug(oneDstSections, curPlayerSection, curPlayerSection.connectors.Length);
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(distanceListPauseTime);
         yield return FillTwoDstListDebug(oneDstSections, twoDstSections);
     }
 
@@ -182,10 +189,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
             iterations--;
             if (iterations <= 0)
             {
-                throw new System.StackOverflowException("Failed to find section that passed Intersection Test");
+                Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
             }
         }
-
+        if (targetSectionDebug == null)
+        {
+            targetSectionDebug = deadEndPlug;
+            Debug.LogWarning("Unable to find usable section, ending the tunnel.", primary);
+        }
         yield return null;
     }
 
@@ -249,7 +260,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
         //objects[0].SetActive(true);
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(intersectTestHoldTime);
         objects.ForEach(ob => Destroy(ob));
 
         intersectionTest = noIntersections;
@@ -491,13 +502,13 @@ public class SpatialParadoxGenerator : MonoBehaviour
             iterations--;
             if (iterations <= 0)
             {
-                Debug.LogException(new System.StackOverflowException("Failed to find section that passed Intersection Test"), this);
+                Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
             }
         }
         if(targetSection == null)
         {
-            Debug.LogException(new System.NullReferenceException("targetSections is null, must return valid prefab"), primary);
-            throw new System.NullReferenceException("targetSections is null, must return valid prefab");
+            targetSection = deadEndPlug;
+            Debug.LogWarning("Unable to find usable section, ending the tunnel.", primary);            
         }
         return targetSection;
     }
@@ -649,8 +660,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
         secondary.UpdateWorldPos(float4x4.TRS(primary.position, rotation, Vector3.one));
 
         Vector3 position = primary.position + (primary.position - secondary.position);
-        position.y = primary.parentPos.y + (primary.position.y - secondary.position.y);
-        position.y = 0f;
+        position.y = primary.parentPos.y + (primary.localPosition.y - secondary.localPosition.y);
+        
 #if UNITY_EDITOR
         if (debugging && transformDebugging)
         {

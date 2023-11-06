@@ -11225,6 +11225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 619e7440358b093499a1d20cd5dc8106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deadEndPlug: {fileID: 736837953}
   tunnelSections:
   - {fileID: 945997909}
   - {fileID: 213246285}
@@ -11236,6 +11237,7 @@ MonoBehaviour:
   - {fileID: 1721496811}
   - {fileID: 382147974}
   - {fileID: 1991039399}
+  - {fileID: 354699218}
   curPlayerSection: {fileID: 0}
   twoDstSections: []
   oneDstSections: []
@@ -11243,17 +11245,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   maxInterations: 10000000
-  RandomSeed: 1
+  randomSeed: 1
   seed:
     s0: -327159958
     s1: -126098709
     s2: 996236964
     s3: 1367127049
-  debugging: 1
-  initialAreaDebugging: 0
-  transformDebugging: 1
   prefab1: {fileID: 945997909}
   prefab2: {fileID: 945997909}
+  debugging: 1
+  initialAreaDebugging: 1
+  transformDebugging: 0
+  intersectTestHoldTime: 1.5
+  distanceListPauseTime: 2.5
+  transformHoldTime: 2.5
   santiziedCube: {fileID: 1200272413}
 --- !u!1 &2038916250
 GameObject:
