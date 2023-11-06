@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using static System.Collections.Specialized.BitVector32;
 using Random = UnityEngine.Random;
 
 public class SpatialParadoxGenerator : MonoBehaviour
@@ -132,14 +133,21 @@ public class SpatialParadoxGenerator : MonoBehaviour
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
 
         yield return new WaitForSeconds(distanceListPauseTime);
-        yield return FillOneDstListDebug(oneDstSections, curPlayerSection, curPlayerSection.connectors.Length);
+        yield return FillOneDstListDebug(oneDstSections, curPlayerSection);
         yield return new WaitForSeconds(distanceListPauseTime);
         yield return FillTwoDstListDebug(oneDstSections, twoDstSections);
     }
 
-    private IEnumerator FillOneDstListDebug(List<TunnelSection> oneDstList, TunnelSection primarySection, int iterations)
+    /// <summary>
+    /// Replicates Functionality of <see cref="FillOneDstList(List{TunnelSection}, TunnelSection, int)"/> with Coroutine support to allow visualisation of what is happening
+    /// </summary>
+    /// <param name="oneDstList"></param>
+    /// <param name="primarySection"></param>
+    /// <param name="iterations"></param>
+    /// <returns></returns>
+    private IEnumerator FillOneDstListDebug(List<TunnelSection> oneDstList, TunnelSection primarySection)
     {
-        for (int j = 0; j < iterations; j++)
+        for (int j = 0; j < primarySection.connectors.Length; j++)
         {
             // pick a new section to connect to
             yield return PickSectionDebug(primarySection);
@@ -150,14 +158,20 @@ public class SpatialParadoxGenerator : MonoBehaviour
         yield return null;
     }
 
+    /// <summary>
+    /// Replicates Functionality of <see cref="FillTwoDstList(List{TunnelSection}, List{TunnelSection})"/> with Coroutine support to allow visualisation of what is happening
+    /// </summary>
+    /// <param name="oneDstList"></param>
+    /// <param name="twoDstList"></param>
+    /// <returns></returns>
     private IEnumerator FillTwoDstListDebug(List<TunnelSection> oneDstList, List<TunnelSection> twoDstList)
     {
         for (int i = 0; i < oneDstList.Count; i++) // for each item in 1 back
         {
             TunnelSection section = oneDstList[i];
             // for each connector -1 (exlucde connection to current section)
-            int iters = section.connectors.Length - section.InUse.Count;
-            for (int j = 0; j < iters; j++)
+            int freeConnectors = section.connectors.Length - section.InUse.Count;
+            for (int j = 0; j < freeConnectors; j++)
             {
                 // pick a new section to connect to
                 yield return PickSectionDebug(section);
@@ -275,7 +289,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         curPlayerSection = InstinateSection(spawnIndex);
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
 
-        FillOneDstList(oneDstSections, curPlayerSection, curPlayerSection.connectors.Length);
+        FillOneDstList(oneDstSections, curPlayerSection);
 
         FillTwoDstList(oneDstSections, twoDstSections);
     }
@@ -442,20 +456,16 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     /// <summary>
     /// Picks and connects new section to the given tunnel Section primarySection.
-    /// This runs as many times as iterations to allow some sections to count as "Backwards".
     /// </summary>
     /// <param name="oneDstList"></param>
     /// <param name="primarySection"></param>
-    /// <param name="iterations"></param>
-    private void FillOneDstList(List<TunnelSection> oneDstList, TunnelSection primarySection, int iterations)
+    private void FillOneDstList(List<TunnelSection> oneDstList, TunnelSection primarySection)
     {
-        for (int j = 0; j < iterations; j++)
+        for (int j = 0; j < primarySection.connectors.Length; j++)
         {
-            // pick & Instinate a new section to connect to
-            TunnelSection sectionInstance = InstinateSection(PickSection(primarySection, out Connector priPref, out Connector secPref));
-            oneDstList.Add(sectionInstance);
-            TransformSection(primarySection, sectionInstance, priPref, secPref); // transform the new section
-            Physics.SyncTransforms();
+            // Pick Instinate & connect a new section
+            TunnelSection sectionInstance = PickInstinateConnect(primarySection);
+            oneDstList.Add(sectionInstance); // add this new section to the 1 distance list
         }
     }
 
@@ -470,19 +480,39 @@ public class SpatialParadoxGenerator : MonoBehaviour
         for (int i = 0; i < oneDstList.Count; i++)
         {
             TunnelSection section = oneDstList[i];
-            // for each connector -1 (exlucde connection to current section)
-            int iters = section.connectors.Length - section.InUse.Count;
-            for (int j = 0; j < iters; j++)
+            // calculate number of remaining connectors - this is how many sections we need to connect.
+            int freeConnectors = section.connectors.Length - section.InUse.Count;
+            for (int j = 0; j < freeConnectors; j++)
             {
-                // pick & Instinate a new section to connect to
-                TunnelSection sectionInstance = InstinateSection(PickSection(section, out Connector priPref, out Connector secPref));
+                // Pick Instinate & connect a new section
+                TunnelSection sectionInstance = PickInstinateConnect(section);
                 twoDstList.Add(sectionInstance); // add this new section to the 2 distance list
-                TransformSection(section, sectionInstance, priPref, secPref); // transform the new section
-                Physics.SyncTransforms();
             }
         }
     }
 
+    /// <summary>
+    /// Based off the givne primary section, this picks a new section prefab, Instinates it and connects (transforms) it to the primay section
+    /// </summary>
+    /// <param name="primary">Given root node of this connection</param>
+    /// <returns>New Section Instance</returns>
+    private TunnelSection PickInstinateConnect(TunnelSection primary)
+    {
+        TunnelSection pickedSection = PickSection(primary, out Connector priPref, out Connector secPref);
+        TunnelSection pickedInstance = InstinateSection(pickedSection);
+        TransformSection(primary, pickedInstance, priPref, secPref); // transform the new section
+        Physics.SyncTransforms(); /// push changes to physics world now instead of next fixed update, required for <see cref="RunIntersectionTests(TunnelSection, TunnelSection, out Connector, out Connector)"/>
+        return pickedInstance;
+    }
+
+    /// <summary>
+    /// Based on a given root, this method figures out what prefabs can connect to it and then chooses, semi-randomly, a prefab from that list that fits in the world.
+    /// In the event no section will fit in the world, a dead end is placed instead.
+    /// </summary>
+    /// <param name="primary">Root Section</param>
+    /// <param name="primaryPreference">Root section connector target</param>
+    /// <param name="secondaryPreference">New section connector target</param>
+    /// <returns>Chosen Prefab</returns>
     private TunnelSection PickSection(TunnelSection primary, out Connector primaryPreference, out Connector secondaryPreference)
     {
         primaryPreference = Connector.Empty;
@@ -507,6 +537,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
         if(targetSection == null)
         {
+            secondaryPreference = deadEndPlug.connectors[0];
             targetSection = deadEndPlug;
             Debug.LogWarning("Unable to find usable section, ending the tunnel.", primary);            
         }
