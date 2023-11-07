@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
+using System.IO;
 
 [CustomEditor(typeof(SectionBaker))]
 public class SectionBakerEditor : Editor
@@ -75,5 +74,38 @@ public class SectionBakerEditor : Editor
         });
         
         section.boundingBoxes = boxBounds.ToArray();
+
+        if(baker.SaveToPrefabs)
+        {
+            CreatePrefab(section.gameObject, baker);
+            DestroyImmediate(section.gameObject);
+        }
+    }
+
+    private static void CreatePrefab(GameObject asset, SectionBaker baker)
+    {
+        string targetPath = baker.prefabsDirectory + "/" + baker.folderName;
+        if (!Directory.Exists(baker.prefabsDirectory))
+        {
+            string[] folders = baker.prefabsDirectory.Split('/', System.StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < folders.Length; i++)
+            {
+                AssetDatabase.CreateFolder(folders[i - 1], folders[i]);
+            }
+        }
+        if (!Directory.Exists(targetPath))
+        {
+            AssetDatabase.CreateFolder(baker.prefabsDirectory, baker.folderName);
+        }
+
+        string localPath = targetPath + "/" + asset.name + ".prefab";
+        localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
+        if(localPath == null)
+        {
+            Debug.LogError("local path invalid");
+            return;
+        }
+        PrefabUtility.SaveAsPrefabAsset(asset, localPath, out bool success);
+        Debug.LogFormat("Asset Create successful? {0}", success);
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
-using static System.Collections.Specialized.BitVector32;
 using Random = UnityEngine.Random;
 
 public class SpatialParadoxGenerator : MonoBehaviour
@@ -377,82 +376,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
         }
     }
-
-    ///private void IncrementForward()
-    ///{
-    ///    // destroy sections now 3 sections back.
-    ///    prevPrevPlayerSections.ForEach(section => DestroySection(section));
-    ///    prevPrevPlayerSections.Clear();
-    ///
-    ///    // add sections that were 1 section back to the 2 back list.
-    ///    prevPrevPlayerSections.AddRange(prevPlayerSections);
-    ///    prevPlayerSections.Clear(); // clear the 1 back list
-    ///
-    ///    prevPlayerSections.Add(curPlayerSection); // add the old currentSection to the 1 back list
-    ///
-    ///    curPlayerSection = lastEnter; // update to new currentSection
-    ///
-    ///    oneDstSections.Remove(curPlayerSection); // remove the new curSection from the 1 foward list
-    ///    // for each remaining item
-    ///    oneDstSections.ForEach(section =>
-    ///    {
-    ///        prevPlayerSections.Add(section); // add it to the 1 back list
-    ///
-    ///        // for any links it has to 2 foward sections
-    ///        List<System.Tuple<TunnelSection, int>> links = new(section.connectorPairs.Values);
-    ///        links.ForEach(link =>
-    ///        {
-    ///            if (link.Item1 != curPlayerSection) // exclude connection to the new currentSection
-    ///            {
-    ///                twoDstSections.Remove(link.Item1); // remove it from 2 forward
-    ///                prevPrevPlayerSections.Add(link.Item1); // add it to 2 back
-    ///            }
-    ///        });
-    ///    });
-    ///    oneDstSections.Clear(); // clear 1 forward list
-    ///    oneDstSections.AddRange(twoDstSections); // add remaining items of 2 forward list
-    ///    twoDstSections.Clear(); // clear 2 forward list
-    ///
-    ///    FillTwoDstList(oneDstSections, twoDstSections);
-    ///}
-
-    ///private void IncrementBackward()
-    ///{
-    ///    // destroy sections now 3 sections forward.
-    ///    twoDstSections.ForEach(section => DestroySection(section));
-    ///    twoDstSections.Clear();
-    ///
-    ///    // add sections that were 1 section forward to the 2 back list.
-    ///    twoDstSections.AddRange(oneDstSections);
-    ///    oneDstSections.Clear(); // clear the 1 forward list
-    ///
-    ///    oneDstSections.Add(curPlayerSection); // add the old currentSection to the 1 forward list
-    ///
-    ///    curPlayerSection = lastEnter; // update to new currentSection
-    ///
-    ///    prevPlayerSections.Remove(curPlayerSection); // remove the new curSection from the 1 back list
-    ///                                                 // for each remaining item
-    ///    prevPlayerSections.ForEach(section =>
-    ///    {
-    ///        oneDstSections.Add(section); // add it to the 1 forward list
-    ///
-    ///        // for any links it has to 2 foward sections
-    ///        List<System.Tuple<TunnelSection, int>> links = new(section.connectorPairs.Values);
-    ///        links.ForEach(link =>
-    ///        {
-    ///            if (link.Item1 != curPlayerSection) // exclude connection to the new currentSection
-    ///            {
-    ///                prevPrevPlayerSections.Remove(link.Item1); // remove it from 2 back
-    ///                twoDstSections.Add(link.Item1); // add it to 2 forward
-    ///            }
-    ///        });
-    ///    });
-    ///    prevPlayerSections.Clear(); // clear 1 back list
-    ///    prevPlayerSections.AddRange(prevPrevPlayerSections); // add remaining items of 2 back list
-    ///    prevPrevPlayerSections.Clear(); // clear 2 back list
-    ///
-    ///    FillTwoDstList(prevPlayerSections, prevPrevPlayerSections);
-    ///}
 
     /// <summary>
     /// Picks and connects new section to the given tunnel Section primarySection.
