@@ -16,6 +16,10 @@ public class TunnelSectionTrigger : MonoBehaviour
             enabled = false;
             return;
         }
+    }
+
+    private void Start()
+    {
         generator = sectionOwner.GetComponentInParent<SpatialParadoxGenerator>();
         if (generator == null)
         {

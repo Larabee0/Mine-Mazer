@@ -81,7 +81,7 @@ public class SectionBakerEditor : Editor
 
         for (int i = 0; i < baker.ConnectorTriggers.Length; i++)
         {
-            Instantiate(baker.ConnectorTriggers[i], section.transform);
+            Instantiate(baker.ConnectorTriggers[i], section.transform).AddComponent<TunnelSectionTrigger>();
         }
 
         if(baker.SaveToPrefabs)
