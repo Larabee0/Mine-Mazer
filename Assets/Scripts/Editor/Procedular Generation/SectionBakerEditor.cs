@@ -16,11 +16,15 @@ public class SectionBakerEditor : Editor
         {
             Bake(baker);
         }
+        if(GUILayout.Button("Swap Parent Child Position"))
+        {
+            (baker.transform.GetChild(0).transform.localPosition, baker.transform.localPosition) = (baker.transform.localPosition, baker.transform.GetChild(0).transform.localPosition);
+        }
     }
 
     private void Bake(SectionBaker baker)
     {
-        if(baker.SectionModel == null) { Debug.LogWarning("Missing section Model, cannot create prefab"); return; }
+        if(baker.SectionModel == null) { baker.SectionModel = baker.transform.GetChild(0).gameObject;Debug.LogWarning("Section model unassigned getting first child. Check and try bake again."); return; }
         List<BoxBounds> boxBounds = new();
         for (int i = 0; i < baker.BoundsObjects.Length; i++)
         {
@@ -74,6 +78,11 @@ public class SectionBakerEditor : Editor
         });
         
         section.boundingBoxes = boxBounds.ToArray();
+
+        for (int i = 0; i < baker.ConnectorTriggers.Length; i++)
+        {
+            Instantiate(baker.ConnectorTriggers[i], section.transform);
+        }
 
         if(baker.SaveToPrefabs)
         {

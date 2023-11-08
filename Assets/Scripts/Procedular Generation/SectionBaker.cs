@@ -5,10 +5,13 @@ using UnityEngine;
 public class SectionBaker : MonoBehaviour
 {
     [SerializeField] private GameObject[] boundsObjects;
-    public GameObject[] BoundsObjects => boundsObjects;
-
     [SerializeField] private GameObject[] connectorObjects;
+    [SerializeField] private GameObject[] connectorTriggers;
+
+    public GameObject[] BoundsObjects => boundsObjects;
     public GameObject[] ConnectorObjects => connectorObjects;
+    public GameObject[] ConnectorTriggers => connectorTriggers;
+
     public string prefabsDirectory = "Assets/Prefabs";
     public string folderName = "Tunnel Assets";
     public LayerMask tunnelSectionLayerMask;
