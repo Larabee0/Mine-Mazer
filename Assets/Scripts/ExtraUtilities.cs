@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 public static class ExtraUtilities
@@ -46,7 +48,7 @@ public static class ExtraUtilities
     {
         return new Quaternion(-value.x, -value.y, -value.z, value.w);
     }
-
+#if UNITY_EDITOR
     public static void DrawWireCapsule(float _radius, float _height)
     {
         Vector3 center = Vector3.zero;
@@ -66,4 +68,5 @@ public static class ExtraUtilities
         Handles.DrawWireDisc(center + Vector3.up * pointOffset, Vector3.up, _radius);
         Handles.DrawWireDisc(center + Vector3.down * pointOffset, Vector3.up, _radius);
     }
+#endif
 }

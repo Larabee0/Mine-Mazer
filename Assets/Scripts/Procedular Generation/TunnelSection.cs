@@ -7,6 +7,8 @@ public class TunnelSection : MonoBehaviour
 {
     [SerializeField] private List<TunnelSection> excludePrefabConnections = new();
 
+    public Vector3 Centre => GetComponent<MeshRenderer>().bounds.center;
+
     public Connector[] connectors;
 
     public BoxBounds[] boundingBoxes;
@@ -20,7 +22,6 @@ public class TunnelSection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Player"))
         {
             GetComponentInParent<SpatialParadoxGenerator>().PlayerEnterSection(this);

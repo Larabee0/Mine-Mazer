@@ -9,6 +9,8 @@ public class LadderScript : MonoBehaviour
     public float speedUpDown = 3.2f;
     public Improved_Movement FPSInput;
 
+    private Transform ladder;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -17,30 +19,32 @@ public class LadderScript : MonoBehaviour
     }
     private void OnTriggerEnter(Collider col)
     {
-       if(col.gameObject.tag == "Ladder")
+       if(col.gameObject.CompareTag("Ladder"))
         {
             FPSInput.enabled = false;
             inside = !inside;
+            ladder = col.transform;
         }
     }
     private void OnTriggerExit(Collider col)
     {
-        if(col.gameObject.tag == "Ladder")
+        if (col.gameObject.CompareTag("Ladder"))
         {
             FPSInput.enabled = true;
             inside = !inside;
+            ladder = null;
         }
     }
     private void Update()
     {
-        if(inside == true && Input.GetKey("w"))
+        if(inside == true && Input.GetKey(KeyCode.W))
         {
-            chController.transform.position += Vector3.up * speedUpDown * Time.deltaTime;
+            chController.transform.position += speedUpDown * Time.deltaTime * ladder.up;
         }
 
-        if(inside == true && Input.GetKey("s"))
+        if(inside == true && Input.GetKey(KeyCode.S))
         {
-            chController.transform.position += Vector3.down * speedUpDown * Time.deltaTime;
+            chController.transform.position += -speedUpDown * Time.deltaTime * ladder.up;
         }
     }
 }

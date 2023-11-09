@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &563885210313048928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5779315755480768641}
+  - component: {fileID: 6372838106400907776}
+  m_Layer: 0
+  m_Name: MapGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5779315755480768641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563885210313048928}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6372838106400907776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563885210313048928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 619e7440358b093499a1d20cd5dc8106, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadEndPlug: {fileID: 7113011209303798032, guid: fc93cda41d77b1442bb709e6410dc4c2,
+    type: 3}
+  tunnelSections:
+  - {fileID: 7541396775899075963, guid: 2e3fb2f25c7499740a8e78cd64cbd320, type: 3}
+  - {fileID: 35608542359863082, guid: 75ba65f3b527d674fae0a36e4781cad3, type: 3}
+  - {fileID: 7544748717809826148, guid: 17cf9e69ff45f2d4db8a8e84c5559246, type: 3}
+  - {fileID: 7280747401053184910, guid: 5c6e2853f717f8c428620637ea73048f, type: 3}
+  - {fileID: 7115210080915405535, guid: d3c3b5ae8768c8a45b239b9b45ca7b9f, type: 3}
+  - {fileID: 4699310440157599471, guid: 7a114b4e17d402448bdafb0f125ae068, type: 3}
+  - {fileID: 4233013943535160681, guid: f8504dc5229c59c4bb765e72c8f3781d, type: 3}
+  - {fileID: 2163722355442894833, guid: 2a118433d47760043984e4217cbe88eb, type: 3}
+  - {fileID: 6413336854673384978, guid: f8877bc59c277884aa6ddeb4403a8d4b, type: 3}
+  - {fileID: 2742071741484992111, guid: df6ca25f8f0f98e4294616b46272eddd, type: 3}
+  - {fileID: 7108369093871069744, guid: 9059b741be8efc84c892e8bc29852056, type: 3}
+  - {fileID: 7226286589360190076, guid: 6df7ef2c6258fcf47a4010c199db3320, type: 3}
+  - {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962, type: 3}
+  - {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8, type: 3}
+  - {fileID: 1296708680027945885, guid: 0f6c366f838347e4382141d3b700490c, type: 3}
+  curPlayerSection: {fileID: 0}
+  twoDstSections: []
+  oneDstSections: []
+  tunnelSectionLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  maxInterations: 10000000
+  randomSeed: 1
+  seed:
+    s0: -327159958
+    s1: -126098709
+    s2: 996236964
+    s3: 1367127049
+  prefab1: {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962, type: 3}
+  prefab2: {fileID: 7113011209303798032, guid: fc93cda41d77b1442bb709e6410dc4c2, type: 3}
+  debugging: 0
+  initialAreaDebugging: 0
+  transformDebugging: 0
+  intersectTestHoldTime: 1.5
+  distanceListPauseTime: 2.5
+  transformHoldTime: 2.5
+  santiziedCube: {fileID: 0}

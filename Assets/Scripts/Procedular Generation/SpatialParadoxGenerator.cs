@@ -66,6 +66,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
             Random.state = seed;
         }
         GenerateInitialArea();
+
+        //FindObjectOfType<Improved_Movement>().transform.position = curPlayerSection.Centre;
     }
 
 
