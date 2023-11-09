@@ -208,6 +208,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
         if (targetSectionDebug == null)
         {
             targetSectionDebug = deadEndPlug;
+            secondaryPreferenceDebug = deadEndPlug.connectors[0];
+            secondaryPreferenceDebug.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
             Debug.LogWarning("Unable to find usable section, ending the tunnel.", primary);
         }
         yield return null;
@@ -461,6 +463,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         if(targetSection == null)
         {
             secondaryPreference = deadEndPlug.connectors[0];
+            secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
             targetSection = deadEndPlug;
             Debug.LogWarning("Unable to find usable section, ending the tunnel.", primary);            
         }
