@@ -26,6 +26,8 @@ public class TunnelSectionTrigger : MonoBehaviour
             Debug.LogError("Unable to resolve generator reference", this);
             enabled = false;
         }
+
+        
     }
 
     private void OnTriggerEnter(Collider other)
