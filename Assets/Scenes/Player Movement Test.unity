@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465791, g: 0.4964133, b: 0.57481784, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 919898356}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Floor
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -228,6 +228,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 9.999999, y: 2.220446e-16, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &957219042 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5637687250392250194, guid: e78a1712f70fb7344af802fa73a4a9cd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7067484268991840553}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e0759d7a8d532142a8e4c756df00462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1154865242
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,7 +561,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1611948406}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2.955751, y: 6.56, z: -0.86}
+  m_LocalPosition: {x: 2.955751, y: 5.83, z: -0.86}
   m_LocalScale: {x: 0.12307, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -572,7 +584,7 @@ PrefabInstance:
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.23
+      value: -1.39
       objectReference: {fileID: 0}
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
@@ -582,7 +594,7 @@ PrefabInstance:
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.53
+      value: 9.99
       objectReference: {fileID: 0}
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
@@ -626,6 +638,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5637687250392250194, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
+      propertyPath: gravity
+      value: -3.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 5637687250392250194, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
       propertyPath: jumpHeight
       value: 3
       objectReference: {fileID: 0}
@@ -634,6 +651,11 @@ PrefabInstance:
       propertyPath: groundCheck
       value: 
       objectReference: {fileID: 919898355}
+    - target: {fileID: 8499462043942966915, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: FPSInput
+      value: 
+      objectReference: {fileID: 957219042}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
