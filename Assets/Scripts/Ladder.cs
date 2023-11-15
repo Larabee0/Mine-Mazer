@@ -11,40 +11,86 @@ public class LadderScript : MonoBehaviour
 
     private Transform ladder;
 
+    private bool newInputSystem = false;
+    private Coroutine ladderProcess;
+
     // Start is called before the first frame update
     private void Start()
     {
         FPSInput = GetComponent<Improved_Movement>();
         inside = false;
+        newInputSystem = InputManager.Instance != null;
     }
+
     private void OnTriggerEnter(Collider col)
     {
        if(col.gameObject.CompareTag("Ladder"))
         {
             FPSInput.enabled = false;
-            inside = !inside;
+            inside = true;
+            if(ladderProcess != null)
+            {
+                StopCoroutine(ladderProcess);
+            }
+            
             ladder = col.transform;
+            ladderProcess = StartCoroutine(UpdateLadder());
         }
     }
+
     private void OnTriggerExit(Collider col)
     {
         if (col.gameObject.CompareTag("Ladder"))
         {
             FPSInput.enabled = true;
-            inside = !inside;
+            inside = false;
+            if (ladderProcess != null)
+            {
+                StopCoroutine(ladderProcess);
+            }
             ladder = null;
         }
     }
-    private void Update()
-    {
-        if(inside == true && Input.GetKey(KeyCode.W))
-        {
-            chController.transform.position += speedUpDown * Time.deltaTime * ladder.up;
-        }
 
-        if(inside == true && Input.GetKey(KeyCode.S))
+    private IEnumerator UpdateLadder()
+    {
+        while (true)
         {
-            chController.transform.position += -speedUpDown * Time.deltaTime * ladder.up;
+            if (inside)
+            {
+                float speed = 0;
+                if (newInputSystem)
+                {
+                    float axisValue = InputManager.Instance.MoveAxis.y;
+                    speed = (axisValue > 0) ? speedUpDown : ((axisValue < 0) ? -speedUpDown : speed);
+                }
+                else
+                {
+                    if (Input.GetKey(KeyCode.W))
+                    {
+                        speed = speedUpDown;
+                    }
+                    else if (Input.GetKey(KeyCode.S))
+                    {
+                        speed = -speedUpDown;
+                    }
+                }
+                chController.transform.position += speed * Time.deltaTime * ladder.up;
+            }
+            yield return null;
         }
     }
+
+    //private void Update()
+    //{
+    //    if(inside == true && Input.GetKey(KeyCode.W))
+    //    {
+    //        chController.transform.position += speedUpDown * Time.deltaTime * ladder.up;
+    //    }
+    //
+    //    if(inside == true && Input.GetKey(KeyCode.S))
+    //    {
+    //        chController.transform.position += -speedUpDown * Time.deltaTime * ladder.up;
+    //    }
+    //}
 }
