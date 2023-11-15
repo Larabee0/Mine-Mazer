@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1978256791226161907}
   - component: {fileID: 3589282519963536948}
   - component: {fileID: 6506778449611488446}
-  - component: {fileID: 4993049634549650691}
   m_Layer: 0
   m_Name: ShadowCaster
   m_TagString: Untagged
@@ -84,28 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4993049634549650691
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 60328215956254135}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6234164866730262449, guid: 57fe3ada1a6cc084391f61fd41fc1745, type: 3}
 --- !u!1 &126952497580449433
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,7 +361,7 @@ Transform:
   - {fileID: 3819615483369125972}
   - {fileID: 1978256791226161907}
   m_Father: {fileID: 0}
-  m_RootOrder: 32
+  m_RootOrder: 33
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &639728387149933021
 MeshFilter:

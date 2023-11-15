@@ -219,7 +219,7 @@ Transform:
   - {fileID: 3531778164436899925}
   - {fileID: 3752248455202570776}
   m_Father: {fileID: 0}
-  m_RootOrder: 35
+  m_RootOrder: 36
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8638488253123328776
 MeshFilter:
@@ -609,7 +609,6 @@ GameObject:
   - component: {fileID: 3752248455202570776}
   - component: {fileID: 4675988526533144374}
   - component: {fileID: 8659362170821290588}
-  - component: {fileID: 4491040028935790399}
   m_Layer: 0
   m_Name: ShadowCaster
   m_TagString: Untagged
@@ -682,28 +681,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4491040028935790399
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5354332526473912263}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5674940725215731478, guid: 57fe3ada1a6cc084391f61fd41fc1745, type: 3}
 --- !u!1 &5485037785593204291
 GameObject:
   m_ObjectHideFlags: 0
