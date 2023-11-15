@@ -264,7 +264,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""binding"",
                     ""id"": ""7d44248c-c457-4f00-9d2e-44b1f2fe16f6"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Steam Deck & Controller"",
