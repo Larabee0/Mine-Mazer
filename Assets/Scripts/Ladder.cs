@@ -51,9 +51,18 @@ public class LadderScript : MonoBehaviour
             chController.transform.position += speedUpDown * Time.deltaTime * Vector3.down;
         }
 
-        if (inside == true && Ground)
+        if (inside == true && Input.GetKey(KeyCode.Space))
         {
-            Debug.Log("Ground Hit");
+            FPSInput.enabled = true;
+            inside = !inside;
+            ladder = null;
+        }
+
+        if (inside == true && gameObject.CompareTag("ground"))
+        {
+            FPSInput.enabled = true;
+            inside = !inside;
+            ladder = null;
         }
     }
 }
