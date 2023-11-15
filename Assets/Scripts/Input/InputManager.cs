@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 
 public delegate void OverUIChanged(bool newValue);
 public delegate void Vector2Axis(Vector2 axis);
@@ -101,6 +102,9 @@ public class InputManager : MonoBehaviour
             PlayerActions.North.canceled += OnNorthStop;
             PlayerActions.South.started += OnSouthStart;
             PlayerActions.South.canceled += OnSouthStop;
+
+            PlayerActions.Reload.canceled += ReloadScene;
+            northButton.OnButtonReleased += Quit;
         }
     }
 
@@ -117,7 +121,20 @@ public class InputManager : MonoBehaviour
             PlayerActions.North.canceled -= OnNorthStop;
             PlayerActions.South.started -= OnSouthStart;
             PlayerActions.South.canceled -= OnSouthStop;
+
+            PlayerActions.Reload.canceled -= ReloadScene;
+            northButton.OnButtonReleased -= Quit;
         }
+    }
+
+    private void ReloadScene(InputAction.CallbackContext context)
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    private void Quit()
+    {
+        Application.Quit();
     }
 
     // look is recieved as a position delta. exactly how Input.GetAxis("Mouse X/Y") works.

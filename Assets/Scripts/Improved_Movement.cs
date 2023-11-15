@@ -80,7 +80,7 @@ public class Improved_Movement : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         
-        //controller.Move(velocity * Time.deltaTime);
+        controller.Move(velocity * Time.deltaTime);
     }
 
     private void Move(float x, float z)
