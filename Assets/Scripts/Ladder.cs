@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,19 @@ public class LadderScript : MonoBehaviour
         inside = false;
         newInputSystem = InputManager.Instance != null;
         Ground = gameObject.GetComponent<Improved_Movement>().groundCheck;
+
+        if (newInputSystem)
+        {
+            InputManager.Instance.southButton.OnButtonHeld += OnJumpHeld;
+        }
+    }
+
+    private void OnJumpHeld()
+    {
+        if (inside)
+        {
+            ExitLadder();
+        }
     }
 
     private void OnTriggerEnter(Collider col)
@@ -45,14 +59,19 @@ public class LadderScript : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Ladder"))
         {
-            FPSInput.enabled = true;
-            inside = false;
             if (ladderProcess != null)
             {
                 StopCoroutine(ladderProcess);
             }
-            ladder = null;
+            ExitLadder();
         }
+    }
+
+    private void ExitLadder()
+    {
+        FPSInput.enabled = true;
+        inside = false;
+        ladder = null;
     }
 
     private IEnumerator UpdateLadder()
@@ -77,37 +96,36 @@ public class LadderScript : MonoBehaviour
                     {
                         speed = -speedUpDown;
                     }
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        ExitLadder();
+                    }
                 }
                 chController.transform.position += speed * Time.deltaTime * ladder.up;
+
+                if (gameObject.CompareTag("ground"))
+                {
+                    ExitLadder();
+                }
             }
             yield return null;
         }
     }
 
-    private void Update()
-    {
-        if (inside == true && Input.GetKey(KeyCode.W))
-        {
-            chController.transform.position += speedUpDown * Time.deltaTime * Vector3.up;
-        }
-
-        if (inside == true && Input.GetKey(KeyCode.S))
-        {
-            chController.transform.position += speedUpDown * Time.deltaTime * Vector3.down;
-        }
-
-        if (inside == true && Input.GetKey(KeyCode.Space))
-        {
-            FPSInput.enabled = true;
-            inside = !inside;
-            ladder = null;
-        }
-
-        if (inside == true && gameObject.CompareTag("ground"))
-        {
-            FPSInput.enabled = true;
-            inside = !inside;
-            ladder = null;
-        }
-    }
+    // private void Update()
+    // {
+    //     if (inside == true && Input.GetKey(KeyCode.Space))
+    //     {
+    //         FPSInput.enabled = true;
+    //         inside = !inside;
+    //         ladder = null;
+    //     }
+    // 
+    //     if (inside == true && gameObject.CompareTag("ground"))
+    //     {
+    //         FPSInput.enabled = true;
+    //         inside = !inside;
+    //         ladder = null;
+    //     }
+    // }
 }
