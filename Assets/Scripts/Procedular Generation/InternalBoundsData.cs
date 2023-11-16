@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public struct BoxBounds
 {
     public Vector3 center;
@@ -12,7 +13,7 @@ public struct BoxBounds
     public float4x4 Matrix => float4x4.TRS(center, Quaternion.Euler(oreintation), Vector3.one);
 }
 
-[System.Serializable]
+[Serializable]
 public struct Connector : System.IEquatable<Connector>
 {
     public static Connector Empty = new() { localPosition = Vector3.zero, localRotation = Quaternion.identity, internalIndex = int.MaxValue };
@@ -38,4 +39,37 @@ public struct Connector : System.IEquatable<Connector>
         position = ltw.Translation();
         rotation = ltw.Rotation();
     }
+}
+
+[Serializable]
+public class ConnectorMask
+{
+    public TunnelSection[] exclude;
+
+    public HashSet<int> excludeRuntime;
+
+    public void Build()
+    {
+        if (exclude == null)
+        {
+            excludeRuntime = new HashSet<int>();
+            return;
+        }
+        
+
+        excludeRuntime = new HashSet<int>(exclude.Length);
+
+        for (int i = 0; i < exclude.Length; i++)
+        {
+            excludeRuntime.Add(exclude[i].GetInstanceID());
+        }
+        exclude = null;
+    }
+}
+
+[Serializable]
+public class MapRing
+{
+    public List<TunnelSection> twoDstSections = new();
+    public int curDst = 0;
 }

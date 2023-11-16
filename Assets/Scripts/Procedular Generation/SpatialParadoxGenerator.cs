@@ -8,8 +8,12 @@ using Random = UnityEngine.Random;
 public class SpatialParadoxGenerator : MonoBehaviour
 {
     [Header("Prefabs")]
+    [SerializeField] private TunnelSection startSection;
     [SerializeField] private TunnelSection deadEndPlug;
     [SerializeField] private List<TunnelSection> tunnelSections;
+
+    private Dictionary<int, TunnelSection> instanceIdToSection;
+    private List<int> tunnelSectionsByInstanceID;
 
     [Header("Runtime Map")]
     [SerializeField] private TunnelSection curPlayerSection;
@@ -47,6 +51,20 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private bool intersectionTest;
 
 #endif
+    private void Awake()
+    {
+        instanceIdToSection = new Dictionary<int, TunnelSection>(tunnelSections.Count);
+        tunnelSectionsByInstanceID = new (tunnelSections.Count);
+        tunnelSections.ForEach(prefab =>
+        {
+            tunnelSectionsByInstanceID.Add(prefab.GetInstanceID());
+            instanceIdToSection.TryAdd(tunnelSectionsByInstanceID[^1], prefab);
+            prefab.excludeConnectorSections.ForEach(connector => connector.Build());
+            prefab.Build();
+        });
+        tunnelSections.Clear();
+        tunnelSections = null;
+    }
 
     private void Start()
     {
@@ -129,7 +147,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private IEnumerator GenerateInitialAreaDebug()
     {
-        int spawnIndex = Random.Range(0, tunnelSections.Count);
+        int spawnIndex = Random.Range(0, tunnelSectionsByInstanceID.Count);
         curPlayerSection = InstinateSection(spawnIndex);
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
 
@@ -189,17 +207,52 @@ public class SpatialParadoxGenerator : MonoBehaviour
     {
         primaryPreferenceDebug = Connector.Empty;
         secondaryPreferenceDebug = Connector.Empty;
-        List<TunnelSection> nextSections = FilterSections(primary);
+
+        List<Connector> primaryConnectors = FilterConnectors(primary);
+        List<int> nextSections = FilterSections(primary);
+
         int iterations = maxInterations;
         targetSectionDebug = null;
+
+        while(targetSectionDebug == null && primaryConnectors.Count > 0)
+        {
+            primaryPreferenceDebug = GetConnectorFromSection(primaryConnectors, out int priIndex);
+            List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreferenceDebug), nextSections);
+            while (internalNextSections.Count > 0)
+            {
+                int curInstanceID = internalNextSections.ElementAt(Random.Range(0, internalNextSections.Count));
+                targetSectionDebug = instanceIdToSection[curInstanceID];
+                yield return IntersectionTestDebug(primary, targetSectionDebug);
+                if (intersectionTest)
+                {
+                    break;
+                }
+                internalNextSections.Remove(curInstanceID);
+                targetSectionDebug = null;
+                iterations--;
+                if (iterations <= 0)
+                {
+                    Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
+                }
+            }
+            if (targetSectionDebug != null)
+            {
+                break;
+            }
+            primaryConnectors.RemoveAt(priIndex);
+        }
+
+        /*
         while (targetSectionDebug == null)
         {
-            targetSectionDebug = nextSections.ElementAt(Random.Range(0, nextSections.Count));
+            int curInstanceID = nextSections.ElementAt(Random.Range(0, nextSections.Count));
+            targetSectionDebug = instanceIdToSection[curInstanceID];
             yield return IntersectionTestDebug(primary, targetSectionDebug);
             if (intersectionTest)
             {
                 break;
             }
+            nextSections.Remove(curInstanceID);
             targetSectionDebug = null;
             iterations--;
             if (iterations <= 0)
@@ -207,6 +260,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
             }
         }
+        */
+
         if (targetSectionDebug == null)
         {
             targetSectionDebug = deadEndPlug;
@@ -219,11 +274,20 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private IEnumerator IntersectionTestDebug(TunnelSection primary, TunnelSection target)
     {
-        primaryPreferenceDebug = Connector.Empty;
         secondaryPreferenceDebug = Connector.Empty;
-        List<Connector> primaryConnectors = FilterConnectors(primary);
         List<Connector> secondaryConnectors = FilterConnectors(target);
 
+        while(secondaryConnectors.Count > 0)
+        {
+            secondaryPreferenceDebug = GetConnectorFromSection(secondaryConnectors, out int secIndex);
+            yield return DebugIntersectionTest(primary, target);
+            if (intersectionTest)
+            {
+                yield break;
+            }
+            secondaryConnectors.RemoveAt(secIndex);
+        }
+        /*
         while (primaryConnectors.Count > 0)
         {
             primaryPreferenceDebug = GetConnectorFromSection(primaryConnectors, out int priIndex);
@@ -241,7 +305,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             secondaryConnectors = FilterConnectors(target);
             primaryConnectors.RemoveAt(priIndex);
         }
-
+        */
         intersectionTest = false;
         yield break;
     }
@@ -288,8 +352,15 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private void GenerateInitialArea()
     {
         seed = Random.state;
-        int spawnIndex = Random.Range(0, tunnelSections.Count);
-        curPlayerSection = InstinateSection(spawnIndex);
+        if(startSection == null)
+        {
+            int spawnIndex = Random.Range(0, tunnelSectionsByInstanceID.Count);
+            curPlayerSection = InstinateSection(spawnIndex);
+        }
+        else
+        {
+            curPlayerSection = InstinateSection(startSection);
+        }
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
 
         FillOneDstList(oneDstSections, curPlayerSection);
@@ -444,17 +515,50 @@ public class SpatialParadoxGenerator : MonoBehaviour
     {
         primaryPreference = Connector.Empty;
         secondaryPreference = Connector.Empty;
-        List<TunnelSection> nextSections = FilterSections(primary);
+
+        List<Connector> primaryConnectors = FilterConnectors(primary);
+        List<int> nextSections = FilterSections(primary);
+
         int iterations = maxInterations;
         TunnelSection targetSection = null;
+
+        while (targetSection == null && primaryConnectors.Count > 0)
+        {
+            primaryPreference = GetConnectorFromSection(primaryConnectors, out int priIndex);
+            List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreference), nextSections);
+            while (internalNextSections.Count > 0)
+            {
+                int curInstanceID = internalNextSections.ElementAt(Random.Range(0, internalNextSections.Count));
+                targetSection = instanceIdToSection[curInstanceID];
+                if (RunIntersectionTests(primary, targetSection, ref primaryPreference, out secondaryPreference))
+                {
+                    break;
+                }
+                internalNextSections.Remove(curInstanceID);
+                targetSection = null;
+                iterations--;
+                if (iterations <= 0)
+                {
+                    Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
+                }
+            }
+            if (targetSection != null)
+            {
+                break;
+            }
+            primaryConnectors.RemoveAt(priIndex);
+        }
+        
+        /*
         while (targetSection == null && nextSections.Count > 0)
         {
-            targetSection = nextSections.ElementAt(Random.Range(0, nextSections.Count));
+            int curInstanceID = nextSections.ElementAt(Random.Range(0, nextSections.Count));
+            targetSection = instanceIdToSection[curInstanceID];
             if (RunIntersectionTests(primary, targetSection, out primaryPreference, out secondaryPreference))
             {
                 break;
             }
-            nextSections.Remove(targetSection);
+            nextSections.Remove(curInstanceID);
             targetSection = null;
             iterations--;
             if (iterations <= 0)
@@ -462,6 +566,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
             }
         }
+        */
+
         if(targetSection == null)
         {
             secondaryPreference = deadEndPlug.connectors[0];
@@ -472,13 +578,35 @@ public class SpatialParadoxGenerator : MonoBehaviour
         return targetSection;
     }
 
-    private List<TunnelSection> FilterSections(TunnelSection primary)
+    private List<int> FilterSections(TunnelSection primary)
     {
-        List<TunnelSection> nextSections = new(tunnelSections);
+        List<int> nextSections = new(tunnelSectionsByInstanceID);
 
         if (primary.ExcludePrefabConnections.Count > 0)
         {
             primary.ExcludePrefabConnections.ForEach(item => nextSections.RemoveAll(element => element == item));
+        }
+
+        return nextSections;
+    }
+
+    private List<int> FilterSectionsByConnector(ConnectorMask connector, List<int> sections)
+    {
+        if(connector.exclude != null)
+        {
+            connector.Build();
+        }
+        List<int> nextSections = new(tunnelSectionsByInstanceID);
+
+        if (connector.excludeRuntime.Count > 0)
+        {
+            for (int i = sections.Count - 1; i >= 0; i--)
+            {
+                if (connector.excludeRuntime.Contains(sections[i]))
+                {
+                    nextSections.RemoveAt(i);
+                }
+            }
         }
 
         return nextSections;
@@ -494,30 +622,22 @@ public class SpatialParadoxGenerator : MonoBehaviour
     /// <param name="primaryConnector"></param>
     /// <param name="secondaryConnector"></param>
     /// <returns></returns>
-    private bool RunIntersectionTests(TunnelSection primary, TunnelSection target, out Connector primaryConnector, out Connector secondaryConnector)
+    private bool RunIntersectionTests(TunnelSection primary, TunnelSection target, ref Connector primaryConnector, out Connector secondaryConnector)
     {
-        primaryConnector = Connector.Empty;
         secondaryConnector = Connector.Empty;
-        List<Connector> primaryConnectors = FilterConnectors(primary);
         List<Connector> secondaryConnectors = FilterConnectors(target);
 
-        while (primaryConnectors.Count > 0)
+        while (secondaryConnectors.Count > 0)
         {
-            primaryConnector = GetConnectorFromSection(primaryConnectors, out int priIndex);
-            while (secondaryConnectors.Count > 0)
+            secondaryConnector = GetConnectorFromSection(secondaryConnectors, out int secIndex);
+
+            bool noIntersections = IntersectionTest(primary, target, ref primaryConnector, ref secondaryConnector);
+
+            if (noIntersections)
             {
-                secondaryConnector = GetConnectorFromSection(secondaryConnectors, out int secIndex);
-
-                bool noIntersections = IntersectionTest(primary, target, ref primaryConnector, ref secondaryConnector);
-
-                if (noIntersections)
-                {
-                    return true;
-                }
-                secondaryConnectors.RemoveAt(secIndex);
+                return true;
             }
-            secondaryConnectors = FilterConnectors(target);
-            primaryConnectors.RemoveAt(priIndex);
+            secondaryConnectors.RemoveAt(secIndex);
         }
         return false;
     }
@@ -575,7 +695,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private TunnelSection InstinateSection(int index)
     {
-        return InstinateSection(tunnelSections.ElementAt(index));
+        return InstinateSection(instanceIdToSection[tunnelSectionsByInstanceID[index]]);
     }
 
     private TunnelSection InstinateSection(TunnelSection tunnelSection)

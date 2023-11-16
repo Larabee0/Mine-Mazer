@@ -221,7 +221,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3116920719093728772}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 3
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
@@ -295,7 +295,7 @@ Transform:
   - {fileID: 6881726059667293540}
   - {fileID: 9032263893898463670}
   m_Father: {fileID: 0}
-  m_RootOrder: 27
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &9189074328685598576
 MeshFilter:
@@ -385,7 +385,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  excludePrefabConnections: []
+  excludePrefabConnections:
+  - {fileID: 1296708680027945885}
   connectors:
   - localPosition: {x: 0, y: 1.5, z: 0}
     localRotation: {x: -0, y: -0, z: -0, w: 1}
@@ -409,6 +410,8 @@ MonoBehaviour:
   - center: {x: 0.0043, y: 11.6479, z: -7.3737}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 4.782614, y: 3.5540936, z: 4.75285}
+  excludeConnectorSections: []
+  excludePrefabConnectionsIds: 
 --- !u!1 &4846029518679545828
 GameObject:
   m_ObjectHideFlags: 0

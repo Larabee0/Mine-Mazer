@@ -90,7 +90,7 @@ Transform:
   - {fileID: 8028229612592790208}
   - {fileID: 5909014835096033022}
   m_Father: {fileID: 0}
-  m_RootOrder: 30
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6021174809027145644
 MeshFilter:
@@ -177,7 +177,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  excludePrefabConnections: []
+  excludePrefabConnections:
+  - {fileID: 7541396775899075963, guid: 2e3fb2f25c7499740a8e78cd64cbd320, type: 3}
+  - {fileID: 7280747401053184910}
+  - {fileID: 7544748717809826148, guid: 17cf9e69ff45f2d4db8a8e84c5559246, type: 3}
+  - {fileID: 7115210080915405535, guid: d3c3b5ae8768c8a45b239b9b45ca7b9f, type: 3}
+  - {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8, type: 3}
+  - {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962, type: 3}
+  - {fileID: 1925884630686241207, guid: 47ecaaf294d32d345877b4d8b966f55e, type: 3}
   connectors:
   - localPosition: {x: 0, y: 1.5, z: 0}
     localRotation: {x: -0, y: -0, z: -0, w: 1}
@@ -195,6 +202,8 @@ MonoBehaviour:
   - center: {x: 0, y: 1.6324005, z: -5}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 3.91916, y: 3.39812, z: 9.5}
+  excludeConnectorSections: []
+  excludePrefabConnectionsIds: 
 --- !u!1 &5057039446764770956
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,7 +253,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5057039446764770956}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 3
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
   m_StaticShadowCaster: 0

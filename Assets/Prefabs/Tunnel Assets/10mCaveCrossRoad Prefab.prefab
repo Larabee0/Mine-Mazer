@@ -159,7 +159,7 @@ Transform:
   - {fileID: 4625331354301905625}
   - {fileID: 9112540078864956448}
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4602682908715615793
 MeshFilter:
@@ -279,6 +279,8 @@ MonoBehaviour:
   - center: {x: 0, y: 1.6324005, z: -5}
     oreintation: {x: -0, y: 90, z: 0}
     size: {x: 3.91916, y: 3.39812, z: 9.5}
+  excludeConnectorSections: []
+  excludePrefabConnectionsIds: 
 --- !u!1 &5347814331144535809
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,7 +515,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8217352669231176131}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 3
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
   m_StaticShadowCaster: 0

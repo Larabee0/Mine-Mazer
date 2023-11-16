@@ -499,7 +499,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7485389563467121880}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 3
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
@@ -699,6 +699,8 @@ MonoBehaviour:
   - center: {x: -10.1481, y: 6.2501, z: -10.2391}
     oreintation: {x: 21.835978, y: 100.45719, z: 358.51794}
     size: {x: 4.8393726, y: 4.145571, z: 7.266438}
+  excludeConnectorSections: []
+  excludePrefabConnectionsIds: 
 --- !u!1 &9207288404384216192
 GameObject:
   m_ObjectHideFlags: 0

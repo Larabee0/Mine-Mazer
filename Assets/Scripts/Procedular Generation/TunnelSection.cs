@@ -18,7 +18,32 @@ public class TunnelSection : MonoBehaviour
     public HashSet<int> InUse = new();
     public Dictionary<int, System.Tuple<TunnelSection, int>> connectorPairs = new();
 
-    public List<TunnelSection> ExcludePrefabConnections => excludePrefabConnections;
+    public List<ConnectorMask> excludeConnectorSections = new();
+
+    [SerializeField] private List<int> excludePrefabConnectionsIds;
+    public List<int> ExcludePrefabConnections => excludePrefabConnectionsIds;
+
+    public ConnectorMask GetConnectorMask(Connector connector)
+    {
+        return excludeConnectorSections[connector.internalIndex];
+    }
+
+    public void Build()
+    {
+        if(excludeConnectorSections.Count != connectors.Length)
+        {
+            for (int i = 0; i < connectors.Length; i++)
+            {
+                excludeConnectorSections.Add(new() { excludeRuntime = new() });
+            }
+        }
+
+        if (excludePrefabConnections == null) return;
+        excludePrefabConnectionsIds = new List<int>(excludePrefabConnections.Count);
+        excludePrefabConnections.ForEach(section=> excludePrefabConnectionsIds.Add(section.GetInstanceID()));
+        excludePrefabConnections.Clear();
+        excludePrefabConnections = null;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
