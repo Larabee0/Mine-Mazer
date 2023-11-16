@@ -30,7 +30,10 @@ public class LadderScript : MonoBehaviour
             InputManager.Instance.southButton.OnButtonHeld += OnJumpHeld;
         }
     }
-
+    private void OnDestroy()
+    {
+        InputManager.Instance.southButton.OnButtonHeld -= OnJumpHeld;
+    }
     private void OnJumpHeld()
     {
         if (inside)
