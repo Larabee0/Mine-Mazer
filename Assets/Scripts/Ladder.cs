@@ -8,8 +8,9 @@ public class LadderScript : MonoBehaviour
     bool inside = false;
     public float speedUpDown = 3.2f;
     public Improved_Movement FPSInput;
-
+    private Rigidbody rb;
     private Transform ladder;
+    private Transform Ground;
 
     private bool newInputSystem = false;
     private Coroutine ladderProcess;
@@ -17,15 +18,17 @@ public class LadderScript : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         FPSInput = GetComponent<Improved_Movement>();
         inside = false;
         newInputSystem = InputManager.Instance != null;
+        Ground = gameObject.GetComponent<Improved_Movement>().groundCheck;
     }
 
     private void OnTriggerEnter(Collider col)
     {
        if(col.gameObject.CompareTag("Ladder"))
-        {
+       {
             FPSInput.enabled = false;
             inside = true;
             if(ladderProcess != null)
@@ -81,16 +84,30 @@ public class LadderScript : MonoBehaviour
         }
     }
 
-    //private void Update()
-    //{
-    //    if(inside == true && Input.GetKey(KeyCode.W))
-    //    {
-    //        chController.transform.position += speedUpDown * Time.deltaTime * ladder.up;
-    //    }
-    //
-    //    if(inside == true && Input.GetKey(KeyCode.S))
-    //    {
-    //        chController.transform.position += -speedUpDown * Time.deltaTime * ladder.up;
-    //    }
-    //}
+    private void Update()
+    {
+        if (inside == true && Input.GetKey(KeyCode.W))
+        {
+            chController.transform.position += speedUpDown * Time.deltaTime * Vector3.up;
+        }
+
+        if (inside == true && Input.GetKey(KeyCode.S))
+        {
+            chController.transform.position += speedUpDown * Time.deltaTime * Vector3.down;
+        }
+
+        if (inside == true && Input.GetKey(KeyCode.Space))
+        {
+            FPSInput.enabled = true;
+            inside = !inside;
+            ladder = null;
+        }
+
+        if (inside == true && gameObject.CompareTag("ground"))
+        {
+            FPSInput.enabled = true;
+            inside = !inside;
+            ladder = null;
+        }
+    }
 }

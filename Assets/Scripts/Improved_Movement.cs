@@ -21,8 +21,8 @@ public class Improved_Movement : MonoBehaviour
     private bool isGrounded;
     private bool useUpdateMove = true;
 
-    private void Start()
-    {
+    private void Start() { 
+    
         /// new input system additions, will use old input system if there is no <see cref="InputManager"/> instance
         if (InputManager.Instance != null)
         {
