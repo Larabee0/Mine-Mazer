@@ -68,8 +68,16 @@ public class ConnectorMask
 }
 
 [Serializable]
-public class MapRing
+public class SectionAndConnector
 {
-    public List<TunnelSection> twoDstSections = new();
-    public int curDst = 0;
+    public TunnelSection sectionInstance;
+    public int internalIndex = 0;
+    public int instanceID;
+
+    public SectionAndConnector(TunnelSection section, int interalIndex)
+    {
+        sectionInstance = section;
+        internalIndex = interalIndex;
+        instanceID = section.GetInstanceID();
+    }
 }

@@ -16,7 +16,7 @@ public class TunnelSection : MonoBehaviour
     public BoxBounds[] BoundingBoxes => boundingBoxes;
 
     public HashSet<int> InUse = new();
-    public Dictionary<int, System.Tuple<TunnelSection, int>> connectorPairs = new();
+    public Dictionary<int, SectionAndConnector> connectorPairs = new();
 
     public List<ConnectorMask> excludeConnectorSections = new();
 
@@ -39,10 +39,11 @@ public class TunnelSection : MonoBehaviour
         }
 
         if (excludePrefabConnections == null) return;
+        excludePrefabConnectionsIds.Clear();
         excludePrefabConnectionsIds = new List<int>(excludePrefabConnections.Count);
         excludePrefabConnections.ForEach(section=> excludePrefabConnectionsIds.Add(section.GetInstanceID()));
-        excludePrefabConnections.Clear();
-        excludePrefabConnections = null;
+        //excludePrefabConnections.Clear();
+        //excludePrefabConnections = null;
     }
 
     private void OnTriggerEnter(Collider other)
