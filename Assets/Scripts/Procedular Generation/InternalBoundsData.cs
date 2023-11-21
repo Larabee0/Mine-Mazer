@@ -5,6 +5,13 @@ using Unity.Mathematics;
 using UnityEngine;
 
 [Serializable]
+public struct BoxTransform
+{
+    public float3 pos;
+    public quaternion rotation;
+}
+
+[Serializable]
 public struct BoxBounds
 {
     public Vector3 center;

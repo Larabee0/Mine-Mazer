@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -367,7 +368,38 @@ public class SpatialParadoxGenerator : MonoBehaviour
         List<Connector> primaryConnectors = FilterConnectors(primary);
         List<int> nextSections = FilterSections(primary);
 
+        NativeParallelHashMap<int, UnsafeList<Connector>> sectionConnectors = new(nextSections.Count, Allocator.TempJob);
+        NativeParallelHashMap<int, UnsafeList<BoxBounds>> boxBounds = new(nextSections.Count,Allocator.TempJob);
+        NativeParallelHashMap<int, UnsafeList<BoxTransform>> boxTransforms = new(nextSections.Count, Allocator.TempJob);
+
+        for (int i = 0; i < nextSections.Count; i++)
+        {
+            int id = nextSections[i];
+            TunnelSection section = instanceIdToSection[id];
+            boxBounds.Add(id, new(section.boundingBoxes.Length, Allocator.TempJob, NativeArrayOptions.UninitializedMemory));
+            boxTransforms.Add(id, new UnsafeList<BoxTransform>(section.boundingBoxes.Length, Allocator.TempJob, NativeArrayOptions.UninitializedMemory));
+            sectionConnectors.Add(id, new UnsafeList<Connector>(section.connectors.Length, Allocator.TempJob, NativeArrayOptions.UninitializedMemory));
+
+            UnsafeList<BoxBounds> bounds = boxBounds[id];
+            NativeArray<BoxBounds> nativeBounds = new(section.boundingBoxes, Allocator.Temp);
+            bounds.CopyFrom(nativeBounds);
+
+            UnsafeList<Connector> connectors = sectionConnectors[id];
+            NativeArray<Connector> nativeConnectors = new(section.connectors, Allocator.Temp);
+            connectors.CopyFrom(nativeConnectors);
+            
+        }
+
         int iterations = maxInterations;
+        nextSections.ForEach(id =>
+        {
+            boxBounds[id].Dispose();
+            boxTransforms[id].Dispose();
+            sectionConnectors[id].Dispose();
+        });
+        boxBounds.Dispose();
+        boxTransforms.Dispose();
+        sectionConnectors.Dispose();
         targetSectionDebug = null;
 
         while (targetSectionDebug == null && primaryConnectors.Count > 0)
@@ -836,6 +868,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         secondaryPreference = Connector.Empty;
 
         List<Connector> primaryConnectors = FilterConnectors(primary);
+
         List<int> nextSections = FilterSections(primary);
 
         int iterations = maxInterations;
