@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
+using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -414,7 +416,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         while (secondaryConnectors.Count > 0)
         {
             secondaryPreferenceDebug = GetConnectorFromSection(secondaryConnectors, out int secIndex);
-            yield return DebugIntersectionTest(primary, target);
+            yield return DebugIntersectionTestBurst(primary, target);
             if (intersectionTest)
             {
                 yield break;
@@ -462,6 +464,65 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
         intersectionTest = noIntersections;
     }
+    private IEnumerator DebugIntersectionTestBurst(TunnelSection primary, TunnelSection target)
+    {
+        NativeArray<BoxBounds> nativeBoundstarget = new(target.BoundingBoxes, Allocator.TempJob);
+        NativeReference<float4x4> mainMatrix = new(float4x4.identity, Allocator.TempJob);
+        NativeArray<float4x2> boxTransforms = new(nativeBoundstarget.Length, Allocator.TempJob);
+        NativeArray<Connector> connectors = new(2, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        connectors[0] = primaryPreferenceDebug;
+        connectors[1] = secondaryPreferenceDebug;
+        JobHandle handle = new MatrixMulJob
+        {
+            priMatrix = (float4x4)primary.transform.localToWorldMatrix,
+            secMatrix = (float4x4)target.transform.localToWorldMatrix,
+            parentMatrix = mainMatrix,
+            connectors = connectors
+        }.Schedule(new JobHandle());
+
+        handle = new MatrixJob
+        {
+            boxes = nativeBoundstarget,
+            parentMatrix = mainMatrix,
+            boxTransform = boxTransforms
+        }.Schedule(boxTransforms.Length, handle);
+        mainMatrix.Dispose(handle).Complete();
+
+        primaryPreferenceDebug = connectors[0];
+        secondaryPreferenceDebug = connectors[1];
+        connectors.Dispose();
+
+        List<GameObject> objects = new();
+        //objects.Add(Instantiate(target,pos,rot).gameObject);
+
+        bool noIntersections = true;
+        for (int i = 0; i < target.BoundingBoxes.Length; i++)
+        {
+            BoxBounds boxBounds = target.BoundingBoxes[i];
+            objects.Add(Instantiate(santiziedCube));
+
+            float4x2 m = boxTransforms[i];
+            float3 position = new(m.c0.x, m.c0.y, m.c0.z);
+            Quaternion rotation = new(m.c1.x, m.c1.y, m.c1.z, m.c1.w);
+
+            objects[^1].transform.SetPositionAndRotation(position, rotation);
+            objects[^1].transform.localScale = boxBounds.size;
+            objects[^1].GetComponent<MeshRenderer>().material.color = Color.green;
+            if (Physics.CheckBox(position, boxBounds.size * 0.5f, rotation, tunnelSectionLayerIndex, QueryTriggerInteraction.Ignore))
+            {
+                objects[^1].GetComponent<MeshRenderer>().material.color = Color.red;
+                noIntersections = false;
+            }
+        }
+
+        boxTransforms.Dispose();
+        //objects[0].SetActive(true);
+
+        yield return new WaitForSeconds(intersectTestHoldTime);
+        objects.ForEach(ob => Destroy(ob));
+
+        intersectionTest = noIntersections;
+    }
 
 #endif
 
@@ -496,6 +557,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
             recursiveConstruction.Add(new());
             FillSectionConnectors(startSections);
         }
+        StartCoroutine(BreakEditor());
+    }
+
+    private IEnumerator BreakEditor()
+    {
+        yield return null;
+        yield return null;
+        Debug.Break();
     }
 
     public void PlayerExitSection(TunnelSection section)
@@ -546,6 +615,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
             MakeRootNode(newSection);
 #endif
         mapUpdateProcess = null;
+        yield return null;
+        Debug.Break();
     }
 
     private void IncrementMap()
@@ -879,7 +950,12 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             secondaryConnector = GetConnectorFromSection(secondaryConnectors, out int secIndex);
 
-            bool noIntersections = IntersectionTest(primary, target, ref primaryConnector, ref secondaryConnector);
+            //double startTime = Time.realtimeSinceStartupAsDouble;
+            //bool noIntersections = IntersectionTest(primary, target, ref primaryConnector, ref secondaryConnector);
+            //Debug.LogFormat("None Burst Test: {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+            //startTime = Time.realtimeSinceStartupAsDouble;
+            bool noIntersections = SpatialParadoxBurst.IntersectionTestBurst(primary, target, ref primaryConnector, ref secondaryConnector, tunnelSectionLayerIndex);
+            //Debug.LogFormat("Burst Test: {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
 
             if (noIntersections)
             {
@@ -941,6 +1017,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         return true;
     }
 
+
     private TunnelSection InstinateSection(int index)
     {
         return InstinateSection(instanceIdToSection[tunnelSectionsByInstanceID[index]]);
@@ -966,6 +1043,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 sectionTwin.sectionInstance.InUse.Remove(sectionTwin.internalIndex);
                 sectionTwin.sectionInstance.connectorPairs.Remove(sectionTwin.internalIndex);
             }
+            
         });
         Destroy(section.gameObject);
     }
