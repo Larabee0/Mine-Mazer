@@ -23,6 +23,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
     [SerializeField] private List<TunnelSection> twoDstSections = new();
     [SerializeField] private List<TunnelSection> oneDstSections = new();
 
+    private Coroutine mapUpdateProcess;
+
     [Header("Generation Settings")]
     [SerializeField, Min(1)] private int maxDst = 3;
     [SerializeField] private LayerMask tunnelSectionLayerMask;
@@ -57,7 +59,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private void Awake()
     {
         instanceIdToSection = new Dictionary<int, TunnelSection>(tunnelSections.Count);
-        tunnelSectionsByInstanceID = new (tunnelSections.Count);
+        tunnelSectionsByInstanceID = new(tunnelSections.Count);
         tunnelSections.ForEach(prefab =>
         {
             tunnelSectionsByInstanceID.Add(prefab.GetInstanceID());
@@ -71,7 +73,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void Start()
     {
-
         tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
 #if UNITY_EDITOR
@@ -94,7 +95,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void Debugging()
     {
-        if(santiziedCube == null)
+        if (santiziedCube == null)
         {
             Debug.LogWarning("Santizied cube unassigned!");
         }
@@ -168,8 +169,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
         // oneDstSections.Clear();
         // twoDstSections.Clear();
         recursiveConstruction.Add(new() { curPlayerSection });
-        yield return RecursiveBuilder();
-        yield return new WaitForSeconds(distanceListPauseTime*2);
+        yield return RecursiveBuilderDebug();
+        yield return new WaitForSeconds(distanceListPauseTime * 2);
 
         //yield return MakeRootNode(recursiveConstruction[1][Random.Range(0, recursiveConstruction[1].Count)]);
         //TestBuildListStructures();
@@ -198,10 +199,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
         dstTwo.ExceptWith(exceptWith);
         oneDstSections.AddRange(dstOne);
         twoDstSections.AddRange(dstTwo);
-        
+
     }
 
-    private IEnumerator RecursiveBuilder()
+    private IEnumerator RecursiveBuilderDebug()
     {
         while (recursiveConstruction.Count <= maxDst)
         {
@@ -210,11 +211,11 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
             recursiveConstruction.Add(new());
 
-            yield return FillSectionConnectors(startSections);
+            yield return FillSectionConnectorsDebug(startSections);
         }
     }
 
-    private IEnumerator FillSectionConnectors(List<TunnelSection> startSections)
+    private IEnumerator FillSectionConnectorsDebug(List<TunnelSection> startSections)
     {
         for (int i = 0; i < startSections.Count; i++)
         {
@@ -234,14 +235,18 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
-    private IEnumerator MakeRootNode(TunnelSection newRoot)
+    private IEnumerator MakeRootNodeDebug(TunnelSection newRoot)
     {
         Debug.Log("Begin Root Node Update");
         List<List<TunnelSection>> newTree = new() { new() { newRoot } };
         HashSet<TunnelSection> exceptWith = new(newTree[^1]);
         yield return new WaitForSeconds(intersectTestHoldTime);
         Debug.Log("Building new Tree..");
-        yield return RecursiveTreeBuilder(newTree, exceptWith);
+        yield return RecursiveTreeBuilderDebug(newTree, exceptWith);
+        if(newTree.Count < recursiveConstruction.Count)
+        {
+            Debug.LogError("Failed to build tree");
+        }
         Debug.LogFormat("New Tree Size {0}", newTree.Count);
         Debug.LogFormat("Original Tree Size {0}", recursiveConstruction.Count);
 
@@ -268,12 +273,16 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
         Debug.Log("Growing Tree..");
         int oldSize = recursiveConstruction[^1].Count;
-        yield return FillSectionConnectors(recursiveConstruction[^2]);
+        yield return FillSectionConnectorsDebug(recursiveConstruction[^2]);
         Debug.LogFormat("Grew {0} leaves", recursiveConstruction[^1].Count - oldSize);
         curPlayerSection = newTree[0][0];
+        if (curPlayerSection == null)
+        {
+            ResolvePlayerSection();
+        }
     }
 
-    private IEnumerator RecursiveTreeBuilder(List<List<TunnelSection>> recursiveConstruction, HashSet<TunnelSection> exceptWith)
+    private IEnumerator RecursiveTreeBuilderDebug(List<List<TunnelSection>> recursiveConstruction, HashSet<TunnelSection> exceptWith)
     {
         exceptWith.UnionWith(recursiveConstruction[^1]);
 
@@ -298,7 +307,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             // Debug.LogFormat("Last: {0} Total: {1}", dstOne.Count, recursiveConstruction.Count);
             yield return new WaitForSeconds(intersectTestHoldTime);
             recursiveConstruction.Add(new(dstOne));
-            yield return RecursiveTreeBuilder(recursiveConstruction, exceptWith);
+            yield return RecursiveTreeBuilderDebug(recursiveConstruction, exceptWith);
         }
     }
 
@@ -359,7 +368,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         int iterations = maxInterations;
         targetSectionDebug = null;
 
-        while(targetSectionDebug == null && primaryConnectors.Count > 0)
+        while (targetSectionDebug == null && primaryConnectors.Count > 0)
         {
             primaryPreferenceDebug = GetConnectorFromSection(primaryConnectors, out int priIndex);
             List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreferenceDebug), nextSections);
@@ -402,7 +411,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         secondaryPreferenceDebug = Connector.Empty;
         List<Connector> secondaryConnectors = FilterConnectors(target);
 
-        while(secondaryConnectors.Count > 0)
+        while (secondaryConnectors.Count > 0)
         {
             secondaryPreferenceDebug = GetConnectorFromSection(secondaryConnectors, out int secIndex);
             yield return DebugIntersectionTest(primary, target);
@@ -459,7 +468,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private void GenerateInitialArea()
     {
         seed = Random.state;
-        if(startSection == null)
+        if (startSection == null)
         {
             int spawnIndex = Random.Range(0, tunnelSectionsByInstanceID.Count);
             curPlayerSection = InstinateSection(spawnIndex);
@@ -469,10 +478,24 @@ public class SpatialParadoxGenerator : MonoBehaviour
             curPlayerSection = InstinateSection(startSection);
         }
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
+        recursiveConstruction.Add(new() { curPlayerSection });
 
-        FillOneDstList(oneDstSections, curPlayerSection);
+        double startTime = Time.realtimeSinceStartupAsDouble;
+        RecursiveBuilder();
+        Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+        // FillOneDstList(oneDstSections, curPlayerSection);
+        //
+        // FillTwoDstList(oneDstSections, twoDstSections);
+    }
 
-        FillTwoDstList(oneDstSections, twoDstSections);
+    private void RecursiveBuilder()
+    {
+        while(recursiveConstruction.Count <= maxDst)
+        {
+            List<TunnelSection> startSections = recursiveConstruction[^1];
+            recursiveConstruction.Add(new());
+            FillSectionConnectors(startSections);
+        }
     }
 
     public void PlayerExitSection(TunnelSection section)
@@ -497,23 +520,32 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void UpdateMap()
     {
-        if (lastExit == curPlayerSection && lastEnter != curPlayerSection)
+        if (lastExit == curPlayerSection && lastEnter != curPlayerSection && mapUpdateProcess == null)
         {
-#if UNITY_EDITOR
-            if (debugging)
-            {
-                StartCoroutine(MakeRootNode(lastEnter));
-            }
-            else
-            {
-                IncrementMap();
-            }
-#else
-            IncrementMap();
-#endif
+            mapUpdateProcess = StartCoroutine(DelayedMapGen(lastEnter));
         }
         lastEnter = null;
         lastExit = null;
+    }
+
+    private IEnumerator DelayedMapGen(TunnelSection newSection)
+    {
+        yield return null;
+#if UNITY_EDITOR
+        if (debugging)
+        {
+            StartCoroutine(MakeRootNodeDebug(newSection));
+        }
+        else
+        {
+            double startTime = Time.realtimeSinceStartupAsDouble;
+            MakeRootNode(newSection);
+            Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+        }
+#else
+            MakeRootNode(newSection);
+#endif
+        mapUpdateProcess = null;
     }
 
     private void IncrementMap()
@@ -534,7 +566,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         oldTwoDst.ExceptWith(newTwoDst);
         oldTwoDst.ExceptWith(newOneDst);
         List<TunnelSection> cleanUpsections = new(oldTwoDst);
-        cleanUpsections.ForEach(section=>DestroySection(section));
+        cleanUpsections.ForEach(section => DestroySection(section));
         Physics.SyncTransforms();
         newOneDst.Remove(lastEnter);
         oneDstSections.Clear();
@@ -594,6 +626,116 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
         }
     }
+
+    private void FillSectionConnectors(List<TunnelSection> startSections)
+    {
+        for (int i = 0; i < startSections.Count; i++)
+        {
+            TunnelSection section = startSections[i];
+            int freeConnectors = section.connectors.Length - section.InUse.Count;
+            for (int j = 0; j < freeConnectors; j++)
+            {
+                TunnelSection sectionInstance = PickInstinateConnect(section);
+                recursiveConstruction[^1].Add(sectionInstance);
+            }
+        }
+    }
+
+    private void MakeRootNode(TunnelSection newRoot)
+    {
+        List<List<TunnelSection>> newTree = new() { new() { newRoot } };
+        HashSet<TunnelSection> exceptWith = new(newTree[^1]);
+
+        RecursiveTreeBuilder(newTree, exceptWith);
+        Debug.LogFormat("New Tree Size {0}", newTree.Count);
+        Debug.LogFormat("Original Tree Size {0}", recursiveConstruction.Count);
+        bool forceGrow = newTree.Count < recursiveConstruction.Count;
+        Debug.Log("Pruning Tree..");
+        int leafCounter = 0;
+        while(newTree.Count > maxDst + 1)
+        {
+            for (int i = 0; i < newTree[^1].Count; i++)
+            {
+                leafCounter++;
+                DestroySection(newTree[^1][i]);
+            }
+            newTree.RemoveAt(newTree.Count - 1);
+        }
+        Physics.SyncTransforms();
+
+        recursiveConstruction.Clear();
+        recursiveConstruction.AddRange(newTree);
+
+        Debug.Log("Growing Tree..");
+        int oldSize = 0;
+        if (forceGrow)
+        {
+            RecursiveBuilder();
+        }
+        else
+        {
+            oldSize = recursiveConstruction[^1].Count;
+            FillSectionConnectors(recursiveConstruction[^2]);
+        }
+        Debug.LogFormat("Grew {0} leaves", recursiveConstruction[^1].Count - oldSize);
+        curPlayerSection = newTree[0][0];
+        if (curPlayerSection == null)
+        {
+            Debug.LogWarning("cur player section null, attempting to resolve..");
+            ResolvePlayerSection();
+        }
+    }
+
+    private void RecursiveTreeBuilder(List<List<TunnelSection>> recursiveConstruction, HashSet<TunnelSection> exceptWith)
+    {
+        exceptWith.UnionWith(recursiveConstruction[^1]);
+    
+        HashSet<TunnelSection> dstOne = new();
+        List<TunnelSection> curList = recursiveConstruction[^1];
+        for (int i = 0; i < curList.Count; i++)
+        {
+            TunnelSection sec = curList[i];
+            List<SectionAndConnector> SandCs = new(sec.connectorPairs.Values);
+            for (int j = 0; j < SandCs.Count; j++)
+            {
+                SectionAndConnector SandC = SandCs[j];
+                if (!exceptWith.Contains(SandC.sectionInstance))
+                {
+                    dstOne.Add(SandC.sectionInstance);
+                }
+            }
+        }
+        dstOne.ExceptWith(exceptWith);
+        if (dstOne.Count > 0)
+        {
+            recursiveConstruction.Add(new(dstOne));
+            RecursiveTreeBuilder(recursiveConstruction, exceptWith);
+        }
+    }
+
+    private void ResolvePlayerSection()
+    {
+        GameObject player = FindObjectOfType<Improved_Movement>().gameObject;
+        if (player.GetComponent<Collider>().Raycast(new(player.transform.position, Vector3.down), out RaycastHit hitInfo, 100f))
+        {
+            if (hitInfo.collider.gameObject.TryGetComponent(out TunnelSection section))
+            {
+#if UNITY_EDITOR
+                if (debugging)
+                {
+                    StartCoroutine(MakeRootNodeDebug(section));
+                }
+                else
+                {
+                    MakeRootNode(section);
+                }
+#else
+                MakeRootNode(section);
+#endif
+            }
+        }
+    }
+
 
     /// <summary>
     /// Based off the givne primary section, this picks a new section prefab, Instinates it and connects (transforms) it to the primay section

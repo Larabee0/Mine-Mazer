@@ -17966,7 +17966,7 @@ PrefabInstance:
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.62
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
@@ -17976,7 +17976,7 @@ PrefabInstance:
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 44.3
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
@@ -18021,7 +18021,12 @@ PrefabInstance:
     - target: {fileID: 5356439156297477815, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5637687250392250194, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: speed
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22257,7 +22262,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1708006303
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -31597,7 +31602,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 619e7440358b093499a1d20cd5dc8106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startSection: {fileID: 0}
+  startSection: {fileID: 7280747401053184910, guid: 5c6e2853f717f8c428620637ea73048f,
+    type: 3}
   deadEndPlug: {fileID: 7113011209303798032, guid: fc93cda41d77b1442bb709e6410dc4c2,
     type: 3}
   tunnelSections:
@@ -31620,7 +31626,7 @@ MonoBehaviour:
   curPlayerSection: {fileID: 0}
   twoDstSections: []
   oneDstSections: []
-  maxDst: 4
+  maxDst: 7
   tunnelSectionLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -31633,8 +31639,8 @@ MonoBehaviour:
     s3: 1367127049
   prefab1: {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962, type: 3}
   prefab2: {fileID: 7113011209303798032, guid: fc93cda41d77b1442bb709e6410dc4c2, type: 3}
-  debugging: 1
-  initialAreaDebugging: 1
+  debugging: 0
+  initialAreaDebugging: 0
   transformDebugging: 0
   intersectTestHoldTime: 1.5
   distanceListPauseTime: 2.5
@@ -33055,6 +33061,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6310521924657178447, guid: df6ca25f8f0f98e4294616b46272eddd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310521924657178447, guid: df6ca25f8f0f98e4294616b46272eddd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7695764492245604777, guid: df6ca25f8f0f98e4294616b46272eddd,
         type: 3}
       propertyPath: m_Name
