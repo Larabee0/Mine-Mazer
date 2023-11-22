@@ -11,6 +11,18 @@ public struct BoxTransform
     public quaternion rotation;
 }
 
+public struct SectionDstData
+{
+    public float sqrDst;
+    public int dst;
+
+    public SectionDstData(float lastSqrDst, int dst)
+    {
+        this.sqrDst = lastSqrDst;
+        this.dst = dst;
+    }
+}
+
 [Serializable]
 public struct BoxBounds
 {

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
@@ -22,6 +21,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
     [Header("Runtime Map")]
     [SerializeField] private TunnelSection curPlayerSection;
     [SerializeField] private List<List<TunnelSection>> recursiveConstruction = new();
+
+    private Dictionary<TunnelSection, SectionDstData> mothBalledSections = new();
+    private Dictionary<int, List<TunnelSection>> unMothBall = new();
+    List<TunnelSection> unMothBallSections = new();
 
     private Coroutine mapUpdateProcess;
 
@@ -298,6 +301,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private IEnumerator MakeRootNodeDebug(TunnelSection newRoot)
     {
         Debug.Log("Begin Root Node Update");
+
+        UpdateMothBalledSections(newRoot);
+
         List<List<TunnelSection>> newTree = new() { new() { newRoot } };
         HashSet<TunnelSection> exceptWith = new(newTree[^1]);
         yield return new WaitForSeconds(intersectTestHoldTime);
@@ -318,9 +324,18 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             for (int i = 0; i < newTree[^1].Count; i++)
             {
+                TunnelSection section = newTree[^1][i];
                 yield return new WaitForSeconds(intersectTestHoldTime);
-                leafCounter++;
-                DestroySection(newTree[^1][i]);
+                if (section.keep)
+                {
+                    section.gameObject.SetActive(false);
+                    mothBalledSections.Add(section, new(math.distancesq(newRoot.transform.position, section.transform.position), newTree.Count - 1));
+                }
+                else
+                {
+                    leafCounter++;
+                    DestroySection(section);
+                }
             }
             newTree.RemoveAt(newTree.Count - 1);
         }
@@ -652,6 +667,23 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void FillSectionConnectors(List<TunnelSection> startSections)
     {
+        if (unMothBall.Count > 0 && unMothBall.ContainsKey(recursiveConstruction.Count - 1))
+        {
+            int freeConnectors = GetFreeConnectorCount(startSections);
+            if (freeConnectors < unMothBall[recursiveConstruction.Count - 1].Count)
+            {
+                // not enough free connectors, go in a level and regenerate.
+                Debug.LogWarningFormat("Regening ring {0} it does not have enough free connectors.", recursiveConstruction.Count - 2);
+                RegenRing(recursiveConstruction.Count - 2);
+                return;
+            }
+            else
+            {
+                unMothBallSections.AddRange(unMothBall[recursiveConstruction.Count - 1]);
+                unMothBall.Remove(recursiveConstruction.Count - 1);
+            }
+        }
+
         for (int i = 0; i < startSections.Count; i++)
         {
             TunnelSection section = startSections[i];
@@ -662,10 +694,59 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 recursiveConstruction[^1].Add(sectionInstance);
             }
         }
+
+        if (unMothBallSections.Count > 0 && recursiveConstruction.Count <= maxDst)
+        {
+            if (unMothBall.ContainsKey(recursiveConstruction.Count))
+            {
+                unMothBall[recursiveConstruction.Count].AddRange(unMothBallSections);
+            }
+            else
+            {
+                unMothBall.Add(recursiveConstruction.Count, new(unMothBallSections));
+            }
+            unMothBall.Clear();
+        }
+    }
+
+    private void RegenRing(int regenTarget)
+    {
+        while(recursiveConstruction.Count - 1 != regenTarget)
+        {
+            for (int i = 0; i < recursiveConstruction[^1].Count; i++)
+            {
+                TunnelSection section = recursiveConstruction[^1][i];
+                if (section.keep)
+                {
+                    section.gameObject.SetActive(false);
+                    mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.Position, section.Position), recursiveConstruction.Count - 1));
+                }
+                else
+                {
+                    DestroySection(section);
+                }
+            }
+            recursiveConstruction.RemoveAt(recursiveConstruction.Count - 1);
+        }
+        UpdateUnMothBallSections();
+        RecursiveBuilder();
+    }
+
+    private int GetFreeConnectorCount(List<TunnelSection> sections)
+    {
+        int freeConnectors = 0;
+        for (int i = 0; i < sections.Count; i++)
+        {
+            TunnelSection section = sections[i];
+            freeConnectors += section.connectors.Length - section.InUse.Count;
+        }
+        return freeConnectors;
     }
 
     private void MakeRootNode(TunnelSection newRoot)
     {
+        UpdateMothBalledSections(newRoot);
+
         List<List<TunnelSection>> newTree = new() { new() { newRoot } };
         HashSet<TunnelSection> exceptWith = new(newTree[^1]);
 
@@ -679,8 +760,17 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             for (int i = 0; i < newTree[^1].Count; i++)
             {
-                leafCounter++;
-                DestroySection(newTree[^1][i]);
+                TunnelSection section = newTree[^1][i];
+                if (section.keep)
+                {
+                    section.gameObject.SetActive(false);
+                    mothBalledSections.Add(section, new(math.distancesq(newRoot.Position, section.Position), newTree.Count - 1));
+                }
+                else
+                {
+                    leafCounter++;
+                    DestroySection(section);
+                }
             }
             newTree.RemoveAt(newTree.Count - 1);
         }
@@ -706,6 +796,57 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             Debug.LogWarning("cur player section null, attempting to resolve..");
             ResolvePlayerSection();
+        }
+    }
+
+    private void UpdateUnMothBallSections()
+    {
+        if(mothBalledSections.Count > 0)
+        {
+            List<TunnelSection> mothBalledSections = new(this.mothBalledSections.Keys);
+            mothBalledSections.ForEach(section =>
+            {
+                int curDst = this.mothBalledSections[section].dst;
+                if (curDst < recursiveConstruction.Count)
+                {
+                    if (unMothBall.ContainsKey(curDst))
+                    {
+                        unMothBall[curDst].Add(section);
+                    }
+                    else
+                    {
+                        unMothBall.Add(curDst, new List<TunnelSection>() { section });
+                    }
+
+                }
+                else
+                {
+                    if (unMothBall.ContainsKey(curDst) && unMothBall[curDst].Contains(section))
+                    {
+                        HashSet<TunnelSection> unBallSet = new(unMothBall[curDst]);
+                        unBallSet.Remove(section);
+                        unMothBall[curDst] = new(unBallSet);
+                    }
+                }
+            });
+        }
+    }
+
+    private void UpdateMothBalledSections(TunnelSection newRoot)
+    {
+        if (mothBalledSections.Count > 0)
+        {
+            List<TunnelSection> mothBalledSections = new(this.mothBalledSections.Keys);
+            mothBalledSections.ForEach(section =>
+            {
+                SectionDstData cur = this.mothBalledSections[section];
+                SectionDstData newRootDstData = new(math.distancesq(newRoot.Position, section.Position), cur.dst);
+
+                newRootDstData.dst += cur.sqrDst < newRootDstData.sqrDst ? 1 : -1;
+                this.mothBalledSections[section] = newRootDstData;
+            });
+
+            UpdateUnMothBallSections();
         }
     }
 
@@ -767,8 +908,35 @@ public class SpatialParadoxGenerator : MonoBehaviour
     /// <returns>New Section Instance</returns>
     private TunnelSection PickInstinateConnect(TunnelSection primary)
     {
-        TunnelSection pickedSection = PickSection(primary, out Connector priPref, out Connector secPref);
-        TunnelSection pickedInstance = InstinateSection(pickedSection);
+        TunnelSection pickedSection = null;
+        TunnelSection pickedInstance = null;
+        Connector priPref = Connector.Empty, secPref = Connector.Empty;
+        if (unMothBallSections.Count > 0)
+        {
+            List<int> internalSections = new(unMothBallSections.Count);
+            unMothBallSections.ForEach(section => internalSections.Add(section.orignalInstanceId));
+            pickedSection = PickSection(primary, internalSections, out priPref, out secPref);
+            if (!internalSections.Contains(pickedSection.GetInstanceID()))
+            {
+                List<int> nextSections = FilterSections(primary);
+                pickedSection = PickSection(primary, nextSections, out priPref, out secPref);
+                pickedInstance = InstinateSection(pickedSection);
+            }
+            else
+            {
+                int index = internalSections.IndexOf(pickedSection.GetInstanceID());
+                pickedInstance = unMothBallSections[index];
+                pickedInstance.gameObject.SetActive(true);
+                unMothBallSections.RemoveAt(index);
+            }
+        }
+        else
+        {
+            List<int> nextSections = FilterSections(primary);
+            pickedSection = PickSection(primary, nextSections, out priPref, out secPref);
+            pickedInstance = InstinateSection(pickedSection);
+        }
+        
         TransformSection(primary, pickedInstance, priPref, secPref); // transform the new section
         Physics.SyncTransforms(); /// push changes to physics world now instead of next fixed update, required for <see cref="RunIntersectionTests(TunnelSection, TunnelSection, out Connector, out Connector)"/>
         return pickedInstance;
@@ -782,14 +950,13 @@ public class SpatialParadoxGenerator : MonoBehaviour
     /// <param name="primaryPreference">Root section connector target</param>
     /// <param name="secondaryPreference">New section connector target</param>
     /// <returns>Chosen Prefab</returns>
-    private TunnelSection PickSection(TunnelSection primary, out Connector primaryPreference, out Connector secondaryPreference)
+    private TunnelSection PickSection(TunnelSection primary, List<int> nextSections, out Connector primaryPreference, out Connector secondaryPreference)
     {
         primaryPreference = Connector.Empty;
         secondaryPreference = Connector.Empty;
 
         List<Connector> primaryConnectors = FilterConnectors(primary);
 
-        List<int> nextSections = FilterSections(primary);
         ClearBurstMatrices();
 
         NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.TempJob);
@@ -1003,6 +1170,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private TunnelSection InstinateSection(TunnelSection tunnelSection)
     {
         TunnelSection section = Instantiate(tunnelSection);
+        section.orignalInstanceId = tunnelSection.GetInstanceID();
         section.gameObject.SetActive(true);
         section.transform.parent = transform;
         return section;

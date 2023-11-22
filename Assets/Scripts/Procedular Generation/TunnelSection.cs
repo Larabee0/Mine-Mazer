@@ -7,6 +7,7 @@ public class TunnelSection : MonoBehaviour
 {
     [SerializeField] private List<TunnelSection> excludePrefabConnections = new();
 
+    public Vector3 Position => transform.position;
     public Vector3 Centre => GetComponent<MeshRenderer>().bounds.center;
 
     public Connector[] connectors;
@@ -22,6 +23,10 @@ public class TunnelSection : MonoBehaviour
 
     [SerializeField] private List<int> excludePrefabConnectionsIds;
     public List<int> ExcludePrefabConnections => excludePrefabConnectionsIds;
+
+    public int orignalInstanceId;
+
+    public bool keep;
 
     public ConnectorMask GetConnectorMask(Connector connector)
     {
