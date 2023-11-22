@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
@@ -21,9 +22,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
     [Header("Runtime Map")]
     [SerializeField] private TunnelSection curPlayerSection;
     [SerializeField] private List<List<TunnelSection>> recursiveConstruction = new();
-
-    [SerializeField] private List<TunnelSection> twoDstSections = new();
-    [SerializeField] private List<TunnelSection> oneDstSections = new();
 
     private Coroutine mapUpdateProcess;
 
@@ -169,8 +167,11 @@ public class SpatialParadoxGenerator : MonoBehaviour
             UnsafeList<UnsafeList<BoxTransform>> boxTransforms = matrices[id];
             for (int i = 0; i < boxTransforms.Length; i++)
             {
-                boxTransforms[i].Clear();
+                UnsafeList<BoxTransform> boxes = boxTransforms[i];
+                boxes.Clear();
+                boxTransforms[i] = boxes;
             }
+            matrices[id] = boxTransforms;
         });
     }
 
@@ -259,31 +260,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
         //yield return MakeRootNode(recursiveConstruction[1][Random.Range(0, recursiveConstruction[1].Count)]);
         //TestBuildListStructures();
         Debug.Log("Ended Initial Area Debug");
-    }
-
-    private void TestBuildListStructures()
-    {
-        HashSet<TunnelSection> exceptWith = new() { curPlayerSection };
-
-        HashSet<TunnelSection> dstOne = new();
-        HashSet<TunnelSection> dstTwo = new();
-        List<SectionAndConnector> sections = new(curPlayerSection.connectorPairs.Values);
-        for (int i = 0; i < sections.Count; i++)
-        {
-            SectionAndConnector SandC = sections[i];
-            dstOne.Add(SandC.sectionInstance);
-            List<SectionAndConnector> childSections = new(SandC.sectionInstance.connectorPairs.Values);
-            for (int j = 0; j < childSections.Count; j++)
-            {
-                dstTwo.Add(childSections[j].sectionInstance);
-            }
-        }
-        dstOne.ExceptWith(exceptWith);
-        exceptWith.UnionWith(dstOne);
-        dstTwo.ExceptWith(exceptWith);
-        oneDstSections.AddRange(dstOne);
-        twoDstSections.AddRange(dstTwo);
-
     }
 
     private IEnumerator RecursiveBuilderDebug()
@@ -395,52 +371,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Replicates Functionality of <see cref="FillOneDstList(List{TunnelSection}, TunnelSection, int)"/> with Coroutine support to allow visualisation of what is happening
-    /// </summary>
-    /// <param name="oneDstList"></param>
-    /// <param name="primarySection"></param>
-    /// <param name="iterations"></param>
-    /// <returns></returns>
-    private IEnumerator FillOneDstListDebug(List<TunnelSection> oneDstList, TunnelSection primarySection)
-    {
-        for (int j = 0; j < primarySection.connectors.Length; j++)
-        {
-            // pick a new section to connect to
-            yield return PickSectionDebug(primarySection);
-            TunnelSection sectionInstance = InstinateSection(targetSectionDebug);
-            oneDstList.Add(sectionInstance);
-            TransformSection(primarySection, sectionInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // position new section
-        }
-        yield return null;
-    }
-
-    /// <summary>
-    /// Replicates Functionality of <see cref="FillTwoDstList(List{TunnelSection}, List{TunnelSection})"/> with Coroutine support to allow visualisation of what is happening
-    /// </summary>
-    /// <param name="oneDstList"></param>
-    /// <param name="twoDstList"></param>
-    /// <returns></returns>
-    private IEnumerator FillTwoDstListDebug(List<TunnelSection> oneDstList, List<TunnelSection> twoDstList)
-    {
-        for (int i = 0; i < oneDstList.Count; i++) // for each item in 1 back
-        {
-            TunnelSection section = oneDstList[i];
-            // for each connector -1 (exlucde connection to current section)
-            int freeConnectors = section.connectors.Length - section.InUse.Count;
-            for (int j = 0; j < freeConnectors; j++)
-            {
-                // pick a new section to connect to
-                yield return PickSectionDebug(section);
-
-                TunnelSection sectionInstance = InstinateSection(targetSectionDebug);
-
-                twoDstList.Add(sectionInstance); // add this to 2 back
-                TransformSection(section, sectionInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // position new section
-            }
-        }
-    }
-
     private IEnumerator PickSectionDebug(TunnelSection primary)
     {
         primaryPreferenceDebug = Connector.Empty;
@@ -458,18 +388,23 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             primaryPreferenceDebug = GetConnectorFromSection(primaryConnectors, out int priIndex);
 
-            Connector priConn = primaryPreferenceDebug;
-
-            priConn.UpdateWorldPos(primary.transform.localToWorldMatrix);
             double startTime = Time.realtimeSinceStartupAsDouble;
-            new BigMatrixJob
+            NativeReference<Connector> priConn = new(primaryPreferenceDebug, Allocator.TempJob);
+
+            JobHandle handle = new MatrixMulJob
             {
-                primaryConnector = priConn,
+                connector = priConn,
+                sectionLTW = primary.transform.localToWorldMatrix
+            }.Schedule(new JobHandle());
+            handle = new BigMatrixJob
+            {
+                connector = priConn,
                 sectionIds = nativeNexSections,
                 sectionConnectors = sectionConnectors,
                 boxBounds = boxBounds,
                 matrices = matrices
-            }.Schedule(nextSections.Count, new()).Complete();
+            }.Schedule(nextSections.Count, handle);
+            priConn.Dispose(handle).Complete();
             Debug.LogFormat("Big Matrix: {1} Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f, nextSections.Count);
 
             List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreferenceDebug), nextSections);
@@ -567,9 +502,15 @@ public class SpatialParadoxGenerator : MonoBehaviour
     }
     private IEnumerator DebugIntersectionTestBurst(TunnelSection primary, TunnelSection target)
     {
-        primaryPreferenceDebug.UpdateWorldPos(primary.transform.localToWorldMatrix);
-        secondaryPreferenceDebug.UpdateWorldPos(target.transform.localToWorldMatrix);
-
+        NativeReference<Connector> pri = new(primaryPreferenceDebug, Allocator.TempJob);
+        NativeReference<Connector> sec = new(secondaryPreferenceDebug, Allocator.TempJob);
+        JobHandle handle1 = new MatrixMulJob { connector = pri, sectionLTW = primary.transform.localToWorldMatrix }.Schedule(new JobHandle());
+        JobHandle handle2 = new MatrixMulJob { connector = sec, sectionLTW = target.transform.localToWorldMatrix }.Schedule(new JobHandle());
+        JobHandle.CombineDependencies(handle1, handle2).Complete();
+        primaryPreferenceDebug = pri.Value;
+        secondaryPreferenceDebug = sec.Value;
+        pri.Dispose();
+        sec.Dispose();
 
         List<GameObject> objects = new();
         //objects.Add(Instantiate(target,pos,rot).gameObject);
@@ -707,85 +648,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
         mapUpdateProcess = null;
         yield return null;
         Debug.Break();
-    }
-
-    private void IncrementMap()
-    {
-        List<SectionAndConnector> links = new(lastEnter.connectorPairs.Values);
-        List<TunnelSection> newOneDst = new(links.Count);
-        links.ForEach(link => newOneDst.Add(link.sectionInstance));
-        HashSet<TunnelSection> newTwoDst = new(links.Count);
-        for (int i = 0; i < newOneDst.Count; i++)
-        {
-            links = new(newOneDst[i].connectorPairs.Values);
-            links.ForEach(link => newTwoDst.Add(link.sectionInstance));
-        }
-
-        newTwoDst.ExceptWith(newOneDst);
-        newTwoDst.Remove(lastEnter);
-        HashSet<TunnelSection> oldTwoDst = new(twoDstSections);
-        oldTwoDst.ExceptWith(newTwoDst);
-        oldTwoDst.ExceptWith(newOneDst);
-        List<TunnelSection> cleanUpsections = new(oldTwoDst);
-        cleanUpsections.ForEach(section => DestroySection(section));
-        Physics.SyncTransforms();
-        newOneDst.Remove(lastEnter);
-        oneDstSections.Clear();
-        twoDstSections.Clear();
-        oneDstSections.AddRange(newOneDst);
-        twoDstSections.AddRange(newTwoDst);
-        FillTwoDstList(oneDstSections, twoDstSections);
-        curPlayerSection = lastEnter;
-
-        TunnelSection[] allSections = GetComponentsInChildren<TunnelSection>();
-        for (int i = 0; i < allSections.Length; i++)
-        {
-            List<SectionAndConnector> newLinks = new(allSections[i].connectorPairs.Values);
-            for (int l = 0; l < newLinks.Count; l++)
-            {
-                if (newLinks[l] == null || newLinks[l].sectionInstance == null)
-                {
-                    Debug.LogWarning("Null link!");
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Picks and connects new section to the given tunnel Section primarySection.
-    /// </summary>
-    /// <param name="oneDstList"></param>
-    /// <param name="primarySection"></param>
-    private void FillOneDstList(List<TunnelSection> oneDstList, TunnelSection primarySection)
-    {
-        for (int j = 0; j < primarySection.connectors.Length; j++)
-        {
-            // Pick Instinate & connect a new section
-            TunnelSection sectionInstance = PickInstinateConnect(primarySection);
-            oneDstList.Add(sectionInstance); // add this new section to the 1 distance list
-        }
-    }
-
-    /// <summary>
-    /// Picks and connects new sections to sections stored in the 1 distance list.
-    /// Adds them to the 2 distance list as these sections will be the 2nd section away from the current.
-    /// </summary>
-    /// <param name="oneDstList"></param>
-    /// <param name="twoDstList"></param>
-    private void FillTwoDstList(List<TunnelSection> oneDstList, List<TunnelSection> twoDstList)
-    {
-        for (int i = 0; i < oneDstList.Count; i++)
-        {
-            TunnelSection section = oneDstList[i];
-            // calculate number of remaining connectors - this is how many sections we need to connect.
-            int freeConnectors = section.connectors.Length - section.InUse.Count;
-            for (int j = 0; j < freeConnectors; j++)
-            {
-                // Pick Instinate & connect a new section
-                TunnelSection sectionInstance = PickInstinateConnect(section);
-                twoDstList.Add(sectionInstance); // add this new section to the 2 distance list
-            }
-        }
     }
 
     private void FillSectionConnectors(List<TunnelSection> startSections)
@@ -938,16 +800,23 @@ public class SpatialParadoxGenerator : MonoBehaviour
         while (targetSection == null && primaryConnectors.Count > 0)
         {
             primaryPreference = GetConnectorFromSection(primaryConnectors, out int priIndex);
-            Connector priConn = primaryPreference;
-            priConn.UpdateWorldPos(primary.transform.localToWorldMatrix);
-            new BigMatrixJob
+
+            NativeReference<Connector> priConn = new(primaryPreference, Allocator.TempJob);
+
+            JobHandle handle = new MatrixMulJob
             {
-                primaryConnector = priConn,
+                connector = priConn,
+                sectionLTW = primary.transform.localToWorldMatrix
+            }.Schedule(new JobHandle());
+            handle = new BigMatrixJob
+            {
+                connector = priConn,
                 sectionIds = nativeNexSections,
                 sectionConnectors = sectionConnectors,
                 boxBounds = boxBounds,
                 matrices = matrices
-            }.ScheduleParallel(nextSections.Count, 64, new()).Complete();
+            }.ScheduleParallel(nextSections.Count, 64, handle);
+            priConn.Dispose(handle).Complete();
 
 
             List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreference), nextSections);
@@ -1039,9 +908,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             secondaryConnector = GetConnectorFromSection(secondaryConnectors, out int secIndex);
 
-            double startTime = Time.realtimeSinceStartupAsDouble;
             bool noIntersections = IntersectionTest(primary, target, ref primaryConnector, ref secondaryConnector);
-            Debug.LogFormat("Intersection Test: {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
 
             if (noIntersections)
             {
@@ -1086,8 +953,15 @@ public class SpatialParadoxGenerator : MonoBehaviour
     /// <returns>True if the section will fit, false if not.</returns>
     private bool IntersectionTest(TunnelSection primary, TunnelSection target, ref Connector primaryConnector, ref Connector secondaryConnector)
     {
-        primaryConnector.UpdateWorldPos(primary.transform.localToWorldMatrix);
-        secondaryConnector.UpdateWorldPos(target.transform.localToWorldMatrix);
+        NativeReference<Connector> pri = new(primaryConnector, Allocator.TempJob);
+        NativeReference<Connector> sec = new(secondaryConnector, Allocator.TempJob);
+        JobHandle handle1 = new MatrixMulJob { connector = pri, sectionLTW = primary.transform.localToWorldMatrix }.Schedule(new JobHandle());
+        JobHandle handle2 = new MatrixMulJob { connector = sec, sectionLTW = target.transform.localToWorldMatrix }.Schedule(new JobHandle());
+        JobHandle.CombineDependencies(handle1, handle2).Complete();
+        primaryConnector = pri.Value;
+        secondaryConnector = sec.Value;
+        pri.Dispose();
+        sec.Dispose();
 
         int instanceID = target.GetInstanceID();
         UnsafeList<UnsafeList<BoxTransform>> transformsContainer = matrices[instanceID];
