@@ -20,13 +20,16 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     [Header("Runtime Map")]
     [SerializeField] private TunnelSection curPlayerSection;
-    private Dictionary<int, TunnelSection> idToInstanceSections = new();
     [SerializeField] private List<List<TunnelSection>> recursiveConstruction = new();
 
     [SerializeField] private List<TunnelSection> twoDstSections = new();
     [SerializeField] private List<TunnelSection> oneDstSections = new();
 
     private Coroutine mapUpdateProcess;
+
+    UnsafeParallelHashMap<int, UnsafeList<UnsafeList<BoxTransform>>> matrices;
+    NativeParallelHashMap<int, UnsafeList<Connector>> sectionConnectors;
+    NativeParallelHashMap<int, UnsafeList<BoxBounds>> boxBounds;
 
     [Header("Generation Settings")]
     [SerializeField, Min(1)] private int maxDst = 3;
@@ -72,6 +75,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
         });
         tunnelSections.Clear();
         tunnelSections = null;
+
+
+        SetUpBurstDataStructures(tunnelSectionsByInstanceID);
     }
 
     private void Start()
@@ -91,6 +97,81 @@ public class SpatialParadoxGenerator : MonoBehaviour
             Random.state = seed;
         }
         GenerateInitialArea();
+    }
+
+    private void OnDestroy()
+    {
+        tunnelSectionsByInstanceID.ForEach(id =>
+        {
+            boxBounds[id].Dispose();
+            sectionConnectors[id].Dispose();
+            UnsafeList<UnsafeList<BoxTransform>> boxTransforms = matrices[id];
+            for (int i = 0; i < boxTransforms.Length; i++)
+            {
+                boxTransforms[i].Dispose();
+            }
+            boxTransforms.Dispose();
+        });
+        matrices.Dispose();
+        boxBounds.Dispose();
+        sectionConnectors.Dispose();
+    }
+
+    private void SetUpBurstDataStructures(List<int> nextSections)
+    {
+        double startTime = Time.realtimeSinceStartupAsDouble;
+        sectionConnectors = new(nextSections.Count, Allocator.Persistent);
+        boxBounds = new(nextSections.Count, Allocator.Persistent);
+
+        SetUpBurstMatrices(nextSections,Allocator.Persistent);
+
+        for (int i = 0; i < nextSections.Count; i++)
+        {
+            int id = nextSections[i];
+            TunnelSection section = instanceIdToSection[id];
+
+            UnsafeList<BoxBounds> bounds = new(section.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+            NativeArray<BoxBounds> nativeBounds = new(section.boundingBoxes, Allocator.Temp);
+            bounds.CopyFrom(nativeBounds);
+            boxBounds.Add(id, bounds);
+
+            UnsafeList<Connector> connectors = new(section.connectors.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+            NativeArray<Connector> nativeConnectors = new(section.connectors, Allocator.Temp);
+            connectors.CopyFrom(nativeConnectors);
+            sectionConnectors.Add(id, connectors);
+        }
+        Debug.LogFormat("Initial Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+    }
+
+    private void SetUpBurstMatrices(List<int> sections, Allocator allocator)
+    {
+        double startTime = Time.realtimeSinceStartupAsDouble;
+        matrices = new(sections.Count, allocator);
+        for (int i = 0; i < sections.Count; i++)
+        {
+            int id = sections[i];
+            TunnelSection section = instanceIdToSection[id];
+
+            UnsafeList<UnsafeList<BoxTransform>> boxTransforms = new(section.connectors.Length, allocator, NativeArrayOptions.UninitializedMemory);
+            for (int j = 0; j < section.connectors.Length; j++)
+            {
+                boxTransforms.AddNoResize(new UnsafeList<BoxTransform>(section.boundingBoxes.Length, allocator, NativeArrayOptions.UninitializedMemory));
+            }
+            matrices.Add(id, boxTransforms);
+        }
+        Debug.LogFormat("Matrix Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+    }
+
+    private void ClearBurstMatrices()
+    {
+        tunnelSectionsByInstanceID.ForEach(id =>
+        {
+            UnsafeList<UnsafeList<BoxTransform>> boxTransforms = matrices[id];
+            for (int i = 0; i < boxTransforms.Length; i++)
+            {
+                boxTransforms[i].Clear();
+            }
+        });
     }
 
 
@@ -367,44 +448,30 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
         List<Connector> primaryConnectors = FilterConnectors(primary);
         List<int> nextSections = FilterSections(primary);
-
-        NativeParallelHashMap<int, UnsafeList<Connector>> sectionConnectors = new(nextSections.Count, Allocator.TempJob);
-        NativeParallelHashMap<int, UnsafeList<BoxBounds>> boxBounds = new(nextSections.Count,Allocator.TempJob);
-        NativeParallelHashMap<int, UnsafeList<BoxTransform>> boxTransforms = new(nextSections.Count, Allocator.TempJob);
-
-        for (int i = 0; i < nextSections.Count; i++)
-        {
-            int id = nextSections[i];
-            TunnelSection section = instanceIdToSection[id];
-            boxBounds.Add(id, new(section.boundingBoxes.Length, Allocator.TempJob, NativeArrayOptions.UninitializedMemory));
-            boxTransforms.Add(id, new UnsafeList<BoxTransform>(section.boundingBoxes.Length, Allocator.TempJob, NativeArrayOptions.UninitializedMemory));
-            sectionConnectors.Add(id, new UnsafeList<Connector>(section.connectors.Length, Allocator.TempJob, NativeArrayOptions.UninitializedMemory));
-
-            UnsafeList<BoxBounds> bounds = boxBounds[id];
-            NativeArray<BoxBounds> nativeBounds = new(section.boundingBoxes, Allocator.Temp);
-            bounds.CopyFrom(nativeBounds);
-
-            UnsafeList<Connector> connectors = sectionConnectors[id];
-            NativeArray<Connector> nativeConnectors = new(section.connectors, Allocator.Temp);
-            connectors.CopyFrom(nativeConnectors);
-            
-        }
-
+        ClearBurstMatrices();
+        NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.Persistent);
         int iterations = maxInterations;
-        nextSections.ForEach(id =>
-        {
-            boxBounds[id].Dispose();
-            boxTransforms[id].Dispose();
-            sectionConnectors[id].Dispose();
-        });
-        boxBounds.Dispose();
-        boxTransforms.Dispose();
-        sectionConnectors.Dispose();
+
         targetSectionDebug = null;
 
         while (targetSectionDebug == null && primaryConnectors.Count > 0)
         {
             primaryPreferenceDebug = GetConnectorFromSection(primaryConnectors, out int priIndex);
+
+            Connector priConn = primaryPreferenceDebug;
+
+            priConn.UpdateWorldPos(primary.transform.localToWorldMatrix);
+            double startTime = Time.realtimeSinceStartupAsDouble;
+            new BigMatrixJob
+            {
+                primaryConnector = priConn,
+                sectionIds = nativeNexSections,
+                sectionConnectors = sectionConnectors,
+                boxBounds = boxBounds,
+                matrices = matrices
+            }.Schedule(nextSections.Count, new()).Complete();
+            Debug.LogFormat("Big Matrix: {1} Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f, nextSections.Count);
+
             List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreferenceDebug), nextSections);
             while (internalNextSections.Count > 0)
             {
@@ -429,6 +496,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
             primaryConnectors.RemoveAt(priIndex);
         }
+
+        nativeNexSections.Dispose();
 
         if (targetSectionDebug == null)
         {
@@ -498,44 +567,34 @@ public class SpatialParadoxGenerator : MonoBehaviour
     }
     private IEnumerator DebugIntersectionTestBurst(TunnelSection primary, TunnelSection target)
     {
-        NativeArray<BoxBounds> nativeBoundstarget = new(target.BoundingBoxes, Allocator.TempJob);
-        NativeReference<float4x4> mainMatrix = new(float4x4.identity, Allocator.TempJob);
-        NativeArray<float4x2> boxTransforms = new(nativeBoundstarget.Length, Allocator.TempJob);
-        NativeArray<Connector> connectors = new(2, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
-        connectors[0] = primaryPreferenceDebug;
-        connectors[1] = secondaryPreferenceDebug;
-        JobHandle handle = new MatrixMulJob
-        {
-            priMatrix = (float4x4)primary.transform.localToWorldMatrix,
-            secMatrix = (float4x4)target.transform.localToWorldMatrix,
-            parentMatrix = mainMatrix,
-            connectors = connectors
-        }.Schedule(new JobHandle());
+        primaryPreferenceDebug.UpdateWorldPos(primary.transform.localToWorldMatrix);
+        secondaryPreferenceDebug.UpdateWorldPos(target.transform.localToWorldMatrix);
 
-        handle = new MatrixJob
-        {
-            boxes = nativeBoundstarget,
-            parentMatrix = mainMatrix,
-            boxTransform = boxTransforms
-        }.Schedule(boxTransforms.Length, handle);
-        mainMatrix.Dispose(handle).Complete();
-
-        primaryPreferenceDebug = connectors[0];
-        secondaryPreferenceDebug = connectors[1];
-        connectors.Dispose();
 
         List<GameObject> objects = new();
         //objects.Add(Instantiate(target,pos,rot).gameObject);
-
+        int instanceID = target.GetInstanceID();
+        UnsafeList<UnsafeList<BoxTransform>> transformsContainer = matrices[instanceID];
+        if (transformsContainer.Length == 0)
+        {
+            Debug.LogError("no transforms found for connector");
+            yield break;
+        }
+        UnsafeList<BoxTransform> transforms = transformsContainer[secondaryPreferenceDebug.internalIndex];
+        if (transforms.Length == 0)
+        {
+            Debug.LogError("no box transforms found");
+            yield break;
+        }
         bool noIntersections = true;
         for (int i = 0; i < target.BoundingBoxes.Length; i++)
         {
             BoxBounds boxBounds = target.BoundingBoxes[i];
             objects.Add(Instantiate(santiziedCube));
 
-            float4x2 m = boxTransforms[i];
-            float3 position = new(m.c0.x, m.c0.y, m.c0.z);
-            Quaternion rotation = new(m.c1.x, m.c1.y, m.c1.z, m.c1.w);
+            BoxTransform m = transforms[i];
+            float3 position = m.pos;
+            Quaternion rotation = m.rotation;
 
             objects[^1].transform.SetPositionAndRotation(position, rotation);
             objects[^1].transform.localScale = boxBounds.size;
@@ -547,7 +606,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
         }
 
-        boxTransforms.Dispose();
         //objects[0].SetActive(true);
 
         yield return new WaitForSeconds(intersectTestHoldTime);
@@ -870,6 +928,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
         List<Connector> primaryConnectors = FilterConnectors(primary);
 
         List<int> nextSections = FilterSections(primary);
+        ClearBurstMatrices();
+
+        NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.TempJob);
 
         int iterations = maxInterations;
         TunnelSection targetSection = null;
@@ -877,6 +938,18 @@ public class SpatialParadoxGenerator : MonoBehaviour
         while (targetSection == null && primaryConnectors.Count > 0)
         {
             primaryPreference = GetConnectorFromSection(primaryConnectors, out int priIndex);
+            Connector priConn = primaryPreference;
+            priConn.UpdateWorldPos(primary.transform.localToWorldMatrix);
+            new BigMatrixJob
+            {
+                primaryConnector = priConn,
+                sectionIds = nativeNexSections,
+                sectionConnectors = sectionConnectors,
+                boxBounds = boxBounds,
+                matrices = matrices
+            }.ScheduleParallel(nextSections.Count, 64, new()).Complete();
+
+
             List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreference), nextSections);
             while (internalNextSections.Count > 0)
             {
@@ -900,27 +973,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
             primaryConnectors.RemoveAt(priIndex);
         }
-        
-        /*
-        while (targetSection == null && nextSections.Count > 0)
-        {
-            int curInstanceID = nextSections.ElementAt(Random.Range(0, nextSections.Count));
-            targetSection = instanceIdToSection[curInstanceID];
-            if (RunIntersectionTests(primary, targetSection, out primaryPreference, out secondaryPreference))
-            {
-                break;
-            }
-            nextSections.Remove(curInstanceID);
-            targetSection = null;
-            iterations--;
-            if (iterations <= 0)
-            {
-                Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
-            }
-        }
-        */
 
-        if(targetSection == null)
+        nativeNexSections.Dispose();
+
+        if (targetSection == null)
         {
             secondaryPreference = deadEndPlug.connectors[0];
             secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
@@ -948,7 +1004,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             connector.Build();
         }
-        List<int> nextSections = new(tunnelSectionsByInstanceID);
+        List<int> nextSections = new(sections);
 
         if (connector.excludeRuntime.Count > 0)
         {
@@ -983,12 +1039,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             secondaryConnector = GetConnectorFromSection(secondaryConnectors, out int secIndex);
 
-            //double startTime = Time.realtimeSinceStartupAsDouble;
-            //bool noIntersections = IntersectionTest(primary, target, ref primaryConnector, ref secondaryConnector);
-            //Debug.LogFormat("None Burst Test: {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
-            //startTime = Time.realtimeSinceStartupAsDouble;
-            bool noIntersections = SpatialParadoxBurst.IntersectionTestBurst(primary, target, ref primaryConnector, ref secondaryConnector, tunnelSectionLayerIndex);
-            //Debug.LogFormat("Burst Test: {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+            double startTime = Time.realtimeSinceStartupAsDouble;
+            bool noIntersections = IntersectionTest(primary, target, ref primaryConnector, ref secondaryConnector);
+            Debug.LogFormat("Intersection Test: {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
 
             if (noIntersections)
             {
@@ -1035,14 +1088,31 @@ public class SpatialParadoxGenerator : MonoBehaviour
     {
         primaryConnector.UpdateWorldPos(primary.transform.localToWorldMatrix);
         secondaryConnector.UpdateWorldPos(target.transform.localToWorldMatrix);
-        
-        float4x4 secondaryTransform = CalculateSectionMatrix(primaryConnector, secondaryConnector);
+
+        int instanceID = target.GetInstanceID();
+        UnsafeList<UnsafeList<BoxTransform>> transformsContainer = matrices[instanceID];
+        if (transformsContainer.Length == 0)
+        {
+            Debug.LogError("no transforms found for connector");
+            return false;
+        }
+
+        UnsafeList<BoxTransform> transforms = transformsContainer[secondaryPreferenceDebug.internalIndex];
+        if (transforms.Length == 0)
+        {
+            Debug.LogError("no box transforms found");
+            return false;
+        }
 
         for (int i = 0; i < target.BoundingBoxes.Length; i++)
         {
             BoxBounds boxBounds = target.BoundingBoxes[i];
-            float4x4 m = math.mul(secondaryTransform, target.boundingBoxes[i].Matrix);
-            if (Physics.CheckBox(m.Translation(), boxBounds.size * 0.5f, m.Rotation(), tunnelSectionLayerIndex, QueryTriggerInteraction.Ignore))
+
+            BoxTransform m = transforms[i];
+            float3 position = m.pos;
+            Quaternion rotation = m.rotation;
+
+            if (Physics.CheckBox(position, boxBounds.size * 0.5f, rotation, tunnelSectionLayerIndex, QueryTriggerInteraction.Ignore))
             {
                 return false;
             }
