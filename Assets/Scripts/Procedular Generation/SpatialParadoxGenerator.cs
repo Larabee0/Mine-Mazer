@@ -467,7 +467,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private IEnumerator DebugIntersectionTest(TunnelSection primary, TunnelSection target)
     {
         primaryPreferenceDebug.UpdateWorldPos(primary.transform.localToWorldMatrix);
-        secondaryPreferenceDebug.UpdateWorldPos(target.transform.localToWorldMatrix);
+        secondaryPreferenceDebug.UpdateWorldPos(float4x4.identity);
 
         List<GameObject> objects = new();
 
@@ -505,7 +505,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         NativeReference<Connector> pri = new(primaryPreferenceDebug, Allocator.TempJob);
         NativeReference<Connector> sec = new(secondaryPreferenceDebug, Allocator.TempJob);
         JobHandle handle1 = new MatrixMulJob { connector = pri, sectionLTW = primary.transform.localToWorldMatrix }.Schedule(new JobHandle());
-        JobHandle handle2 = new MatrixMulJob { connector = sec, sectionLTW = target.transform.localToWorldMatrix }.Schedule(new JobHandle());
+        JobHandle handle2 = new MatrixMulJob { connector = sec, sectionLTW = float4x4.identity }.Schedule(new JobHandle());
         JobHandle.CombineDependencies(handle1, handle2).Complete();
         primaryPreferenceDebug = pri.Value;
         secondaryPreferenceDebug = sec.Value;
@@ -956,7 +956,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         NativeReference<Connector> pri = new(primaryConnector, Allocator.TempJob);
         NativeReference<Connector> sec = new(secondaryConnector, Allocator.TempJob);
         JobHandle handle1 = new MatrixMulJob { connector = pri, sectionLTW = primary.transform.localToWorldMatrix }.Schedule(new JobHandle());
-        JobHandle handle2 = new MatrixMulJob { connector = sec, sectionLTW = target.transform.localToWorldMatrix }.Schedule(new JobHandle());
+        JobHandle handle2 = new MatrixMulJob { connector = sec, sectionLTW = float4x4.identity }.Schedule(new JobHandle());
         JobHandle.CombineDependencies(handle1, handle2).Complete();
         primaryConnector = pri.Value;
         secondaryConnector = sec.Value;
