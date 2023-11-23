@@ -6,6 +6,8 @@ using UnityEngine;
 public class TunnelSection : MonoBehaviour
 {
     [SerializeField] private List<TunnelSection> excludePrefabConnections = new();
+    
+    public GameObject stagnationBeacon;
 
     public Vector3 Position => transform.position;
     public Vector3 Centre => GetComponent<MeshRenderer>().bounds.center;

@@ -49,11 +49,11 @@ public struct BigMatrixJob : IJobFor
             for (int j = 0; j < boxes.Length; j++)
             {
                 float4x4 childMatrix = math.mul(parentMatrix, boxes[j].Matrix);
-                curTransforms.AddNoResize(new BoxTransform
+                curTransforms[j] = new BoxTransform
                 {
                     pos = childMatrix.Translation(),
                     rotation = childMatrix.Rotation()
-                });
+                };
             }
             boxTransforms[i] = curTransforms;
         }
