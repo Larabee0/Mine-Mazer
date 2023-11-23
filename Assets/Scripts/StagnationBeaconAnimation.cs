@@ -34,7 +34,7 @@ public class StagnationBeaconAnimation : MonoBehaviour
 
     private void OnDisable()
     {
-        StopAllCoroutines();
+        StopAllCoroutines();    
     }
 
     private IEnumerator Animation()
