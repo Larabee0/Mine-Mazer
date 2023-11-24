@@ -31765,7 +31765,7 @@ MonoBehaviour:
   stagnationBeacon: {fileID: 3346427576957048216, guid: 12c8e986ba132d445ad84b4f8ee1af0c,
     type: 3}
   curPlayerSection: {fileID: 0}
-  maxDst: 7
+  maxDst: 2
   tunnelSectionLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -31776,10 +31776,11 @@ MonoBehaviour:
     s1: -126098709
     s2: 996236964
     s3: 1367127049
+  parallelMatrixCalculations: 0
   prefab1: {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962, type: 3}
   prefab2: {fileID: 7113011209303798032, guid: fc93cda41d77b1442bb709e6410dc4c2, type: 3}
-  debugging: 1
-  initialAreaDebugging: 1
+  debugging: 0
+  initialAreaDebugging: 0
   transformDebugging: 0
   intersectTestHoldTime: 1.5
   distanceListPauseTime: 2.5

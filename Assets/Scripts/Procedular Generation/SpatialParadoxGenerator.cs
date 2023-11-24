@@ -30,22 +30,26 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private Transform sectionGraveYard; 
     private Coroutine mapUpdateProcess;
 
-    UnsafeParallelHashMap<int, UnsafeList<UnsafeList<BoxTransform>>> matrices;
-    NativeParallelHashMap<int, UnsafeList<Connector>> sectionConnectors;
-    NativeParallelHashMap<int, UnsafeList<BoxBounds>> boxBounds;
+    // these are quite unsafe lol
+    // Its fine, once initilised their capacity doesn't change and their values are accessed safely by seperate threads.
+    // the keys for these parallel hash maps are the prefab instance ids of the sections.
+    UnsafeParallelHashMap<int, UnsafeList<UnsafeList<BoxTransform>>> sectionBoxTransforms; // result of box tranform when the map looks to position a new tunnel.
+    NativeParallelHashMap<int, UnsafeList<BurstConnector>> sectionConnectorContainers; // connector structs for each section - these all have an identity matrix applied.
+    NativeParallelHashMap<int, UnsafeList<float4x4>> sectionBoxMatrices; // local matrices of the bounding boxes of the section
 
     [Header("Generation Settings")]
     [SerializeField, Min(1)] private int maxDst = 3;
     [SerializeField] private LayerMask tunnelSectionLayerMask;
-    [SerializeField, Min(1000)] private int maxInterations = 1000000;
-    [SerializeField] private bool randomSeed = true;
-    [SerializeField] private Random.State seed;
-
+    [SerializeField, Min(1000)] private int maxInterations = 1000000; /// max iterations allowed for <see cref="PickSection(TunnelSection, List{int}, out Connector, out Connector)"/>
+    [SerializeField] private bool randomSeed = true; // generate a new seed every application run or use old seed.
+    [SerializeField] private Random.State seed; // override seed.
+    [SerializeField] private bool parallelMatrixCalculations = false; // allow parallel Matrix calculations for big matrix job
     private int tunnelSectionLayerIndex;
     private TunnelSection lastEnter;
     private TunnelSection lastExit;
 
 #if UNITY_EDITOR
+    // extra variables and settings for the debugger, these aren't compiled into the build.
     [Header("Debug")]
     [SerializeField] private TunnelSection prefab1;
     [SerializeField] private TunnelSection prefab2;
@@ -65,8 +69,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private bool intersectionTest;
 
 #endif
+     
     private void Awake()
     {
+        // construct instance Id based data structures so we aren't doing reference based look-ups.
         instanceIdToSection = new Dictionary<int, TunnelSection>(tunnelSections.Count);
         tunnelSectionsByInstanceID = new(tunnelSections.Count);
         tunnelSections.ForEach(prefab =>
@@ -79,18 +85,21 @@ public class SpatialParadoxGenerator : MonoBehaviour
         tunnelSections.Clear();
         tunnelSections = null;
 
-        sectionGraveYard = new GameObject("Mothballed sections").transform;
+        sectionGraveYard = new GameObject("Mothballed Sections").transform;
         sectionGraveYard.parent = transform;
         sectionGraveYard.localPosition = Vector3.zero;
 
         SetUpBurstDataStructures(tunnelSectionsByInstanceID);
+        SetUpBurstMatrices(tunnelSectionsByInstanceID, Allocator.Persistent);
     }
 
     private void Start()
     {
         InputManager.Instance.PlayerActions.East.canceled += PlaceStagnationBeacon;
+
         tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
+
 #if UNITY_EDITOR
         if (debugging)
         {
@@ -107,6 +116,11 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Places or removes a stagnation beacon in the current player section <see cref="curPlayerSection"/>
+    /// This toggles a flag in the <see cref="TunnelSection"/> instance called "keep".
+    /// </summary>
+    /// <param name="context"></param>
     private void PlaceStagnationBeacon(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         if (curPlayerSection.keep)
@@ -124,52 +138,57 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void OnDestroy()
     {
-        tunnelSectionsByInstanceID.ForEach(id =>
-        {
-            boxBounds[id].Dispose();
-            sectionConnectors[id].Dispose();
-            UnsafeList<UnsafeList<BoxTransform>> boxTransforms = matrices[id];
-            for (int i = 0; i < boxTransforms.Length; i++)
-            {
-                boxTransforms[i].Dispose();
-            }
-            boxTransforms.Dispose();
-        });
-        matrices.Dispose();
-        boxBounds.Dispose();
-        sectionConnectors.Dispose();
+        CleanUpBurstDataStructures();
     }
 
+    /// <summary>
+    /// Initilises a lot of data structures used by the burst compiled job <see cref="BigMatrixJob"/>
+    /// </summary>
+    /// <param name="nextSections"></param>
     private void SetUpBurstDataStructures(List<int> nextSections)
     {
         double startTime = Time.realtimeSinceStartupAsDouble;
-        sectionConnectors = new(nextSections.Count, Allocator.Persistent);
-        boxBounds = new(nextSections.Count, Allocator.Persistent);
-
-        SetUpBurstMatrices(nextSections,Allocator.Persistent);
+        sectionConnectorContainers = new(nextSections.Count, Allocator.Persistent);
+        sectionBoxMatrices = new(nextSections.Count, Allocator.Persistent);
 
         for (int i = 0; i < nextSections.Count; i++)
         {
             int id = nextSections[i];
             TunnelSection section = instanceIdToSection[id];
 
-            UnsafeList<BoxBounds> bounds = new(section.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            NativeArray<BoxBounds> nativeBounds = new(section.boundingBoxes, Allocator.Temp);
-            bounds.CopyFrom(nativeBounds);
-            boxBounds.Add(id, bounds);
+            // convert bounding box data to transform matrix (float4x4) to avoid unnessecary matrix calculations during map updates.
+            UnsafeList<float4x4> bounds = new(section.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+            bounds.Resize(section.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
+            for (int j = 0; j < section.boundingBoxes.Length; j++)
+            {
+                bounds[j] = section.boundingBoxes[j].Matrix;
+            }
+            sectionBoxMatrices.Add(id, bounds);
 
-            UnsafeList<Connector> connectors = new(section.connectors.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            NativeArray<Connector> nativeConnectors = new(section.connectors, Allocator.Temp);
-            connectors.CopyFrom(nativeConnectors);
-            sectionConnectors.Add(id, connectors);
+            // convert Connector data to BurstConnector to avoid unnessecary matrix calculations during map updates.
+            UnsafeList<BurstConnector> connectors = new(section.connectors.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+            connectors.Resize(section.connectors.Length, NativeArrayOptions.UninitializedMemory);
+            for (int j = 0; j < section.connectors.Length; j++)
+            {
+                connectors[j] = new(section.connectors[j]);
+            }
+            sectionConnectorContainers.Add(id, connectors);
         }
+
+        new SetupConnectorsJob
+        {
+            sectionIds = new NativeArray<int>(nextSections.ToArray(), Allocator.TempJob),
+            sectionConnectors = sectionConnectorContainers
+        }.ScheduleParallel(nextSections.Count, 8, new JobHandle()).Complete();
+
         Debug.LogFormat("Initial Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+
     }
 
     private void SetUpBurstMatrices(List<int> sections, Allocator allocator)
     {
         double startTime = Time.realtimeSinceStartupAsDouble;
-        matrices = new(sections.Count, allocator);
+        sectionBoxTransforms = new(sections.Count, allocator);
         for (int i = 0; i < sections.Count; i++)
         {
             int id = sections[i];
@@ -178,13 +197,35 @@ public class SpatialParadoxGenerator : MonoBehaviour
             UnsafeList<UnsafeList<BoxTransform>> boxTransforms = new(section.connectors.Length, allocator, NativeArrayOptions.UninitializedMemory);
             for (int j = 0; j < section.connectors.Length; j++)
             {
+                /// the boxes are left as Uninitialized - don't read from them before running <see cref="BigMatrixJob"/> hehe
                 UnsafeList<BoxTransform> boxes = new(section.boundingBoxes.Length, allocator, NativeArrayOptions.UninitializedMemory);
                 boxes.Resize(section.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
                 boxTransforms.AddNoResize(boxes);
             }
-            matrices.Add(id, boxTransforms);
+            sectionBoxTransforms.Add(id, boxTransforms);
         }
         Debug.LogFormat("Matrix Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+    }
+
+    /// <summary>
+    /// Safely disposes of all burst data structures to prevent memory leaks when the application ends.
+    /// </summary>
+    private void CleanUpBurstDataStructures()
+    {
+        tunnelSectionsByInstanceID.ForEach(id =>
+        {
+            sectionBoxMatrices[id].Dispose();
+            sectionConnectorContainers[id].Dispose();
+            UnsafeList<UnsafeList<BoxTransform>> boxTransforms = sectionBoxTransforms[id];
+            for (int i = 0; i < boxTransforms.Length; i++)
+            {
+                boxTransforms[i].Dispose();
+            }
+            boxTransforms.Dispose();
+        });
+        sectionBoxTransforms.Dispose();
+        sectionBoxMatrices.Dispose();
+        sectionConnectorContainers.Dispose();
     }
 
 
@@ -195,6 +236,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         if (santiziedCube == null)
         {
             Debug.LogWarning("Santizied cube unassigned!");
+            return;
         }
         if (initialAreaDebugging)
         {
@@ -216,6 +258,11 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Visually tries every connector combination between <see cref="prefab1"/> and <see cref="prefab2"/>
+    /// This runs forever.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator TransformDebugging()
     {
         curPlayerSection = InstinateSection(prefab1);
@@ -250,6 +297,11 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// slow step through map generation to allow visualisation.
+    /// Has side effect to force physics ticks between intersection tests.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator GenerateInitialAreaDebug()
     {
         if (startSection == null)
@@ -270,6 +322,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
         Debug.Log("Ended Initial Area Debug");
     }
 
+    /// <summary>
+    /// Slow step through increasing the <see cref="mapTree"/> until it is the size of maxDst.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator RecursiveBuilderDebug()
     {
         while (mapTree.Count <= maxDst)
@@ -283,12 +339,24 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Connectors a new or mothballed section to every free connector of <see cref="startSections"/>
+    /// This is the debug version that waits between operations and contains extra logging information.
+    /// </summary>
+    /// <param name="startSections"></param>
+    /// <returns></returns>
     private IEnumerator FillSectionConnectorsDebug(List<TunnelSection> startSections)
     {
+        /// promoteSectionsDict contains items when <see cref="CheckForSectionsPromotions"/> is called and finds mothballed sections that can be promoted.
+        /// the dictionary much contain the key corrisponding the to current map ring index in order to be delt with this cycle.
         if (promoteSectionsDict.Count > 0 && promoteSectionsDict.ContainsKey(mapTree.Count - 1))
         {
             Debug.LogFormat(gameObject, "Attempting to Promotion {0} rings queued", promoteSectionsDict.Count);
+            // calculates number of free connectors on the previous orbital.
             int freeConnectors = GetFreeConnectorCount(startSections);
+
+            // if there isn't enough free connectors for the number of sections we need to promote, then the previous ring needs to be regenerated.
+            // this is done by calling RegenRing with the index before this one.
             if (freeConnectors < promoteSectionsDict[mapTree.Count - 1].Count)
             {
                 // not enough free connectors, go in a level and regenerate.
@@ -298,6 +366,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
             else
             {
+                /// connectors allowing, the sections to be promoted get copied to <see cref="promoteSectionsList"/> then removed from the dictionary.
+                /// <see cref="PickInstinateConnectDebug(TunnelSection)"/> will deal with the rest of the heavy lifting.
                 Debug.LogFormat(gameObject, "Enough free connectors exist for ring {1}, queuing promotion of {0} sections", promoteSectionsDict[mapTree.Count - 1].Count, mapTree.Count - 1);
                 promoteSectionsList.AddRange(promoteSectionsDict[mapTree.Count - 1]);
                 promoteSectionsDict.Remove(mapTree.Count - 1);
@@ -311,13 +381,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             for (int j = 0; j < freeConnectors; j++)
             {
                 // pick a new section to connect to
-                yield return PickSectionDebug(section);
-
-                TunnelSection sectionInstance = InstinateSection(targetSectionDebug);
-
-                mapTree[^1].Add(sectionInstance); // add this to 2 back
-                TransformSection(section, sectionInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // position new section
-                Physics.SyncTransforms();
+                yield return PickInstinateConnectDebug(section);
             }
         }
 
@@ -334,6 +398,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
             promoteSectionsList.Clear();
         }
+        Debug.LogFormat(gameObject, "promoteList: {0} promoteDict: {1}", promoteSectionsList.Count, promoteSectionsDict.Count);
     }
 
     private IEnumerator RegenRingDebug(int regenTarget)
@@ -359,7 +424,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             mapTree.RemoveAt(mapTree.Count - 1);
         }
         Physics.SyncTransforms();
-        UpdateUnMothBallSections();
+        CheckForSectionsPromotions();
         Debug.Log("Begining tree re-gen..");
         yield return RecursiveBuilderDebug();
     }
@@ -437,13 +502,51 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
-    private IEnumerator PickSectionDebug(TunnelSection primary)
+
+
+    private IEnumerator PickInstinateConnectDebug(TunnelSection primary)
+    {
+        TunnelSection pickedInstance = null;
+        Connector priPref = Connector.Empty, secPref = Connector.Empty;
+        if (promoteSectionsList.Count > 0)
+        {
+            List<int> internalSections = new(promoteSectionsList.Count);
+            promoteSectionsList.ForEach(section => internalSections.Add(section.orignalInstanceId));
+            yield return PickSectionDebug(primary, internalSections);
+            if (!internalSections.Contains(targetSectionDebug.GetInstanceID())) // returned dead end.
+            {
+                List<int> nextSections = FilterSections(primary);
+                yield return PickSectionDebug(primary, nextSections);
+                pickedInstance = InstinateSection(targetSectionDebug);
+            }
+            else // reinstance section
+            {
+                int index = internalSections.IndexOf(targetSectionDebug.GetInstanceID());
+                pickedInstance = promoteSectionsList[index];
+                pickedInstance.gameObject.SetActive(true);
+                promoteSectionsList.RemoveAt(index);
+            }
+        }
+        else
+        {
+            List<int> nextSections = FilterSections(primary);
+            yield return PickSectionDebug(primary, nextSections);
+            pickedInstance = InstinateSection(targetSectionDebug);
+        }
+
+        TransformSection(primary, pickedInstance, primaryPreferenceDebug, secondaryPreferenceDebug); // transform the new section
+        Physics.SyncTransforms(); // push changes to physics world now instead of next fixed update
+
+        mapTree[^1].Add(pickedInstance); // add this to 2 back
+    }
+
+
+    private IEnumerator PickSectionDebug(TunnelSection primary, List<int> nextSections)
     {
         primaryPreferenceDebug = Connector.Empty;
         secondaryPreferenceDebug = Connector.Empty;
 
         List<Connector> primaryConnectors = FilterConnectors(primary);
-        List<int> nextSections = FilterSections(primary);
         NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.Persistent);
         int iterations = maxInterations;
 
@@ -454,9 +557,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
             primaryPreferenceDebug = GetConnectorFromSection(primaryConnectors, out int priIndex);
 
             double startTime = Time.realtimeSinceStartupAsDouble;
-            NativeReference<Connector> priConn = new(primaryPreferenceDebug, Allocator.TempJob);
+            NativeReference<BurstConnector> priConn = new(new(primaryPreferenceDebug), Allocator.TempJob);
 
-            JobHandle handle = new MatrixMulJob
+            JobHandle handle = new BurstConnectorMulJob
             {
                 connector = priConn,
                 sectionLTW = primary.transform.localToWorldMatrix
@@ -465,9 +568,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
             {
                 connector = priConn,
                 sectionIds = nativeNexSections,
-                sectionConnectors = sectionConnectors,
-                boxBounds = boxBounds,
-                matrices = matrices
+                sectionConnectors = sectionConnectorContainers,
+                boxBounds = sectionBoxMatrices,
+                matrices = sectionBoxTransforms
             }.Schedule(nextSections.Count, handle);
             priConn.Dispose(handle).Complete();
             Debug.LogFormat("Big Matrix: {1} Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f, nextSections.Count);
@@ -533,8 +636,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
     {
         NativeReference<Connector> pri = new(primaryPreferenceDebug, Allocator.TempJob);
         NativeReference<Connector> sec = new(secondaryPreferenceDebug, Allocator.TempJob);
-        JobHandle handle1 = new MatrixMulJob { connector = pri, sectionLTW = primary.transform.localToWorldMatrix }.Schedule(new JobHandle());
-        JobHandle handle2 = new MatrixMulJob { connector = sec, sectionLTW = float4x4.identity }.Schedule(new JobHandle());
+        JobHandle handle1 = new ConnectorMulJob { connector = pri, sectionLTW = primary.transform.localToWorldMatrix }.Schedule(new JobHandle());
+        JobHandle handle2 = new ConnectorMulJob { connector = sec, sectionLTW = float4x4.identity }.Schedule(new JobHandle());
         JobHandle.CombineDependencies(handle1, handle2).Complete();
         primaryPreferenceDebug = pri.Value;
         secondaryPreferenceDebug = sec.Value;
@@ -544,7 +647,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         List<GameObject> objects = new();
         //objects.Add(Instantiate(target,pos,rot).gameObject);
         int instanceID = target.GetInstanceID();
-        UnsafeList<UnsafeList<BoxTransform>> transformsContainer = matrices[instanceID];
+        UnsafeList<UnsafeList<BoxTransform>> transformsContainer = sectionBoxTransforms[instanceID];
         if (transformsContainer.Length == 0)
         {
             Debug.LogError("no transforms found for connector");
@@ -740,7 +843,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             mapTree.RemoveAt(mapTree.Count - 1);
         }
         Physics.SyncTransforms();
-        UpdateUnMothBallSections();
+        CheckForSectionsPromotions();
         RecursiveBuilder();
     }
 
@@ -818,7 +921,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
-    private void UpdateUnMothBallSections()
+    private void CheckForSectionsPromotions()
     {
         if(mothBalledSections.Count > 0)
         {
@@ -866,7 +969,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 this.mothBalledSections[section] = newRootDstData;
             });
 
-            UpdateUnMothBallSections();
+            CheckForSectionsPromotions();
         }
     }
 
@@ -989,21 +1092,29 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             primaryPreference = GetConnectorFromSection(primaryConnectors, out int priIndex);
 
-            NativeReference<Connector> priConn = new(primaryPreference, Allocator.TempJob);
-
-            JobHandle handle = new MatrixMulJob
+            NativeReference<BurstConnector> priConn = new(new(primaryPreference), Allocator.TempJob);
+            if (!priConn.IsCreated)
+            {
+                Debug.LogError("Failed to create priConnector native reference!", gameObject);
+                continue;
+            }
+            JobHandle handle = new BurstConnectorMulJob
             {
                 connector = priConn,
                 sectionLTW = primary.transform.localToWorldMatrix
             }.Schedule(new JobHandle());
-            handle = new BigMatrixJob
+
+            var bmj = new BigMatrixJob
             {
                 connector = priConn,
                 sectionIds = nativeNexSections,
-                sectionConnectors = sectionConnectors,
-                boxBounds = boxBounds,
-                matrices = matrices
-            }.Schedule(nextSections.Count, handle);
+                sectionConnectors = sectionConnectorContainers,
+                boxBounds = sectionBoxMatrices,
+                matrices = sectionBoxTransforms
+            };
+
+            handle = parallelMatrixCalculations ? bmj.ScheduleParallel(nextSections.Count,8, handle) : bmj.Schedule(nextSections.Count, handle);
+            
             priConn.Dispose(handle).Complete();
 
 
@@ -1143,8 +1254,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
     {
         NativeReference<Connector> pri = new(primaryConnector, Allocator.TempJob);
         NativeReference<Connector> sec = new(secondaryConnector, Allocator.TempJob);
-        JobHandle handle1 = new MatrixMulJob { connector = pri, sectionLTW = primary.transform.localToWorldMatrix }.Schedule(new JobHandle());
-        JobHandle handle2 = new MatrixMulJob { connector = sec, sectionLTW = float4x4.identity }.Schedule(new JobHandle());
+        JobHandle handle1 = new ConnectorMulJob { connector = pri, sectionLTW = primary.transform.localToWorldMatrix }.Schedule(new JobHandle());
+        JobHandle handle2 = new ConnectorMulJob { connector = sec, sectionLTW = float4x4.identity }.Schedule(new JobHandle());
         JobHandle.CombineDependencies(handle1, handle2).Complete();
         primaryConnector = pri.Value;
         secondaryConnector = sec.Value;
@@ -1152,14 +1263,19 @@ public class SpatialParadoxGenerator : MonoBehaviour
         sec.Dispose();
 
         int instanceID = target.GetInstanceID();
-        UnsafeList<UnsafeList<BoxTransform>> transformsContainer = matrices[instanceID];
+        UnsafeList<UnsafeList<BoxTransform>> transformsContainer = sectionBoxTransforms[instanceID];
         if (transformsContainer.Length == 0)
         {
             Debug.LogError("no transforms found for connector");
             return false;
         }
 
-        UnsafeList<BoxTransform> transforms = transformsContainer[secondaryPreferenceDebug.internalIndex];
+        if(transformsContainer.Length <= secondaryConnector.internalIndex)
+        {
+            Debug.LogErrorFormat(gameObject, "returned transforms list does not contain index ({0}) for connector", secondaryConnector.internalIndex);
+        }
+
+        UnsafeList<BoxTransform> transforms = transformsContainer[secondaryConnector.internalIndex];
         if (transforms.Length == 0)
         {
             Debug.LogError("no box transforms found");
