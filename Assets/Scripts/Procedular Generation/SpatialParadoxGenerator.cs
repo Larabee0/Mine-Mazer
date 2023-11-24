@@ -27,6 +27,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private Dictionary<TunnelSection, SectionDstData> mothBalledSections = new();
     private Dictionary<int, List<TunnelSection>> promoteSectionsDict = new();
     List<TunnelSection> promoteSectionsList = new();
+
     private Transform sectionGraveYard; 
     private Coroutine mapUpdateProcess;
 
@@ -113,7 +114,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
             Random.state = seed;
         }
         GenerateInitialArea();
-
     }
 
     /// <summary>
@@ -227,7 +227,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
         sectionBoxMatrices.Dispose();
         sectionConnectorContainers.Dispose();
     }
-
 
 #if UNITY_EDITOR
 
@@ -414,6 +413,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 {
                     section.gameObject.SetActive(false);
                     section.transform.parent = sectionGraveYard;
+                    ClearConnectors(section);
                     mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.Position, section.Position), mapTree.Count - 1));
                 }
                 else
@@ -428,6 +428,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         Debug.Log("Begining tree re-gen..");
         yield return RecursiveBuilderDebug();
     }
+
     private IEnumerator MakeRootNodeDebug(TunnelSection newRoot)
     {
         Debug.Log("Begin Root Node Update");
@@ -502,8 +503,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
-
-
     private IEnumerator PickInstinateConnectDebug(TunnelSection primary)
     {
         TunnelSection pickedInstance = null;
@@ -539,7 +538,6 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
         mapTree[^1].Add(pickedInstance); // add this to 2 back
     }
-
 
     private IEnumerator PickSectionDebug(TunnelSection primary, List<int> nextSections)
     {
@@ -833,6 +831,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 {
                     section.gameObject.SetActive(false);
                     section.transform.parent = sectionGraveYard;
+                    ClearConnectors(section);
                     mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.Position, section.Position), mapTree.Count - 1));
                 }
                 else
@@ -894,6 +893,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
                     DestroySection(section);
                 }
             }
+            newTree[^1].Clear();
             newTree.RemoveAt(newTree.Count - 1);
         }
         Physics.SyncTransforms();
@@ -923,7 +923,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void CheckForSectionsPromotions()
     {
-        if(mothBalledSections.Count > 0)
+        Debug.LogFormat(gameObject, "promoteList: {0} promoteDict: {1}", promoteSectionsList.Count, promoteSectionsDict.Count);
+        if (mothBalledSections.Count > 0)
         {
             List<TunnelSection> mothBalledSections = new(this.mothBalledSections.Keys);
             mothBalledSections.ForEach(section =>
@@ -939,19 +940,20 @@ public class SpatialParadoxGenerator : MonoBehaviour
                     {
                         promoteSectionsDict.Add(curDst, new List<TunnelSection>() { section });
                     }
-
+                    this.mothBalledSections.Remove(section);
                 }
                 else
                 {
                     if (promoteSectionsDict.ContainsKey(curDst) && promoteSectionsDict[curDst].Contains(section))
                     {
-                        HashSet<TunnelSection> unBallSet = new(promoteSectionsDict[curDst]);
-                        unBallSet.Remove(section);
-                        promoteSectionsDict[curDst] = new(unBallSet);
+                        HashSet<TunnelSection> promoteSet = new(promoteSectionsDict[curDst]);
+                        promoteSet.Remove(section);
+                        promoteSectionsDict[curDst] = new(promoteSet);
                     }
                 }
             });
         }
+        Debug.LogFormat(gameObject, "promoteList: {0} promoteDict: {1}", promoteSectionsList.Count, promoteSectionsDict.Count);
     }
 
     private void UpdateMothBalledSections(TunnelSection newRoot)
@@ -1331,8 +1333,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 sectionTwin.sectionInstance.InUse.Remove(sectionTwin.internalIndex);
                 sectionTwin.sectionInstance.connectorPairs.Remove(sectionTwin.internalIndex);
             }
-
         });
+
+        section.connectorPairs.Clear();
+        section.InUse.Clear();
     }
 
     private void TransformSection(TunnelSection primary, TunnelSection secondary, Connector primaryConnector, Connector secondaryConnector)
