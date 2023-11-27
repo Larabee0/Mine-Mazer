@@ -39,6 +39,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     NativeParallelHashMap<int, UnsafeList<float4x4>> sectionBoxMatrices; // local matrices of the bounding boxes of the section
 
     [Header("Generation Settings")]
+    [SerializeField] private int ringRenderDst = 3; 
     [SerializeField, Min(1)] private int maxDst = 3;
     [SerializeField] private LayerMask tunnelSectionLayerMask;
     [SerializeField, Min(1000)] private int maxInterations = 1000000; /// max iterations allowed for <see cref="PickSection(TunnelSection, List{int}, out Connector, out Connector)"/>
@@ -398,6 +399,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
             promoteSectionsList.Clear();
         }
         Debug.LogFormat(gameObject, "promoteList: {0} promoteDict: {1}", promoteSectionsList.Count, promoteSectionsDict.Count);
+        if (GetFreeConnectorCount(mapTree[^1]) == 0)
+        {
+            yield return RegenRingDebug(mapTree.Count - 2);
+        }
+        if (ringRenderDst < maxDst && mapTree.Count > ringRenderDst)
+        {
+            mapTree[^1].ForEach(section => section.SetRenderersEnabled(false));
+        }
     }
 
     private IEnumerator RegenRingDebug(int regenTarget)
@@ -500,6 +509,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
         if (curPlayerSection == null)
         {
             ResolvePlayerSection();
+        }
+
+        if (ringRenderDst < maxDst)
+        {
+            for (int i = 0; i < ringRenderDst; i++)
+            {
+                mapTree[i].ForEach(section => section.SetRenderersEnabled(true));
+            }
         }
     }
 
@@ -818,6 +835,17 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
             promoteSectionsDict.Clear();
         }
+        if (GetFreeConnectorCount(mapTree[^1]) == 0)
+        {
+            RegenRing(mapTree.Count - 2);
+        }
+        if (ringRenderDst < maxDst && mapTree.Count > ringRenderDst)
+        {
+            if (mapTree.Count > ringRenderDst)
+            {
+                mapTree[^1].ForEach(section => section.SetRenderersEnabled(false));
+            }
+        }
     }
 
     private void RegenRing(int regenTarget)
@@ -872,7 +900,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
         Debug.Log("Pruning Tree..");
         int leafCounter = 0;
-        while(newTree.Count > maxDst + 1)
+        while (newTree.Count > maxDst + 1)
         {
             for (int i = 0; i < newTree[^1].Count; i++)
             {
@@ -918,6 +946,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             Debug.LogWarning("cur player section null, attempting to resolve..");
             ResolvePlayerSection();
+        }
+
+        if (ringRenderDst < maxDst)
+        {
+            for (int i = 0; i < ringRenderDst; i++)
+            {
+                mapTree[i].ForEach(section => section.SetRenderersEnabled(true));
+            }
         }
     }
 

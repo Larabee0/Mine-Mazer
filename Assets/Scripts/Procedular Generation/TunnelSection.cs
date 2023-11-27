@@ -10,7 +10,7 @@ public class TunnelSection : MonoBehaviour
     public GameObject stagnationBeacon;
 
     public Vector3 Position => transform.position;
-    public Vector3 Centre => GetComponent<MeshRenderer>().bounds.center;
+    private Renderer[] renderers;
 
     public Connector[] connectors;
 
@@ -71,6 +71,15 @@ public class TunnelSection : MonoBehaviour
     public static float4x4 GetLTWConnectorMatrix(float4x4 ltw, Connector connector)
     {
         return math.mul(ltw, connector.Matrix);
+    }
+
+    public void SetRenderersEnabled(bool enabled)
+    {
+        renderers ??= GetComponentsInChildren<Renderer>();
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].enabled = enabled;
+        }
     }
 
     private void OnDrawGizmosSelected()
