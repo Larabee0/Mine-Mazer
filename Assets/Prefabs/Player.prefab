@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 25082560468175286}
   - component: {fileID: 3737253345502188513}
   - component: {fileID: 4870648457455411705}
+  - component: {fileID: 2180367214576700126}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -152,6 +153,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 500
   playerBody: {fileID: 5171837018204868551}
+--- !u!114 &2180367214576700126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635016642857578586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5052485fa337ac74f9c4455127b451a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InteractorSource: {fileID: 8822894938288071245}
+  InteractRange: 5
 --- !u!1 &5356439156297477815
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +204,7 @@ Transform:
   - {fileID: 8822894938288071245}
   - {fileID: 4660900709538736813}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6010642323376987620
 MeshFilter:

@@ -3,21 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+interface IInteractable
+{
+    public void Interact();
+}
+
 public class NPC_Interact : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Transform InteractorSource;
+    public float InteractRange;
+
     void Start()
     {
         
     }
-
-    
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && gameObject.CompareTag("NPC"))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Lumenite says Hi.");
+            Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
+            if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange))
+            {
+                if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+                {
+                    interactObj.Interact();
+                }
+            }
         }
     }
 }
