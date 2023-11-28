@@ -12,6 +12,32 @@ public class TunnelSection : MonoBehaviour
     public Vector3 Position => transform.position;
     private Renderer[] renderers;
 
+    private bool renderersEnabled = true;
+    public bool RenderersEnabled 
+    {
+        get => renderersEnabled;
+        set
+        {
+            if(value != renderersEnabled)
+            {
+                SetRenderersEnabled(value);
+            }
+        }
+    }
+    private Collider[] allColliders;
+    private bool collidersEnabled = true;
+    public bool CollidersEnabled
+    {
+        get => collidersEnabled;
+        set
+        {
+            if (value != collidersEnabled)
+            {
+                SetCollidersEnabled(value);
+            }
+        }
+    }
+
     public Connector[] connectors;
 
     public BoxBounds[] boundingBoxes;
@@ -75,10 +101,21 @@ public class TunnelSection : MonoBehaviour
 
     public void SetRenderersEnabled(bool enabled)
     {
+        renderersEnabled = enabled;
         renderers ??= GetComponentsInChildren<Renderer>();
         for (int i = 0; i < renderers.Length; i++)
         {
             renderers[i].enabled = enabled;
+        }
+    }
+
+    public void SetCollidersEnabled(bool enabled)
+    {
+        collidersEnabled = enabled;
+        allColliders ??= GetComponentsInChildren<Collider>();
+        for (int i = 0; i < allColliders.Length; i++)
+        {
+            allColliders[i].enabled = enabled;
         }
     }
 

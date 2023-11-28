@@ -27,7 +27,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private Dictionary<TunnelSection, SectionDstData> mothBalledSections = new();
     private Dictionary<int, List<TunnelSection>> promoteSectionsDict = new();
     List<TunnelSection> promoteSectionsList = new();
-
+    private int reRingInters = 0;
     private Transform sectionGraveYard; 
     private Coroutine mapUpdateProcess;
 
@@ -398,10 +398,11 @@ public class SpatialParadoxGenerator : MonoBehaviour
             }
             promoteSectionsList.Clear();
         }
-        Debug.LogFormat(gameObject, "promoteList: {0} promoteDict: {1}", promoteSectionsList.Count, promoteSectionsDict.Count);
+        //Debug.LogFormat(gameObject, "promoteList: {0} promoteDict: {1}", promoteSectionsList.Count, promoteSectionsDict.Count);
         if (GetFreeConnectorCount(mapTree[^1]) == 0)
         {
             yield return RegenRingDebug(mapTree.Count - 2);
+            yield break;
         }
         if (ringRenderDst < maxDst && mapTree.Count > ringRenderDst)
         {
@@ -411,6 +412,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private IEnumerator RegenRingDebug(int regenTarget)
     {
+        //yield return BreakEditor();
         while (mapTree.Count - 1 != regenTarget)
         {
             Debug.LogFormat(gameObject, "Cleaning up {0} sections", mapTree[^1].Count);
@@ -595,7 +597,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             {
                 int curInstanceID = internalNextSections.ElementAt(Random.Range(0, internalNextSections.Count));
                 targetSectionDebug = instanceIdToSection[curInstanceID];
-                yield return IntersectionTestDebug(primary, targetSectionDebug);
+                yield return RunIntersectionTestsDebug(primary, targetSectionDebug);
                 if (intersectionTest)
                 {
                     break;
@@ -627,7 +629,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator IntersectionTestDebug(TunnelSection primary, TunnelSection target)
+    private IEnumerator RunIntersectionTestsDebug(TunnelSection primary, TunnelSection target)
     {
         secondaryPreferenceDebug = Connector.Empty;
         List<Connector> secondaryConnectors = FilterConnectors(target);
@@ -666,8 +668,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
         if (transformsContainer.Length == 0)
         {
             Debug.LogError("no transforms found for connector");
+            intersectionTest = false;
             yield break;
         }
+        if (transformsContainer.Length <= secondaryPreferenceDebug.internalIndex)
+        {
+            Debug.LogErrorFormat(gameObject, "returned transforms list does not contain index ({0}) for connector", secondaryPreferenceDebug.internalIndex);
+        }
+
         UnsafeList<BoxTransform> transforms = transformsContainer[secondaryPreferenceDebug.internalIndex];
         if (transforms.Length == 0)
         {
@@ -838,19 +846,17 @@ public class SpatialParadoxGenerator : MonoBehaviour
         if (GetFreeConnectorCount(mapTree[^1]) == 0)
         {
             RegenRing(mapTree.Count - 2);
+            return;
         }
         if (ringRenderDst < maxDst && mapTree.Count > ringRenderDst)
         {
-            if (mapTree.Count > ringRenderDst)
-            {
-                mapTree[^1].ForEach(section => section.SetRenderersEnabled(false));
-            }
+            mapTree[^1].ForEach(section => section.SetRenderersEnabled(false));
         }
     }
 
     private void RegenRing(int regenTarget)
     {
-        while(mapTree.Count - 1 != regenTarget)
+        while (mapTree.Count - 1 != regenTarget-reRingInters)
         {
             for (int i = 0; i < mapTree[^1].Count; i++)
             {
@@ -864,6 +870,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 }
                 else
                 {
+                    section.CollidersEnabled = false;
                     DestroySection(section);
                 }
             }
@@ -871,7 +878,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
         Physics.SyncTransforms();
         CheckForSectionsPromotions();
+        reRingInters++;
         RecursiveBuilder();
+        reRingInters = 0;
     }
 
     private int GetFreeConnectorCount(List<TunnelSection> sections)
@@ -1090,6 +1099,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 int index = internalSections.IndexOf(pickedSection.GetInstanceID());
                 pickedInstance = promoteSectionsList[index];
                 pickedInstance.gameObject.SetActive(true);
+                pickedInstance.CollidersEnabled = true;
                 promoteSectionsList.RemoveAt(index);
             }
         }
@@ -1151,7 +1161,9 @@ public class SpatialParadoxGenerator : MonoBehaviour
                 matrices = sectionBoxTransforms
             };
 
-            handle = parallelMatrixCalculations ? bmj.ScheduleParallel(nextSections.Count,8, handle) : bmj.Schedule(nextSections.Count, handle);
+            handle = parallelMatrixCalculations
+                ? bmj.ScheduleParallel(nextSections.Count,8, handle)
+                : bmj.Schedule(nextSections.Count, handle);
             
             priConn.Dispose(handle).Complete();
 
