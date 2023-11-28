@@ -856,7 +856,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void RegenRing(int regenTarget)
     {
-        while (mapTree.Count - 1 != regenTarget-reRingInters)
+        regenTarget -= reRingInters;
+
+        if(regenTarget < 2)
+        {
+            throw new System.InvalidOperationException(string.Format("Regeneration target set to {0} Cannot regenerate root node! Something catastrophic occured!", regenTarget));
+        }
+
+        while (mapTree.Count - 1 != regenTarget)
         {
             for (int i = 0; i < mapTree[^1].Count; i++)
             {
@@ -878,7 +885,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
         Physics.SyncTransforms();
         CheckForSectionsPromotions();
-        reRingInters++;
+        reRingInters = 1;
         RecursiveBuilder();
         reRingInters = 0;
     }
