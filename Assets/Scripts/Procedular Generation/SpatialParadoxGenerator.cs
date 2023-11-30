@@ -6,7 +6,6 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-using static System.Collections.Specialized.BitVector32;
 using Random = UnityEngine.Random;
 
 public class SpatialParadoxGenerator : MonoBehaviour
@@ -30,6 +29,10 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private int reRingInters = 0;
     private Transform sectionGraveYard; 
     private Coroutine mapUpdateProcess;
+
+    public Pluse OnMapUpdate;
+    public List<List<TunnelSection>> MapTree => mapTree;
+    public TunnelSection CurPlayerSection => curPlayerSection;
 
     // these are quite unsafe lol
     // Its fine, once initilised their capacity doesn't change and their values are accessed safely by seperate threads.
@@ -135,6 +138,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             Transform player = FindObjectOfType<Improved_Movement>().transform;
             curPlayerSection.stagnationBeacon = Instantiate(stagnationBeacon, player.position- new Vector3(0,0.6f,0f), player.rotation, curPlayerSection.transform);
         }
+        OnMapUpdate?.Invoke();
     }
 
     private void OnDestroy()
@@ -320,6 +324,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         yield return new WaitForSeconds(distanceListPauseTime * 2);
 
         Debug.Log("Ended Initial Area Debug");
+        OnMapUpdate?.Invoke();
     }
 
     /// <summary>
@@ -690,7 +695,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
             BoxTransform m = transforms[i];
             float3 position = m.pos;
-            Quaternion rotation = m.rotation;
+            Quaternion rotation = m.rot;
 
             objects[^1].transform.SetPositionAndRotation(position, rotation);
             objects[^1].transform.localScale = boxBounds.size;
@@ -737,6 +742,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
         double startTime = Time.realtimeSinceStartupAsDouble;
         RecursiveBuilder();
         Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+        OnMapUpdate?.Invoke();
     }
 
     private void RecursiveBuilder()
@@ -797,6 +803,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             MakeRootNode(newSection);
 #endif
         mapUpdateProcess = null;
+        OnMapUpdate?.Invoke();
         //yield return null;
         //Debug.Break();
     }
@@ -1345,7 +1352,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
             BoxTransform m = transforms[i];
             float3 position = m.pos;
-            Quaternion rotation = m.rotation;
+            Quaternion rotation = m.rot;
 
             if (Physics.CheckBox(position, boxBounds.size * 0.5f, rotation, tunnelSectionLayerIndex, QueryTriggerInteraction.Ignore))
             {
@@ -1422,5 +1429,39 @@ public class SpatialParadoxGenerator : MonoBehaviour
         }
 #endif
         return float4x4.TRS(position, rotation, Vector3.one);
+    }
+
+    internal Dictionary<int,Texture2D> GenerateMiniMapTextures()
+    {
+        Dictionary<int, Texture2D> textureLoopUp = new (tunnelSectionsByInstanceID.Count);
+        for (int i = 0; i < tunnelSectionsByInstanceID.Count; i++)
+        {
+            int instanceID = tunnelSectionsByInstanceID[i];
+            textureLoopUp.Add(instanceID, instanceIdToSection[instanceID].MiniMapAsset);
+        }
+        return textureLoopUp;
+    }
+
+    internal List<TunnelSection> GetMothballedSections()
+    {
+        HashSet<TunnelSection> sections = new();
+
+        if(mothBalledSections.Count > 0)
+        {
+            sections.UnionWith(mothBalledSections.Keys);
+        }
+        if (promoteSectionsList.Count > 0)
+        {
+            sections.UnionWith(promoteSectionsList);
+        }
+        if (promoteSectionsDict.Count > 0)
+        {
+            foreach (var item in promoteSectionsDict.Values)
+            {
+                sections.UnionWith(item);
+            }
+        }
+
+        return sections.ToList();
     }
 }

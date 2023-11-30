@@ -326,6 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  miniMapAsset: {fileID: 2800000, guid: f28187e576ec2364d9fb407028a8bb50, type: 3}
   excludePrefabConnections:
   - {fileID: 7541396775899075963}
   - {fileID: 4699310440157599471, guid: 7a114b4e17d402448bdafb0f125ae068, type: 3}
@@ -355,6 +356,9 @@ MonoBehaviour:
   - exclude: []
   - exclude: []
   excludePrefabConnectionsIds: ca630000d0630000ce630000d2630000e4630000e2630000e8630000
+  stagnationBeacon: {fileID: 0}
+  orignalInstanceId: 0
+  keep: 0
 --- !u!1 &8582775816916939885
 GameObject:
   m_ObjectHideFlags: 0

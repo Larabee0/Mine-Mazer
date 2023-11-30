@@ -5,11 +5,25 @@ using UnityEngine;
 
 public class TunnelSection : MonoBehaviour
 {
+    [Header("Baked data")]
+    [SerializeField] private Texture2D miniMapAsset;
     [SerializeField] private List<TunnelSection> excludePrefabConnections = new();
-    
-    public GameObject stagnationBeacon;
+    public Connector[] connectors;
 
+    public BoxBounds[] boundingBoxes;
+
+    public List<ConnectorMask> excludeConnectorSections = new();
+
+    [SerializeField] private List<int> excludePrefabConnectionsIds;
+    [Header("Runtime Data")]
+    public GameObject stagnationBeacon;
+    public int orignalInstanceId;
+    public bool keep;
+
+    // accessors 
+    public Texture2D MiniMapAsset => miniMapAsset;
     public Vector3 Position => transform.position;
+    public Quaternion Rotation => transform.rotation;
     private Renderer[] renderers;
 
     private bool renderersEnabled = true;
@@ -38,23 +52,13 @@ public class TunnelSection : MonoBehaviour
         }
     }
 
-    public Connector[] connectors;
-
-    public BoxBounds[] boundingBoxes;
-
     public BoxBounds[] BoundingBoxes => boundingBoxes;
 
     public HashSet<int> InUse = new();
     public Dictionary<int, SectionAndConnector> connectorPairs = new();
 
-    public List<ConnectorMask> excludeConnectorSections = new();
-
-    [SerializeField] private List<int> excludePrefabConnectionsIds;
     public List<int> ExcludePrefabConnections => excludePrefabConnectionsIds;
 
-    public int orignalInstanceId;
-
-    public bool keep;
 
     public ConnectorMask GetConnectorMask(Connector connector)
     {

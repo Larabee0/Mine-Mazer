@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+#if UNITY_EDITOR
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -12,6 +11,10 @@ public class SectionImager : MonoBehaviour
     [SerializeField] private string folderName = "ProceduralGenerationMiniMapTextures";
     public void Photograph()
     {
+        if(transform.parent != null)
+        {
+            fileName = transform.parent.name;
+        }
         RenderTexture.active = targetCamera.activeTexture;
 
         Texture2D tex = new(targetCamera.activeTexture.width, targetCamera.activeTexture.height, TextureFormat.RGBA32, false, true);
@@ -26,5 +29,8 @@ public class SectionImager : MonoBehaviour
 
         string localPath = path + "/"+ folderName + "/" + fileName + ".png";
         File.WriteAllBytes(localPath, tex.EncodeToPNG());
+
+        AssetDatabase.Refresh();
     }
 }
+#endif

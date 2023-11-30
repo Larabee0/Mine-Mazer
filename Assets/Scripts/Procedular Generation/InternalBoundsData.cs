@@ -9,7 +9,7 @@ using UnityEngine;
 public struct BoxTransform
 {
     public float3 pos;
-    public quaternion rotation;
+    public quaternion rot;
 }
 
 public struct SectionDstData

@@ -79,7 +79,7 @@ public struct BigMatrixJob : IJobFor
                 curTransforms[j] = new BoxTransform
                 {
                     pos = childMatrix.Translation(),
-                    rotation = childMatrix.Rotation()
+                    rot = childMatrix.Rotation()
                 };
             }
             boxTransforms[i] = curTransforms;
