@@ -158,6 +158,8 @@ namespace MazeGame.MiniMap
                     TranslateWayPoint(element);
                 }
             }
+
+            OnMove(Vector2.zero);
         }
 
         private void TranslateWayPoint(MiniMapElement element)
