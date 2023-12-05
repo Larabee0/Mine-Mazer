@@ -30,6 +30,10 @@ namespace MazeGame.MiniMap
 
         private void Awake()
         {
+            if(mapGenerator == null|| !mapGenerator.isActiveAndEnabled)
+            {
+                return;
+            }
             miniMap = new() { root = DocRoot.Q("MiniMap"), mapAssembly = new(), waypoints = new() };
             compass = new()
             {
@@ -54,7 +58,11 @@ namespace MazeGame.MiniMap
             }
             player = FindObjectOfType<Improved_Movement>().transform;
         }
-
+        private void Start()
+        {
+            Debug.Log(Application.targetFrameRate);
+            Debug.Log(QualitySettings.vSyncCount);
+        }
         private void OnLook(Vector2 axis)
         {
             float angle = player.rotation.eulerAngles.y;
