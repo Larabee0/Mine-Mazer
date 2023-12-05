@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 1107179529098808119}
   - component: {fileID: 5637687250392250194}
   - component: {fileID: 8149822027707432298}
+  - component: {fileID: 2377281665050414085}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -255,7 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chController: {fileID: 5171837018204868551}
   speedUpDown: 3.2
-  FPSInput: {fileID: 0}
+  FPSInput: {fileID: 5637687250392250194}
 --- !u!136 &1107179529098808119
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -293,9 +294,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 8149822027707432298}
   speed: 12
-  gravity: -9.81
+  gravity: -3.81
   jumpHeight: 3
-  groundCheck: {fileID: 4660900709538736813}
+  groundCheck: {fileID: 0}
   groundDistance: 0.4
   groundMask:
     serializedVersion: 2
@@ -326,6 +327,20 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2377281665050414085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5356439156297477815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5052485fa337ac74f9c4455127b451a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InteractorSource: {fileID: 8822894938288071245}
+  InteractRange: 10
 --- !u!1 &6730143712483946699
 GameObject:
   m_ObjectHideFlags: 0
