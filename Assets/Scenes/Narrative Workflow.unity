@@ -559,7 +559,7 @@ GameObject:
   - component: {fileID: 670344879}
   - component: {fileID: 670344878}
   - component: {fileID: 670344877}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane
   m_TagString: ground
   m_Icon: {fileID: 0}
@@ -846,6 +846,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1146104090 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4660900709538736813, guid: e78a1712f70fb7344af802fa73a4a9cd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1547867312}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1547867312
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -923,7 +929,12 @@ PrefabInstance:
         type: 3}
       propertyPath: groundCheck
       value: 
-      objectReference: {fileID: 670344880}
+      objectReference: {fileID: 1146104090}
+    - target: {fileID: 5637687250392250194, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: groundMask.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

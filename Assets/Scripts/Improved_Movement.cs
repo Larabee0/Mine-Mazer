@@ -12,7 +12,6 @@ public class Improved_Movement : MonoBehaviour
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
     private Rigidbody rb;
-    public float jumpCount;
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
@@ -68,28 +67,14 @@ public class Improved_Movement : MonoBehaviour
             velocity.y = -2f;
         }
 
-        if (isGrounded == true)
-        {
-            jumpCount = 0f;
-        }
-
         if (useUpdateMove)
         {
             float x = Input.GetAxis("Horizontal");
             float z = Input.GetAxis("Vertical");
             Move(x, z);
-            if (isGrounded == true && Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Jump"))
             {
                 OnJump();
-                jumpCount = 1;
-            }
-
-            if (isGrounded == false && jumpCount >= 1)
-            {
-                if (Input.GetButtonDown("Jump"))
-                {
-                    
-                }
             }
         }
 
