@@ -6,20 +6,18 @@ using UnityEngine.SceneManagement;
 //VOIDLYNX. 2022. 'Unity Script: FPS Player Movement'. Voidlynx March 2022. Available at: https://www.voidlynx.com/2022/03/unity-script-fps-player-movement.html [accessed 24 October 2023].
 public class Improved_Movement : MonoBehaviour
 {
+    private bool isGrounded;
     public CharacterController controller;
     public float speed = 12f;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
     private Rigidbody rb;
-
+    public float jumpCount;
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-
-
-
+    
     private Vector3 velocity;
-    private bool isGrounded;
     private bool useUpdateMove = true;
 
     private void Start() {
@@ -70,14 +68,28 @@ public class Improved_Movement : MonoBehaviour
             velocity.y = -2f;
         }
 
+        if (isGrounded == true)
+        {
+            jumpCount = 0f;
+        }
+
         if (useUpdateMove)
         {
             float x = Input.GetAxis("Horizontal");
             float z = Input.GetAxis("Vertical");
             Move(x, z);
-            if (Input.GetButtonDown("Jump"))
+            if (isGrounded == true && Input.GetButtonDown("Jump"))
             {
                 OnJump();
+                jumpCount = 1;
+            }
+
+            if (isGrounded == false && jumpCount >= 1)
+            {
+                if (Input.GetButtonDown("Jump"))
+                {
+                    
+                }
             }
         }
 
