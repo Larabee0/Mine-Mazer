@@ -1,3 +1,4 @@
+using MazeGame.Input;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +14,6 @@ public class Camera_Movement : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
 
         /// new input system additions, will use old input system if there is no <see cref="InputManager"/> instance
         if(InputManager.Instance != null)
@@ -52,6 +52,10 @@ public class Camera_Movement : MonoBehaviour
     // recieves Mouse X and Y deltas and converts to camera movement
     private void Look(float deltaX, float deltaY)
     {
+        if (Cursor.lockState != CursorLockMode.Locked)
+        {
+            return;
+        }
         deltaX *= mouseSensitivity * Time.deltaTime;
         deltaY *= mouseSensitivity * Time.deltaTime;
 

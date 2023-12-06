@@ -1,7 +1,8 @@
 // This code is part of the Fungus library (https://github.com/snozbot/fungus)
 // It is released for free under the MIT open source license (https://github.com/snozbot/fungus/blob/master/LICENSE)
 
-﻿using UnityEngine;
+using MazeGame.Input;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Fungus
@@ -45,6 +46,7 @@ namespace Fungus
         protected float ignoreClickTimer;
 
         protected StandaloneInputModule currentStandaloneInputModule;
+        protected bool newInputSystem = false;
 
         protected Writer writer;
 
@@ -59,15 +61,20 @@ namespace Fungus
         // This method will automatically instantiate one if none exists.
         protected virtual void CheckEventSystem()
         {
-            EventSystem eventSystem = GameObject.FindObjectOfType<EventSystem>();
-            if (eventSystem == null)
+            if(EventSystem.current == null)
             {
-                // Auto spawn an Event System from the prefab
-                GameObject prefab = Resources.Load<GameObject>("Prefabs/EventSystem");
-                if (prefab != null)
+                Debug.LogError("No event system present!");
+                enabled = false;
+                return;
+            }
+
+            currentStandaloneInputModule = EventSystem.current.GetComponent<StandaloneInputModule>();
+            if(currentStandaloneInputModule == null && InputManager.Instance != null && InputManager.Instance.EventSystemInput != null)
+            {
+                newInputSystem = true;
+                if(clickMode == ClickMode.ClickAnywhere)
                 {
-                    GameObject go = Instantiate(prefab) as GameObject;
-                    go.name = "EventSystem";
+                    InputManager.Instance.southButton.OnButtonPressed += SetClickAnywhereClickedFlag;
                 }
             }
         }
@@ -79,37 +86,43 @@ namespace Fungus
                 return;
             }
 
-            if (currentStandaloneInputModule == null)
-            {
-                currentStandaloneInputModule = EventSystem.current.GetComponent<StandaloneInputModule>();
-            }
-
             if (writer != null)
             {
-                if (Input.GetButtonDown(currentStandaloneInputModule.submitButton) ||
-                    (cancelEnabled && Input.GetButton(currentStandaloneInputModule.cancelButton)))
+                if (newInputSystem)
                 {
-                    SetNextLineFlag();
+                    if (InputManager.Instance.EventSystemInput.submit.action.ReadValue<bool>() ||
+                        (cancelEnabled && InputManager.Instance.EventSystemInput.cancel.action.ReadValue<float>() != 0))
+                    {
+                        SetNextLineFlag();
+                    }
+                }
+                else
+                {
+                    if (Input.GetButtonDown(currentStandaloneInputModule.submitButton) ||
+                        (cancelEnabled && Input.GetButton(currentStandaloneInputModule.cancelButton)))
+                    {
+                        SetNextLineFlag();
+                    }
                 }
             }
 
             switch (clickMode)
             {
-            case ClickMode.Disabled:
-                break;
-            case ClickMode.ClickAnywhere:
-                if (Input.GetMouseButtonDown(0))
-                {
-                    SetClickAnywhereClickedFlag();
-                }
-                break;
-            case ClickMode.ClickOnDialog:
-                if (dialogClickedFlag)
-                {
-                    SetNextLineFlag();
-                    dialogClickedFlag = false;
-                }
-                break;
+                case ClickMode.Disabled:
+                    break;
+                case ClickMode.ClickAnywhere:
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        SetClickAnywhereClickedFlag();
+                    }
+                    break;
+                case ClickMode.ClickOnDialog:
+                    if (dialogClickedFlag)
+                    {
+                        SetNextLineFlag();
+                        dialogClickedFlag = false;
+                    }
+                    break;
             }
 
             if (ignoreClickTimer > 0f)

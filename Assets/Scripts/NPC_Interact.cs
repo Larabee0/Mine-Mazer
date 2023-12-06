@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using MazeGame.Input;
+
 //RYTECH. 2023. How to Make a Flexible Interaction System in 2 Minutes [C#] [Unity3D]. Available at: https://www.youtube.com/watch?v=K06lVKiY-sY [accessed 28 November 2023].
 interface IInteractable
 {
@@ -10,26 +11,45 @@ interface IInteractable
 
 public class NPC_Interact : MonoBehaviour
 {
-    public Transform InteractorSource;
-    public float InteractRange;
+    [SerializeField] private Transform InteractorSource;
+    [SerializeField] private float InteractRange;
+    [SerializeField] private LayerMask npcLayer;
 
-    void Start()
+    private bool hitInteractable = false;
+    public bool HitInteractable => hitInteractable;
+
+    private IInteractable interactable;
+
+    private void Start()
     {
-        
+        InputManager.Instance.PlayerActions.East.canceled += Interact;
     }
-    // Update is called once per frame
-    void Update()
+
+    private void Interact(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        interactable?.Interact();
+    } 
+
+    private void FixedUpdate()
+    {
+        Ray r = new(InteractorSource.position, InteractorSource.forward);
+        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, npcLayer))
         {
-            Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
-            if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange))
+            if (hitInfo.collider.gameObject.TryGetComponent(out interactable))
             {
-                if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
-                {
-                    interactObj.Interact();
-                }
+                hitInteractable = true;
+                //interactObj.Interact();
             }
+            else
+            {
+                interactable = null;
+                hitInteractable = false;
+            }
+        }
+        else
+        {
+            interactable = null;
+            hitInteractable = false;
         }
     }
 }

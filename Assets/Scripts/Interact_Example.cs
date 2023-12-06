@@ -3,19 +3,36 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using Fungus;
+using MazeGame.Input;
 
 public class Interact_Example : MonoBehaviour, IInteractable
 {
     public Flowchart Dialogue;
-    // Start is called before the first frame update
+
+    private void Start()
+    {
+        Dialogue = GetComponentInChildren<Flowchart>();
+    }
+
+    public void UnlockPointer()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.UnlockPointer();
+        }
+    }
+
+    public void LockPointer()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.LockPointer();
+        }
+    }
+
     public void Interact()
     {
         Dialogue.ExecuteBlock("NPC Interact");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

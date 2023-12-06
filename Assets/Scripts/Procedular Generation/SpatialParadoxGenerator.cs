@@ -1,3 +1,4 @@
+using MazeGame.Input;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,6 +128,11 @@ public class SpatialParadoxGenerator : MonoBehaviour
     /// <param name="context"></param>
     private void PlaceStagnationBeacon(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        NPC_Interact player = FindAnyObjectByType<NPC_Interact>();
+        if (player.HitInteractable)
+        {
+            return;
+        }
         if (curPlayerSection.keep)
         {
             curPlayerSection.keep = false;
@@ -135,8 +141,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
         else
         {
             curPlayerSection.keep = true;
-            Transform player = FindObjectOfType<Improved_Movement>().transform;
-            curPlayerSection.stagnationBeacon = Instantiate(stagnationBeacon, player.position- new Vector3(0,0.6f,0f), player.rotation, curPlayerSection.transform);
+            Transform playerTransform = player.transform;
+            curPlayerSection.stagnationBeacon = Instantiate(stagnationBeacon, playerTransform.position- new Vector3(0,0.6f,0f), playerTransform.rotation, curPlayerSection.transform);
         }
         OnMapUpdate?.Invoke();
     }
