@@ -6,7 +6,6 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-using static System.Collections.Specialized.BitVector32;
 using Random = UnityEngine.Random;
 
 public class SpatialParadoxGenerator : MonoBehaviour
