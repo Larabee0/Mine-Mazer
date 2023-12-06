@@ -48,6 +48,12 @@ public class SectionBakerEditor : Editor
         {
             Destroy(section);
         }
+
+        for (int i = 0; i < baker.AdditionalChildren.Length; i++)
+        {
+            Instantiate(baker.AdditionalChildren[i], prefab.transform, false);
+        }
+
         section = prefab.AddComponent<TunnelSection>();
         if (baker.ConnectorObjects != null)
         {

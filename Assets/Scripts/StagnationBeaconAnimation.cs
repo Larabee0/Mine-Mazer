@@ -14,7 +14,7 @@ public class StagnationBeaconAnimation : MonoBehaviour
     private float3x2 sphereStartEnd;
     private float3x2 cylinderStartEnd;
 
-    private void Start()
+    private void OnEnable()
     {
         sphereStartEnd = new()
         {
@@ -30,6 +30,11 @@ public class StagnationBeaconAnimation : MonoBehaviour
         cylinder.transform.localPosition = cylinderStartEnd.c0;
 
         StartCoroutine(Animation());
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();    
     }
 
     private IEnumerator Animation()

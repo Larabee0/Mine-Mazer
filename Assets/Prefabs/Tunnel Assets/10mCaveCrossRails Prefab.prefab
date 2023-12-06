@@ -449,6 +449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  miniMapAsset: {fileID: 2800000, guid: 7a8395fd42b67e84ca43da95efcce28f, type: 3}
   excludePrefabConnections:
   - {fileID: 7541396775899075963, guid: 2e3fb2f25c7499740a8e78cd64cbd320, type: 3}
   - {fileID: 7280747401053184910, guid: 5c6e2853f717f8c428620637ea73048f, type: 3}
@@ -479,3 +480,6 @@ MonoBehaviour:
     size: {x: 3.91916, y: 3.39812, z: 7.556674}
   excludeConnectorSections: []
   excludePrefabConnectionsIds: 
+  stagnationBeacon: {fileID: 0}
+  orignalInstanceId: 0
+  keep: 0

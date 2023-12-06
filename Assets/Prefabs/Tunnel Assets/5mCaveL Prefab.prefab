@@ -261,6 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  miniMapAsset: {fileID: 2800000, guid: 9bea908199a744b498cdc5eda24eb103, type: 3}
   excludePrefabConnections: []
   connectors:
   - localPosition: {x: 0, y: 1.5, z: 0}
@@ -284,6 +285,9 @@ MonoBehaviour:
     size: {x: 6.707, y: 3.39812, z: 3.74536}
   excludeConnectorSections: []
   excludePrefabConnectionsIds: 
+  stagnationBeacon: {fileID: 0}
+  orignalInstanceId: 0
+  keep: 0
 --- !u!1 &3046601394642490119
 GameObject:
   m_ObjectHideFlags: 0

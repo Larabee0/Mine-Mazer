@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ using UnityEngine;
 public struct BoxTransform
 {
     public float3 pos;
-    public quaternion rotation;
+    public quaternion rot;
 }
 
 public struct SectionDstData
@@ -33,7 +34,7 @@ public struct BoxBounds
 }
 
 [Serializable]
-public struct Connector : System.IEquatable<Connector>
+public struct Connector : IEquatable<Connector>
 {
     public static Connector Empty = new() { localPosition = Vector3.zero, localRotation = Quaternion.identity, internalIndex = int.MaxValue };
     public Vector3 localPosition;
@@ -57,6 +58,31 @@ public struct Connector : System.IEquatable<Connector>
         float4x4 ltw = math.mul(transform, Matrix);
         position = ltw.Translation();
         rotation = ltw.Rotation();
+    }
+}
+
+public struct BurstConnector
+{
+    public float4x4 localMatrix;
+    public float3 parentPos;
+    public float3 position;
+    public quaternion rotation;
+
+    public BurstConnector(Connector connector) 
+    {
+        localMatrix = float4x4.TRS(connector.localPosition, connector.localRotation, new(1));
+        parentPos = new(0);
+        position = new(0);
+        rotation = quaternion.identity;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void UpdateWorldPos(ref BurstConnector connector, float4x4 parentMatrix)
+    {
+        connector.parentPos = parentMatrix.Translation();
+        float4x4 ltw = math.mul(parentMatrix, connector.localMatrix);
+        connector.position = ltw.Translation();
+        connector.rotation = ltw.Rotation();
     }
 }
 

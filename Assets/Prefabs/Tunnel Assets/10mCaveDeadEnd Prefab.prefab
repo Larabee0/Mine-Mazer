@@ -155,7 +155,7 @@ Transform:
   - {fileID: 4680425320970055466}
   - {fileID: 6497328283453903455}
   m_Father: {fileID: 0}
-  m_RootOrder: 32
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2060220477268073680
 MeshFilter:
@@ -194,7 +194,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
+  m_ReceiveGI: 2
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -242,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  miniMapAsset: {fileID: 2800000, guid: 0b06b6c4fc305934a8ff16c987bd2205, type: 3}
   excludePrefabConnections: []
   connectors:
   - localPosition: {x: 0, y: 1.5, z: 0}
@@ -256,6 +257,9 @@ MonoBehaviour:
     size: {x: 3.91916, y: 3.39812, z: 8.226049}
   excludeConnectorSections: []
   excludePrefabConnectionsIds: 
+  stagnationBeacon: {fileID: 0}
+  orignalInstanceId: 0
+  keep: 0
 --- !u!1 &3593191823535046731
 GameObject:
   m_ObjectHideFlags: 0

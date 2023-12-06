@@ -5,30 +5,60 @@ using UnityEngine;
 
 public class TunnelSection : MonoBehaviour
 {
+    [Header("Baked data")]
+    [SerializeField] private Texture2D miniMapAsset;
     [SerializeField] private List<TunnelSection> excludePrefabConnections = new();
-    
-    public GameObject stagnationBeacon;
-
-    public Vector3 Position => transform.position;
-    public Vector3 Centre => GetComponent<MeshRenderer>().bounds.center;
-
     public Connector[] connectors;
 
     public BoxBounds[] boundingBoxes;
+
+    public List<ConnectorMask> excludeConnectorSections = new();
+
+    [SerializeField] private List<int> excludePrefabConnectionsIds;
+    [Header("Runtime Data")]
+    public GameObject stagnationBeacon;
+    public int orignalInstanceId;
+    public bool keep;
+
+    // accessors 
+    public Texture2D MiniMapAsset => miniMapAsset;
+    public Vector3 Position => transform.position;
+    public Quaternion Rotation => transform.rotation;
+    private Renderer[] renderers;
+
+    private bool renderersEnabled = true;
+    public bool RenderersEnabled 
+    {
+        get => renderersEnabled;
+        set
+        {
+            if(value != renderersEnabled)
+            {
+                SetRenderersEnabled(value);
+            }
+        }
+    }
+    private Collider[] allColliders;
+    private bool collidersEnabled = true;
+    public bool CollidersEnabled
+    {
+        get => collidersEnabled;
+        set
+        {
+            if (value != collidersEnabled)
+            {
+                SetCollidersEnabled(value);
+            }
+        }
+    }
 
     public BoxBounds[] BoundingBoxes => boundingBoxes;
 
     public HashSet<int> InUse = new();
     public Dictionary<int, SectionAndConnector> connectorPairs = new();
 
-    public List<ConnectorMask> excludeConnectorSections = new();
-
-    [SerializeField] private List<int> excludePrefabConnectionsIds;
     public List<int> ExcludePrefabConnections => excludePrefabConnectionsIds;
 
-    public int orignalInstanceId;
-
-    public bool keep;
 
     public ConnectorMask GetConnectorMask(Connector connector)
     {
@@ -71,6 +101,26 @@ public class TunnelSection : MonoBehaviour
     public static float4x4 GetLTWConnectorMatrix(float4x4 ltw, Connector connector)
     {
         return math.mul(ltw, connector.Matrix);
+    }
+
+    public void SetRenderersEnabled(bool enabled)
+    {
+        renderersEnabled = enabled;
+        renderers ??= GetComponentsInChildren<Renderer>();
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            renderers[i].enabled = enabled;
+        }
+    }
+
+    public void SetCollidersEnabled(bool enabled)
+    {
+        collidersEnabled = enabled;
+        allColliders ??= GetComponentsInChildren<Collider>();
+        for (int i = 0; i < allColliders.Length; i++)
+        {
+            allColliders[i].enabled = enabled;
+        }
     }
 
     private void OnDrawGizmosSelected()
