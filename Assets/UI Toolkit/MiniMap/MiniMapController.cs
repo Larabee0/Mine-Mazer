@@ -1,6 +1,7 @@
 using MazeGame.Input;
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,6 +18,7 @@ namespace MazeGame.MiniMap
         [SerializeField] private int textureResolution = 512;
         [SerializeField] private float viewPortSize = 22f;
         [SerializeField] private float miniMapScale = 1f;
+        [SerializeField] private float offscreenThreshold = 510;
         [SerializeField] private Color playerCurrent = new(1f, 1f, 1f, 0.5f);
         [SerializeField] private Color explored = new(0.5f, 0.25f, 0.25f, 0.5f);
         [SerializeField] private Color unexplored = new(0.5f, 0.25f, 0.25f, 0.5f);
@@ -65,6 +67,7 @@ namespace MazeGame.MiniMap
         }
         private void Start()
         {
+            DebugMap();
             Debug.Log(Application.targetFrameRate);
             Debug.Log(QualitySettings.vSyncCount);
         }
@@ -98,7 +101,22 @@ namespace MazeGame.MiniMap
 
         private void MapUpdateEvent()
         {
-            MapUpdateProcess();
+            //MapUpdateProcess();
+        }
+
+        private void DebugMap()
+        {
+            var trans = new BoxTransform
+            {
+                pos = float3.zero,
+                rot = quaternion.identity
+            };
+            AddElement(stagnationBeacon, 0, "Debug waypoint", Color.white, trans);
+            miniMap.root.Add(miniMap.mapAssembly[^1].asset);
+            miniMap.waypoints.Add(miniMap.mapAssembly[^1]);
+            miniMap.mapAssembly[^1].asset.style.translate = new Translate((trans.pos.x * pixelsPerUnit) + (textureResolution / 2), (-(trans.pos.z * pixelsPerUnit)) + (textureResolution / 2));
+            miniMap.mapAssembly[^1].asset.transform.rotation = Quaternion.Euler(0, 0, ((Quaternion)trans.rot).eulerAngles.y);
+            OnMove(Vector2.zero);
         }
 
         private void MapUpdateProcess()
@@ -197,10 +215,31 @@ namespace MazeGame.MiniMap
         private void TranslateWayPoint(MiniMapElement element)
         {
             BoxTransform trans = element.transform;
-            Vector2 pixelPos = new((trans.pos.x * pixelsPerUnit) + (textureResolution / 2), (-(trans.pos.z * pixelsPerUnit)) + (textureResolution / 2));
-            pixelPos = (pixelPos.normalized * 500);
+            Vector2 pixelPos = new(
+                (trans.pos.x * pixelsPerUnit) + (textureResolution / 2),
+                (-(trans.pos.z * pixelsPerUnit)) + (textureResolution / 2));
+            Vector3 pos = player.position;
+            Vector2 playerPos = new((pos.x * pixelsPerUnit) + (textureResolution / 2), ((-pos.z * pixelsPerUnit)) + (textureResolution / 2));
+            Translate translate = miniMap.root.style.translate.value;
+            Vector2 miniMapTrans = new(translate.x.value, translate.y.value);
+            Vector2 unnormalizedDir = playerPos - pixelPos;
+            float dist = unnormalizedDir.magnitude;
+            Debug.Log(dist);
+            if (dist >= offscreenThreshold)
+            {
+                Vector2 dir = (new Vector2(trans.pos.x, trans.pos.z)-new Vector2(-player.position.x, player.position.z) ).normalized;
 
-            element.asset.style.translate = new Translate(pixelPos.x, pixelPos.y);
+                Vector2 newTranslation = playerPos + (dir * -offscreenThreshold);
+
+                element.asset.style.translate = new Translate(newTranslation.x, newTranslation.y);
+                Debug.Log("Translating waypoint");
+            }
+            else
+            {
+                element.asset.style.translate = new Translate(pixelPos.x, pixelPos.y);
+            }
+            //Vector3 pos = player.position;
+            //element.asset.style.translate = new Translate((pos.x * pixelsPerUnit)+(textureResolution/2), ((-pos.z * pixelsPerUnit)) + (textureResolution / 2));
             element.asset.transform.rotation = Quaternion.Euler(0, 0, ((Quaternion)trans.rot).eulerAngles.y);
         }
 
