@@ -270,7 +270,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.9956369, b: 0.5801887, a: 1}
-  m_Intensity: 2.55
+  m_Intensity: 2
   m_Range: 3
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -395,10 +395,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
+      propertyPath: maxDst
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
       propertyPath: startSection
       value: 
       objectReference: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: ringRenderDst
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -643,7 +653,7 @@ PrefabInstance:
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.859
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
@@ -653,7 +663,7 @@ PrefabInstance:
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.768
+      value: -4.54
       objectReference: {fileID: 0}
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
@@ -769,11 +779,15 @@ MonoBehaviour:
   miniMapOutput: {fileID: 8400000, guid: 6b5a7d27c18fcfa4491b21d2e27b571a, type: 2}
   mapGenerator: {fileID: 399645860}
   textureResolution: 512
-  viewPortSize: 22
+  viewPortSize: 44
   miniMapScale: 1
-  playerCurrent: {r: 1, g: 1, b: 1, a: 0.5}
-  aboveCurrent: {r: 0.25, g: 0.5, b: 0.25, a: 0.5}
-  belowCurrent: {r: 0.5, g: 0.25, b: 0.25, a: 0.5}
+  playerCurrent: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
+  explored: {r: 0.86666673, g: 0.6666667, b: 0.20000002, a: 1}
+  unexplored: {r: 0, g: 0.26666668, b: 0.53333336, a: 1}
+  aboveExplored: {r: 1, g: 0.81462264, b: 0.3820755, a: 0.3254902}
+  aboveUnExplored: {r: 0.21933962, g: 0.5483491, b: 0.8773585, a: 0.3254902}
+  belowExplored: {r: 0.5754717, g: 0.47367835, b: 0.23616058, a: 1}
+  belowUnexplored: {r: 0.076094694, g: 0.1781773, b: 0.2830189, a: 1}
   stagnationBeacon: {fileID: 2800000, guid: 569c131a56e6b234f9cea8d56a578f72, type: 3}
 --- !u!114 &745175164
 MonoBehaviour:

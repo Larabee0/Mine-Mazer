@@ -18,8 +18,12 @@ namespace MazeGame.MiniMap
         [SerializeField] private float viewPortSize = 22f;
         [SerializeField] private float miniMapScale = 1f;
         [SerializeField] private Color playerCurrent = new(1f, 1f, 1f, 0.5f);
-        [SerializeField] private Color aboveCurrent = new(0.25f, 0.5f, 0.25f, 0.5f);
-        [SerializeField] private Color belowCurrent = new(0.5f, 0.25f, 0.25f, 0.5f);
+        [SerializeField] private Color explored = new(0.5f, 0.25f, 0.25f, 0.5f);
+        [SerializeField] private Color unexplored = new(0.5f, 0.25f, 0.25f, 0.5f);
+        [SerializeField] private Color aboveExplored = new(0.25f, 0.5f, 0.25f, 0.5f);
+        [SerializeField] private Color aboveUnExplored = new(0.25f, 0.5f, 0.25f, 0.5f);
+        [SerializeField] private Color belowExplored = new(0.5f, 0.25f, 0.25f, 0.5f);
+        [SerializeField] private Color belowUnexplored = new(0.5f, 0.25f, 0.25f, 0.5f);
         [SerializeField] private Texture2D stagnationBeacon;
 
 
@@ -116,21 +120,34 @@ namespace MazeGame.MiniMap
                     if (miniMapAssets.ContainsKey(instanceid))
                     {
                         float sectioHieght = ring[j].Position.y;
-                        Color tint = sectioHieght < curHeight ? belowCurrent : playerCurrent;
-                        tint = sectioHieght > curHeight ? aboveCurrent : tint;
+                        
+                        Color above = ring[j].explored ? aboveExplored : aboveUnExplored;
+                        Color below = ring[j].explored ? belowExplored : belowUnexplored;
+                        Color same = ring[j].explored ? explored : unexplored;
+
+                        Color tint = sectioHieght > curHeight ? above : same;
+                        tint = sectioHieght < curHeight ? below : tint;
+
+                        tint = ring[j] == mapGenerator.CurPlayerSection ? playerCurrent : tint;
                         var trans = new BoxTransform
                         {
                             pos = ring[j].Position,
                             rot = ring[j].Rotation
                         };
                         AddElement(instanceid, ring[j].name, tint, trans);
-                        if (ring[j].keep)
+                        if (ring[j].Keep)
                         {
-                            trans = new BoxTransform
-                            {
-                                pos = ring[j].stagnationBeacon.transform.position,
-                                rot = ring[j].stagnationBeacon.transform.rotation
-                            };
+                            trans = ring[j].StrongKeep
+                                ? new BoxTransform
+                                {
+                                    pos = ring[j].transform.TransformPoint(ring[j].strongKeepPosition),
+                                    rot = ring[j].Rotation
+                                }
+                                : new BoxTransform
+                                {
+                                    pos = ring[j].stagnationBeacon.transform.position,
+                                    rot = ring[j].stagnationBeacon.transform.rotation
+                                };
                             AddElement(stagnationBeacon, instanceid, ring[j].name, Color.white, trans);
                         }
                     }
@@ -153,13 +170,19 @@ namespace MazeGame.MiniMap
             {
                 TunnelSection section = mothballedSections[i];
 
-                if (section.keep)
+                if (section.Keep)
                 {
-                    var trans = new BoxTransform
-                    {
-                        pos = section.stagnationBeacon.transform.position,
-                        rot = section.stagnationBeacon.transform.rotation
-                    };
+                    BoxTransform trans = section.StrongKeep
+                        ? new BoxTransform
+                        {
+                            pos = section.transform.TransformPoint(section.strongKeepPosition),
+                            rot = section.Rotation
+                        }
+                        : new BoxTransform
+                        {
+                            pos = section.stagnationBeacon.transform.position,
+                            rot = section.stagnationBeacon.transform.rotation
+                        };
                     AddElement(stagnationBeacon, section.orignalInstanceId, section.name, Color.white, trans);
                     MiniMapElement element = miniMap.mapAssembly[^1];
                     miniMap.waypoints.Add(element);
@@ -233,7 +256,7 @@ namespace MazeGame.MiniMap
         public VisualElement asset;
         public int CompareTo(MiniMapElement other)
         {
-            return transform.pos.y.CompareTo(transform.pos.y);
+            return transform.pos.y.CompareTo(other.transform.pos.y);
         }
     }
 }
