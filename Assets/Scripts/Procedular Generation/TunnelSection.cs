@@ -11,15 +11,30 @@ public class TunnelSection : MonoBehaviour
     public Connector[] connectors;
 
     public BoxBounds[] boundingBoxes;
-
     public List<ConnectorMask> excludeConnectorSections = new();
-
+    public Vector3 strongKeepPosition;
+    public int limit = -1;
     [SerializeField] private List<int> excludePrefabConnectionsIds;
     [Header("Runtime Data")]
     public GameObject stagnationBeacon;
     public int orignalInstanceId;
-    public bool keep;
+    private bool weakKeep = false;
+    [SerializeField] private bool strongKeep = false;
+    public bool StrongKeep => strongKeep;
+    public bool Keep
+    {
+        get
+        {
+            return weakKeep || strongKeep;
+        }
+        set
+        {
+            weakKeep = value;
+        }
+    }
 
+    
+    public bool explored = false;
     // accessors 
     public Texture2D MiniMapAsset => miniMapAsset;
     public Vector3 Position => transform.position;
@@ -83,21 +98,6 @@ public class TunnelSection : MonoBehaviour
         //excludePrefabConnections = null;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            GetComponentInParent<SpatialParadoxGenerator>().PlayerEnterSection(this);
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            GetComponentInParent<SpatialParadoxGenerator>().PlayerExitSection(this);
-        }
-    }
-
     public static float4x4 GetLTWConnectorMatrix(float4x4 ltw, Connector connector)
     {
         return math.mul(ltw, connector.Matrix);
@@ -125,6 +125,7 @@ public class TunnelSection : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        Gizmos.DrawCube(transform.TransformPoint(strongKeepPosition), Vector3.one);
         if (connectors != null)
         {
             for (int i = 0; i < connectors.Length; i++)
@@ -147,5 +148,6 @@ public class TunnelSection : MonoBehaviour
                 Gizmos.DrawWireCube(Vector3.zero, boundingBoxes[i].size);
             }
         }
+
     }
 }

@@ -42,6 +42,7 @@ public class TunnelSectionTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            sectionOwner.explored = true;
             generator.PlayerExitSection(sectionOwner);
         }
     }

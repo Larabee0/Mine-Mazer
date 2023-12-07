@@ -23,7 +23,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     [Header("Runtime Map")]
     [SerializeField] private TunnelSection curPlayerSection;
     [SerializeField] private List<List<TunnelSection>> mapTree = new();
-
+    private Dictionary<int, int> sectionCounter = new();
     private Dictionary<TunnelSection, SectionDstData> mothBalledSections = new();
     private Dictionary<int, List<TunnelSection>> promoteSectionsDict = new();
     List<TunnelSection> promoteSectionsList = new();
@@ -133,14 +133,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             return;
         }
-        if (curPlayerSection.keep)
+        if (curPlayerSection.Keep && !curPlayerSection.StrongKeep)
         {
-            curPlayerSection.keep = false;
+            curPlayerSection.Keep = false;
             Destroy(curPlayerSection.stagnationBeacon);
         }
-        else
+        else if (!curPlayerSection.StrongKeep)
         {
-            curPlayerSection.keep = true;
+            curPlayerSection.Keep = true;
             Transform playerTransform = player.transform;
             curPlayerSection.stagnationBeacon = Instantiate(stagnationBeacon, playerTransform.position- new Vector3(0,0.6f,0f), playerTransform.rotation, curPlayerSection.transform);
         }
@@ -431,7 +431,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             {
                 yield return new WaitForSeconds(intersectTestHoldTime);
                 TunnelSection section = mapTree[^1][i];
-                if (section.keep)
+                if (section.Keep)
                 {
                     section.gameObject.SetActive(false);
                     section.transform.parent = sectionGraveYard;
@@ -478,7 +478,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             {
                 yield return new WaitForSeconds(intersectTestHoldTime);
                 TunnelSection section = newTree[^1][i];
-                if (section.keep)
+                if (section.Keep)
                 {
                     section.gameObject.SetActive(false);
                     section.transform.parent = sectionGraveYard;
@@ -881,7 +881,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             for (int i = 0; i < mapTree[^1].Count; i++)
             {
                 TunnelSection section = mapTree[^1][i];
-                if (section.keep)
+                if (section.Keep)
                 {
                     section.gameObject.SetActive(false);
                     section.transform.parent = sectionGraveYard;
@@ -934,7 +934,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
             for (int i = 0; i < newTree[^1].Count; i++)
             {
                 TunnelSection section = newTree[^1][i];
-                if (section.keep)
+                if (section.Keep)
                 {
                     section.gameObject.SetActive(false);
                     section.transform.parent = sectionGraveYard;
@@ -1233,6 +1233,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
             primary.ExcludePrefabConnections.ForEach(item => nextSections.RemoveAll(element => element == item));
         }
 
+        nextSections.RemoveAll(element => AtSectionLimit(element));
+
         return nextSections;
     }
 
@@ -1368,6 +1370,12 @@ public class SpatialParadoxGenerator : MonoBehaviour
         return true;
     }
 
+    private bool AtSectionLimit(int id)
+    {
+        return instanceIdToSection[id].limit >= 0 
+            && sectionCounter.ContainsKey(id)
+            && sectionCounter[id] >= instanceIdToSection[id].limit;
+    }
 
     private TunnelSection InstinateSection(int index)
     {
@@ -1377,7 +1385,15 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private TunnelSection InstinateSection(TunnelSection tunnelSection)
     {
         TunnelSection section = Instantiate(tunnelSection);
-        section.orignalInstanceId = tunnelSection.GetInstanceID();
+        int id = section.orignalInstanceId = tunnelSection.GetInstanceID();
+        if (sectionCounter.ContainsKey(id))
+        {
+            sectionCounter[id]++;
+        }
+        else
+        {
+            sectionCounter.Add(id, 1);
+        }
         section.gameObject.SetActive(true);
         section.transform.parent = transform;
         return section;
@@ -1386,6 +1402,17 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private void DestroySection(TunnelSection section)
     {
         ClearConnectors(section);
+
+        int id = section.orignalInstanceId;
+
+        if (sectionCounter.ContainsKey(id))
+        {
+            sectionCounter[id]--;
+            if(sectionCounter[id] == 0)
+            {
+                sectionCounter.Remove(id);
+            }
+        }
         Destroy(section.gameObject);
     }
 
