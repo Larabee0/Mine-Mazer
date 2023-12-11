@@ -38,7 +38,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     // these are quite unsafe lol
     // Its fine, once initilised their capacity doesn't change and their values are accessed safely by seperate threads.
     // the keys for these parallel hash maps are the prefab instance ids of the sections.
-    UnsafeParallelHashMap<int, UnsafeList<UnsafeList<BoxTransform>>> sectionBoxTransforms; // result of box tranform when the map looks to position a new tunnel.
+    UnsafeParallelHashMap<int, UnsafeList<UnsafeList<BoxTransform>>> sectionBoxTransforms; // result of box tranform when the map looks to position a new section.
     NativeParallelHashMap<int, UnsafeList<BurstConnector>> sectionConnectorContainers; // connector structs for each section - these all have an identity matrix applied.
     NativeParallelHashMap<int, UnsafeList<float4x4>> sectionBoxMatrices; // local matrices of the bounding boxes of the section
 

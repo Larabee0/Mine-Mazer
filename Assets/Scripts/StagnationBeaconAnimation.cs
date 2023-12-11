@@ -14,6 +14,12 @@ public class StagnationBeaconAnimation : MonoBehaviour
     private float3x2 sphereStartEnd;
     private float3x2 cylinderStartEnd;
 
+    public string BeaconName
+    {
+        get => gameObject.name;
+        set => gameObject.name = value;
+    }
+
     private void OnEnable()
     {
         sphereStartEnd = new()

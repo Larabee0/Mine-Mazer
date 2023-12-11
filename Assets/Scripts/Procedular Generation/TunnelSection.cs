@@ -12,7 +12,9 @@ public class TunnelSection : MonoBehaviour
 
     public BoxBounds[] boundingBoxes;
     public List<ConnectorMask> excludeConnectorSections = new();
-    public Vector3 strongKeepPosition;
+    [SerializeField] private Vector3 strongKeepPosition;
+    [SerializeField] private string waypointName;
+
     public int limit = -1;
     [SerializeField] private List<int> excludePrefabConnectionsIds;
     [Header("Runtime Data")]
@@ -20,6 +22,8 @@ public class TunnelSection : MonoBehaviour
     public int orignalInstanceId;
     private bool weakKeep = false;
     [SerializeField] private bool strongKeep = false;
+    public Vector3 WaypointPosition => stagnationBeacon != null ? stagnationBeacon.transform.position : transform.TransformPoint(strongKeepPosition);
+    public string WaypointName => stagnationBeacon != null ? stagnationBeacon.name : waypointName;
     public bool StrongKeep => strongKeep;
     public bool Keep
     {

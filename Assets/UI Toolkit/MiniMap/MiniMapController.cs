@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace MazeGame.MiniMap
+namespace MazeGame.Navigation
 {
     public class MiniMapController : MonoBehaviour
     {
@@ -18,6 +18,8 @@ namespace MazeGame.MiniMap
         [SerializeField] private int textureResolution = 512;
         [SerializeField] private float viewPortSize = 22f;
         [SerializeField] private float miniMapScale = 1f;
+        [SerializeField] private float minimapCentreOffset = 0f;
+        [SerializeField] private float minimapZoomOffset = 0f;
         [SerializeField] private float offscreenThreshold = 510;
         [SerializeField] private Color playerCurrent = new(1f, 1f, 1f, 0.5f);
         [SerializeField] private Color explored = new(0.5f, 0.25f, 0.25f, 0.5f);
@@ -34,11 +36,14 @@ namespace MazeGame.MiniMap
         private MiniMap miniMap;
         private Compass compass;
         private float pixelsPerUnit;
+        private float angle;
 
         private void Awake()
         {
             if(mapGenerator == null|| !mapGenerator.isActiveAndEnabled)
             {
+                Debug.LogError("No Map Generator or Map Generator Disabled");
+                enabled = false;
                 return;
             }
             miniMap = new() { root = DocRoot.Q("MiniMap"), mapAssembly = new(), waypoints = new() };
@@ -52,47 +57,62 @@ namespace MazeGame.MiniMap
             };
 
             miniMapAssets = mapGenerator.GenerateMiniMapTextures();
-            mapGenerator.OnMapUpdate += MapUpdateEvent;
             
 
             pixelsPerUnit = (textureResolution/2) / viewPortSize;
 
-            if(InputManager.Instance != null)
+            player = FindObjectOfType<Improved_Movement>().transform;
+            if (player == null)
+            {
+                Debug.LogError("No Player, UI cannot start");
+                enabled = false;
+                return;
+            }
+            mapGenerator.OnMapUpdate += MapUpdateEvent;
+            if (InputManager.Instance != null)
             {
                 InputManager.Instance.OnLookDelta += OnLook;
                 InputManager.Instance.OnMoveAxis += OnMove;
 
             }
-            player = FindObjectOfType<Improved_Movement>().transform;
+            else
+            {
+                Debug.LogError("No Input, UI cannot start");
+                enabled = false;
+            }
         }
+
         private void Start()
         {
             //DebugMap();
             Debug.Log(Application.targetFrameRate);
             Debug.Log(QualitySettings.vSyncCount);
         }
+
         private void OnLook(Vector2 axis)
         {
-            float angle = player.rotation.eulerAngles.y;
+            angle = player.rotation.eulerAngles.y;
             compass.RotateTo(-angle);
+            miniMap.waypoints.ForEach(element => TranslateWayPoint(element));
         }
 
         private void OnMove(Vector2 axis)
         {
             Vector3 pos = player.position;
-            miniMap.root.style.translate = new Translate(-(pos.x * pixelsPerUnit) , ((pos.z * pixelsPerUnit)) );
+            miniMap.root.style.translate = new Translate(-(pos.x * pixelsPerUnit) - minimapZoomOffset, ((pos.z * pixelsPerUnit)) - minimapZoomOffset);
             miniMap.waypoints.ForEach(element =>TranslateWayPoint(element));
         }
 
-        //private void OnValidate()
-        //{
-        //    if (Application.isPlaying)
-        //    {
-        //        pixelsPerUnit = textureResolution / viewPortSize;
-        //        miniMap.root.style.scale = new Scale(new Vector2(miniMapScale, miniMapScale));
-        //        MapUpdateEvent();
-        //    }
-        //}
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                //minimapZoomOffset = textureResolution * (miniMapScale - 1);
+                //minimapZoomOffset -= minimapCentreOffset;
+                //miniMap.root.style.scale = new Scale(new Vector2(miniMapScale, miniMapScale));
+                //miniMap.root.style.translate = new Translate(-minimapZoomOffset, -minimapZoomOffset);
+            }
+        }
 
         private void OnDestroy()
         {
@@ -158,7 +178,7 @@ namespace MazeGame.MiniMap
                             trans = ring[j].StrongKeep
                                 ? new BoxTransform
                                 {
-                                    pos = ring[j].transform.TransformPoint(ring[j].strongKeepPosition),
+                                    pos = ring[j].WaypointPosition,
                                     rot = ring[j].Rotation
                                 }
                                 : new BoxTransform
@@ -167,6 +187,8 @@ namespace MazeGame.MiniMap
                                     rot = ring[j].stagnationBeacon.transform.rotation
                                 };
                             AddElement(stagnationBeacon, instanceid, ring[j].name, Color.white, trans);
+                            miniMap.waypoints.Add(miniMap.mapAssembly[^1]);
+                            AddText(miniMap.mapAssembly[^1], ring[j].WaypointName);
                         }
                     }
                 }
@@ -193,7 +215,7 @@ namespace MazeGame.MiniMap
                     BoxTransform trans = section.StrongKeep
                         ? new BoxTransform
                         {
-                            pos = section.transform.TransformPoint(section.strongKeepPosition),
+                            pos = section.WaypointPosition,
                             rot = section.Rotation
                         }
                         : new BoxTransform
@@ -205,6 +227,7 @@ namespace MazeGame.MiniMap
                     MiniMapElement element = miniMap.mapAssembly[^1];
                     miniMap.waypoints.Add(element);
                     miniMap.root.Add(element.asset);
+                    AddText(element, section.WaypointName);
                     TranslateWayPoint(element);
                 }
             }
@@ -233,7 +256,10 @@ namespace MazeGame.MiniMap
             {
                 element.asset.style.translate = new Translate(pixelPos.x, pixelPos.y);
             }
-            element.asset.transform.rotation = Quaternion.Euler(0, 0, ((Quaternion)trans.rot).eulerAngles.y);
+
+
+
+            element.asset.style.rotate = new Rotate(angle);
         }
 
         private void AddElement(Texture2D texture, int id, string name, Color tint, BoxTransform transform)
@@ -245,6 +271,20 @@ namespace MazeGame.MiniMap
             element.asset.style.position = Position.Absolute;
             element.asset.style.unityBackgroundImageTintColor = tint;
             miniMap.mapAssembly.Add(element);
+        }
+
+        private void AddText(MiniMapElement element, string text)
+        {
+            Label label = new()
+            {
+                text = text
+            };
+            // label.style.position = Position.Absolute;
+            label.AddToClassList("WayPointText");
+            label.style.top = 50;
+            element.asset.style.alignItems = Align.Center;
+            element.asset.style.justifyContent = Justify.Center;
+            element.asset.Add(label);
         }
 
         private void AddElement(int id,string name,Color tint, BoxTransform transform)
