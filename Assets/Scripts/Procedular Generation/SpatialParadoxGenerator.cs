@@ -101,7 +101,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void Start()
     {
-        InputManager.Instance.PlayerActions.East.canceled += PlaceStagnationBeacon;
+        InputManager.Instance.interactButton.OnButtonReleased += PlaceStagnationBeacon;
 
         tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
@@ -126,7 +126,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     /// This toggles a flag in the <see cref="TunnelSection"/> instance called "keep".
     /// </summary>
     /// <param name="context"></param>
-    private void PlaceStagnationBeacon(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    private void PlaceStagnationBeacon()
     {
         NPC_Interact player = FindAnyObjectByType<NPC_Interact>();
         if (player.HitInteractable)

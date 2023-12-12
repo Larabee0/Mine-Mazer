@@ -18,8 +18,67 @@ namespace MazeGame.Input
         public Pluse OnButtonPressed;
         public Pluse OnButtonReleased;
         public Pluse OnButtonHeld;
-        public bool buttonDown = false;
+        public bool ButtonDown => buttonDown;
+        public bool Bound => bound;
 
+        private bool buttonDown = false;
+        private Coroutine buttonProcess;
+        private readonly InputManager inputManager;
+        private readonly InputAction action;
+        private bool bound = false;
+
+        public ButtonEventContainer(InputManager inputManager, InputAction action)
+        {
+            this.inputManager = inputManager;
+            this.action = action;
+        }
+
+        internal void Bind()
+        {
+            if(bound) { return; }
+            bound = true;
+            action.started += OnButtonStart;
+            action.canceled += OnButtonStop;
+        }
+
+        internal void Unbind()
+        {
+            if (!bound) { return; }
+            bound = false;
+            action.started -= OnButtonStart;
+            action.canceled -= OnButtonStop;
+        }
+
+        private void OnButtonStart(InputAction.CallbackContext context)
+        {
+            buttonDown = true;
+            OnButtonPressed?.Invoke();
+            if (buttonProcess != null)
+            {
+                inputManager.StopCoroutine(buttonProcess);
+            }
+            buttonProcess = inputManager.StartCoroutine(OnHeld());
+        }
+
+        private void OnButtonStop(InputAction.CallbackContext context)
+        {
+            if (buttonProcess != null)
+            {
+                inputManager.StopCoroutine(buttonProcess);
+                buttonProcess = null;
+            }
+            buttonDown = false;
+            OnButtonReleased?.Invoke();
+        }
+
+        private IEnumerator OnHeld()
+        {
+            while (true)
+            {
+                OnButtonHeld?.Invoke();
+                yield return null;
+            }
+        }
     }
 
     /// <summary>
@@ -55,11 +114,11 @@ namespace MazeGame.Input
         public bool MoveActive => moveActive;
         public Vector2 LookDelta => PlayerActions.Look.ReadValue<Vector2>();
 
-        public ButtonEventContainer northButton = new();
-        private Coroutine northButtonProcess;
+        public ButtonEventContainer northButton;
+        
+        public ButtonEventContainer southButton;
 
-        public ButtonEventContainer southButton = new();
-        private Coroutine southButtonProcess;
+        public ButtonEventContainer interactButton;
 
         private void Awake()
         {
@@ -93,6 +152,15 @@ namespace MazeGame.Input
             UnBind();
         }
 
+        private void Build()
+        {
+            northButton = new(this, PlayerActions.North);
+
+            southButton = new(this, PlayerActions.South);
+
+            interactButton = new(this, PlayerActions.Interact);
+        }
+
         // bind internal controls for coroutine execution
         private void Bind()
         {
@@ -102,10 +170,10 @@ namespace MazeGame.Input
                 PlayerActions.Look.canceled += LookStopped;
                 PlayerActions.Move.started += MoveStarted;
                 PlayerActions.Move.canceled += MoveStopped;
-                PlayerActions.North.started += OnNorthStart;
-                PlayerActions.North.canceled += OnNorthStop;
-                PlayerActions.South.started += OnSouthStart;
-                PlayerActions.South.canceled += OnSouthStop;
+
+                northButton.Bind();
+                southButton.Bind();
+                interactButton.Bind();
 
                 PlayerActions.Reload.canceled += ReloadScene;
                 northButton.OnButtonReleased += Quit;
@@ -121,10 +189,10 @@ namespace MazeGame.Input
                 PlayerActions.Look.canceled -= LookStopped;
                 PlayerActions.Move.started -= MoveStarted;
                 PlayerActions.Move.canceled -= MoveStopped;
-                PlayerActions.North.started -= OnNorthStart;
-                PlayerActions.North.canceled -= OnNorthStop;
-                PlayerActions.South.started -= OnSouthStart;
-                PlayerActions.South.canceled -= OnSouthStop;
+
+                northButton.Unbind();
+                southButton.Unbind();
+                interactButton.Unbind();
 
                 PlayerActions.Reload.canceled -= ReloadScene;
                 northButton.OnButtonReleased -= Quit;
@@ -222,74 +290,5 @@ namespace MazeGame.Input
         }
         #endregion
 
-        #region NorthButton
-
-        private void OnNorthStart(InputAction.CallbackContext context)
-        {
-            northButton.buttonDown = true;
-            northButton.OnButtonPressed?.Invoke();
-            if (northButtonProcess != null)
-            {
-                StopCoroutine(northButtonProcess);
-            }
-            northButtonProcess = StartCoroutine(OnNorthHeld());
-        }
-
-        private void OnNorthStop(InputAction.CallbackContext context)
-        {
-            if (northButtonProcess != null)
-            {
-                StopCoroutine(northButtonProcess);
-                northButtonProcess = null;
-            }
-            northButton.buttonDown = false;
-            northButton.OnButtonReleased?.Invoke();
-        }
-
-        private IEnumerator OnNorthHeld()
-        {
-            while (true)
-            {
-                northButton.OnButtonHeld?.Invoke();
-                yield return null;
-            }
-        }
-
-        #endregion
-
-        #region SouthButton
-
-        private void OnSouthStart(InputAction.CallbackContext context)
-        {
-            southButton.buttonDown = true;
-            southButton.OnButtonPressed?.Invoke();
-            if (southButtonProcess != null)
-            {
-                StopCoroutine(southButtonProcess);
-            }
-            southButtonProcess = StartCoroutine(OnSouthHeld());
-        }
-
-        private void OnSouthStop(InputAction.CallbackContext context)
-        {
-            if (southButtonProcess != null)
-            {
-                StopCoroutine(southButtonProcess);
-                southButtonProcess = null;
-            }
-            southButton.buttonDown = false;
-            southButton.OnButtonReleased?.Invoke();
-        }
-
-        private IEnumerator OnSouthHeld()
-        {
-            while (true)
-            {
-                southButton.OnButtonHeld?.Invoke();
-                yield return null;
-            }
-        }
-
-        #endregion
     }
 }

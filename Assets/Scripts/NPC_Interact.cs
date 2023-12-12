@@ -22,10 +22,10 @@ public class NPC_Interact : MonoBehaviour
 
     private void Start()
     {
-        InputManager.Instance.PlayerActions.East.canceled += Interact;
+        InputManager.Instance.interactButton.OnButtonReleased += Interact;
     }
 
-    private void Interact(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    private void Interact()
     {
         interactable?.Interact();
     } 
