@@ -80,6 +80,8 @@ namespace MazeGame.Navigation
                 Debug.LogError("No Input, UI cannot start");
                 enabled = false;
             }
+            minimapZoomOffset = textureResolution * (miniMapScale - 1);
+            minimapZoomOffset -= minimapCentreOffset;
         }
 
         private void Start()
@@ -98,20 +100,25 @@ namespace MazeGame.Navigation
 
         private void OnMove(Vector2 axis)
         {
-            Vector3 pos = player.position;
-            miniMap.root.style.translate = new Translate(-(pos.x * pixelsPerUnit) - minimapZoomOffset, ((pos.z * pixelsPerUnit)) - minimapZoomOffset);
-            miniMap.waypoints.ForEach(element =>TranslateWayPoint(element));
+            TranslateMap();
         }
 
-        private void OnValidate()
+        private void ScaleMap()
         {
-            if (Application.isPlaying)
-            {
-                //minimapZoomOffset = textureResolution * (miniMapScale - 1);
-                //minimapZoomOffset -= minimapCentreOffset;
-                //miniMap.root.style.scale = new Scale(new Vector2(miniMapScale, miniMapScale));
-                //miniMap.root.style.translate = new Translate(-minimapZoomOffset, -minimapZoomOffset);
-            }
+            minimapZoomOffset = textureResolution * (miniMapScale - 1);
+            minimapZoomOffset -= minimapCentreOffset;
+            miniMap.root.style.scale = new Scale(new Vector2(miniMapScale, miniMapScale));
+            TranslateMap();
+        }
+
+        private void TranslateMap()
+        {
+            Vector3 pos = player.position;
+            miniMap.root.style.translate = new Translate(
+                -(pos.x * pixelsPerUnit * miniMapScale) - minimapZoomOffset,
+                (pos.z * pixelsPerUnit * miniMapScale) - minimapZoomOffset);
+
+            miniMap.waypoints.ForEach(element => TranslateWayPoint(element));
         }
 
         private void OnDestroy()
@@ -257,7 +264,12 @@ namespace MazeGame.Navigation
                 element.asset.style.translate = new Translate(pixelPos.x, pixelPos.y);
             }
 
+            float inverse = 1f-(miniMapScale * 0.15f);
 
+            inverse = miniMapScale > 1f ? inverse : 1f;
+            inverse = miniMapScale < 1f ? 1f + (1f-miniMapScale) : inverse;
+
+            element.asset.style.scale = new StyleScale(new Vector2(inverse, inverse));
 
             element.asset.style.rotate = new Rotate(angle);
         }
