@@ -80,6 +80,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MinimapZoomIn"",
+                    ""type"": ""Button"",
+                    ""id"": ""b44906b7-1ab2-4366-b71f-08ff501df257"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MinimapZoomOut"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f95210c-f47c-40e6-b74a-75db919c1641"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -300,6 +318,50 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5719640f-23ef-4d4e-b75f-2df798ea289c"",
+                    ""path"": ""<Keyboard>/numpadPlus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MinimapZoomIn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32fa0e00-1765-4c8d-be6f-3d29d40d4705"",
+                    ""path"": ""<Keyboard>/equals"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MinimapZoomIn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf7e7f95-af19-4d3e-9bf3-276e4322f218"",
+                    ""path"": ""<Keyboard>/numpadMinus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MinimapZoomOut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e77b5ef-966c-4e5f-aef2-bec944ac6aa6"",
+                    ""path"": ""<Keyboard>/minus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MinimapZoomOut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -870,6 +932,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_South = m_Player.FindAction("South", throwIfNotFound: true);
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_MinimapZoomIn = m_Player.FindAction("MinimapZoomIn", throwIfNotFound: true);
+        m_Player_MinimapZoomOut = m_Player.FindAction("MinimapZoomOut", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -949,6 +1013,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_South;
     private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_MinimapZoomIn;
+    private readonly InputAction m_Player_MinimapZoomOut;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -959,6 +1025,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @South => m_Wrapper.m_Player_South;
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @MinimapZoomIn => m_Wrapper.m_Player_MinimapZoomIn;
+        public InputAction @MinimapZoomOut => m_Wrapper.m_Player_MinimapZoomOut;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -986,6 +1054,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @MinimapZoomIn.started += instance.OnMinimapZoomIn;
+            @MinimapZoomIn.performed += instance.OnMinimapZoomIn;
+            @MinimapZoomIn.canceled += instance.OnMinimapZoomIn;
+            @MinimapZoomOut.started += instance.OnMinimapZoomOut;
+            @MinimapZoomOut.performed += instance.OnMinimapZoomOut;
+            @MinimapZoomOut.canceled += instance.OnMinimapZoomOut;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1008,6 +1082,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @MinimapZoomIn.started -= instance.OnMinimapZoomIn;
+            @MinimapZoomIn.performed -= instance.OnMinimapZoomIn;
+            @MinimapZoomIn.canceled -= instance.OnMinimapZoomIn;
+            @MinimapZoomOut.started -= instance.OnMinimapZoomOut;
+            @MinimapZoomOut.performed -= instance.OnMinimapZoomOut;
+            @MinimapZoomOut.canceled -= instance.OnMinimapZoomOut;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1169,6 +1249,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnSouth(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnMinimapZoomIn(InputAction.CallbackContext context);
+        void OnMinimapZoomOut(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

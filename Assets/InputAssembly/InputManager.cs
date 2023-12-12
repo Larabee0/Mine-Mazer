@@ -135,6 +135,7 @@ namespace MazeGame.Input
             eventSystemInput = EventSystem.current.GetComponent<InputSystemUIInputModule>();
             // create new action class and enable the player action map
             playerControls = new PlayerControls();
+            Build();
             playerControls.Player.Enable();
             LockPointer();
             // bind internal controls to the action map.

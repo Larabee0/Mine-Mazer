@@ -74,6 +74,10 @@ namespace MazeGame.Navigation
                 InputManager.Instance.OnLookDelta += OnLook;
                 InputManager.Instance.OnMoveAxis += OnMove;
 
+                InputManager.Instance.PlayerActions.MinimapZoomOut.canceled += ZoomOut;
+                InputManager.Instance.PlayerActions.MinimapZoomIn.canceled += ZoomIn;
+
+
             }
             else
             {
@@ -82,6 +86,8 @@ namespace MazeGame.Navigation
             }
             minimapZoomOffset = textureResolution * (miniMapScale - 1);
             minimapZoomOffset -= minimapCentreOffset;
+
+
         }
 
         private void Start()
@@ -103,8 +109,19 @@ namespace MazeGame.Navigation
             TranslateMap();
         }
 
-        private void ScaleMap()
+        private void ZoomOut(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {
+            ScaleMap(-0.1f);
+        }
+
+        private void ZoomIn(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            ScaleMap(0.1f);
+        }
+
+        private void ScaleMap(float newScale)
+        {
+            miniMapScale += newScale;
             minimapZoomOffset = textureResolution * (miniMapScale - 1);
             minimapZoomOffset -= minimapCentreOffset;
             miniMap.root.style.scale = new Scale(new Vector2(miniMapScale, miniMapScale));
