@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 186450591792626422}
   - component: {fileID: 6910702644914057683}
   - component: {fileID: 7108369093871069744}
+  - component: {fileID: -9015093224705491301}
   m_Layer: 0
   m_Name: 20mCaveElevation Prefab
   m_TagString: Untagged
@@ -151,11 +152,33 @@ MonoBehaviour:
   - center: {x: 0, y: 11.5116, z: -18.4147}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 3.91916, y: 3.786059, z: 2.6709344}
-  excludeConnectorSections: []
+  excludeConnectorSections:
+  - exclude: []
+  - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: -9015093224705491301}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27444
+  strongKeep: 0
+  explored: 0
+--- !u!114 &-9015093224705491301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280028926933479429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27444
 --- !u!1 &928381221570657475
 GameObject:
   m_ObjectHideFlags: 0

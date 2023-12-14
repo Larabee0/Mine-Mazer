@@ -15,7 +15,8 @@ public class TunnelSection : MonoBehaviour
     [SerializeField] private Vector3 strongKeepPosition;
     [SerializeField] private string waypointName;
 
-    public int limit = -1;
+    [SerializeField] private SectionSpawnBaseRule spawnRule;
+
     [SerializeField] private List<int> excludePrefabConnectionsIds;
     [Header("Runtime Data")]
     public GameObject stagnationBeacon;
@@ -39,6 +40,15 @@ public class TunnelSection : MonoBehaviour
 
     
     public bool explored = false;
+
+    public int InstanceCount
+    {
+        get => spawnRule.InstancesCount;
+        set => spawnRule.InstancesCount = value;
+    }
+
+    public bool Spawnable => spawnRule.Spawnable;
+
     // accessors 
     public Texture2D MiniMapAsset => miniMapAsset;
     public Vector3 Position => transform.position;
@@ -84,8 +94,22 @@ public class TunnelSection : MonoBehaviour
         return excludeConnectorSections[connector.internalIndex];
     }
 
-    public void Build()
+    public void Build(SpatialParadoxGenerator generator)
     {
+        orignalInstanceId = GetInstanceID();
+        if (spawnRule == null)
+        {
+            if (!TryGetComponent(out spawnRule))
+            {
+                spawnRule = gameObject.AddComponent<SectionSpawnBaseRule>();
+            }
+        }
+        if(spawnRule != null)
+        {
+            spawnRule.owner = orignalInstanceId;
+            spawnRule.generator = generator;
+            InstanceCount = 0;
+        }
         if(excludeConnectorSections.Count != connectors.Length)
         {
             for (int i = 0; i < connectors.Length; i++)
@@ -100,6 +124,11 @@ public class TunnelSection : MonoBehaviour
         excludePrefabConnections.ForEach(section=> excludePrefabConnectionsIds.Add(section.GetInstanceID()));
         //excludePrefabConnections.Clear();
         //excludePrefabConnections = null;
+    }
+
+    public bool UpdateRule()
+    {
+        return spawnRule.UpdateSpawnStatus();
     }
 
     public static float4x4 GetLTWConnectorMatrix(float4x4 ltw, Connector connector)

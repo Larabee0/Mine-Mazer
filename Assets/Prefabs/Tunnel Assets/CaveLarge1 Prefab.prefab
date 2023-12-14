@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 4998033263281273839}
   - component: {fileID: 4678738079926176368}
   - component: {fileID: 3803638923336616636}
+  - component: {fileID: -5732421837634516859}
   m_Layer: 0
   m_Name: CaveLarge1 Prefab
   m_TagString: Untagged
@@ -321,11 +322,34 @@ MonoBehaviour:
   - center: {x: -7.5, y: 1.6429996, z: -10}
     oreintation: {x: -0, y: 90, z: -0}
     size: {x: 4.31566, y: 3.6647298, z: 4.5}
-  excludeConnectorSections: []
-  excludePrefabConnectionsIds: 
+  excludeConnectorSections:
+  - exclude: []
+  - exclude: []
+  - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: -5732421837634516859}
+  excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27448
+  strongKeep: 0
+  explored: 0
+--- !u!114 &-5732421837634516859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801700286422856763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27448
 --- !u!1 &1879349557654696638
 GameObject:
   m_ObjectHideFlags: 0

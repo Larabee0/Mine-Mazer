@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 7493120381888725232}
   - component: {fileID: 977384089479776006}
   - component: {fileID: 1296708680027945885}
+  - component: {fileID: 1173406888214272067}
   m_Layer: 0
   m_Name: 10mCaveLadder Prefab
   m_TagString: Untagged
@@ -411,11 +412,33 @@ MonoBehaviour:
   - center: {x: 0.0043, y: 11.6479, z: -7.3737}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 4.782614, y: 3.5540936, z: 4.75285}
-  excludeConnectorSections: []
-  excludePrefabConnectionsIds: 
+  excludeConnectorSections:
+  - exclude: []
+  - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: 1173406888214272067}
+  excludePrefabConnectionsIds: 3a6b0000
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27450
+  strongKeep: 0
+  explored: 0
+--- !u!114 &1173406888214272067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3879073284189379631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27450
 --- !u!1 &4846029518679545828
 GameObject:
   m_ObjectHideFlags: 0

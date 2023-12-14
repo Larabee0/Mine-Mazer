@@ -563,6 +563,7 @@ GameObject:
   - component: {fileID: 3729571775024526139}
   - component: {fileID: 4329879352267559336}
   - component: {fileID: 1925884630686241207}
+  - component: {fileID: 4214625514530151077}
   m_Layer: 0
   m_Name: LargeCaveWater Prefab
   m_TagString: Untagged
@@ -729,11 +730,33 @@ MonoBehaviour:
   - center: {x: -6.99, y: 1.53, z: -9.9775}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 1.9864982, y: 3.6647298, z: 5.2249503}
-  excludeConnectorSections: []
-  excludePrefabConnectionsIds: 
+  excludeConnectorSections:
+  - exclude: []
+  - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: 4214625514530151077}
+  excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27452
+  strongKeep: 0
+  explored: 0
+--- !u!114 &4214625514530151077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3679796258436271516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27452
 --- !u!1 &5989423766175744301
 GameObject:
   m_ObjectHideFlags: 0

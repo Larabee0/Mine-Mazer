@@ -321,6 +321,7 @@ GameObject:
   - component: {fileID: 312625729852135482}
   - component: {fileID: 790953254736775940}
   - component: {fileID: 6413336854673384978}
+  - component: {fileID: -3081295523247690166}
   m_Layer: 0
   m_Name: 10mCaveUpCircle Prefab
   m_TagString: Untagged
@@ -491,11 +492,33 @@ MonoBehaviour:
   - center: {x: -1.9329, y: 1.6391, z: -4.617}
     oreintation: {x: 5.881182, y: 40.1973, z: 354.30447}
     size: {x: 4.3056865, y: 3.5642157, z: 6.635406}
-  excludeConnectorSections: []
+  excludeConnectorSections:
+  - exclude: []
+  - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: -3081295523247690166}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27440
+  strongKeep: 0
+  explored: 0
+--- !u!114 &-3081295523247690166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3033756551422647694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27440
 --- !u!1 &3078624659955553666
 GameObject:
   m_ObjectHideFlags: 0

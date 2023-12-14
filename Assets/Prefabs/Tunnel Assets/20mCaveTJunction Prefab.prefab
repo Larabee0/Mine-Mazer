@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2458599954807693183}
   - component: {fileID: 8233018590910846955}
   - component: {fileID: 7226286589360190076}
+  - component: {fileID: -1886313466182116042}
   m_Layer: 0
   m_Name: 20mCaveTJunction Prefab
   m_TagString: Untagged
@@ -162,11 +163,34 @@ MonoBehaviour:
   - center: {x: 7.251259, y: 1.4459991, z: -2.8565044}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 2.14796, y: 3.892, z: 2.0913}
-  excludeConnectorSections: []
+  excludeConnectorSections:
+  - exclude: []
+  - exclude: []
+  - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: -1886313466182116042}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27446
+  strongKeep: 0
+  explored: 0
+--- !u!114 &-1886313466182116042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171612208962928746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27446
 --- !u!1 &2319835659622089281
 GameObject:
   m_ObjectHideFlags: 0

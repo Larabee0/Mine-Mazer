@@ -546,6 +546,7 @@ GameObject:
   - component: {fileID: 4432596587219976661}
   - component: {fileID: 990834845903046052}
   - component: {fileID: 2742071741484992111}
+  - component: {fileID: -7141117933906971303}
   m_Layer: 0
   m_Name: 10mCaveUpHalfCircle Prefab
   m_TagString: Untagged
@@ -703,10 +704,30 @@ MonoBehaviour:
   excludeConnectorSections:
   - exclude: []
   - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: -7141117933906971303}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27442
+  strongKeep: 0
+  explored: 0
+--- !u!114 &-7141117933906971303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7695764492245604777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27442
 --- !u!1 &9207288404384216192
 GameObject:
   m_ObjectHideFlags: 0

@@ -334,6 +334,7 @@ GameObject:
   - component: {fileID: 952839817357946816}
   - component: {fileID: 469736703384709933}
   - component: {fileID: 7115210080915405535}
+  - component: {fileID: 8351807840266759401}
   m_Layer: 0
   m_Name: 10mCaveCrossRails Prefab
   m_TagString: Untagged
@@ -478,8 +479,30 @@ MonoBehaviour:
   - center: {x: 0, y: 1.6324005, z: -5}
     oreintation: {x: -0, y: 90, z: -0}
     size: {x: 3.91916, y: 3.39812, z: 7.556674}
-  excludeConnectorSections: []
-  excludePrefabConnectionsIds: 
+  excludeConnectorSections:
+  - exclude: []
+  - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: 8351807840266759401}
+  excludePrefabConnectionsIds: 206b0000266b0000246b0000286b0000886a0000386b00003c6b0000
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27432
+  strongKeep: 0
+  explored: 0
+--- !u!114 &8351807840266759401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4301971218139400115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27432

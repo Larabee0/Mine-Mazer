@@ -3517,6 +3517,7 @@ GameObject:
   - component: {fileID: 7194950053747840209}
   - component: {fileID: 8376583618156584004}
   - component: {fileID: 7620240774403884024}
+  - component: {fileID: 2206222050835317255}
   m_Layer: 0
   m_Name: Colony1 Prefab
   m_TagString: Untagged
@@ -3731,12 +3732,29 @@ MonoBehaviour:
   - exclude: []
   strongKeepPosition: {x: -12.12, y: 2.15, z: -21}
   waypointName: Lumenite Colony
-  limit: 1
+  spawnRule: {fileID: 2206222050835317255}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
+  orignalInstanceId: 27454
   strongKeep: 1
   explored: 0
+--- !u!114 &2206222050835317255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1744198537644947954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2acd93fa78f4d7249ae8130d1222c561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 0
+  spawnLimit: 1
+  generator: {fileID: 0}
+  owner: 27454
+  exploreThreshold: 6
 --- !u!1 &1760621962523203306
 GameObject:
   m_ObjectHideFlags: 0

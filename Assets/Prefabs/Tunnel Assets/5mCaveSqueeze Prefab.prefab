@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 2534680681378790191}
   - component: {fileID: 290371338472861755}
   - component: {fileID: 7544748717809826148}
+  - component: {fileID: -851804242554496158}
   m_Layer: 0
   m_Name: 5mCaveSqueeze Prefab
   m_TagString: Untagged
@@ -365,11 +366,33 @@ MonoBehaviour:
   - center: {x: 0, y: 1.6324005, z: -2.5}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 3.91916, y: 3.39812, z: 4.5}
-  excludeConnectorSections: []
-  excludePrefabConnectionsIds: 
+  excludeConnectorSections:
+  - exclude: []
+  - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: -851804242554496158}
+  excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27428
+  strongKeep: 0
+  explored: 0
+--- !u!114 &-851804242554496158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8067933336209886050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27428
 --- !u!1 &8537734873157505293
 GameObject:
   m_ObjectHideFlags: 0

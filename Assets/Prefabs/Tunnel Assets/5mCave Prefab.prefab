@@ -215,6 +215,7 @@ GameObject:
   - component: {fileID: 8328234503495518801}
   - component: {fileID: 4595231766861077641}
   - component: {fileID: 7541396775899075963}
+  - component: {fileID: -6903181322850615606}
   m_Layer: 0
   m_Name: 5mCave Prefab
   m_TagString: Untagged
@@ -355,10 +356,30 @@ MonoBehaviour:
   excludeConnectorSections:
   - exclude: []
   - exclude: []
-  excludePrefabConnectionsIds: ca630000d0630000ce630000d2630000e4630000e2630000e8630000
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: -6903181322850615606}
+  excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27424
+  strongKeep: 0
+  explored: 0
+--- !u!114 &-6903181322850615606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176323169833114417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27424
 --- !u!1 &8582775816916939885
 GameObject:
   m_ObjectHideFlags: 0

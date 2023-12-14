@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 5010544934679028810}
   - component: {fileID: 8722152599836419226}
   - component: {fileID: 4233013943535160681}
+  - component: {fileID: -6912114443855155818}
   m_Layer: 0
   m_Name: 10mCaveDeadEnd Prefab
   m_TagString: Untagged
@@ -255,11 +256,32 @@ MonoBehaviour:
   - center: {x: 0, y: 1.6324005, z: -4.3631}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 3.91916, y: 3.39812, z: 8.226049}
-  excludeConnectorSections: []
+  excludeConnectorSections:
+  - exclude: []
+  strongKeepPosition: {x: 0, y: 0, z: 0}
+  waypointName: 
+  spawnRule: {fileID: -6912114443855155818}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
-  keep: 0
+  orignalInstanceId: 27436
+  strongKeep: 0
+  explored: 0
+--- !u!114 &-6912114443855155818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3431334257392131182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 1
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 27436
 --- !u!1 &3593191823535046731
 GameObject:
   m_ObjectHideFlags: 0
