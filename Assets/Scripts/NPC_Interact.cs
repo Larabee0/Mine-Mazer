@@ -30,7 +30,7 @@ public class NPC_Interact : MonoBehaviour
         interactable?.Interact();
     } 
 
-    private void FixedUpdate()
+    private void Update()
     {
         Ray r = new(InteractorSource.position, InteractorSource.forward);
         if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, npcLayer))
@@ -38,7 +38,6 @@ public class NPC_Interact : MonoBehaviour
             if (hitInfo.collider.gameObject.TryGetComponent(out interactable))
             {
                 hitInteractable = true;
-                //interactObj.Interact();
             }
             else
             {

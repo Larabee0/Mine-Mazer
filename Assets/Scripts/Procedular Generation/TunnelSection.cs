@@ -142,7 +142,10 @@ public class TunnelSection : MonoBehaviour
         renderers ??= GetComponentsInChildren<Renderer>();
         for (int i = 0; i < renderers.Length; i++)
         {
-            renderers[i].enabled = enabled;
+            if (renderers[i] != null)
+            {
+                renderers[i].enabled = enabled;
+            }
         }
     }
 

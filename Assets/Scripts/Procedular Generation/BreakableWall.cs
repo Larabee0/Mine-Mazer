@@ -7,13 +7,8 @@ public class BreakableWall : MonoBehaviour, IInteractable
 {
     [SerializeField] private Rigidbody[] bodies;
     [SerializeField] private Vector2 rockLingerTimeRange;
-    [SerializeField] private Vector3 offsetAngleOnAwake = new(0, 90, 0);
-
-    private void Awake()
-    {
-        transform.localEulerAngles = offsetAngleOnAwake;
-    }
-
+    public Connector connector;
+    
     private void BreakWall()
     {
         transform.DetachChildren();
@@ -25,16 +20,18 @@ public class BreakableWall : MonoBehaviour, IInteractable
         Destroy(gameObject);
     }
 
-    private void OnGUI()
-    {
-        if(GUI.Button(new Rect(10, 10, 50, 50), "Destroy Wall"))
-        {
-            BreakWall();
-        }
-    }
-
     public void Interact()
     {
         BreakWall();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.matrix = TunnelSection.GetLTWConnectorMatrix(transform.localToWorldMatrix, connector);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawCube(Vector3.zero, 0.5f * Vector3.one);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawRay(Vector3.zero, Vector3.forward);
     }
 }

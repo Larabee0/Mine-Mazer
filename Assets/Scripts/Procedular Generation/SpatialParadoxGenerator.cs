@@ -14,6 +14,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private TunnelSection startSection;
     [SerializeField] private TunnelSection deadEndPlug;
+    [SerializeField] private BreakableWall breakableWall;
     [SerializeField] private List<TunnelSection> tunnelSections;
     [SerializeField] private GameObject stagnationBeacon;
 
@@ -48,6 +49,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
     [Header("Generation Settings")]
     [SerializeField] private int ringRenderDst = 3; 
     [SerializeField, Min(1)] private int maxDst = 3;
+    [SerializeField, Range(0, 1)] private float breakableWallAtConnectionChance = 0.5f;
+    [Space]
     [SerializeField] private LayerMask tunnelSectionLayerMask;
     [SerializeField, Min(1000)] private int maxInterations = 1000000; /// max iterations allowed for <see cref="PickSection(TunnelSection, List{int}, out Connector, out Connector)"/>
     [SerializeField] private bool randomSeed = true; // generate a new seed every application run or use old seed.
@@ -56,6 +59,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private int tunnelSectionLayerIndex;
     private TunnelSection lastEnter;
     private TunnelSection lastExit;
+    private bool forceBreakableWallAtConnections = false;
+    private bool rejectBreakableWallAtConnections = false;
 
 #if UNITY_EDITOR
     // extra variables and settings for the debugger, these aren't compiled into the build.
@@ -757,18 +762,23 @@ public class SpatialParadoxGenerator : MonoBehaviour
         mapTree.Add(new() { curPlayerSection });
 
         double startTime = Time.realtimeSinceStartupAsDouble;
-        RecursiveBuilder();
+        rejectBreakableWallAtConnections = true;
+        RecursiveBuilder(true);
         Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
         OnMapUpdate?.Invoke();
     }
 
-    private void RecursiveBuilder()
+    private void RecursiveBuilder(bool initialArea = false)
     {
         while(mapTree.Count <= maxDst)
         {
             List<TunnelSection> startSections = mapTree[^1];
             mapTree.Add(new());
             FillSectionConnectors(startSections);
+            if (initialArea)
+            {
+                rejectBreakableWallAtConnections = false;
+            }
         }
     }
 
@@ -1144,7 +1154,21 @@ public class SpatialParadoxGenerator : MonoBehaviour
             pickedInstance = InstinateSection(pickedSection);
         }
         
+        
+
         TransformSection(primary, pickedInstance, priPref, secPref); // transform the new section
+
+        if (pickedSection != deadEndPlug && !rejectBreakableWallAtConnections)
+        {
+            if (forceBreakableWallAtConnections || Random.value < breakableWallAtConnectionChance)
+            {
+                BreakableWall breakableInstance = Instantiate(breakableWall, pickedInstance.transform);
+                Connector conn = breakableInstance.connector;
+                conn.UpdateWorldPos(breakableWall.transform.localToWorldMatrix);
+                TransformSection(breakableInstance.transform, priPref, conn);
+            }
+        }
+
         Physics.SyncTransforms(); /// push changes to physics world now instead of next fixed update, required for <see cref="RunIntersectionTests(TunnelSection, TunnelSection, out Connector, out Connector)"/>
         return pickedInstance;
     }
@@ -1440,13 +1464,18 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void TransformSection(TunnelSection primary, TunnelSection secondary, Connector primaryConnector, Connector secondaryConnector)
     {
-        float4x4 transformMatrix = CalculateSectionMatrix(primaryConnector, secondaryConnector);
-        secondary.transform.SetPositionAndRotation(transformMatrix.Translation(), transformMatrix.Rotation());
+        TransformSection(secondary.transform, primaryConnector, secondaryConnector);
 
         primary.connectorPairs[primaryConnector.internalIndex] = new(secondary, secondaryConnector.internalIndex);
         secondary.connectorPairs[secondaryConnector.internalIndex] = new(primary, primaryConnector.internalIndex);
         primary.InUse.Add(primaryConnector.internalIndex);
         secondary.InUse.Add(secondaryConnector.internalIndex);
+    }
+
+    private void TransformSection(Transform secondaryTransform, Connector primaryConnector, Connector secondaryConnector)
+    {
+        float4x4 transformMatrix = CalculateSectionMatrix(primaryConnector, secondaryConnector);
+        secondaryTransform.SetPositionAndRotation(transformMatrix.Translation(), transformMatrix.Rotation());
     }
 
     private float4x4 CalculateSectionMatrix(Connector primary, Connector secondary)
