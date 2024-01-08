@@ -1406,14 +1406,15 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private void DestroySection(TunnelSection section)
     {
         ClearConnectors(section);
-        try
+
+        if (instanceIdToSection.ContainsKey(section.orignalInstanceId))
         {
             instanceIdToSection[section.orignalInstanceId].InstanceCount--;
         }
-        catch(KeyNotFoundException exception)
+        else
         {
-            Debug.LogException(exception,gameObject);
-            Debug.LogErrorFormat(gameObject, "Section {0} has incorrect instance id {1}", section.gameObject.name, section.orignalInstanceId);
+            Debug.LogException(new KeyNotFoundException(string.Format("Key: {0} not present in dictionary instanceIdToSection!", section.orignalInstanceId)),gameObject);
+            Debug.LogErrorFormat(gameObject, "Likely section {0} has incorrect instance id of {1}", section.gameObject.name, section.orignalInstanceId);
         }
 
         Destroy(section.gameObject);
