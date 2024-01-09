@@ -86,12 +86,31 @@ namespace MazeGame.Input
     /// </summary>
     public class InputManager : MonoBehaviour
     {
-        public static InputManager Instance;
+        private static InputManager instance;
+        public static InputManager Instance
+        {
+            get
+            {
+                if(instance == null)
+                {
+                    Debug.LogWarning("Expected Input Manager instance not found. Order of operations issue? Or Input Manager is disabled/missing.");
+                }
+                return instance;
+            }
+            private set
+            {
+                if (value != null && instance == null)
+                {
+                    instance = value;
+                }
+            }
+        }
 
         // Input Action Class and Accessors.
         private PlayerControls playerControls;
         public PlayerControls MainControls => playerControls;
         public PlayerControls.PlayerActions PlayerActions => playerControls.Player;
+        public PlayerControls.DialogueControlsActions DialogueActions => playerControls.DialogueControls;
 
         // Over UI stuff, currently unused.
         private InputSystemUIInputModule eventSystemInput;
@@ -119,6 +138,8 @@ namespace MazeGame.Input
         public ButtonEventContainer southButton;
 
         public ButtonEventContainer interactButton;
+
+        public ButtonEventContainer AdvanceDialogueButton;
 
         private void Awake()
         {
@@ -160,6 +181,8 @@ namespace MazeGame.Input
             southButton = new(this, PlayerActions.South);
 
             interactButton = new(this, PlayerActions.Interact);
+
+            AdvanceDialogueButton = new(this, DialogueActions.AdvanceDialogue);
         }
 
         // bind internal controls for coroutine execution
@@ -213,11 +236,15 @@ namespace MazeGame.Input
         public void UnlockPointer()
         {
             Cursor.lockState = CursorLockMode.Confined;
+            PlayerActions.Enable();
+            DialogueActions.Disable();
         }
 
         public void LockPointer()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            PlayerActions.Disable();
+            DialogueActions.Enable();
         }
 
         // look is recieved as a position delta. exactly how Input.GetAxis("Mouse X/Y") works.

@@ -86,10 +86,6 @@ public class Improved_Movement : MonoBehaviour
 
     private void Move(float x, float z)
     {
-        if (Cursor.lockState != CursorLockMode.Locked)
-        {
-            return;
-        }
         Vector3 move = transform.right * x + transform.forward * z;
 
         controller.Move(speed * Time.deltaTime * move);
