@@ -13,6 +13,7 @@ namespace MazeGame.Input
     public delegate void Vector2Axis(Vector2 axis);
     public delegate void Pluse();
 
+    [Serializable]
     public class ButtonEventContainer
     {
         public Pluse OnButtonPressed;
@@ -21,7 +22,7 @@ namespace MazeGame.Input
         public bool ButtonDown => buttonDown;
         public bool Bound => bound;
 
-        private bool buttonDown = false;
+        [SerializeField] private bool buttonDown = false;
         private Coroutine buttonProcess;
         private readonly InputManager inputManager;
         private readonly InputAction action;
@@ -139,12 +140,12 @@ namespace MazeGame.Input
 
         public ButtonEventContainer interactButton;
 
-        public ButtonEventContainer AdvanceDialogueButton;
+        public ButtonEventContainer advanceDialogueButton;
 
         private void Awake()
         {
             // if no static instance, set it to this, otherwise destroy ourselves.
-            if (Instance == null)
+            if (instance == null)
             {
                 Instance = this;
             }
@@ -157,10 +158,13 @@ namespace MazeGame.Input
             // create new action class and enable the player action map
             playerControls = new PlayerControls();
             Build();
-            playerControls.Player.Enable();
+
             LockPointer();
             // bind internal controls to the action map.
             Bind();
+
+            // Debug.LogFormat("Player Input Enabled: {0}", playerControls.Player.enabled);
+            // Debug.LogFormat("UI Input Enabled: {0}", playerControls.UI.enabled);
         }
 
         // clean up on for when class is destroyed or application quits
@@ -182,7 +186,9 @@ namespace MazeGame.Input
 
             interactButton = new(this, PlayerActions.Interact);
 
-            AdvanceDialogueButton = new(this, DialogueActions.AdvanceDialogue);
+            advanceDialogueButton = new(this, DialogueActions.AdvanceDialogue);
+
+           // navigationSubmitButton = new(this, eventSystemInput.submit.action);
         }
 
         // bind internal controls for coroutine execution
@@ -198,6 +204,7 @@ namespace MazeGame.Input
                 northButton.Bind();
                 southButton.Bind();
                 interactButton.Bind();
+                advanceDialogueButton.Bind();
 
                 PlayerActions.Reload.canceled += ReloadScene;
                 northButton.OnButtonReleased += Quit;
@@ -217,6 +224,7 @@ namespace MazeGame.Input
                 northButton.Unbind();
                 southButton.Unbind();
                 interactButton.Unbind();
+                advanceDialogueButton.Unbind();
 
                 PlayerActions.Reload.canceled -= ReloadScene;
                 northButton.OnButtonReleased -= Quit;
@@ -236,15 +244,15 @@ namespace MazeGame.Input
         public void UnlockPointer()
         {
             Cursor.lockState = CursorLockMode.Confined;
-            PlayerActions.Enable();
-            DialogueActions.Disable();
+            PlayerActions.Disable();
+            DialogueActions.Enable();
         }
 
         public void LockPointer()
         {
             Cursor.lockState = CursorLockMode.Locked;
-            PlayerActions.Disable();
-            DialogueActions.Enable();
+            PlayerActions.Enable();
+            DialogueActions.Disable();
         }
 
         // look is recieved as a position delta. exactly how Input.GetAxis("Mouse X/Y") works.
