@@ -1,4 +1,5 @@
 using Fungus;
+using MazeGame.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,5 +34,17 @@ public class BreakableWall : MonoBehaviour, IInteractable
         Gizmos.DrawCube(Vector3.zero, 0.5f * Vector3.one);
         Gizmos.color = Color.yellow;
         Gizmos.DrawRay(Vector3.zero, Vector3.forward);
+    }
+
+    public string GetToolTipText()
+    {
+        if (InputManager.GamePadPresent)
+        {
+            return "B to Mine Wall";
+        }
+        else
+        {
+            return "E to Mine Wall";
+        }
     }
 }

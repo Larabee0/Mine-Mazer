@@ -9,16 +9,36 @@ namespace MazeGame.Navigation
 {
     public class WorldWayPointsController : MonoBehaviour
     {
+        private static WorldWayPointsController instance;
+        public static WorldWayPointsController Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    Debug.LogWarning("Expected WorldWay Points Controller instance not found. Order of operations issue? Or WorldWay Points Controller is disabled/missing.");
+                }
+                return instance;
+            }
+            private set
+            {
+                if (value != null && instance == null)
+                {
+                    instance = value;
+                }
+            }
+        }
+
         [SerializeField] private UIDocument uiController;
         [SerializeField] private SpatialParadoxGenerator mapGenerator;
         [SerializeField] private VisualTreeAsset waypointTemplate;
-        [SerializeField] private Texture2D waypointAsset;
+        [SerializeField] private Texture2D[] waypointAssets;
         [SerializeField] private int wayPointRes = 512;
         private VisualElement DocRoot => uiController.rootVisualElement;
         private Transform player;
 
         private VisualElement root;
-        private List<WorldWayPoint> waypoints = new();
+        private readonly List<WorldWayPoint> waypoints = new();
 
         private Coroutine wayPointTransformProcess = null;
 
@@ -38,6 +58,7 @@ namespace MazeGame.Navigation
                 enabled = false;
                 return;
             }
+
             mapGenerator.OnMapUpdate += MapUpdateEvent;
 
             if (InputManager.Instance != null)
@@ -53,6 +74,15 @@ namespace MazeGame.Navigation
             }
 
             root = DocRoot.Q("WayPoints");
+            
+            if (instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
         }
 
         private void OnMove(Vector2 axis)
@@ -92,19 +122,22 @@ namespace MazeGame.Navigation
 
             waypointable.UnionWith(mapGenerator.GetMothballedSections());
 
-
             HashSet<TunnelSection> existingPoints = new(waypoints.Count);
 
             for (int i = waypoints.Count - 1; i >= 0; i--)
             {
-                if (!waypointable.Contains(waypoints[i].target))
+                if (waypoints[i].GetType() == typeof(TunnelWayPoint))
                 {
-                    root.Remove(waypoints[i].wayPointRoot);
-                    waypoints.RemoveAt(i);
-                }
-                else
-                {
-                    existingPoints.Add(waypoints[i].target);
+                    TunnelWayPoint tunnelWayPoint = waypoints[i] as TunnelWayPoint;
+                    if (!waypointable.Contains(tunnelWayPoint.target))
+                    {
+                        root.Remove(tunnelWayPoint.wayPointRoot);
+                        waypoints.RemoveAt(i);
+                    }
+                    else
+                    {
+                        existingPoints.Add(tunnelWayPoint.target);
+                    }
                 }
             }
 
@@ -116,24 +149,39 @@ namespace MazeGame.Navigation
             }
         }
 
+        public void RemoveWaypoint(WorldWayPoint waypoint)
+        {
+            waypoints.Remove(waypoint);
+            root.Remove(waypoint.wayPointRoot);
+        }
+
         private void AddwayPoint(TunnelSection section, Color tint)
         {
-            waypoints.Add(new(section, waypointTemplate.Instantiate()));
+            waypoints.Add(new TunnelWayPoint(section, waypointTemplate.Instantiate()));
+            AddWayPoint(section.WaypointName,0, tint);
+        }
 
-            
+        public WorldWayPoint AddwayPoint(string text, Vector3 position, Color tint, int iconIndex = 1)
+        {
+            waypoints.Add(new WorldWayPoint(position, waypointTemplate.Instantiate()));
 
+            AddWayPoint(text, iconIndex, tint);
+            return waypoints[^1];
+        }
+
+        private void AddWayPoint(string text, int iconIndex,Color tint)
+        {
             VisualElement wayPoint = waypoints[^1].texture;
-            wayPoint.style.backgroundImage = waypointAsset;
+            wayPoint.style.backgroundImage = waypointAssets[iconIndex];
             wayPoint.style.height = wayPointRes;
             wayPoint.style.width = wayPointRes;
             wayPoint.style.unityBackgroundImageTintColor = tint;
 
-            waypoints[^1].Name = section.WaypointName;
+            waypoints[^1].Name = text;
             waypoints[^1].wayPointRoot.style.position = Position.Absolute;
             root.Add(waypoints[^1].wayPointRoot);
             TransformWayPoint(waypoints[^1]);
         }
-
 
         private void TransformWayPoint(WorldWayPoint waypoint)
         {
@@ -143,26 +191,40 @@ namespace MazeGame.Navigation
         }
     }
 
-    internal class WorldWayPoint
+    public class WorldWayPoint
     {
-        public TunnelSection target;
         public VisualElement wayPointRoot;
         public VisualElement texture;
         public Label text;
+        public Vector3 position;
+        public virtual Vector3 CurPositon => position;
 
         public string Name
         {
             set => text.text = value;
         }
+        public WorldWayPoint() { }
+        public WorldWayPoint(Vector3 position, VisualElement wayPointRoot)
+        {
+            this.position = position;
+            this.wayPointRoot = wayPointRoot;
+            texture = wayPointRoot.Q("WaypointImage");
+            text = wayPointRoot.Q<Label>("WaypointName");
+        }
+    }
 
-        public WorldWayPoint(TunnelSection target, VisualElement wayPointRoot)
+    internal class TunnelWayPoint : WorldWayPoint
+    {
+        public TunnelSection target;
+
+        public override Vector3 CurPositon => target.WaypointPosition;
+
+        public TunnelWayPoint(TunnelSection target, VisualElement wayPointRoot)
         {
             this.target = target;
             this.wayPointRoot = wayPointRoot;
             texture = wayPointRoot.Q("WaypointImage");
             text = wayPointRoot.Q<Label>("WaypointName");
         }
-
-        public Vector3 CurPositon => target.WaypointPosition;
     }
 }

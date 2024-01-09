@@ -592,6 +592,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2377281665050414085, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: InteractRange
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3737253345502188513, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: m_StopNaN
@@ -1140,6 +1145,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overUI: 0
+  northButton:
+    buttonDown: 0
+  southButton:
+    buttonDown: 0
+  interactButton:
+    buttonDown: 0
+  advanceDialogueButton:
+    buttonDown: 0
 --- !u!82 &1556909715
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1302,5 +1315,7 @@ MonoBehaviour:
   mapGenerator: {fileID: 399645860}
   waypointTemplate: {fileID: 9197481963319205126, guid: 198e1b02f50b95a42ac466cbc74746c3,
     type: 3}
-  waypointAsset: {fileID: 2800000, guid: ec464d8581ef7734ca35cf5f0ceae6bf, type: 3}
+  waypointAssets:
+  - {fileID: 2800000, guid: ec464d8581ef7734ca35cf5f0ceae6bf, type: 3}
+  - {fileID: 2800000, guid: bff2ba39f5f4448589e80522ebfcd0a0, type: 3}
   wayPointRes: 96

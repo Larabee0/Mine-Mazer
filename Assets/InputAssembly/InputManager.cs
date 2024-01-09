@@ -120,6 +120,8 @@ namespace MazeGame.Input
 
         public InputSystemUIInputModule EventSystemInput => eventSystemInput;
 
+        public static bool GamePadPresent => Gamepad.current != null;
+
         // Movement axis members.
         private Coroutine moveProcess;
         private bool lookActive = false;
