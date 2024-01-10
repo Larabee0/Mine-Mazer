@@ -1,7 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="Container" style="background-color: rgba(0, 0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center;">
-        <ui:VisualElement name="MessagePreview">
-            <ui:Label tabindex="-1" display-tooltip-when-elided="true" style="flex-grow: 1; white-space: normal; -unity-text-align: middle-left;" />
-        </ui:VisualElement>
-    </ui:VisualElement>
+    <ui:Template name="Container" src="project://database/Assets/UI%20Toolkit/WorldMessages/Container.uxml?fileID=9197481963319205126&amp;guid=9d01f63a273fd9a488bb24bedd2c464e&amp;type=3#Container" />
+    <ui:Instance template="Container" name="Container" />
 </ui:UXML>

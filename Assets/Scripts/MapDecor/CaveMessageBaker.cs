@@ -15,6 +15,7 @@ public class CaveMessageBaker : MonoBehaviour
     public Color backgroundTint = Color.white;
     public Vector2Int dimentions = new (100,250);
     public string assetName = "Example Message";
+    public string[] dependsOn;
     public string prefabsDirectory = "";
     public string folderName = "";
     
@@ -68,7 +69,9 @@ public class CaveMessageBaker : MonoBehaviour
             assetName = assetName,
             backgroundIndex = backgroundImageIndex,
             backgroundTint = backgroundTint,
-            messageText = PackageText()
+            dimentions = dimentions,
+            messageText = PackageText(),
+            dependsOn = dependsOn,
         };
 
         EditableMessage editableMessage = new()
@@ -77,7 +80,8 @@ public class CaveMessageBaker : MonoBehaviour
             backgroundImageIndex = backgroundImageIndex,
             backgroundTint = backgroundTint,
             dimentions = dimentions,
-            sections = new MessageSection[messageParts.Length]
+            sections = new MessageSection[messageParts.Length],
+            dependsOn = dependsOn,
         };
 
         messageParts.CopyTo(editableMessage.sections,0);
@@ -110,7 +114,7 @@ public class CaveMessageBaker : MonoBehaviour
 
         targetPath = Application.dataPath + "/" + folderName;
         mainAssetPath = targetPath + "/" + asset.assetName + ".xml";
-        string editableAssetPath = targetPath + "/" +  editableMessage.assetName + "_EDITABLE" + ".xml";
+        string editableAssetPath = targetPath + "/" +  editableMessage.assetName + "_EDITABLE" + ".ecm";
         XmlSerializer writer = new(typeof(MessageAsset));
         FileStream file = File.Create(mainAssetPath);
         writer.Serialize(file, asset);
@@ -177,6 +181,7 @@ public class EditableMessage
     public Color backgroundTint = Color.white;
     public Vector2Int dimentions = new(100, 250);
     public MessageSection[] sections;
+    public string[] dependsOn = new string[0];
 }
 
 [Serializable]

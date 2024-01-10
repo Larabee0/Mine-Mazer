@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <EditableMessage xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <assetName>Test Message</assetName>
+  <assetName>Test Message 2</assetName>
   <backgroundImageIndex>-1</backgroundImageIndex>
   <backgroundTint>
     <r>0.0317728929</r>
@@ -84,4 +84,7 @@
       </colour>
     </MessageSection>
   </sections>
+  <dependsOn>
+    <string>Test Message</string>
+  </dependsOn>
 </EditableMessage>
