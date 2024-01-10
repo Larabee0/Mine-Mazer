@@ -196,6 +196,112 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e06221782e04aaf49b4b706d66363521, type: 3}
+--- !u!1 &599204090
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 599204093}
+  - component: {fileID: 599204092}
+  - component: {fileID: 599204091}
+  m_Layer: 0
+  m_Name: MessageTesting
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &599204091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599204090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 3689ea8d69b6a6c449ea0bad9cf3162f, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 0346a7cb560ce6b40b820b43db140c34,
+    type: 3}
+  m_SortingOrder: 0
+--- !u!114 &599204092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599204090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840ee0a231c18f4dafb79e070c01b3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  messageParts:
+  - text: Frostbaned Section below!
+    size: 87
+    italics: 0
+    bold: 1
+    newLines: 0
+    alignment: 1
+    colour: {r: 1, g: 1, b: 1, a: 1}
+  - text: 'If you are entering the Frostbaned Depths and '
+    size: 40
+    italics: 0
+    bold: 0
+    newLines: 3
+    alignment: 1
+    colour: {r: 1, g: 1, b: 1, a: 1}
+  - text: 'have not '
+    size: 40
+    italics: 0
+    bold: 1
+    newLines: 0
+    alignment: 1
+    colour: {r: 1, g: 1, b: 1, a: 1}
+  - text: 'completed depths training, '
+    size: 40
+    italics: 0
+    bold: 0
+    newLines: 0
+    alignment: 1
+    colour: {r: 1, g: 1, b: 1, a: 1}
+  - text: go to the Frostbaned Colony or Rendezvous Point 7 immediately.
+    size: 40
+    italics: 0
+    bold: 1
+    newLines: 0
+    alignment: 1
+    colour: {r: 1, g: 1, b: 1, a: 1}
+  backgroundImageIndex: -1
+  backgroundTint: {r: 0.031772893, g: 0.28020447, b: 0.9622642, a: 1}
+  dimentions: {x: 1001, y: 590}
+  assetName: Example Message
+  document: {fileID: 599204091}
+  messagePrefab: {fileID: 9197481963319205126, guid: 0346a7cb560ce6b40b820b43db140c34,
+    type: 3}
+  autoUpdate: 1
+--- !u!4 &599204093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599204090}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &652295663
 GameObject:
   m_ObjectHideFlags: 1
@@ -640,6 +746,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overUI: 0
+  northButton:
+    buttonDown: 0
+  southButton:
+    buttonDown: 0
+  interactButton:
+    buttonDown: 0
+  advanceDialogueButton:
+    buttonDown: 0
 --- !u!114 &1690054698
 MonoBehaviour:
   m_ObjectHideFlags: 0

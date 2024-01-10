@@ -23,8 +23,26 @@ public static class TextFormatter
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string SizeText(string text, int size)
     {
-
         return string.Format("<size={0}>{1}</size>", size, StripSpaces(text));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static string BreakText(string text)
+    {
+        return string.Format("<br>{0}</br>", StripSpaces(text));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static string AlignText(string text, TextAlignment alignment)
+    {
+        string alignTag = alignment switch
+        {
+            TextAlignment.Left => "left",
+            TextAlignment.Center => "center",
+            TextAlignment.Right => "right",
+            _ => "left",
+        };
+        return string.Format("<align={0}>{1}</align>", alignTag, StripSpaces(text));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
