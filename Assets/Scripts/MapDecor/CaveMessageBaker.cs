@@ -16,6 +16,7 @@ public class CaveMessageBaker : MonoBehaviour
     public Vector2Int dimentions = new (100,250);
     public string assetName = "Example Message";
     public string[] dependsOn;
+    public bool randomlyFound = true;
     public string prefabsDirectory = "";
     public string folderName = "";
     
@@ -72,6 +73,7 @@ public class CaveMessageBaker : MonoBehaviour
             dimentions = dimentions,
             messageText = PackageText(),
             dependsOn = dependsOn,
+            randomlyFound = randomlyFound,
         };
 
         EditableMessage editableMessage = new()

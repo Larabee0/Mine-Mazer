@@ -1,3 +1,4 @@
+using MazeGame.Input;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,26 @@ using Random = UnityEngine.Random;
 
 public class CaveMessageController : MonoBehaviour
 {
+    private static CaveMessageController instance;
+    public static CaveMessageController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                Debug.LogWarning("Expected Cave Message Controller instance not found. Order of operations issue? Or Cave Message Controller is disabled/missing.");
+            }
+            return instance;
+        }
+        private set
+        {
+            if (value != null && instance == null)
+            {
+                instance = value;
+            }
+        }
+    }
+
     [SerializeField] private SpatialParadoxGenerator mapGenerator;
 
     [SerializeField] private UIDocument document;
@@ -35,7 +56,16 @@ public class CaveMessageController : MonoBehaviour
         //     enabled = false;
         //     return;
         // }
-        
+
+        if (instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
 
         TextAsset[] allMessages = Resources.LoadAll<TextAsset>("Notes");
         
@@ -46,7 +76,7 @@ public class CaveMessageController : MonoBehaviour
             XmlSerializer reader = new(typeof(MessageAsset));
             MessageAsset asset = (MessageAsset)reader.Deserialize(stringReader);
 
-            asset.hash =  Hash128.Compute(asset.assetName);
+            asset.hash = Hash128.Compute(asset.assetName);
 
             if (hashToMessage.TryAdd(asset.hash, asset))
             {
@@ -65,11 +95,11 @@ public class CaveMessageController : MonoBehaviour
         unreadMessages.AddRange(messageAssetHashes);
         Debug.LogFormat("Loaded {0} Messages", messageAssetHashes.Count);
         UpdateReadableMessages();
-
+        InputManager.Instance.advanceDialogueButton.OnButtonReleased += CloseMessage;
         if (debugForceRandomOnStart)
         {
             Debug.Log("Testing random message show!");
-            if (ShowRandomMessage())
+            if (ShowRandomMessage(out _))
             {
                 Debug.LogFormat("Closing Test random message in {0} seconds!", debugLingerTime.ToString("0.0"));
                 Invoke(nameof(CloseMessage), debugLingerTime);
@@ -77,11 +107,16 @@ public class CaveMessageController : MonoBehaviour
         }
     }
 
-    public bool ShowRandomMessage()
+    public bool ShowRandomMessage(out Hash128 chosenMessage)
     {
         List<Hash128> pickAbleMessages = new(readableMessages);
+        if(pickAbleMessages.Count == 0)
+        {
+            chosenMessage = new Hash128();
+            return false ;
+        }
 
-        Hash128 chosenMessage = pickAbleMessages[Random.Range(0, pickAbleMessages.Count)];
+        chosenMessage = pickAbleMessages[Random.Range(0, pickAbleMessages.Count)];
 
         bool success;
         if(hashToMessage.TryGetValue(chosenMessage,out MessageAsset asset))
@@ -97,6 +132,15 @@ public class CaveMessageController : MonoBehaviour
         }
         UpdateReadableMessages();
         return success;
+    }
+    
+    public void TryShowMessageByName(string messageName)
+    {
+        Hash128 hash = Hash128.Compute(messageName);
+        if(hashToMessage.ContainsKey(hash))
+        {
+            ShowMessage(hash);
+        }
     }
 
     public void ShowMessage(Hash128 message)
@@ -118,6 +162,10 @@ public class CaveMessageController : MonoBehaviour
             if (document.rootVisualElement != null)
             {
                 currentMessage = new(messageContainer, hashToMessage[message]);
+                if (InputManager.Instance != null)
+                {
+                    InputManager.Instance.UnlockPointer();
+                }
             }
             else
             {
@@ -136,6 +184,10 @@ public class CaveMessageController : MonoBehaviour
         {
             document.rootVisualElement.Remove(currentMessage.root);
             currentMessage = null;
+            if (InputManager.Instance != null)
+            {
+                InputManager.Instance.LockPointer();
+            }
         }
     }
 
@@ -145,7 +197,7 @@ public class CaveMessageController : MonoBehaviour
         {
             Hash128 hash = unreadMessages[i];
             MessageAsset asset = hashToMessage[hash];
-            if (asset.shownToPlayer || readMesssages.Contains(hash))
+            if (!asset.randomlyFound || asset.shownToPlayer || readMesssages.Contains(hash))
             {
                 readMesssages.Add(hash);
                 unreadMessages.RemoveAt(i);
@@ -205,6 +257,7 @@ public class MessageContainer
     public MessageContainer(VisualElement root, Texture2D backgroundImage = null)
     {
         this.root = root;
+        messageBody = root;
         text = root.Q<Label>();
         this.backgroundImage = backgroundImage;
     }
@@ -217,6 +270,7 @@ public class MessageAsset
     public int backgroundIndex = -1;
     public Color32 backgroundTint = Color.white;
     public Vector2Int dimentions;
+    public bool randomlyFound = true;
     public string messageText = "Sample Text.";
     public string[] dependsOn = new string[0];
     [XmlIgnore] public Hash128 hash;
