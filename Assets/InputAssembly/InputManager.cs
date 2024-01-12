@@ -12,6 +12,7 @@ namespace MazeGame.Input
     public delegate void OverUIChanged(bool newValue);
     public delegate void Vector2Axis(Vector2 axis);
     public delegate void Pluse();
+    public delegate void IntAxis(int axis);
 
     [Serializable]
     public class ButtonEventContainer
@@ -129,6 +130,9 @@ namespace MazeGame.Input
         public bool LookActive => lookActive;
         public Vector2 MoveAxis => PlayerActions.Move.ReadValue<Vector2>();
 
+        // scroll axis;
+        public IntAxis scrollDirection;
+
         // Look delta members.
         private Coroutine lookProcess;
         private bool moveActive = false;
@@ -203,6 +207,8 @@ namespace MazeGame.Input
                 PlayerActions.Move.started += MoveStarted;
                 PlayerActions.Move.canceled += MoveStopped;
 
+                playerControls.Player.ItemScroll.performed += ScrollInvoke;
+
                 northButton.Bind();
                 southButton.Bind();
                 interactButton.Bind();
@@ -222,6 +228,8 @@ namespace MazeGame.Input
                 PlayerActions.Look.canceled -= LookStopped;
                 PlayerActions.Move.started -= MoveStarted;
                 PlayerActions.Move.canceled -= MoveStopped;
+
+                playerControls.Player.ItemScroll.performed -= ScrollInvoke;
 
                 northButton.Unbind();
                 southButton.Unbind();
@@ -256,6 +264,14 @@ namespace MazeGame.Input
             PlayerActions.Enable();
             DialogueActions.Disable();
         }
+
+
+        private void ScrollInvoke(InputAction.CallbackContext context)
+        {
+            int value = (int)context.ReadValue<float>();
+            scrollDirection?.Invoke(value);
+        }
+
 
         // look is recieved as a position delta. exactly how Input.GetAxis("Mouse X/Y") works.
         // it has been restructed to run in coroutines which run everyframe the control is "active" - aka delta != Vector2.Zero

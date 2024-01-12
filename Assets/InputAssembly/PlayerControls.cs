@@ -98,6 +98,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ItemScroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""aab1f162-0140-4518-b688-d38c36a62933"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": ""Clamp(min=-1,max=1)"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -364,6 +373,50 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""MinimapZoomOut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1011c276-7401-4d00-a2f2-d385dd6c0cb9"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""ItemScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""e3815189-34f2-4f68-aa9b-c47e85104309"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ItemScroll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""da89b3e8-4bd2-459f-8c66-d00f35df00be"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ItemScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""fe9247e0-eb1b-4748-a684-b5a170d62b91"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ItemScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1006,6 +1059,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_MinimapZoomIn = m_Player.FindAction("MinimapZoomIn", throwIfNotFound: true);
         m_Player_MinimapZoomOut = m_Player.FindAction("MinimapZoomOut", throwIfNotFound: true);
+        m_Player_ItemScroll = m_Player.FindAction("ItemScroll", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1090,6 +1144,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_MinimapZoomIn;
     private readonly InputAction m_Player_MinimapZoomOut;
+    private readonly InputAction m_Player_ItemScroll;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1102,6 +1157,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @MinimapZoomIn => m_Wrapper.m_Player_MinimapZoomIn;
         public InputAction @MinimapZoomOut => m_Wrapper.m_Player_MinimapZoomOut;
+        public InputAction @ItemScroll => m_Wrapper.m_Player_ItemScroll;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1135,6 +1191,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MinimapZoomOut.started += instance.OnMinimapZoomOut;
             @MinimapZoomOut.performed += instance.OnMinimapZoomOut;
             @MinimapZoomOut.canceled += instance.OnMinimapZoomOut;
+            @ItemScroll.started += instance.OnItemScroll;
+            @ItemScroll.performed += instance.OnItemScroll;
+            @ItemScroll.canceled += instance.OnItemScroll;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1163,6 +1222,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MinimapZoomOut.started -= instance.OnMinimapZoomOut;
             @MinimapZoomOut.performed -= instance.OnMinimapZoomOut;
             @MinimapZoomOut.canceled -= instance.OnMinimapZoomOut;
+            @ItemScroll.started -= instance.OnItemScroll;
+            @ItemScroll.performed -= instance.OnItemScroll;
+            @ItemScroll.canceled -= instance.OnItemScroll;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1372,6 +1434,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnMinimapZoomIn(InputAction.CallbackContext context);
         void OnMinimapZoomOut(InputAction.CallbackContext context);
+        void OnItemScroll(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

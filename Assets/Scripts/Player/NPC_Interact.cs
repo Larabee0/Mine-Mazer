@@ -16,12 +16,12 @@ public class NPC_Interact : MonoBehaviour
     [SerializeField] private Transform InteractorSource;
     [SerializeField] private float InteractRange;
     [SerializeField] private LayerMask npcLayer;
-
+    [SerializeField] private Texture2D interactionIcon;
     private WorldWayPoint tooltip;
 
     private bool hitInteractable = false;
     public bool HitInteractable => hitInteractable;
-
+    private bool closedToolTip = true;
     private IInteractable interactable;
 
     private void Start()
@@ -36,22 +36,21 @@ public class NPC_Interact : MonoBehaviour
 
     private void InteractableToolTip(Vector3 hitPosition)
     {
-        if(interactable != null && WorldWayPointsController.Instance != null)
+        if(interactable != null && InteractMessage.Instance != null)
         {
-            RemoveInteractableToolTip();
             string tooltipText = interactable.GetToolTipText();
-
-            tooltip = WorldWayPointsController.Instance.AddwayPoint(tooltipText, hitPosition, Color.green);
+            InteractMessage.Instance.ShowInteraction(tooltipText, interactionIcon, Color.yellow);
         }
     }
 
     private void RemoveInteractableToolTip()
     {
-        if (tooltip != null && WorldWayPointsController.Instance != null)
+        if (InteractMessage.Instance == null || closedToolTip)
         {
-            WorldWayPointsController.Instance.RemoveWaypoint(tooltip);
-            tooltip = null;
+            return;
         }
+        closedToolTip = true;
+        InteractMessage.Instance.HideInteraction();
     }
 
     private void Update()
@@ -64,8 +63,21 @@ public class NPC_Interact : MonoBehaviour
                 if(interactable != this.interactable)
                 {
                     this.interactable = interactable;
-                    InteractableToolTip(hitInfo.point);
                 }
+                InteractableToolTip(hitInfo.point);
+                closedToolTip = false;
+                hitInteractable = true;
+                return;
+            }
+            else if(hitInfo.collider.gameObject.GetComponentInParent<IInteractable>() != null)
+            {
+                interactable= hitInfo.collider.gameObject.GetComponentInParent<IInteractable>();
+                if (interactable != this.interactable)
+                {
+                    this.interactable = interactable;
+                }
+                InteractableToolTip(hitInfo.point);
+                closedToolTip = false;
                 hitInteractable = true;
                 return;
             }

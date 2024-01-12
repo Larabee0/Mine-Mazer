@@ -112,7 +112,7 @@ public class SpatialParadoxGenerator : MonoBehaviour
 
     private void Start()
     {
-        InputManager.Instance.interactButton.OnButtonReleased += PlaceStagnationBeacon;
+        // InputManager.Instance.interactButton.OnButtonReleased += PlaceStagnationBeacon;
 
         tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;

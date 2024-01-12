@@ -1,36 +1,76 @@
+using MazeGame.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemCatagory
+public enum Item
 {
-    Crystal,
-    Mushroom,
-    Metal,
-    Equipment
+    LumenCrystal,
+    GoldenTrumpetMycelium,
+    VelvetBud,
+    Versicolor,
+    Antarticite,
+    Cinnabite,
+    Torch,
+    Pickaxe
+}
+
+[Serializable]
+public class ItemStats
+{
+    public string name;
+    public Item type;
 }
 
 public class MapResource : MonoBehaviour, IInteractable
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+    [SerializeField] protected Collider itemCollider;
+    [SerializeField] protected ItemStats itemStats;
+    public Vector3 heldOrenintationOffset;
+    [SerializeField,Tooltip("If left blank, falls back to ItemStats.name")] protected string toolTipNameOverride;
 
+    protected virtual string ToolTipName
+    {
+        get
+        {
+            if(string.IsNullOrEmpty( toolTipNameOverride)|| string.IsNullOrWhiteSpace(toolTipNameOverride))
+            {
+                return itemStats.name;
+            }
+            return toolTipNameOverride;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    public ItemStats ItemStats => itemStats;
 
+    public virtual string GetToolTipText()
+    {
+        if (InputManager.GamePadPresent)
+        {
+            return string.Format("B to  Pick Up {0}", ToolTipName);
+        }
+        else
+        {
+            return string.Format("E to Pick Up {0}", ToolTipName);
+        }
     }
 
-    public string GetToolTipText()
+    public virtual void Interact()
     {
-        throw new System.NotImplementedException();
+        if(Inventory.Instance== null)
+        {
+            return;
+        }
+
+        Inventory.Instance.AddItem(itemStats.type, 1,this);
     }
 
-    public void Interact()
+    public virtual void SetColliderActive(bool active)
     {
-        throw new System.NotImplementedException();
+        if(itemCollider != null)
+        {
+            itemCollider.enabled = active;
+        }
     }
 }

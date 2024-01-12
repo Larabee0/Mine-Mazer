@@ -23,7 +23,22 @@ public class BreakableWall : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        BreakWall();
+        if (PlayerCanBreak())
+        {
+            BreakWall();
+        }
+    }
+
+    private bool PlayerCanBreak()
+    {
+        if (Inventory.Instance)
+        {
+            if(Inventory.Instance.CurHeldItem ==Item.Pickaxe)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void OnDrawGizmosSelected()
@@ -38,13 +53,23 @@ public class BreakableWall : MonoBehaviour, IInteractable
 
     public string GetToolTipText()
     {
-        if (InputManager.GamePadPresent)
+        bool canMine = PlayerCanBreak();
+        
+
+        if (canMine)
         {
-            return "B to Mine Wall";
+            string control = InputManager.GamePadPresent switch
+            {
+                true => "B",
+                false => "E"
+            };
+            return string.Format("{0} to Unblock", control);
         }
         else
         {
-            return "E to Mine Wall";
+            return "Blocked Tunnel, Unblock with Pickaxe";
         }
+
+        
     }
 }

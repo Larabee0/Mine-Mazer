@@ -4,4 +4,10 @@
         <ui:VisualElement picking-mode="Ignore" name="MiniMap" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/UI%20Toolkit/MiniMap/MiniMapOutput.renderTexture?fileID=8400000&amp;guid=6b5a7d27c18fcfa4491b21d2e27b571a&amp;type=2#MiniMapOutput&apos;); position: absolute; width: 384px; height: 384px; left: 32px; top: 32px;" />
         <ui:VisualElement name="WayPoints" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
     </ui:VisualElement>
+    <ui:VisualElement name="InteractionText" picking-mode="Ignore" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; align-items: center; left: 0; top: 0; right: 0; bottom: 0; flex-direction: column-reverse; display: flex;">
+        <ui:VisualElement picking-mode="Ignore" style="background-color: rgba(0, 0, 0, 0); margin-bottom: 50px; align-items: center;">
+            <ui:VisualElement name="InteractImage" picking-mode="Ignore" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 128px; height: 128px;" />
+            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="InteractText" picking-mode="Ignore" class="waypointname" style="-unity-text-align: middle-center;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>
