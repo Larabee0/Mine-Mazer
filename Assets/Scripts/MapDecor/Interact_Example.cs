@@ -45,6 +45,5 @@ public class Interact_Example : MonoBehaviour, IInteractable
         {
             return string.Format("E to Interact with {0}",Dialogue.GetComponent<Character>().NameText);
         }
-        
     }
 }

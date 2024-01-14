@@ -52,12 +52,98 @@ public class Inventory : MonoBehaviour
             return;
         }
 
+        InputManager.Instance.scrollDirection += ScrollInventory;
+    }
+
+    private void Start()
+    {
         for (int i = 0; i < defaultItems.Length; i++)
         {
             AddItem(defaultItems[i].ItemStats.type, 1, defaultItems[i]);
         }
+    }
+
+    public void AddItem(Item itemType, int quantity, MapResource itemInstance)
+    {
+        if (inventory.ContainsKey(itemType))
+        {
+            inventory[itemType] += quantity;
+            Destroy(itemInstance.gameObject);
+        }
+        else
+        {
+            inventory.Add(itemType, quantity);
+            assets.Add(itemType, itemInstance);
+            itemInstance.SetColliderActive(false);
+            itemInstance.gameObject.SetActive(false);
+            itemInstance.transform.parent = virtualhands;
+            itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
+            UpdateInventory();
+        }
+    }
+
+    public bool TryRemoveItem(Item item, int quantity)
+    {
+        if(inventory.ContainsKey(item))
+        {
+            inventory[item]-=quantity;
+            
+            if(inventory[item] <= 0)
+            {
+                inventory.Remove(item);
+                
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CanTrade(Item taken, int take = 1)
+    {
+        if (inventory.TryGetValue(taken, out int quantity))
+        {
+            if(quantity >= take)
+            {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public Dictionary<Item,int> GetAllItemsMatchingCategory(ItemCategory taken)
+    {
+        HashSet<Item> validItems = ItemUtility.GetItemsInCategory(taken);
+
+        Dictionary<Item, int> playerItems = new();
+
+        foreach (Item item in validItems)
+        {
+            if(inventory.TryGetValue(item,out int quantity))
+            {
+                playerItems.TryAdd(item, quantity);
+            }
+        }
         
-        InputManager.Instance.scrollDirection += ScrollInventory;
+        if(playerItems.Count == 0)
+        {
+            return null;
+        }
+
+        return playerItems;
+    }
+
+    public bool TryGetItem(Item item, out KeyValuePair<Item, int> itemQuantity)
+    {
+        if(inventory.TryGetValue(item, out int value))
+        {
+            itemQuantity = new(item,value);
+            return true;
+        }
+        itemQuantity = new(item, 0);
+        return false;
     }
 
     private void ScrollInventory(int axis)
@@ -79,25 +165,6 @@ public class Inventory : MonoBehaviour
             return curIndex;
         }
         return 0;
-    }
-
-    public void AddItem(Item itemType, int quantity, MapResource itemInstance)
-    {
-        if (inventory.ContainsKey(itemType))
-        {
-            inventory[itemType] += quantity;
-            Destroy(itemInstance.gameObject);
-        }
-        else
-        {
-            inventory.Add(itemType, quantity);
-            assets.Add(itemType, itemInstance);
-            itemInstance.SetColliderActive(false);
-            itemInstance.gameObject.SetActive(false);
-            itemInstance.transform.parent = virtualhands;
-            itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
-            UpdateInventory();
-        }
     }
 
     private void UpdateInventory()

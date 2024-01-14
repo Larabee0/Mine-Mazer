@@ -6,10 +6,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 namespace MazeGame.Input
 {
-    public delegate void OverUIChanged(bool newValue);
+    public delegate void BoolPluse(bool newValue);
     public delegate void Vector2Axis(Vector2 axis);
     public delegate void Pluse();
     public delegate void IntAxis(int axis);
@@ -117,7 +118,7 @@ namespace MazeGame.Input
         // Over UI stuff, currently unused.
         private InputSystemUIInputModule eventSystemInput;
         public bool overUI = false;
-        public OverUIChanged OnOverUIChanged;
+        public BoolPluse OnOverUIChanged;
 
         public InputSystemUIInputModule EventSystemInput => eventSystemInput;
 
@@ -265,6 +266,10 @@ namespace MazeGame.Input
             DialogueActions.Disable();
         }
 
+        public void SetUIToolkitFocus()
+        {
+            EventSystem.current.SetSelectedGameObject(FindObjectOfType<PanelEventHandler>().gameObject);
+        }
 
         private void ScrollInvoke(InputAction.CallbackContext context)
         {

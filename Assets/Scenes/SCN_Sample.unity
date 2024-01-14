@@ -1203,6 +1203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6cdb22ffd2e0f04ebf0a5b0aab78309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerUi: {fileID: 2129518432}
   overUI: 0
   northButton:
     buttonDown: 0
@@ -1394,6 +1395,7 @@ GameObject:
   - component: {fileID: 2129518434}
   - component: {fileID: 2129518435}
   - component: {fileID: 2129518436}
+  - component: {fileID: 2129518437}
   m_Layer: 5
   m_Name: PlayerUI
   m_TagString: Untagged
@@ -1486,3 +1488,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiController: {fileID: 2129518432}
+--- !u!114 &2129518437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129518431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 536d758ff88e0e6448c2b1263b101239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerUI: {fileID: 2129518432}
+  tradingUiPrefab: {fileID: 9197481963319205126, guid: 59200017c675f2a49af4b8fa62010f5c,
+    type: 3}
