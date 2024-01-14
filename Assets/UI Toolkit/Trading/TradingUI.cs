@@ -173,7 +173,7 @@ public class TradingUI : MonoBehaviour
         bool withdrawn = (Inventory.Instance.CanTrade(item, takeQuantity)
             && Inventory.Instance.TryRemoveItem(item, takeQuantity));
 
-        if (withdrawn)
+        if (withdrawn && givenItem != null)
         {
             Inventory.Instance.AddItem(givenItem.ItemStats.type, giveQuantity, Instantiate(givenItem));
         }

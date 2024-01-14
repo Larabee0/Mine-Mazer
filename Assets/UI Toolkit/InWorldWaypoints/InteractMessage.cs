@@ -62,9 +62,15 @@ public class InteractMessage : MonoBehaviour
         open = true;
     }
 
-    public void HideInteraction()
+    public void HideInteraction(bool now = false)
     {
         StopAllCoroutines();
+        if (now)
+        {
+            interactRoot.style.display = DisplayStyle.None;
+            open = false;
+            return;
+        }
         interactRoot.style.opacity = 1;
         StartCoroutine(HideInteractionFade());
     }

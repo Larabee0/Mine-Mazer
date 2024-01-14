@@ -30,12 +30,12 @@ public class Interact_Example : MonoBehaviour, IInteractable
         }
     }
 
-    public void Interact()
+    public virtual void Interact()
     {
         Dialogue.ExecuteBlock("NPC Interact");
     }
 
-    public string GetToolTipText()
+    public virtual string GetToolTipText()
     {
         if (InputManager.GamePadPresent)
         {

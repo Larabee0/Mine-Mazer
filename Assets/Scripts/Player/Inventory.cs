@@ -59,7 +59,7 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < defaultItems.Length; i++)
         {
-            AddItem(defaultItems[i].ItemStats.type, 1, defaultItems[i]);
+            AddItem(defaultItems[i].ItemStats.type, 1, Instantiate(defaultItems[i]));
         }
     }
 
@@ -91,9 +91,11 @@ public class Inventory : MonoBehaviour
             if(inventory[item] <= 0)
             {
                 inventory.Remove(item);
+                Destroy(assets[item].gameObject);
+                assets.Remove(item);
                 
             }
-
+            UpdateInventory();
             return true;
         }
 
