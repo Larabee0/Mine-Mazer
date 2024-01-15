@@ -9,9 +9,12 @@ public class BreakableWall : MonoBehaviour, IInteractable
     [SerializeField] private Rigidbody[] bodies;
     [SerializeField] private Vector2 rockLingerTimeRange;
     public Connector connector;
-    
+
+    public Pluse OnWallBreak;
+
     private void BreakWall()
     {
+        OnWallBreak?.Invoke();
         transform.DetachChildren();
         for (int i = 0; i < bodies.Length; i++)
         {

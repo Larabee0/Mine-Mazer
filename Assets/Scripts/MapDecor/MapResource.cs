@@ -119,6 +119,8 @@ public class MapResource : MonoBehaviour, IInteractable
     [SerializeField] protected Collider itemCollider;
     [SerializeField] protected ItemStats itemStats;
     public Vector3 heldOrenintationOffset;
+    public Vector3 heldpositonOffset;
+    public Vector3 heldScaleOffset = Vector3.one;
     [SerializeField,Tooltip("If left blank, falls back to ItemStats.name")] protected string toolTipNameOverride;
 
     protected virtual string ToolTipName
