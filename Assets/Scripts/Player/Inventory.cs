@@ -27,7 +27,8 @@ public class Inventory : MonoBehaviour
 
     public Dictionary<Item, int> inventory = new();
     public Dictionary<Item, MapResource> assets = new();
-    public Item CurHeldItem => inventoryOrder[curIndex];
+    public Item? CurHeldItem => inventoryOrder.Count > 0 ? inventoryOrder[curIndex] : null;
+
     [SerializeField] private List<Item> inventoryOrder = new();
     [SerializeField] private int curIndex = -1;
     [SerializeField] private MapResource heldItem;

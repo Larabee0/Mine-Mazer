@@ -33,7 +33,7 @@ public class BreakableWall : MonoBehaviour, IInteractable
     {
         if (Inventory.Instance)
         {
-            if(Inventory.Instance.CurHeldItem ==Item.Pickaxe)
+            if(Inventory.Instance.CurHeldItem == Item.Pickaxe)
             {
                 return true;
             }
