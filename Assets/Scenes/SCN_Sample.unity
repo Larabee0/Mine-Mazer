@@ -616,6 +616,11 @@ GameObject:
   - component: {fileID: 528317577}
   - component: {fileID: 528317588}
   - component: {fileID: 528317587}
+  - component: {fileID: 528317593}
+  - component: {fileID: 528317592}
+  - component: {fileID: 528317591}
+  - component: {fileID: 528317590}
+  - component: {fileID: 528317589}
   m_Layer: 0
   m_Name: Tutorial
   m_TagString: Untagged
@@ -652,8 +657,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 780
-    y: 259
+    x: 779
+    y: 258
     width: 123
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -667,13 +672,18 @@ MonoBehaviour:
   - {fileID: 528317549}
   - {fileID: 528317586}
   - {fileID: 528317585}
+  - {fileID: 528317593}
+  - {fileID: 528317592}
   - {fileID: 528317584}
   - {fileID: 528317583}
   - {fileID: 528317582}
   - {fileID: 528317581}
   - {fileID: 528317580}
   - {fileID: 528317579}
+  - {fileID: 528317591}
+  - {fileID: 528317590}
   - {fileID: 528317578}
+  - {fileID: 528317589}
   - {fileID: 528317577}
   - {fileID: 528317587}
   - {fileID: 528317545}
@@ -694,7 +704,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: -159.5, y: 171.5}
+  scrollPos: {x: -546, y: -118}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 612
@@ -707,7 +717,8 @@ MonoBehaviour:
     height: 0
   selectedBlocks:
   - {fileID: 528317542}
-  selectedCommands: []
+  selectedCommands:
+  - {fileID: 528317593}
   variables:
   - {fileID: 528317548}
   description: 
@@ -2008,6 +2019,88 @@ MonoBehaviour:
   targetObject: {fileID: 528317540}
   methodName: FadeOut
   delay: 0
+--- !u!114 &528317589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528317540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd2f6be51b3d7490ba5633ee095d0391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 49
+  indentLevel: 0
+  soundClip: {fileID: 8300000, guid: e4f9adc80a2c1fe4ebb2a98e0ddaa05f, type: 3}
+  volume: 1
+  waitUntilFinished: 0
+--- !u!114 &528317590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528317540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd2f6be51b3d7490ba5633ee095d0391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 48
+  indentLevel: 0
+  soundClip: {fileID: 8300000, guid: 60ae45a7f1ba5fd4a8b029fa595860a0, type: 3}
+  volume: 1
+  waitUntilFinished: 0
+--- !u!114 &528317591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528317540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bce3bd679be2c94196f3f6aaeb33f0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 47
+  indentLevel: 0
+--- !u!114 &528317592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528317540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 831c208af3cccf24b80cc6f3768919bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 46
+  indentLevel: 0
+  soundClip: {fileID: 8300000, guid: d9acd27575c48554dbae4da3fee428e1, type: 3}
+  volume: 1
+  loop: 0
+--- !u!114 &528317593
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528317540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd2f6be51b3d7490ba5633ee095d0391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 45
+  indentLevel: 0
+  soundClip: {fileID: 8300000, guid: 5840ac1416c678c439ad0982d5e98992, type: 3}
+  volume: 1
+  waitUntilFinished: 1
 --- !u!1001 &580653608
 PrefabInstance:
   m_ObjectHideFlags: 0
