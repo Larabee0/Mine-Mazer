@@ -29,7 +29,7 @@ public class PlayerUIController : MonoBehaviour
 
     private VisualElement Root => playerUi.rootVisualElement;
 
-
+    private VisualElement screenFade;
     private VisualElement miniMapContainer;
 
     private void Awake()
@@ -44,10 +44,45 @@ public class PlayerUIController : MonoBehaviour
             return;
         }
         miniMapContainer = Root.Q("MiniMap");
+        screenFade = Root.Q("ScreenFade");
+        screenFade.style.display = DisplayStyle.None;
     }
     
     public void SetMiniMapVisible(bool visible)
     {
         miniMapContainer.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    public void FadeIn(float duration = 1)
+    {
+        FadeScreen(1, 0, duration);
+    }
+
+    public void FadeOut(float duration = 1)
+    {
+        FadeScreen(0, 1, duration);
+    }
+
+    public void FadeScreen(float startAlpha, float endAlpha, float duration)
+    {
+        StartCoroutine(FadeScreenOperation(startAlpha, endAlpha, duration));
+    }
+
+    private IEnumerator FadeScreenOperation(float startAlpha, float endAlpha, float duration)
+    {
+        screenFade.style.display = DisplayStyle.Flex;
+
+        for (float i = 0; i < duration; i += Time.deltaTime)
+        {
+            yield return null;
+            float t = Mathf.InverseLerp(0, duration, i);
+            float opacity = Mathf.Lerp(startAlpha, endAlpha, t);
+            screenFade.style.opacity = opacity;
+        }
+        if(endAlpha == 0)
+        {
+            yield return null;
+            screenFade.style.display = DisplayStyle.None;
+        }
     }
 }
