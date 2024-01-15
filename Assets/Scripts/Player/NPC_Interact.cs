@@ -36,10 +36,13 @@ public class NPC_Interact : MonoBehaviour
 
     private void InteractableToolTip(Vector3 hitPosition)
     {
-        if(interactable != null && InteractMessage.Instance != null)
+        if (interactable != null && InteractMessage.Instance != null)
         {
             string tooltipText = interactable.GetToolTipText();
-            InteractMessage.Instance.ShowInteraction(tooltipText, interactionIcon, Color.yellow);
+            if (!string.IsNullOrEmpty(tooltipText) && !string.IsNullOrWhiteSpace(tooltipText))
+            {
+                InteractMessage.Instance.ShowInteraction(tooltipText, interactionIcon, Color.yellow);
+            }
         }
     }
 

@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class TutorialStarter : MonoBehaviour
 {
+    [SerializeField] private float screenFadeTime = 3f;
     [SerializeField] private float tutorialDelayTime = 2f;
     [SerializeField] private Transform EudieWayPoint;
 
@@ -69,4 +70,13 @@ public class TutorialStarter : MonoBehaviour
         }
     }
 
+    public void FadeIn()
+    {
+        PlayerUIController.Instance.FadeIn(screenFadeTime);
+    }
+
+    public void FadeOut()
+    {
+        PlayerUIController.Instance.FadeOut(0);
+    }
 }
