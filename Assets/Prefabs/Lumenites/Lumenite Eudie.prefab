@@ -187,7 +187,7 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 5534966915953129614}
+  - {fileID: 6790767218374480548}
   selectedCommands: []
   variables: []
   description: 
@@ -1813,7 +1813,7 @@ MonoBehaviour:
   nodeRect:
     serializedVersion: 2
     x: -577.6935
-    y: 34.253662
+    y: 33.253662
     width: 132
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -2616,8 +2616,8 @@ MonoBehaviour:
   eudieWaypoint: {fileID: 4151477205938020254}
   eudieItem: {fileID: 6876458769479377363}
   starterItems:
-  - {fileID: 2186324674680031705, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2, type: 3}
   - {fileID: 2427611828371672613, guid: 7e2e54d9c459107468e3889920e81a3d, type: 3}
+  - {fileID: 2186324674680031705, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2, type: 3}
   tutorialAreaWalls: []
   lumen: {fileID: 0}
   SkipToPickUpEudie: 0
@@ -2663,6 +2663,7 @@ MonoBehaviour:
   placementPositionOffset: {x: 0, y: 0.5, z: 0}
   toolTipNameOverride: 
   pickUpEudie: 0
+  putDownEudieToolTip: 0
 --- !u!4 &8444363788590639654 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7922335778751766424, guid: 8dae75205a939fc4cbe6c074a6babfe3,

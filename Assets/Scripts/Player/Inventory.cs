@@ -216,8 +216,8 @@ public class Inventory : MonoBehaviour
         if (curIndex == -1)
         {
             curIndex = 0;
-            MoveItemToHand();
         }
+        MoveItemToHand();
     }
 
     private void MoveItemToHand()
@@ -240,6 +240,16 @@ public class Inventory : MonoBehaviour
         else
         {
             Debug.LogError("Target item was not contained in the assets dictionary!");
+        }
+    }
+
+    public void TryMoveItemToHand(Item target)
+    {
+        int index = inventoryOrder.IndexOf(target);
+        if(index >= 0)
+        {
+            curIndex = index;
+            MoveItemToHand();
         }
     }
 

@@ -55,7 +55,7 @@ public class Eudie_Tutorial : NPCTrade
 
     private void EnterColonyBark()
     {
-        Invoke(nameof(EnterColonyDelay), 3);
+        Invoke(nameof(EnterColonyDelay), 2.5f);
     }
 
     private void EnterColonyDelay()
@@ -185,6 +185,8 @@ public class Eudie_Tutorial : NPCTrade
         {
             Inventory.Instance.AddItem(starterItems[i].ItemStats.type, 1, Instantiate(starterItems[i]));
         }
+
+        Inventory.Instance.TryMoveItemToHand(Item.Torch);
     }
 
     public void GivenLumen()
@@ -212,11 +214,18 @@ public class Eudie_Tutorial : NPCTrade
         atColony = true;
         eudieItem.MakePlaceable();
         eudieItem.OnEudiePlaced += EudiePlaced;
+
+        eudieItem.putDownEudieToolTip = true;
+        if (Inventory.Instance.CurHeldItem != Item.Eudie)
+        {
+            Inventory.Instance.TryMoveItemToHand(Item.Eudie);
+        }
+        InteractMessage.Instance.ShowInteraction(eudieItem.GetToolTipText(), null, Color.white);
     }
 
     private void EudiePlaced()
     {
-        Invoke(nameof(DelayedHunger), 3);
+        Invoke(nameof(DelayedHunger), 0.2f);
     }
 
     private void DelayedHunger()

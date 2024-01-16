@@ -176,6 +176,8 @@ public class TradingUI : MonoBehaviour
         if (withdrawn && givenItem != null)
         {
             Inventory.Instance.AddItem(givenItem.ItemStats.type, giveQuantity, Instantiate(givenItem));
+
+            Inventory.Instance.TryMoveItemToHand(givenItem.ItemStats.type);
         }
 
         CloseTrading(withdrawn);
