@@ -15,7 +15,10 @@ public enum Item
     Cinnabite,
     Torch,
     Pickaxe,
-    Eudie
+    Eudie,
+    StagnationBeacon,
+    BrokenHeart,
+    Soup
 }
 
 public enum ItemCategory
@@ -52,7 +55,10 @@ public static class ItemUtility
             ItemCategory.Equippment, new ()
             {
                 Item.Torch,
-                Item.Pickaxe
+                Item.Pickaxe,
+                Item.StagnationBeacon,
+                Item.BrokenHeart,
+                Item.Soup
             }
         },
 
@@ -118,9 +124,12 @@ public class MapResource : MonoBehaviour, IInteractable
 {
     [SerializeField] protected Collider itemCollider;
     [SerializeField] protected ItemStats itemStats;
+    [SerializeField] protected bool Placeable;
     public Vector3 heldOrenintationOffset;
     public Vector3 heldpositonOffset;
     public Vector3 heldScaleOffset = Vector3.one;
+    protected Vector3 originalScale;
+    public Vector3 placementPositionOffset = Vector3.zero;
     [SerializeField,Tooltip("If left blank, falls back to ItemStats.name")] protected string toolTipNameOverride;
 
     protected virtual string ToolTipName
@@ -136,6 +145,10 @@ public class MapResource : MonoBehaviour, IInteractable
     }
 
     public ItemStats ItemStats => itemStats;
+    protected virtual void Awake()
+    {
+        originalScale = transform.localScale;
+    }
 
     public virtual string GetToolTipText()
     {
@@ -164,6 +177,33 @@ public class MapResource : MonoBehaviour, IInteractable
         if(itemCollider != null)
         {
             itemCollider.enabled = active;
+        }
+    }
+
+    public virtual void SetMapResourceActive(bool active)
+    {
+        gameObject.SetActive(active);
+    }
+
+    public virtual void PlaceItem()
+    {
+        if (Placeable)
+        {
+            Ray r = new(Camera.main.transform.position, Camera.main.transform.forward);
+            if (Physics.Raycast(r, out RaycastHit hitInfo, 5))
+            {
+                if (Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item))
+                {
+                    Vector3 playerPos = Inventory.Instance.transform.position;
+                    Vector3 toPlayer = (playerPos - hitInfo.point).normalized;
+                    item.gameObject.transform.parent = FindObjectOfType<SpatialParadoxGenerator>().CurPlayerSection.transform;
+                    item.gameObject.transform.position = hitInfo.point+ placementPositionOffset;
+                    item.gameObject.transform.forward = toPlayer;
+                    item.gameObject.transform.localScale = originalScale;
+                    item.SetMapResourceActive(true);
+                    item.SetColliderActive(true);
+                }
+            }
         }
     }
 }

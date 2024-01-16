@@ -4,11 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCTrade : Interact_Example
+[Serializable]
+public class TradeOption
 {
-    [Header("Trader")]
     public string tradeUIText;
-    public string tradeCloseReturnBlock;
     public string tradeCloseSuccessBlock;
     [Header("Takes")]
     public bool specific;
@@ -18,24 +17,58 @@ public class NPCTrade : Interact_Example
     [Header("Gives")]
     public MapResource givenItem;
     public int giveQuantity = 1;
-    
+}
 
-    private void Awake()
+public class NPCTrade : Interact_Example
+{
+    [Header("Trader")]
+    public string tradeCloseReturnBlock;
+
+    [SerializeField] protected string tradeIndexVariableName;
+    [SerializeField] protected TradeOption[] tradeOptions;
+
+    protected TradeOption curOption;
+
+    protected override void Start()
     {
+        base.Start();
+        if(tradeOptions.Length > 0 )
+        {
+            curOption = tradeOptions[0];
+        }
+        else
+        {
+            Debug.LogError("No trade options filled out.", gameObject);
+        }
     }
 
     public void AttemptTrade()
     {
+        int index = Dialogue.GetIntegerVariable(tradeIndexVariableName);
+        if(tradeOptions.Length > 0)
+        {
+            curOption = tradeOptions[index];
+            AttemptTradeOption(curOption);
+        }
+        else
+        {
+            Debug.LogError("No trade options filled out.", gameObject);
+        }
+
+    }
+
+    public void AttemptTradeOption(TradeOption option)
+    {
         if (TradingUI.Instance)
         {
             TradingUI.Instance.OnTradeClose += TradeClose;
-            if(specific)
+            if(option.specific)
             {
-                TradingUI.Instance.OpenTrading(specificItem, givenItem, takeQuantity, giveQuantity, tradeUIText);
+                TradingUI.Instance.OpenTrading(option.specificItem, option.givenItem, option.takeQuantity, option.giveQuantity, option.tradeUIText);
             }
             else
             {
-                TradingUI.Instance.OpenTrading(category, givenItem, takeQuantity, giveQuantity, tradeUIText);
+                TradingUI.Instance.OpenTrading(option.category, option.givenItem, option.takeQuantity, option.giveQuantity, option.tradeUIText);
             }
         }
         else
@@ -47,9 +80,9 @@ public class NPCTrade : Interact_Example
     private void TradeClose(bool newValue)
     {
         TradingUI.Instance.OnTradeClose -= TradeClose;
-        if (newValue)
+        if (newValue && curOption != null)
         {
-            TradeClose(tradeCloseSuccessBlock);
+            TradeClose(curOption.tradeCloseSuccessBlock);
         }
         else
         {

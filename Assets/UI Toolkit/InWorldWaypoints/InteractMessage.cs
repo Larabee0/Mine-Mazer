@@ -27,8 +27,10 @@ public class InteractMessage : MonoBehaviour
 
     [SerializeField] private UIDocument uiController;
     private VisualElement texture;
-    private Label text;
+    private Label interactText;
+    private Label objectiveText;
     private VisualElement interactRoot;
+    private VisualElement objectiveRoot;
     private bool open = false;
 
     private void Awake()
@@ -42,24 +44,38 @@ public class InteractMessage : MonoBehaviour
             Destroy(this);
             return;
         }
-
+        objectiveRoot = uiController.rootVisualElement.Q("ObjectiveTextRoot");
         interactRoot = uiController.rootVisualElement.Q("InteractionText");
         texture = uiController.rootVisualElement.Q("InteractImage");
-        text = uiController.rootVisualElement.Q<Label>("InteractText");
+        interactText = uiController.rootVisualElement.Q<Label>("InteractText");
+        objectiveText = uiController.rootVisualElement.Q<Label>("ObjectiveText");
         
         HideInteraction();
+        ClearObjective();
     }
 
     public void ShowInteraction(string message, Texture2D texture, Color tint)
     {
         StopAllCoroutines();
-        text.text = message;
+        interactText.text = message;
         this.texture.style.backgroundImage = texture;
         this.texture.style.unityBackgroundImageTintColor = tint;
 
         interactRoot.style.opacity = 1;
         interactRoot.style.display = DisplayStyle.Flex;
         open = true;
+    }
+
+    public void SetObjective(string objective)
+    {
+        objectiveText.text = objective;
+        objectiveRoot.style.display = DisplayStyle.Flex;
+    }
+
+    public void ClearObjective()
+    {
+        objectiveText.text = "";
+        objectiveRoot.style.display = DisplayStyle.None;
     }
 
     public void HideInteraction(bool now = false)

@@ -9,7 +9,7 @@ public class Interact_Example : MonoBehaviour, IInteractable
 {
     public Flowchart Dialogue;
 
-    private void Start()
+    protected virtual void Start()
     {
         Dialogue = GetComponentInChildren<Flowchart>();
     }

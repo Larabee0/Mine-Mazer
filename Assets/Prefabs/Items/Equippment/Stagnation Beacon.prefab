@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1078430341108550275}
   - component: {fileID: 8936344853926937464}
-  m_Layer: 0
+  - component: {fileID: 4851515905360349021}
+  m_Layer: 8
   m_Name: Stagnation Beacon
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34,7 +35,7 @@ Transform:
   - {fileID: 8069733206780427147}
   - {fileID: 1232324495243864719}
   m_Father: {fileID: 0}
-  m_RootOrder: 39
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8936344853926937464
 MonoBehaviour:
@@ -48,6 +49,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365b954c567b14b4ebe653e56574fcff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemCollider: {fileID: 4851515905360349021}
+  itemStats:
+    name: Stagnation Beacon
+    type: 9
+  Placeable: 1
+  heldOrenintationOffset: {x: 0, y: 0, z: 0}
+  heldpositonOffset: {x: 0, y: 0, z: 0}
+  heldScaleOffset: {x: 0.25, y: 0.25, z: 0.25}
+  placementPositionOffset: {x: 0, y: 0.6, z: 0}
+  toolTipNameOverride: 
   sphere: {fileID: 1232324495243864719}
   cylinder: {fileID: 8069733206780427147}
   cubeA: {fileID: 2504045546146787993}
@@ -57,6 +68,28 @@ MonoBehaviour:
     y: 0.5
     z: 0
   time: 5
+  targetSection: {fileID: 0}
+--- !u!65 &4851515905360349021
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3346427576957048216}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5, y: 2.5, z: 1.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3908889310971598240
 GameObject:
   m_ObjectHideFlags: 0
@@ -68,7 +101,7 @@ GameObject:
   - component: {fileID: 8069733206780427147}
   - component: {fileID: 5249414097534958537}
   - component: {fileID: 8609736851692631690}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +184,7 @@ GameObject:
   - component: {fileID: 399024262471390919}
   - component: {fileID: 5536993107440737234}
   - component: {fileID: 640640622165624410}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +267,7 @@ GameObject:
   - component: {fileID: 2504045546146787993}
   - component: {fileID: 7863519555485613631}
   - component: {fileID: 1646570538647227951}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,7 +352,7 @@ GameObject:
   - component: {fileID: 2524969781648955619}
   - component: {fileID: 5940216138966628245}
   - component: {fileID: 4838663071157420645}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}

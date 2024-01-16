@@ -1,5 +1,6 @@
 using Fungus;
 using MazeGame.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,9 @@ public class TutorialStarter : MonoBehaviour
     [SerializeField] private float screenFadeTime = 3f;
     [SerializeField] private float tutorialDelayTime = 2f;
     [SerializeField] private Transform EudieWayPoint;
+    [SerializeField] private AudioSource caveAmbience;
+    [Header("Debug")]
+    public bool skipTutorial = false;
 
     private Flowchart tutorialFlowChart;
 
@@ -22,7 +26,24 @@ public class TutorialStarter : MonoBehaviour
     private void Start()
     {
         tutorialFlowChart.SetBooleanVariable("Gamepad", InputManager.GamePadPresent);
-        Tutorial_Backstory();
+        if (skipTutorial)
+        {
+            SkipTutorial();
+        }
+        else
+        {
+            Tutorial_Backstory();
+        }
+    }
+
+    public void PlayCaveAmbiance()
+    {
+        caveAmbience.Play();
+    }
+
+    private void SkipTutorial()
+    {
+        EudieHandOff();
     }
 
     private void Tutorial_Backstory()

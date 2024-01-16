@@ -1620,6 +1620,37 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &2484024560782625336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6299140256719059265}
+  m_Layer: 8
+  m_Name: SpawnArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6299140256719059265
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2484024560782625336}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.588, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 313730576770523094}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2634350738231324253
 GameObject:
   m_ObjectHideFlags: 0
@@ -3272,6 +3303,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6299140256719059265}
   - {fileID: 2073484508154584934}
   - {fileID: 1345125585963484520}
   - {fileID: 6821066774644615628}
@@ -3310,7 +3342,7 @@ Transform:
   - {fileID: 5412998318332905342}
   - {fileID: 8565129969653887745}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &125053811556015849
 MeshFilter:
@@ -3412,6 +3444,11 @@ MonoBehaviour:
   - {fileID: 5847513270147661857}
   - {fileID: 5140819100530929926}
   - {fileID: 193527554358099604}
+  droppableItems:
+  - {fileID: 6506559788001277901, guid: 8f71a7f6279df344a8bc612a68214abe, type: 3}
+  - {fileID: 2540538277186201747, guid: 8e335f83c614acd44abc222d72fb057a, type: 3}
+  droppableSpawnArea: {fileID: 6299140256719059265}
+  minMaxDrop: {x: 0, y: 5}
   rockLingerTimeRange: {x: 5, y: 7}
   connector:
     localPosition: {x: 0, y: 1.5, z: 0}

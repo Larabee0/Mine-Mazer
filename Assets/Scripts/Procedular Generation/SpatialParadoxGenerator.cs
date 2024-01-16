@@ -36,6 +36,8 @@ public class SpatialParadoxGenerator : MonoBehaviour
     public PlayerExplorationStatistics ExplorationStatistics => explorationStatistics;
 
     public Pluse OnMapUpdate;
+    public Pluse OnEnterLadderSection;
+    public Pluse OnEnterColonySection;
     public List<List<TunnelSection>> MapTree => mapTree;
     public TunnelSection CurPlayerSection => curPlayerSection;
 
@@ -156,6 +158,29 @@ public class SpatialParadoxGenerator : MonoBehaviour
             curPlayerSection.stagnationBeacon = Instantiate(stagnationBeacon, playerTransform.position- new Vector3(0,0.6f,0f), playerTransform.rotation, curPlayerSection.transform);
         }
         OnMapUpdate?.Invoke();
+    }
+
+    public void PlaceStatnationBeacon(TunnelSection section,StagnationBeacon beacon)
+    {
+        if(section.stagnationBeacon == null)
+        {
+            beacon.transform.parent = section.transform;
+            beacon.targetSection = section;
+            section.stagnationBeacon = beacon.gameObject;
+            section.Keep = true;
+            OnMapUpdate?.Invoke();
+        }
+    }
+
+    public void RemoveStagnationBeacon(StagnationBeacon beacon)
+    {
+        if(beacon.targetSection.stagnationBeacon == beacon)
+        {
+            beacon.targetSection.Keep = false;
+            beacon.targetSection.stagnationBeacon = null;
+            beacon.targetSection = null;
+            OnMapUpdate?.Invoke();
+        }
     }
 
     public void GetPlayerExplorationStatistics()
@@ -803,6 +828,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
         {
             UpdateMap();
         }
+        if (section.HasLadder)
+        {
+            OnEnterLadderSection?.Invoke();
+        }
+        if (section.IsColony)
+        {
+            OnEnterColonySection?.Invoke();
+        }
     }
 
     private void UpdateMap()
@@ -1421,9 +1454,14 @@ public class SpatialParadoxGenerator : MonoBehaviour
     private TunnelSection InstinateSection(TunnelSection tunnelSection)
     {
         TunnelSection section = Instantiate(tunnelSection);
+
         tunnelSection.InstanceCount++;
         section.gameObject.SetActive(true);
         section.transform.parent = transform;
+        if (instanceIdToSection.TryGetValue(tunnelSection.orignalInstanceId, out TunnelSection original))
+        {
+            original.Spawned();
+        }
         return section;
     }
 

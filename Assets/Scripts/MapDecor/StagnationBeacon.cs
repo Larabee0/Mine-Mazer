@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class StagnationBeaconAnimation : MonoBehaviour
+public class StagnationBeacon : MapResource
 {
+    [Header("Animations")]
     [SerializeField] private Transform sphere;
     [SerializeField] private Transform cylinder;
     [SerializeField] private Transform cubeA;
     [SerializeField] private Transform cubeB;
     [SerializeField] private float3 dst = new(0, 0.5f, 0);
     [SerializeField] private float time = 10f;
+    public TunnelSection targetSection;
     private float3x2 sphereStartEnd;
     private float3x2 cylinderStartEnd;
 
@@ -79,6 +81,37 @@ public class StagnationBeaconAnimation : MonoBehaviour
                 Vector3 eulerB = cubeB.transform.localRotation.eulerAngles;
                 eulerB.y -= time * Time.deltaTime;
                 cubeB.transform.localRotation = Quaternion.Euler(eulerB);
+            }
+        }
+    }
+
+    public override void Interact()
+    {
+        SpatialParadoxGenerator mapGenerator = FindObjectOfType<SpatialParadoxGenerator>();
+        mapGenerator.RemoveStagnationBeacon(this);
+        base.Interact();
+    }
+
+    public override void PlaceItem()
+    {
+        SpatialParadoxGenerator mapGenerator = FindObjectOfType<SpatialParadoxGenerator>();
+        Ray r = new(Camera.main.transform.position, Camera.main.transform.forward);
+        if (Physics.Raycast(r, out RaycastHit hitInfo, 5))
+        {
+            TunnelSection upStack = hitInfo.transform.gameObject.GetComponentInParent<TunnelSection>();
+            TunnelSection downStack = hitInfo.transform.gameObject.GetComponentInChildren<TunnelSection>();
+            TunnelSection hitSection = upStack == null ? downStack : upStack;
+            if(hitSection != null && hitSection.stagnationBeacon == null && !hitSection.StrongKeep && Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item))
+            {
+                if(item == this)
+                {
+                    item.gameObject.transform.position = hitInfo.point + placementPositionOffset;
+                    item.gameObject.transform.up = Vector3.up;
+                    item.gameObject.transform.localScale = originalScale;
+                    item.SetMapResourceActive(true);
+                    item.SetColliderActive(true);
+                    mapGenerator.PlaceStatnationBeacon(hitSection, this);
+                }
             }
         }
     }

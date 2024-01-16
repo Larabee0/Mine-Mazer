@@ -31,7 +31,14 @@ public class NPC_Interact : MonoBehaviour
 
     private void Interact()
     {
-        interactable?.Interact();
+        if(interactable== null)
+        {
+            Inventory.Instance.CurHeldAsset.PlaceItem();
+        }
+        else
+        {
+            interactable?.Interact();
+        }
     }
 
     private void InteractableToolTip(Vector3 hitPosition)

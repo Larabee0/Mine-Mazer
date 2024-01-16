@@ -28,6 +28,7 @@ public class Inventory : MonoBehaviour
     public Dictionary<Item, int> inventory = new();
     public Dictionary<Item, MapResource> assets = new();
     public Item? CurHeldItem => inventoryOrder.Count > 0 ? inventoryOrder[curIndex] : null;
+    public MapResource CurHeldAsset => inventoryOrder.Count > 0 ? assets[CurHeldItem.Value] : null;
 
     [SerializeField] private List<Item> inventoryOrder = new();
     [SerializeField] private int curIndex = -1;
@@ -76,7 +77,7 @@ public class Inventory : MonoBehaviour
             inventory.Add(itemType, quantity);
             assets.Add(itemType, itemInstance);
             itemInstance.SetColliderActive(false);
-            itemInstance.gameObject.SetActive(false);
+            itemInstance.SetMapResourceActive(false);
             itemInstance.transform.parent = virtualhands;
             itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
             UpdateInventory();
@@ -95,6 +96,27 @@ public class Inventory : MonoBehaviour
                 Destroy(assets[item].gameObject);
                 assets.Remove(item);
                 
+            }
+            UpdateInventory();
+            return true;
+        }
+
+        return false;
+    }
+    public bool TryRemoveItem(Item item, int quantity, out MapResource itemInstance)
+    {
+        itemInstance = null;
+        if (inventory.ContainsKey(item))
+        {
+            inventory[item] -= quantity;
+
+            if (inventory[item] <= 0)
+            {
+                inventory.Remove(item);
+                itemInstance = assets[item];
+                //Destroy(assets[item].gameObject);
+                assets.Remove(item);
+
             }
             UpdateInventory();
             return true;
@@ -208,9 +230,9 @@ public class Inventory : MonoBehaviour
             }
             if (heldItem != null)
             {
-                heldItem.gameObject.SetActive(false);
+                heldItem.SetMapResourceActive(false);
             }
-            switchTo.gameObject.SetActive(true);
+            switchTo.SetMapResourceActive(true);
             heldItem = switchTo;
             StopAllCoroutines();
             StartCoroutine(NameItem(heldItem.ItemStats.name));

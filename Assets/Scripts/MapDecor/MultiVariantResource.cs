@@ -9,8 +9,10 @@ public class MultiVariantResource : MapResource
     [SerializeField] private GameObject[] variants;
     [Header("Runtime Selected")]
     [SerializeField] private GameObject chosenVariant;
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake();
         if (variants != null && variants.Length > 0)
         {
             for (int i = 0; i < variants.Length; i++)

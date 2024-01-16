@@ -7,6 +7,9 @@ using UnityEngine;
 public class BreakableWall : MonoBehaviour, IInteractable
 {
     [SerializeField] private Rigidbody[] bodies;
+    [SerializeField] protected MapResource[] droppableItems;
+    [SerializeField] private Transform droppableSpawnArea;
+    [SerializeField] private Vector2Int minMaxDrop;
     [SerializeField] private Vector2 rockLingerTimeRange;
     public Connector connector;
 
@@ -21,7 +24,23 @@ public class BreakableWall : MonoBehaviour, IInteractable
             bodies[i].isKinematic = false;
             Destroy(bodies[i].gameObject, Random.Range(rockLingerTimeRange.x, rockLingerTimeRange.y));
         }
+        DumpDroppables();
+        Destroy(droppableSpawnArea.gameObject);
         Destroy(gameObject);
+    }
+
+    private void DumpDroppables()
+    {
+        int drop = Random.Range(minMaxDrop.x,minMaxDrop.y);
+        drop = droppableItems.Length > 0 ? drop : 0;
+
+        for (int i = 0; i < drop; i++)
+        {
+            MapResource chosenItem = droppableItems[Random.Range(0, droppableItems.Length)];
+            GameObject Instance = Instantiate(chosenItem, droppableSpawnArea.position,Quaternion.identity).gameObject;
+            Instance.AddComponent<Rigidbody>();
+            Instance.AddComponent<ItemDrop>();
+        }
     }
 
     public void Interact()

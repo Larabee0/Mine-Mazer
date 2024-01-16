@@ -23,6 +23,9 @@ public class TunnelSection : MonoBehaviour
     public int orignalInstanceId;
     private bool weakKeep = false;
     [SerializeField] private bool strongKeep = false;
+    [SerializeField] private bool hasLadder = false;
+    [SerializeField] private bool isColony = false;
+
     public Vector3 WaypointPosition => stagnationBeacon != null ? stagnationBeacon.transform.position : transform.TransformPoint(strongKeepPosition);
     public string WaypointName => stagnationBeacon != null ? stagnationBeacon.name : waypointName;
     public bool StrongKeep => strongKeep;
@@ -38,6 +41,8 @@ public class TunnelSection : MonoBehaviour
         }
     }
 
+    public bool HasLadder => hasLadder;
+    public bool IsColony => isColony;
     
     public bool explored = false;
 
@@ -131,6 +136,12 @@ public class TunnelSection : MonoBehaviour
         return spawnRule.UpdateSpawnStatus();
     }
 
+    public void Spawned()
+    {
+        if(spawnRule == null) return;
+        spawnRule.OnSpawned();
+    }
+
     public static float4x4 GetLTWConnectorMatrix(float4x4 ltw, Connector connector)
     {
         return math.mul(ltw, connector.Matrix);
@@ -139,7 +150,7 @@ public class TunnelSection : MonoBehaviour
     public void SetRenderersEnabled(bool enabled)
     {
         renderersEnabled = enabled;
-        renderers ??= GetComponentsInChildren<Renderer>();
+        renderers = GetComponentsInChildren<Renderer>();
         for (int i = 0; i < renderers.Length; i++)
         {
             if (renderers[i] != null)

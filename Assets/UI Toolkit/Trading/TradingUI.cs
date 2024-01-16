@@ -121,7 +121,7 @@ public class TradingUI : MonoBehaviour
 
         if (tradablePlayerItems == null || tradablePlayerItems.Count == 0)
         {
-            TradingText = string.Format("You lack any items to trade, you need {0}(s)", targetCategory.ToString());
+            TradingText = string.Format("You lack any items to trade, you need {0}(s)", specific ? targetItem.ToString() : targetCategory.ToString());
             AddCancel();
             return;
         }
