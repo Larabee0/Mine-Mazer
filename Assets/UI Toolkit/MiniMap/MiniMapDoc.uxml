@@ -17,5 +17,6 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Player" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/UI%20Toolkit/UI%20Assets/CompassArrow.png?fileID=2800000&amp;guid=43109d7e7e2a01444b1220850c1ad0e0&amp;type=3#CompassArrow&apos;); -unity-background-image-tint-color: rgb(187, 85, 102); -unity-background-scale-mode: scale-to-fit; width: 116px; height: 116px; position: absolute; top: 448px; left: 448px;" />
+        <ui:Label tabindex="-1" text="x1.0" display-tooltip-when-elided="true" name="ZoomLevel" class="CompassHeading" style="position: absolute; top: 801px; left: 649px; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 36px; border-bottom-left-radius: 36px; border-top-right-radius: 36px; border-bottom-right-radius: 36px; width: 230px;" />
     </ui:VisualElement>
 </ui:UXML>
