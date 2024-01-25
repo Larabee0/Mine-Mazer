@@ -74,11 +74,21 @@ namespace Fungus
                 newInputSystem = true;
                 if(clickMode == ClickMode.ClickAnywhere)
                 {
-                    InputManager.Instance.southButton.OnButtonPressed += SetClickAnywhereClickedFlag;
+                    InputManager.Instance.advanceDialogueButton.OnButtonPressed += SetNextLineFlagNewInputSystem;
+                    InputManager.Instance.advanceDialogueButton.OnButtonPressed += SetClickAnywhereClickedFlag;
                 }
             }
         }
-            
+        
+        private void SetNextLineFlagNewInputSystem()
+        {
+            bool buttonSelected = EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.TryGetComponent<UnityEngine.UI.Button>(out _);
+            if (!buttonSelected)
+            {
+                SetNextLineFlag();
+            }
+        }
+
         protected virtual void Update()
         {
             if (EventSystem.current == null)
@@ -88,22 +98,21 @@ namespace Fungus
 
             if (writer != null)
             {
-                if (newInputSystem)
+                if (!newInputSystem && (Input.GetButtonDown(currentStandaloneInputModule.submitButton)
+                    || (cancelEnabled && Input.GetButton(currentStandaloneInputModule.cancelButton))))
                 {
-                    if (InputManager.Instance.EventSystemInput.submit.action.ReadValue<bool>() ||
-                        (cancelEnabled && InputManager.Instance.EventSystemInput.cancel.action.ReadValue<float>() != 0))
-                    {
-                        SetNextLineFlag();
-                    }
+                    SetNextLineFlag();
                 }
-                else
-                {
-                    if (Input.GetButtonDown(currentStandaloneInputModule.submitButton) ||
-                        (cancelEnabled && Input.GetButton(currentStandaloneInputModule.cancelButton)))
-                    {
-                        SetNextLineFlag();
-                    }
-                }
+                //else
+                //{
+                //    bool buttonSelected = EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.TryGetComponent<UnityEngine.UI.Button>(out _);
+                //    bool submitPressed = InputManager.Instance.EventSystemInput.submit.action.ReadValue<float>() != 0;
+                //    bool cancelEnabledAndPressed = cancelEnabled && InputManager.Instance.EventSystemInput.cancel.action.ReadValue<float>() != 0;
+                //    if (!buttonSelected && (submitPressed || cancelEnabledAndPressed))
+                //    {
+                //        SetNextLineFlag();
+                //    }
+                //}
             }
 
             switch (clickMode)
