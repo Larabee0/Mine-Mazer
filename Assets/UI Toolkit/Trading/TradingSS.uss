@@ -1,0 +1,30 @@
+.TradeMainbutton {
+    -unity-font-definition: url('project://database/Assets/Fungus/Fonts/Amaranth/Amaranth-Regular%20SDF.asset?fileID=11400000&guid=cb56843408cfcf54a894f7f7d707020f&type=2#Amaranth-Regular SDF');
+    color: rgb(255, 255, 255);
+    background-color: rgb(67, 66, 67);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    font-size: 28px;
+    -unity-text-align: lower-center;
+    min-width: 700px;
+    min-height: 55px;
+    margin-bottom: 20px;
+}
+
+.TradeMainbutton:hover {
+    background-color: rgb(35, 168, 196);
+}
+
+.TradeMainbutton:focus {
+    background-color: rgb(35, 168, 197);
+}
+
+.TradeMainbutton:active {
+    background-color: rgb(27, 142, 166);
+}

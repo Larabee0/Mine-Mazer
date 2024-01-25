@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Trading/TradingSS.uss?fileID=7433441132597879392&amp;guid=3ccd29607d44ac44991d679e9d9659f8&amp;type=3#TradingSS" />
+    <ui:VisualElement name="TradeRoot" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center;">
+        <ui:VisualElement style="background-color: rgba(255, 255, 255, 0.55); align-items: center; justify-content: center; align-self: center; border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; padding-left: 12px; padding-right: 12px; padding-top: 12px; padding-bottom: 12px;">
+            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="TradeTextOut" class="WayPointText" style="-unity-text-align: middle-center; color: rgb(17, 17, 17); font-size: 36px; -unity-font-definition: url(&apos;project://database/Assets/Fungus/Fonts/Amaranth/Amaranth-Regular%20SDF.asset?fileID=11400000&amp;guid=cb56843408cfcf54a894f7f7d707020f&amp;type=2#Amaranth-Regular SDF&apos;);" />
+            <ui:VisualElement name="ButtonContainer" style="background-color: rgba(0, 0, 0, 0); justify-content: center;">
+                <ui:Button text="Button" display-tooltip-when-elided="true" class="TradeMainbutton" />
+                <ui:Button text="Button" display-tooltip-when-elided="true" class="TradeMainbutton" />
+                <ui:Button text="Button" display-tooltip-when-elided="true" class="TradeMainbutton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
