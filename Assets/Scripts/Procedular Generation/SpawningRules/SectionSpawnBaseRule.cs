@@ -33,5 +33,9 @@ public class SectionSpawnBaseRule : MonoBehaviour
         spawnable = spawnLimit < 0 || InstancesCount < spawnLimit;
         return spawnable;
     }
+    
+    public virtual void OnSpawned()
+    {
 
+    }
 }
