@@ -35,6 +35,7 @@ public partial class SpatialParadoxGenerator
             MakeRootNode(newSection);
 #endif
         mapUpdateProcess = null;
+        AmbientLightController.Instance.FadeAmbientLight(newSection.AmbientLightLevel);
         OnMapUpdate?.Invoke();
         //yield return null;
         //Debug.Break();

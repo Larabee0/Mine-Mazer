@@ -42,7 +42,7 @@ public class NPC_Interact : MonoBehaviour
         }
     }
 
-    private void InteractableToolTip(Vector3 hitPosition)
+    private void InteractableToolTip()
     {
         if (interactable != null && InteractMessage.Instance != null)
         {
@@ -84,7 +84,7 @@ public class NPC_Interact : MonoBehaviour
             {
                 this.interactable = interactable;
             }
-            InteractableToolTip(hitInfo.point);
+            InteractableToolTip();
             closedToolTip = false;
             hitInteractable = true;
             return true;
@@ -96,7 +96,7 @@ public class NPC_Interact : MonoBehaviour
             {
                 this.interactable = interactable;
             }
-            InteractableToolTip(hitInfo.point);
+            InteractableToolTip();
             closedToolTip = false;
             hitInteractable = true;
             return true;

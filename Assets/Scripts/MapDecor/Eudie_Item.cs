@@ -54,7 +54,6 @@ public class Eudie_Item : MapResource
 
     public void PickUpEudieItem()
     {
-
         InteractMessage.Instance.SetObjective("Find the Lumenite Colony & Take Eudie to it.");
         base.Interact();
         Inventory.Instance.TryMoveItemToHand(Item.Eudie);

@@ -168,7 +168,10 @@ public class MapResource : MonoBehaviour, IInteractable
         {
             return;
         }
-
+        if (TryGetComponent(out Rigidbody body))
+        {
+            body.isKinematic = true;
+        }
         Inventory.Instance.AddItem(itemStats.type, 1,this);
     }
 
