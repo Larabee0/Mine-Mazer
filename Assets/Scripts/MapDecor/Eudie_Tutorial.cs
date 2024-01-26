@@ -16,8 +16,8 @@ public class Eudie_Tutorial : NPCTrade
     [SerializeField] private BreakableWall[] tutorialAreaWalls;
     [SerializeField] private GameObject lumen;
     private WorldWayPoint[] wallWWP;
-    [Header("Debug")]
-    public bool SkipToPickUpEudie = false;
+
+    private bool skipToPickUpEudie = false;
 
     private bool eudieSleep = true;
     private bool lumenGather = false;
@@ -100,9 +100,10 @@ public class Eudie_Tutorial : NPCTrade
         PlayerUIController.Instance.SetMiniMapVisible(true);
     }
 
-    public void ShowEudieWaypoint()
+    public void ShowEudieWaypoint(bool skipToPickUpEudie = false)
     {
-        if (SkipToPickUpEudie)
+        this.skipToPickUpEudie = skipToPickUpEudie;
+        if (skipToPickUpEudie)
         {
             eudieSleep = false;
             RecieveStarterItems();
