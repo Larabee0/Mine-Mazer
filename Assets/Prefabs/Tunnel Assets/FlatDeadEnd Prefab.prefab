@@ -245,7 +245,7 @@ MonoBehaviour:
   miniMapAsset: {fileID: 0}
   excludePrefabConnections: []
   connectors:
-  - localPosition: {x: 0, y: 1.5, z: 0.5}
+  - localPosition: {x: 0, y: 1.5, z: -0.5}
     localRotation: {x: -0, y: -0, z: -0, w: 1}
     position: {x: 0, y: 0, z: 0}
     rotation: {x: 0, y: 0, z: 0, w: 0}
@@ -255,14 +255,17 @@ MonoBehaviour:
   - center: {x: 0, y: 1.6324005, z: 0}
     oreintation: {x: -0, y: 0, z: 0}
     size: {x: 3.91916, y: 3.39812, z: 1}
-  excludeConnectorSections: []
+  excludeConnectorSections:
+  - exclude: []
   strongKeepPosition: {x: 0, y: 0, z: 0}
   waypointName: 
   spawnRule: {fileID: -8099010526370012669}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 0
+  orignalInstanceId: 30156
   strongKeep: 0
+  hasLadder: 0
+  isColony: 0
   explored: 0
 --- !u!114 &-8099010526370012669
 MonoBehaviour:
@@ -279,4 +282,4 @@ MonoBehaviour:
   spawnable: 1
   spawnLimit: -1
   generator: {fileID: 0}
-  owner: 0
+  owner: 30156
