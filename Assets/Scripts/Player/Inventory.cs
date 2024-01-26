@@ -196,7 +196,7 @@ public class Inventory : MonoBehaviour
     {
         int oldIndex = curIndex;
         Item oldCur = Item.LumenCrystal;
-        if (curIndex > 0)
+        if (curIndex >= 0)
         {
             oldCur = inventoryOrder[curIndex];
         }
