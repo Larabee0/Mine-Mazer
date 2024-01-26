@@ -1,6 +1,7 @@
 using MazeGame.Input;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -210,7 +211,7 @@ public class Inventory : MonoBehaviour
 
         if(oldIndex >= 0)
         {
-            curIndex = inventoryOrder.IndexOf(oldCur);
+            curIndex = inventoryOrder.IndexOf(inventoryOrder.FirstOrDefault(item => item == oldCur));
         }
         
         if (curIndex == -1)
@@ -235,7 +236,7 @@ public class Inventory : MonoBehaviour
             switchTo.SetMapResourceActive(true);
             heldItem = switchTo;
             StopAllCoroutines();
-            StartCoroutine(NameItem(heldItem.ItemStats.name));
+            StartCoroutine(ShowItemNameTooltip(heldItem.ItemStats.name));
         }
         else
         {
@@ -253,7 +254,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private IEnumerator NameItem(string text)
+    private IEnumerator ShowItemNameTooltip(string text)
     {
         InteractMessage.Instance.ShowInteraction(text, null, Color.white);
         yield return new WaitForSeconds(itemNameTime);
