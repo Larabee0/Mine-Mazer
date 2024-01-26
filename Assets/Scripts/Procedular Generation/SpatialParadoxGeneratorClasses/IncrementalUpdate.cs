@@ -29,7 +29,7 @@ public partial class SpatialParadoxGenerator
         {
             double startTime = Time.realtimeSinceStartupAsDouble;
             MakeRootNode(newSection);
-            Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+            if (mapProfiling) Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
         }
 #else
             MakeRootNode(newSection);
@@ -84,12 +84,12 @@ public partial class SpatialParadoxGenerator
         HashSet<TunnelSection> exceptWith = new(newTree[^1]);
 
         RecursiveTreeBuilder(newTree, exceptWith);
-        Debug.LogFormat("New Tree Size {0}", newTree.Count);
-        Debug.LogFormat("Original Tree Size {0}", mapTree.Count);
+        if (mapProfiling) Debug.LogFormat("New Tree Size {0}", newTree.Count);
+        if (mapProfiling) Debug.LogFormat("Original Tree Size {0}", mapTree.Count);
 
         bool forceGrow = newTree.Count < mapTree.Count;
 
-        Debug.Log("Pruning Tree..");
+        if (mapProfiling) Debug.Log("Pruning Tree..");
         int leafCounter = 0;
         while (newTree.Count > maxDst + 1)
         {
@@ -120,7 +120,7 @@ public partial class SpatialParadoxGenerator
         mapTree.Clear();
         mapTree.AddRange(newTree);
 
-        Debug.Log("Growing Tree..");
+        if (mapProfiling) Debug.Log("Growing Tree..");
         int oldSize = 0;
         if (forceGrow)
         {
@@ -131,7 +131,7 @@ public partial class SpatialParadoxGenerator
             oldSize = mapTree[^1].Count;
             FillSectionConnectors(mapTree[^2]);
         }
-        Debug.LogFormat("Grew {0} leaves", mapTree[^1].Count - oldSize);
+        if (mapProfiling) Debug.LogFormat("Grew {0} leaves", mapTree[^1].Count - oldSize);
         curPlayerSection = newTree[0][0];
         if (curPlayerSection == null)
         {

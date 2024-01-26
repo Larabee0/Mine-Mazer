@@ -103,8 +103,6 @@ namespace MazeGame.Navigation
         {
             ScaleMap(0);
             //DebugMap();
-            Debug.Log(Application.targetFrameRate);
-            Debug.Log(QualitySettings.vSyncCount);
         }
 
         private void OnLook(Vector2 axis)
