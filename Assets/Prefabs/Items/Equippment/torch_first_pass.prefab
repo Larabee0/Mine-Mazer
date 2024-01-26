@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682697269214061684}
   m_LocalRotation: {x: -0.24036591, y: -0.0005364921, z: -0.1351358, w: 0.96122956}
-  m_LocalPosition: {x: -0.03, y: 0.137, z: 0.057}
+  m_LocalPosition: {x: -0.0274, y: 0.156, z: 0.0934}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,7 +44,7 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0, g: 0.5568628, b: 0.85098046, a: 1}
+  m_Color: {r: 0.9921569, g: 1, b: 0.30980393, a: 1}
   m_Intensity: 3.5
   m_Range: 10
   m_SpotAngle: 179
@@ -158,13 +158,13 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5255763955170142311}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0, g: 0.5568628, b: 0.85098046, a: 1}
-  m_Intensity: 0.58
-  m_Range: 10
+  m_Color: {r: 0.9921569, g: 1, b: 0.30980393, a: 1}
+  m_Intensity: 0.06
+  m_Range: 0.12
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -287,7 +287,11 @@ MonoBehaviour:
   itemStats:
     name: Torch
     type: 6
+  Placeable: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
+  heldpositonOffset: {x: 0, y: 0, z: 0}
+  heldScaleOffset: {x: 1, y: 1, z: 1}
+  placementPositionOffset: {x: 0, y: 0, z: 0}
   toolTipNameOverride: 
 --- !u!65 &1223650400416557067
 BoxCollider:
@@ -351,7 +355,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6930482079107848499}
-  m_Mesh: {fileID: -1424314700506582731, guid: b1f0e3f8109bddc4ba002ffa7ab82d61, type: 3}
+  m_Mesh: {fileID: -1424314700506582731, guid: 5c1dba28c3f262f4294ba15128195b2d, type: 3}
 --- !u!23 &483500403596340045
 MeshRenderer:
   m_ObjectHideFlags: 0
