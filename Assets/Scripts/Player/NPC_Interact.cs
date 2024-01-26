@@ -17,6 +17,7 @@ public class NPC_Interact : MonoBehaviour
     [SerializeField] private float InteractRange;
     [SerializeField] private LayerMask npcLayer;
     [SerializeField] private Texture2D interactionIcon;
+    [SerializeField] private float boxCastSize = 0.5f;
     private WorldWayPoint tooltip;
 
     private bool hitInteractable = false;
@@ -65,36 +66,41 @@ public class NPC_Interact : MonoBehaviour
 
     private void Update()
     {
-        Ray r = new(InteractorSource.position, InteractorSource.forward);
-        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, npcLayer))
+        if (!Physics.BoxCast(InteractorSource.position, transform.localScale * boxCastSize, InteractorSource.forward, out RaycastHit hitInfo, InteractorSource.rotation, InteractRange, npcLayer)
+            || !InteractCast(hitInfo))
         {
-            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactable))
-            {
-                if(interactable != this.interactable)
-                {
-                    this.interactable = interactable;
-                }
-                InteractableToolTip(hitInfo.point);
-                closedToolTip = false;
-                hitInteractable = true;
-                return;
-            }
-            else if(hitInfo.collider.gameObject.GetComponentInParent<IInteractable>() != null)
-            {
-                interactable= hitInfo.collider.gameObject.GetComponentInParent<IInteractable>();
-                if (interactable != this.interactable)
-                {
-                    this.interactable = interactable;
-                }
-                InteractableToolTip(hitInfo.point);
-                closedToolTip = false;
-                hitInteractable = true;
-                return;
-            }
+            interactable = null;
+            hitInteractable = false;
+            RemoveInteractableToolTip();
         }
+    }
 
-        interactable = null;
-        hitInteractable = false;
-        RemoveInteractableToolTip();
+
+    private bool InteractCast(RaycastHit hitInfo)
+    {
+        if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactable))
+        {
+            if (interactable != this.interactable)
+            {
+                this.interactable = interactable;
+            }
+            InteractableToolTip(hitInfo.point);
+            closedToolTip = false;
+            hitInteractable = true;
+            return true;
+        }
+        else if (hitInfo.collider.gameObject.GetComponentInParent<IInteractable>() != null)
+        {
+            interactable = hitInfo.collider.gameObject.GetComponentInParent<IInteractable>();
+            if (interactable != this.interactable)
+            {
+                this.interactable = interactable;
+            }
+            InteractableToolTip(hitInfo.point);
+            closedToolTip = false;
+            hitInteractable = true;
+            return true;
+        }
+        return false;
     }
 }

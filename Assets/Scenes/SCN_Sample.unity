@@ -487,6 +487,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2377281665050414085, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
+      propertyPath: boxCastSize
+      value: 0.075
+      objectReference: {fileID: 0}
+    - target: {fileID: 2377281665050414085, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
       propertyPath: InteractRange
       value: 3
       objectReference: {fileID: 0}
@@ -652,7 +657,7 @@ MonoBehaviour:
   tutorialDelayTime: 2
   EudieWayPoint: {fileID: 0}
   caveAmbience: {fileID: 528317594}
-  skipTutorial: 0
+  skipTutorial: 1
 --- !u!114 &528317542
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -2260,6 +2265,10 @@ MonoBehaviour:
   mapGenerator: {fileID: 399645860}
   textureResolution: 512
   viewPortSize: 44
+  zoomLevelFadeSpeed: 1
+  zoomLevelHoldTime: 3
+  miniMapMinZoom: 0.5
+  miniMapMaxZoom: 3.2
   miniMapScale: 1
   minimapCentreOffset: -6
   minimapZoomOffset: 0
