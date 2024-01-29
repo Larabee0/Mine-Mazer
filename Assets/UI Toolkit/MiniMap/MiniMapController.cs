@@ -1,5 +1,6 @@
 using MazeGame.Input;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -17,6 +18,10 @@ namespace MazeGame.Navigation
         [SerializeField] private Dictionary<int,Texture2D> miniMapAssets;
         [SerializeField] private int textureResolution = 512;
         [SerializeField] private float viewPortSize = 22f;
+        [SerializeField] private float zoomLevelFadeSpeed = 1;
+        [SerializeField] private float zoomLevelHoldTime = 3;
+        [SerializeField, Min(0.1f)] private float miniMapMinZoom = 0.5f;
+        [SerializeField, Min(1f)] private float miniMapMaxZoom = 3.2f;
         [SerializeField] private float miniMapScale = 1f;
         [SerializeField] private float minimapCentreOffset = 0f;
         [SerializeField] private float minimapZoomOffset = 0f;
@@ -35,12 +40,14 @@ namespace MazeGame.Navigation
         private Transform player;
         private MiniMap miniMap;
         private Compass compass;
+        private Label zoomLevel;
         private float pixelsPerUnit;
         private float angle;
 
         private void Awake()
         {
-            if(mapGenerator == null|| !mapGenerator.isActiveAndEnabled)
+            miniMapMinZoom = miniMapMinZoom > miniMapMaxZoom ? miniMapMaxZoom : miniMapMinZoom;
+            if (mapGenerator == null|| !mapGenerator.isActiveAndEnabled)
             {
                 Debug.LogError("No Map Generator or Map Generator Disabled");
                 enabled = false;
@@ -55,6 +62,8 @@ namespace MazeGame.Navigation
                 South = DocRoot.Q("South"),
                 West = DocRoot.Q("West")
             };
+
+            zoomLevel = DocRoot.Q<Label>("ZoomLevel");
 
             miniMapAssets = mapGenerator.GenerateMiniMapTextures();
             
@@ -92,6 +101,7 @@ namespace MazeGame.Navigation
 
         private void Start()
         {
+            ScaleMap(0);
             //DebugMap();
             Debug.Log(Application.targetFrameRate);
             Debug.Log(QualitySettings.vSyncCount);
@@ -122,10 +132,29 @@ namespace MazeGame.Navigation
         private void ScaleMap(float newScale)
         {
             miniMapScale += newScale;
+            miniMapScale = Mathf.Clamp(miniMapScale,miniMapMinZoom,miniMapMaxZoom);
             minimapZoomOffset = textureResolution * (miniMapScale - 1);
             minimapZoomOffset -= minimapCentreOffset;
             miniMap.root.style.scale = new Scale(new Vector2(miniMapScale, miniMapScale));
             TranslateMap();
+
+            StopAllCoroutines();
+            StartCoroutine(ZoomLevelIndicator());
+        }
+
+        private IEnumerator ZoomLevelIndicator()
+        {
+            zoomLevel.text = string.Format("x{0}", miniMapScale.ToString("0.0"));
+            zoomLevel.style.opacity = 100;
+
+
+            yield return new WaitForSeconds(zoomLevelHoldTime);
+
+            for (float i = 1; i >= 0; i-=Time.deltaTime * zoomLevelFadeSpeed)
+            {
+                zoomLevel.style.opacity = i;
+                yield return null;
+            }
         }
 
         private void TranslateMap()
