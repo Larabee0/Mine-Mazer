@@ -616,6 +616,7 @@ MonoBehaviour:
     name: Lumen Crystal
     type: 0
   Placeable: 0
+  Interactable: 1
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -626,6 +627,7 @@ MonoBehaviour:
   - {fileID: 4422689919979105570}
   - {fileID: 9090362618948946794}
   chosenVariant: {fileID: 0}
+  turnOnAllChance: 0
 --- !u!1 &6606590934997642172
 GameObject:
   m_ObjectHideFlags: 0

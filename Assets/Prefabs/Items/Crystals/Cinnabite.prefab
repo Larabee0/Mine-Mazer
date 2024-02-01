@@ -53,6 +53,12 @@ MonoBehaviour:
   itemStats:
     name: Cinnabite
     type: 5
+  Placeable: 0
+  Interactable: 1
+  heldOrenintationOffset: {x: 0, y: 0, z: 0}
+  heldpositonOffset: {x: 0, y: 0, z: 0}
+  heldScaleOffset: {x: 1, y: 1, z: 1}
+  placementPositionOffset: {x: 0, y: 0, z: 0}
   toolTipNameOverride: 
   variants:
   - {fileID: 3118298742767332906}
@@ -61,6 +67,7 @@ MonoBehaviour:
   - {fileID: 4442816541329374899}
   - {fileID: 8711744641980727770}
   chosenVariant: {fileID: 0}
+  turnOnAllChance: 0
 --- !u!1 &2756966682332905834
 GameObject:
   m_ObjectHideFlags: 0

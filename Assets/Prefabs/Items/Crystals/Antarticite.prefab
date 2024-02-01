@@ -723,9 +723,16 @@ MonoBehaviour:
   itemStats:
     name: Antarticite
     type: 4
+  Placeable: 0
+  Interactable: 1
+  heldOrenintationOffset: {x: 0, y: 0, z: 0}
+  heldpositonOffset: {x: 0, y: 0, z: 0}
+  heldScaleOffset: {x: 1, y: 1, z: 1}
+  placementPositionOffset: {x: 0, y: 0, z: 0}
   toolTipNameOverride: 
   variants:
   - {fileID: 6631917952508211876}
   - {fileID: 1864700406263334995}
   - {fileID: 6404354841930581470}
   chosenVariant: {fileID: 0}
+  turnOnAllChance: 0

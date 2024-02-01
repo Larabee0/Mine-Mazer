@@ -125,6 +125,7 @@ public class MapResource : MonoBehaviour, IInteractable
     [SerializeField] protected Collider itemCollider;
     [SerializeField] protected ItemStats itemStats;
     [SerializeField] protected bool Placeable;
+    [SerializeField] protected bool Interactable = true;
     public Vector3 heldOrenintationOffset;
     public Vector3 heldpositonOffset;
     public Vector3 heldScaleOffset = Vector3.one;
@@ -148,6 +149,7 @@ public class MapResource : MonoBehaviour, IInteractable
     protected virtual void Awake()
     {
         originalScale = transform.localScale;
+        SetColliderActive(Interactable);
     }
 
     public virtual string GetToolTipText()

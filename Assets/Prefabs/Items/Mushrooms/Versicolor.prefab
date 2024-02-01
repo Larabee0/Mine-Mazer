@@ -325,13 +325,19 @@ MonoBehaviour:
   itemStats:
     name: Versicolor
     type: 3
+  Placeable: 0
+  Interactable: 1
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
+  heldpositonOffset: {x: 0, y: 0, z: 0}
+  heldScaleOffset: {x: 1, y: 1, z: 1}
+  placementPositionOffset: {x: 0, y: 0, z: 0}
   toolTipNameOverride: 
   variants:
   - {fileID: 507023176876229315}
   - {fileID: 7981600482841664596}
   - {fileID: 3067982201840586469}
   chosenVariant: {fileID: 0}
+  turnOnAllChance: 0
 --- !u!1 &7688758371323163826
 GameObject:
   m_ObjectHideFlags: 0
