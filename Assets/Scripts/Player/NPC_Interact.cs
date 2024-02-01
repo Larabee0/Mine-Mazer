@@ -13,6 +13,26 @@ interface IInteractable
 
 public class NPC_Interact : MonoBehaviour
 {
+    private static NPC_Interact instance;
+    public static NPC_Interact Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                Debug.LogWarning("Expected NPC_Interact instance not found. Order of operations issue? Or NPC_Interact is disabled/missing.");
+            }
+            return instance;
+        }
+        private set
+        {
+            if (value != null && instance == null)
+            {
+                instance = value;
+            }
+        }
+    }
+
     [SerializeField] private Transform InteractorSource;
     [SerializeField] private float InteractRange;
     [SerializeField] private LayerMask npcLayer;
@@ -25,6 +45,14 @@ public class NPC_Interact : MonoBehaviour
     private bool closedToolTip = true;
     private IInteractable interactable;
 
+    private RaycastHit hitInfo;
+
+    public RaycastHit InteractInfo => hitInfo;
+    private void Awake()
+    {
+        
+    }
+
     private void Start()
     {
         InputManager.Instance.interactButton.OnButtonReleased += Interact;
@@ -32,7 +60,7 @@ public class NPC_Interact : MonoBehaviour
 
     private void Interact()
     {
-        if(interactable== null)
+        if(interactable== null && Inventory.Instance.CurHeldAsset != null)
         {
             Inventory.Instance.CurHeldAsset.PlaceItem();
         }
@@ -66,7 +94,7 @@ public class NPC_Interact : MonoBehaviour
 
     private void Update()
     {
-        if (!Physics.BoxCast(InteractorSource.position, transform.localScale * boxCastSize, InteractorSource.forward, out RaycastHit hitInfo, InteractorSource.rotation, InteractRange, npcLayer)
+        if (!Physics.BoxCast(InteractorSource.position, transform.localScale * boxCastSize, InteractorSource.forward, out hitInfo, InteractorSource.rotation, InteractRange, npcLayer)
             || !InteractCast(hitInfo))
         {
             interactable = null;

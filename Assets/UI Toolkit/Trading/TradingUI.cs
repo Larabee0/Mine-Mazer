@@ -147,6 +147,7 @@ public class TradingUI : MonoBehaviour
             cur.RegisterCallback<NavigationSubmitEvent>(ev => TradeButtonPress(item));
         });
         AddCancel();
+        buttonContainer[0].Focus();
     }
 
     private void AddCancel()

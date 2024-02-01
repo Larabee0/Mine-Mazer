@@ -182,7 +182,10 @@ public class Eudie_Tutorial : NPCTrade
         for (int i = 0; i < wallWWP.Length; i++)
         {
             tutorialAreaWalls[i].OnWallBreak -= OnWallBroken;
-            WorldWayPointsController.Instance.RemoveWaypoint(wallWWP[i]);
+            if (wallWWP[i] != null )
+            {
+                WorldWayPointsController.Instance.RemoveWaypoint(wallWWP[i]);
+            }
         }
         Dialogue.ExecuteBlock("Player Breaks Wall"); // next tutorial blocl
         PlayerUIController.Instance.SetMiniMapVisible(true);
@@ -191,6 +194,7 @@ public class Eudie_Tutorial : NPCTrade
     public void PickUpEudie()
     {
         eudieState = EudieContext.PickUpEudie;
+        eudieItem.pickUpEudie = true;
         eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Eudie", eudieWaypoint.position, Color.yellow);
         InteractMessage.Instance.SetObjective("Pick up Eudie");
     }
