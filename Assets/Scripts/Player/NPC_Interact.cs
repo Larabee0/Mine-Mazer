@@ -50,7 +50,15 @@ public class NPC_Interact : MonoBehaviour
     public RaycastHit InteractInfo => hitInfo;
     private void Awake()
     {
-        
+        if (instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
     }
 
     private void Start()
