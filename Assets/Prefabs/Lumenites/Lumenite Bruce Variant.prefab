@@ -32,6 +32,7 @@ GameObject:
   - component: {fileID: 216895938347811992}
   - component: {fileID: 7902308891661144723}
   - component: {fileID: 3053627009318014786}
+  - component: {fileID: 2089679861979303985}
   m_Layer: 0
   m_Name: Bruce
   m_TagString: Untagged
@@ -67,7 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 493, y: 309}
+  scrollPos: {x: -194, y: 157}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 400
@@ -79,7 +80,7 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 6186305533777618502}
+  - {fileID: 620769194736279420}
   selectedCommands: []
   variables: []
   description: 
@@ -137,7 +138,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: 'Hi-ho. Bruce. '
   description: 
-  character: {fileID: 0}
+  character: {fileID: 3053627009318014786}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -225,6 +226,7 @@ MonoBehaviour:
   eventHandler: {fileID: 0}
   commandList:
   - {fileID: 6283821386550439493}
+  - {fileID: 2089679861979303985}
   - {fileID: 3854884398360052241}
   suppressAllAutoSelections: 0
 --- !u!114 &5460461195431549273
@@ -445,7 +447,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Bruce.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 3053627009318014786}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -493,7 +495,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Chop wood. Pick fungus. Give to Angel.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 3053627009318014786}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -541,7 +543,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: 'Dunno. '
   description: 
-  character: {fileID: 0}
+  character: {fileID: 3053627009318014786}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -626,6 +628,33 @@ MonoBehaviour:
   portraitsFace: 0
   setSayDialog: {fileID: 0}
   description: 
+--- !u!114 &2089679861979303985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780951595793651359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 24
+  indentLevel: 0
+  storyText: 'If you give wood, I give torch. '
+  description: 
+  character: {fileID: 3053627009318014786}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
 --- !u!1001 &2890550138897151372
 PrefabInstance:
   m_ObjectHideFlags: 0
