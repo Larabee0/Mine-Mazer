@@ -269,10 +269,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3526018208391867830, guid: c431316cf725fde469a6dd76a6cb2247,
         type: 3}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: breakableWallAtConnectionChance
+      value: 0.35
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 563885210313048928, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 399645862}
   m_SourcePrefab: {fileID: 100100000, guid: b3c1b0889a4fa6a4491117ebf8219574, type: 3}
 --- !u!114 &399645860 stripped
 MonoBehaviour:
@@ -280,12 +289,32 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 399645859}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 399645861}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 619e7440358b093499a1d20cd5dc8106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &399645861 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 563885210313048928, guid: b3c1b0889a4fa6a4491117ebf8219574,
+    type: 3}
+  m_PrefabInstance: {fileID: 399645859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &399645862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399645861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e50fc8aea858b4691bceccb3d020ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetAmbientIntensity: 0
+  fadeSpeed: 1
 --- !u!1 &416201510
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,11 +514,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2377281665050414085, guid: e78a1712f70fb7344af802fa73a4a9cd,
-        type: 3}
-      propertyPath: InteractRange
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: m_RootOrder
@@ -652,7 +676,8 @@ MonoBehaviour:
   tutorialDelayTime: 2
   EudieWayPoint: {fileID: 0}
   caveAmbience: {fileID: 528317594}
-  skipTutorial: 0
+  skipTutorial: 1
+  skipToPickUpEudie: 0
 --- !u!114 &528317542
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -2260,6 +2285,10 @@ MonoBehaviour:
   mapGenerator: {fileID: 399645860}
   textureResolution: 512
   viewPortSize: 44
+  zoomLevelFadeSpeed: 1
+  zoomLevelHoldTime: 3
+  miniMapMinZoom: 0.5
+  miniMapMaxZoom: 3.2
   miniMapScale: 1
   minimapCentreOffset: -6
   minimapZoomOffset: 0

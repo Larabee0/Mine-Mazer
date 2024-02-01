@@ -16,15 +16,21 @@ public class Eudie_Tutorial : NPCTrade
     [SerializeField] private BreakableWall[] tutorialAreaWalls;
     [SerializeField] private GameObject lumen;
     private WorldWayPoint[] wallWWP;
-    [Header("Debug")]
-    public bool SkipToPickUpEudie = false;
 
-    private bool eudieSleep = true;
-    private bool lumenGather = false;
-    private bool mineWall = false;
-    private bool pickUpEudie = false;
-    private bool eudieInInventory = false;
-    private bool atColony = false;
+    private bool skipToPickUpEudie = false;
+
+    [SerializeField] EudieContext eudieState = EudieContext.EudieSleep;
+
+
+    public enum EudieContext
+    {
+        EudieSleep,
+        LumenGather,
+        MineWall,
+        PickUpEudie,
+        EudieInInventory,
+        AtColony
+    }
 
     // barks allowed
     private bool ladderBark = true;
@@ -45,14 +51,48 @@ public class Eudie_Tutorial : NPCTrade
         wallWWP = new WorldWayPoint[tutorialAreaWalls.Length];
     }
 
-    protected override void Start()
+
+    public override string GetToolTipText()
     {
-        SpatialParadoxGenerator mapGen = FindObjectOfType<SpatialParadoxGenerator>();
-        mapGen.OnEnterLadderSection += LadderBark;
-        mapGen.OnEnterColonySection += EnterColonyBark;
+        if (eudieState == EudieContext.EudieSleep && eudieWWP != null)
+        {
+            WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP);
+            eudieWWP = null;
+        }
+
+        return eudieState switch
+        {
+            EudieContext.MineWall => "Eudie. Current Objective, break out of room",
+            EudieContext.PickUpEudie => eudieItem.GetToolTipText(),
+            EudieContext.EudieInInventory => null,
+            _ => base.GetToolTipText(),
+        };
     }
 
+    public override void Interact()
+    {
+        switch (eudieState)
+        {
+            case EudieContext.LumenGather:
+                UnlockPointer();
+                AttemptTrade();
+                break;
+            case EudieContext.MineWall:
+                return;
+            case EudieContext.PickUpEudie:
+                TransformEudieToItem();
+                break;
+            case EudieContext.AtColony:
+                Dialogue.ExecuteBlock("Come Back Later");
+                break;
+            default:
+                InteractMessage.Instance.ClearObjective();
+                Dialogue.ExecuteBlock("Start Eudie");
+                break;
+        }
+    }
 
+    #region barks
     private void EnterColonyBark()
     {
         Invoke(nameof(EnterColonyDelay), 2.5f);
@@ -81,30 +121,18 @@ public class Eudie_Tutorial : NPCTrade
         yield return new WaitForSeconds(60);
         ladderBark = true;
     }
+    #endregion
 
     public void ClearObjectiveFungus()
     {
         InteractMessage.Instance.ClearObjective();
     }
 
-    private void OnWallBroken()
+    public void ShowEudieWaypoint(bool skipToPickUpEudie = false)
     {
-        InteractMessage.Instance.ClearObjective();
-        mineWall = false;
-        for (int i = 0; i < wallWWP.Length; i++)
+        this.skipToPickUpEudie = skipToPickUpEudie;
+        if (skipToPickUpEudie)
         {
-            tutorialAreaWalls[i].OnWallBreak -= OnWallBroken;
-            WorldWayPointsController.Instance.RemoveWaypoint(wallWWP[i]);
-        }
-        Dialogue.ExecuteBlock("Player Breaks Wall"); // next tutorial blocl
-        PlayerUIController.Instance.SetMiniMapVisible(true);
-    }
-
-    public void ShowEudieWaypoint()
-    {
-        if (SkipToPickUpEudie)
-        {
-            eudieSleep = false;
             RecieveStarterItems();
             PickUpEudie();
             for (int i = 0; i < wallWWP.Length; i++)
@@ -115,68 +143,8 @@ public class Eudie_Tutorial : NPCTrade
         else
         {
             InteractMessage.Instance.SetObjective("Speak to the Lumenite");
-            eudieSleep = false;
             eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Lumenite", eudieWaypoint.position, Color.yellow);
         }
-    }
-
-    public override void Interact()
-    {
-        if (atColony)
-        {
-            Dialogue.ExecuteBlock("Come Back Later");
-        }
-        else if (pickUpEudie)
-        {
-            TransformEudieToItem();
-        }
-        else if (mineWall)
-        {
-            return;
-        }
-        else if(lumenGather)
-        {
-            UnlockPointer();
-            AttemptTrade();
-        }
-        else
-        {
-            InteractMessage.Instance.ClearObjective();
-            Dialogue.ExecuteBlock("Start Eudie");
-        }
-    }
-
-    public override string GetToolTipText()
-    {
-        if(!eudieSleep && eudieWWP != null)
-        {
-            WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP);
-            eudieWWP =null;
-        }
-
-        if (mineWall)
-        {
-            return "Eudie. Current Objective, break out of room";
-        }
-        else if(pickUpEudie)
-        {
-            return eudieItem.GetToolTipText();
-        }
-        else if (eudieInInventory)
-        {
-            return null;
-        }
-        else
-        {
-            return base.GetToolTipText();
-        }
-    }
-
-    public void PickupLumen()
-    {
-        lumen.SetActive(true);
-        lumenGather = true;
-        InteractMessage.Instance.SetObjective("Give Lumen to Eudie");
     }
 
     public void RecieveStarterItems()
@@ -189,11 +157,17 @@ public class Eudie_Tutorial : NPCTrade
         Inventory.Instance.TryMoveItemToHand(Item.Torch);
     }
 
+    public void PickupLumen()
+    {
+        lumen.SetActive(true);
+        eudieState = EudieContext.LumenGather;
+        InteractMessage.Instance.SetObjective("Give Lumen to Eudie");
+    }
+
     public void GivenLumen()
     {
         InteractMessage.Instance.SetObjective("Break out of the current cave");
-        lumenGather = false;
-        mineWall = true;
+        eudieState = EudieContext.MineWall;
 
         for (int i = 0; i < tutorialAreaWalls.Length; i++)
         {
@@ -201,36 +175,28 @@ public class Eudie_Tutorial : NPCTrade
         }
     }
 
+    private void OnWallBroken()
+    {
+        InteractMessage.Instance.ClearObjective();
+
+        for (int i = 0; i < wallWWP.Length; i++)
+        {
+            tutorialAreaWalls[i].OnWallBreak -= OnWallBroken;
+            if (wallWWP[i] != null )
+            {
+                WorldWayPointsController.Instance.RemoveWaypoint(wallWWP[i]);
+            }
+        }
+        Dialogue.ExecuteBlock("Player Breaks Wall"); // next tutorial blocl
+        PlayerUIController.Instance.SetMiniMapVisible(true);
+    }
+
     public void PickUpEudie()
     {
-        eudieItem.pickUpEudie = pickUpEudie = true;
+        eudieState = EudieContext.PickUpEudie;
+        eudieItem.pickUpEudie = true;
         eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Eudie", eudieWaypoint.position, Color.yellow);
         InteractMessage.Instance.SetObjective("Pick up Eudie");
-    }
-
-    public void PutEudieDown()
-    {
-        pickUpEudie= mineWall = eudieInInventory = false;
-        atColony = true;
-        eudieItem.MakePlaceable();
-        eudieItem.OnEudiePlaced += EudiePlaced;
-
-        eudieItem.putDownEudieToolTip = true;
-        if (Inventory.Instance.CurHeldItem != Item.Eudie)
-        {
-            Inventory.Instance.TryMoveItemToHand(Item.Eudie);
-        }
-        InteractMessage.Instance.ShowInteraction(eudieItem.GetToolTipText(), null, Color.white);
-    }
-
-    private void EudiePlaced()
-    {
-        Invoke(nameof(DelayedHunger), 0.2f);
-    }
-
-    private void DelayedHunger()
-    {
-        Dialogue.ExecuteBlock("Lunch Time");
     }
 
     public void TransformEudieToItem()
@@ -240,8 +206,40 @@ public class Eudie_Tutorial : NPCTrade
             WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP);
             eudieWWP = null;
         }
-        eudieInInventory = true;
+        eudieState = EudieContext.EudieInInventory;
         eudieItem.PickUpEudieItem();
+
+        SpatialParadoxGenerator mapGen = FindObjectOfType<SpatialParadoxGenerator>();
+        mapGen.OnEnterLadderSection += LadderBark;
+        mapGen.OnEnterColonySection += EnterColonyBark;
+    }
+
+    public void PutEudieDown()
+    {
+        eudieState = EudieContext.AtColony;
+        eudieItem.MakePlaceable();
+        eudieItem.OnEudiePlaced += EudiePlaced;
+        SpatialParadoxGenerator mapGen = FindObjectOfType<SpatialParadoxGenerator>();
+        mapGen.OnEnterLadderSection -= LadderBark;
+        mapGen.OnEnterColonySection -= EnterColonyBark;
+
+        eudieItem.putDownEudieToolTip = true;
+        if (Inventory.Instance.CurHeldItem != Item.Eudie)
+        {
+            Inventory.Instance.TryMoveItemToHand(Item.Eudie);
+        }
+        InteractMessage.Instance.ShowInteraction(eudieItem.GetToolTipText(), null, Color.white);
+    }
+
+    // hunger triggering
+    private void EudiePlaced()
+    {
+        Invoke(nameof(DelayedHunger), 0.2f);
+    }
+
+    private void DelayedHunger()
+    {
+        Dialogue.ExecuteBlock("Lunch Time");
     }
 
     public void GetLunch()

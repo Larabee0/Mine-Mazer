@@ -1,6 +1,7 @@
 using MazeGame.Input;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -54,7 +55,10 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        InputManager.Instance.scrollDirection += ScrollInventory;
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.scrollDirection += ScrollInventory;
+        }
     }
 
     private void Start()
@@ -62,6 +66,14 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < defaultItems.Length; i++)
         {
             AddItem(defaultItems[i].ItemStats.type, 1, Instantiate(defaultItems[i]));
+        }
+    }
+    
+    private void OnApplicationQuit()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.scrollDirection -= ScrollInventory;
         }
     }
 
@@ -196,7 +208,7 @@ public class Inventory : MonoBehaviour
     {
         int oldIndex = curIndex;
         Item oldCur = Item.LumenCrystal;
-        if (curIndex > 0)
+        if (curIndex >= 0)
         {
             oldCur = inventoryOrder[curIndex];
         }
@@ -210,7 +222,7 @@ public class Inventory : MonoBehaviour
 
         if(oldIndex >= 0)
         {
-            curIndex = inventoryOrder.IndexOf(oldCur);
+            curIndex = inventoryOrder.IndexOf(inventoryOrder.FirstOrDefault(item => item == oldCur));
         }
         
         if (curIndex == -1)
@@ -235,7 +247,7 @@ public class Inventory : MonoBehaviour
             switchTo.SetMapResourceActive(true);
             heldItem = switchTo;
             StopAllCoroutines();
-            StartCoroutine(NameItem(heldItem.ItemStats.name));
+            StartCoroutine(ShowItemNameTooltip(heldItem.ItemStats.name));
         }
         else
         {
@@ -253,7 +265,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private IEnumerator NameItem(string text)
+    private IEnumerator ShowItemNameTooltip(string text)
     {
         InteractMessage.Instance.ShowInteraction(text, null, Color.white);
         yield return new WaitForSeconds(itemNameTime);

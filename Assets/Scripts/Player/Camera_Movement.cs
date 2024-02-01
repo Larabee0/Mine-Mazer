@@ -32,8 +32,7 @@ public class Camera_Movement : MonoBehaviour
         Look(mouseX, mouseY);
     }
 
-
-    private void OnDestroy()
+    private void OnApplicationQuit()
     {
         if (InputManager.Instance != null)
         {

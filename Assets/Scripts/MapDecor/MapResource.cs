@@ -154,11 +154,11 @@ public class MapResource : MonoBehaviour, IInteractable
     {
         if (InputManager.GamePadPresent)
         {
-            return string.Format("B to  Pick Up {0}", ToolTipName);
+            return string.Format("A to  Pick Up {0}", ToolTipName);
         }
         else
         {
-            return string.Format("E to Pick Up {0}", ToolTipName);
+            return string.Format("Click to Pick Up {0}", ToolTipName);
         }
     }
 
@@ -168,7 +168,10 @@ public class MapResource : MonoBehaviour, IInteractable
         {
             return;
         }
-
+        if (TryGetComponent(out Rigidbody body))
+        {
+            body.isKinematic = true;
+        }
         Inventory.Instance.AddItem(itemStats.type, 1,this);
     }
 
@@ -202,6 +205,8 @@ public class MapResource : MonoBehaviour, IInteractable
                     item.gameObject.transform.localScale = originalScale;
                     item.SetMapResourceActive(true);
                     item.SetColliderActive(true);
+
+                    item.gameObject.transform.up = Vector3.up;
                 }
             }
         }

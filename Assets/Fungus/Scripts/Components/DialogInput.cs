@@ -56,6 +56,14 @@ namespace Fungus
 
             CheckEventSystem();
         }
+        private void OnApplicationQuit()
+        {
+            if (newInputSystem && clickMode == ClickMode.ClickAnywhere)
+            {
+                InputManager.Instance.advanceDialogueButton.OnButtonPressed -= SetNextLineFlagNewInputSystem;
+                InputManager.Instance.advanceDialogueButton.OnButtonPressed -= SetClickAnywhereClickedFlag;
+            }
+        }
 
         // There must be an Event System in the scene for Say and Menu input to work.
         // This method will automatically instantiate one if none exists.

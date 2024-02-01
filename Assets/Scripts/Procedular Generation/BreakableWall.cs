@@ -82,8 +82,8 @@ public class BreakableWall : MonoBehaviour, IInteractable
         {
             string control = InputManager.GamePadPresent switch
             {
-                true => "B",
-                false => "E"
+                true => "A",
+                false => "Click"
             };
             return string.Format("{0} to Unblock", control);
         }

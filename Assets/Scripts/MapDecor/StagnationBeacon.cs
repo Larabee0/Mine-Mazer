@@ -101,17 +101,16 @@ public class StagnationBeacon : MapResource
             TunnelSection upStack = hitInfo.transform.gameObject.GetComponentInParent<TunnelSection>();
             TunnelSection downStack = hitInfo.transform.gameObject.GetComponentInChildren<TunnelSection>();
             TunnelSection hitSection = upStack == null ? downStack : upStack;
-            if(hitSection != null && hitSection.stagnationBeacon == null && !hitSection.StrongKeep && Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item))
+            if (hitSection != null && hitSection.stagnationBeacon == null
+                && !hitSection.StrongKeep
+                && Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item) && item == this)
             {
-                if(item == this)
-                {
-                    item.gameObject.transform.position = hitInfo.point + placementPositionOffset;
-                    item.gameObject.transform.up = Vector3.up;
-                    item.gameObject.transform.localScale = originalScale;
-                    item.SetMapResourceActive(true);
-                    item.SetColliderActive(true);
-                    mapGenerator.PlaceStatnationBeacon(hitSection, this);
-                }
+                item.gameObject.transform.position = hitInfo.point + placementPositionOffset;
+                item.gameObject.transform.up = Vector3.up;
+                item.gameObject.transform.localScale = originalScale;
+                item.SetMapResourceActive(true);
+                item.SetColliderActive(true);
+                mapGenerator.PlaceStatnationBeacon(hitSection, this);
             }
         }
     }
