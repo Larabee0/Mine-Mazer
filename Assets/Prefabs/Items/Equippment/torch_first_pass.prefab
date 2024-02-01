@@ -245,7 +245,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9069961890099616369}
-  - component: {fileID: 2186324674680031705}
+  - component: {fileID: 8048640736220625442}
   - component: {fileID: 1223650400416557067}
   m_Layer: 8
   m_Name: torch_first_pass
@@ -271,7 +271,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2186324674680031705
+--- !u!114 &8048640736220625442
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -280,7 +280,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5481056113833604324}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd5432609c4ea33419fb78c1a1c7618d, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d890949a22be734eb403854c6f5bdaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemCollider: {fileID: 1223650400416557067}
@@ -293,6 +293,18 @@ MonoBehaviour:
   heldScaleOffset: {x: 1, y: 1, z: 1}
   placementPositionOffset: {x: 0, y: 0, z: 0}
   toolTipNameOverride: 
+  maxDst: 5
+  transitionSpeed: 15
+  lights:
+  - minBrightness: 0.01
+    maxBrightness: 0.06
+    light: {fileID: 3254894023452853708}
+  - minBrightness: 0.1
+    maxBrightness: 3.5
+    light: {fileID: 8610934922549146800}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 257
 --- !u!65 &1223650400416557067
 BoxCollider:
   m_ObjectHideFlags: 0

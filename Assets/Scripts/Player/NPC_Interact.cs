@@ -46,8 +46,8 @@ public class NPC_Interact : MonoBehaviour
     private IInteractable interactable;
 
     private RaycastHit hitInfo;
-
     public RaycastHit InteractInfo => hitInfo;
+
     private void Awake()
     {
         if (instance == null)
