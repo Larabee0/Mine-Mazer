@@ -95,7 +95,10 @@ public class CaveMessageController : MonoBehaviour
         unreadMessages.AddRange(messageAssetHashes);
         Debug.LogFormat("Loaded {0} Messages", messageAssetHashes.Count);
         UpdateReadableMessages();
-        InputManager.Instance.advanceDialogueButton.OnButtonReleased += CloseMessage;
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.advanceDialogueButton.OnButtonReleased += CloseMessage;
+        }
         if (debugForceRandomOnStart)
         {
             Debug.Log("Testing random message show!");
@@ -106,7 +109,13 @@ public class CaveMessageController : MonoBehaviour
             }
         }
     }
-
+    private void OnApplicationQuit()
+    {
+        if(InputManager.Instance != null)
+        {
+            InputManager.Instance.advanceDialogueButton.OnButtonReleased -= CloseMessage;
+        }
+    }
     public bool ShowRandomMessage(out Hash128 chosenMessage)
     {
         List<Hash128> pickAbleMessages = new(readableMessages);

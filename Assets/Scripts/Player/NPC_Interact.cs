@@ -63,9 +63,30 @@ public class NPC_Interact : MonoBehaviour
 
     private void Start()
     {
-        InputManager.Instance.interactButton.OnButtonReleased += Interact;
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.interactButton.OnButtonReleased += Interact;
+        }
     }
 
+    private void Update()
+    {
+        if (!Physics.BoxCast(InteractorSource.position, transform.localScale * boxCastSize, InteractorSource.forward, out hitInfo, InteractorSource.rotation, InteractRange, npcLayer)
+            || !InteractCast(hitInfo))
+        {
+            interactable = null;
+            hitInteractable = false;
+            RemoveInteractableToolTip();
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.interactButton.OnButtonReleased -= Interact;
+        }
+    }
     private void Interact()
     {
         if(interactable== null && Inventory.Instance.CurHeldAsset != null)
@@ -99,18 +120,6 @@ public class NPC_Interact : MonoBehaviour
         closedToolTip = true;
         InteractMessage.Instance.HideInteraction();
     }
-
-    private void Update()
-    {
-        if (!Physics.BoxCast(InteractorSource.position, transform.localScale * boxCastSize, InteractorSource.forward, out hitInfo, InteractorSource.rotation, InteractRange, npcLayer)
-            || !InteractCast(hitInfo))
-        {
-            interactable = null;
-            hitInteractable = false;
-            RemoveInteractableToolTip();
-        }
-    }
-
 
     private bool InteractCast(RaycastHit hitInfo)
     {

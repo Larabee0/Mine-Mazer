@@ -85,8 +85,6 @@ namespace MazeGame.Navigation
 
                 InputManager.Instance.PlayerActions.MinimapZoomOut.canceled += ZoomOut;
                 InputManager.Instance.PlayerActions.MinimapZoomIn.canceled += ZoomIn;
-
-
             }
             else
             {
@@ -103,6 +101,18 @@ namespace MazeGame.Navigation
         {
             ScaleMap(0);
             //DebugMap();
+        }
+
+        private void OnApplicationQuit()
+        {
+            if (InputManager.Instance != null)
+            {
+                InputManager.Instance.OnLookDelta -= OnLook;
+                InputManager.Instance.OnMoveAxis -= OnMove;
+
+                InputManager.Instance.PlayerActions.MinimapZoomOut.canceled -= ZoomOut;
+                InputManager.Instance.PlayerActions.MinimapZoomIn.canceled -= ZoomIn;
+            }
         }
 
         private void OnLook(Vector2 axis)

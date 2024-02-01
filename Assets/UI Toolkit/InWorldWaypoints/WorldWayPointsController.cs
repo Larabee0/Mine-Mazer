@@ -85,6 +85,16 @@ namespace MazeGame.Navigation
             }
         }
 
+        private void OnApplicationQuit()
+        {
+            if (InputManager.Instance != null)
+            {
+                InputManager.Instance.OnLookDelta -= OnLook;
+                InputManager.Instance.OnMoveAxis -= OnMove;
+
+            }
+        }
+
         private void OnMove(Vector2 axis)
         {
             wayPointTransformProcess ??= StartCoroutine(UpdateWayPoints());
