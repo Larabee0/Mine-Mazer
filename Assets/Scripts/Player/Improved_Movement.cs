@@ -33,7 +33,7 @@ public class Improved_Movement : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    private void OnApplicationQuit()
     {
         if (InputManager.Instance != null)
         { 

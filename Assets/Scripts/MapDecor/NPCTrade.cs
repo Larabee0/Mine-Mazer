@@ -101,8 +101,3 @@ public class NPCTrade : Interact_Example
         Dialogue.ExecuteBlock(exitCommand);
     }
 }
-
-public class StringVarCollection : GenericCollection<StringVar>
-{
-
-}

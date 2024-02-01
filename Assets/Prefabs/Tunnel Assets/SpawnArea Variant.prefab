@@ -240,12 +240,17 @@ PrefabInstance:
     - target: {fileID: -5356444298311868501, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
       propertyPath: owner
-      value: 27272
+      value: 48688
       objectReference: {fileID: 0}
     - target: {fileID: -5356444298311868501, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
       propertyPath: generator
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -5356444298311868501, guid: 7d4d92c11027a1147970002dee1073d8,
+        type: 3}
+      propertyPath: spawnable
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5356444298311868501, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
@@ -314,43 +319,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
+      propertyPath: ambientLightLevel
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
+        type: 3}
       propertyPath: orignalInstanceId
-      value: 27272
+      value: 48688
+      objectReference: {fileID: 0}
+    - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
+        type: 3}
+      propertyPath: sectionLightLevel
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
       propertyPath: excludePrefabConnectionsIds.Array.data[0]
-      value: 27424
+      value: 11946
       objectReference: {fileID: 0}
     - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
       propertyPath: excludePrefabConnectionsIds.Array.data[1]
-      value: 27434
+      value: 11956
       objectReference: {fileID: 0}
     - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
       propertyPath: excludePrefabConnectionsIds.Array.data[2]
-      value: 27448
+      value: 11940
       objectReference: {fileID: 0}
     - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
       propertyPath: excludePrefabConnectionsIds.Array.data[3]
-      value: 27272
+      value: 48688
       objectReference: {fileID: 0}
     - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
       propertyPath: excludePrefabConnectionsIds.Array.data[4]
-      value: 27430
+      value: 11952
       objectReference: {fileID: 0}
     - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
       propertyPath: excludePrefabConnectionsIds.Array.data[5]
-      value: 27428
+      value: 11950
       objectReference: {fileID: 0}
     - target: {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8,
         type: 3}
       propertyPath: excludePrefabConnectionsIds.Array.data[6]
-      value: 27452
+      value: 11972
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -412,7 +427,7 @@ PrefabInstance:
     - target: {fileID: 9041358991876466093, guid: 8f71a7f6279df344a8bc612a68214abe,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.696
+      value: 1.076
       objectReference: {fileID: 0}
     - target: {fileID: 9041358991876466093, guid: 8f71a7f6279df344a8bc612a68214abe,
         type: 3}
@@ -524,7 +539,7 @@ PrefabInstance:
         type: 3}
       propertyPath: starterItems.Array.data[1]
       value: 
-      objectReference: {fileID: 2186324674680031705, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2,
+      objectReference: {fileID: 8048640736220625442, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2,
         type: 3}
     - target: {fileID: 7204789686680481940, guid: 2764cc5b28e49df43a8623c9fde1c290,
         type: 3}

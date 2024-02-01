@@ -14,11 +14,11 @@ public class Eudie_Item : MapResource
         {
             if (InputManager.GamePadPresent)
             {
-                return string.Format("B to Place {0} on Floor", ToolTipName);
+                return string.Format("A to Place {0} on Floor", ToolTipName);
             }
             else
             {
-                return string.Format("E to Place {0} on Floor", ToolTipName);
+                return string.Format("Click to Place {0} on Floor", ToolTipName);
             }
         }
         if (pickUpEudie)
@@ -54,7 +54,6 @@ public class Eudie_Item : MapResource
 
     public void PickUpEudieItem()
     {
-
         InteractMessage.Instance.SetObjective("Find the Lumenite Colony & Take Eudie to it.");
         base.Interact();
         Inventory.Instance.TryMoveItemToHand(Item.Eudie);

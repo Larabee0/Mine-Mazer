@@ -13,6 +13,7 @@ public class TutorialStarter : MonoBehaviour
     [SerializeField] private AudioSource caveAmbience;
     [Header("Debug")]
     public bool skipTutorial = false;
+    public bool skipToPickUpEudie = false;
 
     private Flowchart tutorialFlowChart;
 
@@ -65,7 +66,7 @@ public class TutorialStarter : MonoBehaviour
 
     public void EudieHandOff()
     {
-        FindObjectOfType<Eudie_Tutorial>().ShowEudieWaypoint();
+        FindObjectOfType<Eudie_Tutorial>().ShowEudieWaypoint(skipToPickUpEudie);
     }
 
     private IEnumerator DelayedFlowChartExecute(string command, float delayTime)

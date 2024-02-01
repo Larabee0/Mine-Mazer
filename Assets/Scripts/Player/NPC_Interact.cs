@@ -13,10 +13,31 @@ interface IInteractable
 
 public class NPC_Interact : MonoBehaviour
 {
+    private static NPC_Interact instance;
+    public static NPC_Interact Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                Debug.LogWarning("Expected NPC_Interact instance not found. Order of operations issue? Or NPC_Interact is disabled/missing.");
+            }
+            return instance;
+        }
+        private set
+        {
+            if (value != null && instance == null)
+            {
+                instance = value;
+            }
+        }
+    }
+
     [SerializeField] private Transform InteractorSource;
     [SerializeField] private float InteractRange;
     [SerializeField] private LayerMask npcLayer;
     [SerializeField] private Texture2D interactionIcon;
+    [SerializeField] private float boxCastSize = 0.5f;
     private WorldWayPoint tooltip;
 
     private bool hitInteractable = false;
@@ -24,14 +45,51 @@ public class NPC_Interact : MonoBehaviour
     private bool closedToolTip = true;
     private IInteractable interactable;
 
-    private void Start()
+    private RaycastHit hitInfo;
+    public RaycastHit InteractInfo => hitInfo;
+
+    private void Awake()
     {
-        InputManager.Instance.interactButton.OnButtonReleased += Interact;
+        if (instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
     }
 
+    private void Start()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.interactButton.OnButtonReleased += Interact;
+        }
+    }
+
+    private void Update()
+    {
+        if (!Physics.BoxCast(InteractorSource.position, transform.localScale * boxCastSize, InteractorSource.forward, out hitInfo, InteractorSource.rotation, InteractRange, npcLayer)
+            || !InteractCast(hitInfo))
+        {
+            interactable = null;
+            hitInteractable = false;
+            RemoveInteractableToolTip();
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.interactButton.OnButtonReleased -= Interact;
+        }
+    }
     private void Interact()
     {
-        if(interactable== null)
+        if(interactable== null && Inventory.Instance.CurHeldAsset != null)
         {
             Inventory.Instance.CurHeldAsset.PlaceItem();
         }
@@ -41,7 +99,7 @@ public class NPC_Interact : MonoBehaviour
         }
     }
 
-    private void InteractableToolTip(Vector3 hitPosition)
+    private void InteractableToolTip()
     {
         if (interactable != null && InteractMessage.Instance != null)
         {
@@ -63,38 +121,31 @@ public class NPC_Interact : MonoBehaviour
         InteractMessage.Instance.HideInteraction();
     }
 
-    private void Update()
+    private bool InteractCast(RaycastHit hitInfo)
     {
-        Ray r = new(InteractorSource.position, InteractorSource.forward);
-        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, npcLayer))
+        if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactable))
         {
-            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactable))
+            if (interactable != this.interactable)
             {
-                if(interactable != this.interactable)
-                {
-                    this.interactable = interactable;
-                }
-                InteractableToolTip(hitInfo.point);
-                closedToolTip = false;
-                hitInteractable = true;
-                return;
+                this.interactable = interactable;
             }
-            else if(hitInfo.collider.gameObject.GetComponentInParent<IInteractable>() != null)
-            {
-                interactable= hitInfo.collider.gameObject.GetComponentInParent<IInteractable>();
-                if (interactable != this.interactable)
-                {
-                    this.interactable = interactable;
-                }
-                InteractableToolTip(hitInfo.point);
-                closedToolTip = false;
-                hitInteractable = true;
-                return;
-            }
+            InteractableToolTip();
+            closedToolTip = false;
+            hitInteractable = true;
+            return true;
         }
-
-        interactable = null;
-        hitInteractable = false;
-        RemoveInteractableToolTip();
+        else if (hitInfo.collider.gameObject.GetComponentInParent<IInteractable>() != null)
+        {
+            interactable = hitInfo.collider.gameObject.GetComponentInParent<IInteractable>();
+            if (interactable != this.interactable)
+            {
+                this.interactable = interactable;
+            }
+            InteractableToolTip();
+            closedToolTip = false;
+            hitInteractable = true;
+            return true;
+        }
+        return false;
     }
 }
