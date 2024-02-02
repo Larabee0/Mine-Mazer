@@ -5,3 +5,27 @@
     -unity-text-outline-width: 2px;
     font-size: 48px;
 }
+
+.unity-progress-bar__container {
+    max-height: 69px;
+}
+
+.unity-progress-bar__background {
+    background-color: rgb(44, 44, 44);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.unity-progress-bar__progress {
+    background-color: rgb(35, 168, 197);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}

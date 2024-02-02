@@ -42,14 +42,18 @@ public class Eudie_Item : MapResource
         }
     }
 
-    public override void PlaceItem()
+    public override bool PlaceItem()
     {
         if (putDownEudieToolTip)
         {
-            base.PlaceItem();
-            OnEudiePlaced?.Invoke();
-            InteractMessage.Instance.SetObjective("Talk to Eudies friends in the colony.");
+            if (base.PlaceItem())
+            {
+                OnEudiePlaced?.Invoke();
+                InteractMessage.Instance.SetObjective("Talk to Eudies friends in the colony.");
+                return true;
+            }
         }
+        return false;
     }
 
     public void PickUpEudieItem()

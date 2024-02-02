@@ -94,6 +94,7 @@ public class Inventory : MonoBehaviour
         itemInstance.SetMapResourceActive(false);
         itemInstance.transform.parent = virtualhands;
         itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
+        itemInstance.transform.localScale = itemInstance.heldScaleOffset;
     }
 
     public bool TryRemoveItem(Item item, int quantity)

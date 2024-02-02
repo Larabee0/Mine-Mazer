@@ -34,7 +34,7 @@ public class NPC_Interact : MonoBehaviour
     }
 
     [SerializeField] private Transform InteractorSource;
-    [SerializeField] private float InteractRange;
+    public float InteractRange;
     [SerializeField] private LayerMask npcLayer;
     [SerializeField] private Texture2D interactionIcon;
     [SerializeField] private float boxCastSize = 0.5f;

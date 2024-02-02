@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 416201511}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465791, g: 0.4964133, b: 0.57481784, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedFlowchart: {fileID: 528317543}
+  selectedFlowchart: {fileID: 0}
 --- !u!4 &229147804
 Transform:
   m_ObjectHideFlags: 1
@@ -573,6 +573,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7873265323809388630, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: hungerSpeed
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 8322381442699795188, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
@@ -2731,3 +2736,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUi: {fileID: 2129518432}
+  hungerProgressAnimationSpeed: 1
+  hungerFlashFadeTime: 0.27
+  lowHungerThreshold: 0.15
+  lowHungerColour: {r: 0.8018868, g: 0.21560162, b: 0.21560162, a: 1}
+  normalHungerColour: {r: 0.13725491, g: 0.65882355, b: 0.7725491, a: 1}
