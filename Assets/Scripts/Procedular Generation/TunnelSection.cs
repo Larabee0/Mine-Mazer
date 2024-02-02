@@ -5,34 +5,143 @@ using UnityEngine;
 
 public class TunnelSection : MonoBehaviour
 {
+    [Header("Baked data")]
+    [SerializeField] private Texture2D miniMapAsset;
     [SerializeField] private List<TunnelSection> excludePrefabConnections = new();
-
-    public Vector3 Centre => GetComponent<MeshRenderer>().bounds.center;
-
     public Connector[] connectors;
 
     public BoxBounds[] boundingBoxes;
+    public List<ConnectorMask> excludeConnectorSections = new();
+    [SerializeField] private Vector3 strongKeepPosition;
+    [SerializeField] private string waypointName;
+
+    [SerializeField] private SectionSpawnBaseRule spawnRule;
+    [SerializeField] private float sectionLightLevel = 0.202f;
+
+    [SerializeField] private List<int> excludePrefabConnectionsIds;
+    [Header("Runtime Data")]
+    public GameObject stagnationBeacon;
+    public int orignalInstanceId;
+    private bool weakKeep = false;
+    [SerializeField] private bool strongKeep = false;
+    [SerializeField] private bool hasLadder = false;
+    [SerializeField] private bool isColony = false;
+
+    // accessors 
+    public Vector3 WaypointPosition => stagnationBeacon != null ? stagnationBeacon.transform.position : transform.TransformPoint(strongKeepPosition);
+    public float AmbientLightLevel => sectionLightLevel;
+    public string WaypointName => stagnationBeacon != null ? stagnationBeacon.name : waypointName;
+    public bool StrongKeep => strongKeep;
+    public bool Keep
+    {
+        get
+        {
+            return weakKeep || strongKeep;
+        }
+        set
+        {
+            weakKeep = value;
+        }
+    }
+
+    public bool HasLadder => hasLadder;
+    public bool IsColony => isColony;
+    
+    public bool explored = false;
+
+    public int InstanceCount
+    {
+        get => spawnRule.InstancesCount;
+        set => spawnRule.InstancesCount = value;
+    }
+
+    public bool Spawnable => spawnRule.Spawnable;
+
+    public Texture2D MiniMapAsset => miniMapAsset;
+    public Vector3 Position => transform.position;
+    public Quaternion Rotation => transform.rotation;
+    private Renderer[] renderers;
+
+    private bool renderersEnabled = true;
+    public bool RenderersEnabled 
+    {
+        get => renderersEnabled;
+        set
+        {
+            if(value != renderersEnabled)
+            {
+                SetRenderersEnabled(value);
+            }
+        }
+    }
+    private Collider[] allColliders;
+    private bool collidersEnabled = true;
+    public bool CollidersEnabled
+    {
+        get => collidersEnabled;
+        set
+        {
+            if (value != collidersEnabled)
+            {
+                SetCollidersEnabled(value);
+            }
+        }
+    }
 
     public BoxBounds[] BoundingBoxes => boundingBoxes;
 
     public HashSet<int> InUse = new();
-    public Dictionary<int, System.Tuple<TunnelSection, int>> connectorPairs = new();
+    public Dictionary<int, SectionAndConnector> connectorPairs = new();
 
-    public List<TunnelSection> ExcludePrefabConnections => excludePrefabConnections;
+    public List<int> ExcludePrefabConnections => excludePrefabConnectionsIds;
 
-    private void OnTriggerEnter(Collider other)
+
+    public ConnectorMask GetConnectorMask(Connector connector)
     {
-        if (other.CompareTag("Player"))
-        {
-            GetComponentInParent<SpatialParadoxGenerator>().PlayerEnterSection(this);
-        }
+        return excludeConnectorSections[connector.internalIndex];
     }
-    private void OnTriggerExit(Collider other)
+
+    public void Build(SpatialParadoxGenerator generator)
     {
-        if (other.CompareTag("Player"))
+        orignalInstanceId = GetInstanceID();
+        if (spawnRule == null)
         {
-            GetComponentInParent<SpatialParadoxGenerator>().PlayerExitSection(this);
+            if (!TryGetComponent(out spawnRule))
+            {
+                spawnRule = gameObject.AddComponent<SectionSpawnBaseRule>();
+            }
         }
+        if(spawnRule != null)
+        {
+            spawnRule.owner = orignalInstanceId;
+            spawnRule.generator = generator;
+            InstanceCount = 0;
+        }
+        if(excludeConnectorSections.Count != connectors.Length)
+        {
+            for (int i = 0; i < connectors.Length; i++)
+            {
+                excludeConnectorSections.Add(new() { excludeRuntime = new() });
+            }
+        }
+
+        if (excludePrefabConnections == null) return;
+        excludePrefabConnectionsIds.Clear();
+        excludePrefabConnectionsIds = new List<int>(excludePrefabConnections.Count);
+        excludePrefabConnections.ForEach(section=> excludePrefabConnectionsIds.Add(section.GetInstanceID()));
+        //excludePrefabConnections.Clear();
+        //excludePrefabConnections = null;
+    }
+
+    public bool UpdateRule()
+    {
+        return spawnRule.UpdateSpawnStatus();
+    }
+
+    public void Spawned()
+    {
+        if(spawnRule == null) return;
+        spawnRule.OnSpawned();
     }
 
     public static float4x4 GetLTWConnectorMatrix(float4x4 ltw, Connector connector)
@@ -40,8 +149,32 @@ public class TunnelSection : MonoBehaviour
         return math.mul(ltw, connector.Matrix);
     }
 
+    public void SetRenderersEnabled(bool enabled)
+    {
+        renderersEnabled = enabled;
+        renderers = GetComponentsInChildren<Renderer>();
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            if (renderers[i] != null)
+            {
+                renderers[i].enabled = enabled;
+            }
+        }
+    }
+
+    public void SetCollidersEnabled(bool enabled)
+    {
+        collidersEnabled = enabled;
+        allColliders ??= GetComponentsInChildren<Collider>();
+        for (int i = 0; i < allColliders.Length; i++)
+        {
+            allColliders[i].enabled = enabled;
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
+        Gizmos.DrawCube(transform.TransformPoint(strongKeepPosition), Vector3.one);
         if (connectors != null)
         {
             for (int i = 0; i < connectors.Length; i++)
@@ -64,5 +197,6 @@ public class TunnelSection : MonoBehaviour
                 Gizmos.DrawWireCube(Vector3.zero, boundingBoxes[i].size);
             }
         }
+
     }
 }

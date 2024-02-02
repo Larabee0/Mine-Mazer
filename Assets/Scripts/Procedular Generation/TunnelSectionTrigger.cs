@@ -26,6 +26,8 @@ public class TunnelSectionTrigger : MonoBehaviour
             Debug.LogError("Unable to resolve generator reference", this);
             enabled = false;
         }
+
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,6 +42,7 @@ public class TunnelSectionTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            sectionOwner.explored = true;
             generator.PlayerExitSection(sectionOwner);
         }
     }
