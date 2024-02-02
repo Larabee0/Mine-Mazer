@@ -18,7 +18,8 @@ public enum Item
     Eudie,
     StagnationBeacon,
     BrokenHeart,
-    Soup
+    Soup,
+    FicusWood
 }
 
 public enum ItemCategory
@@ -26,7 +27,8 @@ public enum ItemCategory
     Crystal,
     Mushroom,
     Equippment,
-    Lumenite
+    Lumenite,
+    Wood
 }
 
 public static class ItemUtility
@@ -68,9 +70,19 @@ public static class ItemUtility
                 Item.Eudie
             }
         },
+
+        {
+            ItemCategory.Wood, new ()
+            {
+                Item.FicusWood
+            }
+        }
     };
+
     private static Dictionary<Item, ItemCategory> itemToCategory = null;
+
     public static Dictionary<ItemCategory, HashSet<Item>> CategoryToItems => categoryToItems;
+
     public static Dictionary<Item, ItemCategory> ItemToCategory
     {
         get
