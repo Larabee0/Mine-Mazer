@@ -99,7 +99,7 @@ namespace MazeGame.Navigation
 
         private void Start()
         {
-            ScaleMap(0);
+            ScaleMap(0.7f);
             //DebugMap();
         }
 
