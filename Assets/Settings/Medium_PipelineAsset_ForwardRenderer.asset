@@ -68,7 +68,8 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: -4296918213116926193}
   - {fileID: -8061587081197298472}
-  m_RendererFeatureMap: 0f6742b6a6475ec4d85c5b03437d1f9086298ff3eb225bfd
+  - {fileID: 5260169528512716934}
+  m_RendererFeatureMap: 0f6742b6a6475ec4d85c5b03437d1f906b967f8bfad0863386a0550d51e0ff48
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
@@ -108,3 +109,25 @@ MonoBehaviour:
   m_CopyDepthMode: 1
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &5260169528512716934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de8e02b5d5d8f14abf01f57ba423f8b, type: 3}
+  m_Name: ScreenSpaceOutlines
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  renderPassEvent: 550
+  viewSpaceNormalsTextureSettings:
+    colourFormat: 0
+    depthBufferBits: 4
+    filterMode: 0
+    backgroundColour: {r: 1, g: 0, b: 0, a: 1}
+  outlinesLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
