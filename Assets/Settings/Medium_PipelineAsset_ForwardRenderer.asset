@@ -68,8 +68,8 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: -4296918213116926193}
   - {fileID: -8061587081197298472}
-  - {fileID: 5260169528512716934}
-  m_RendererFeatureMap: 0f6742b6a6475ec4d85c5b03437d1f906b967f8bfad0863386a0550d51e0ff48
+  - {fileID: 6186814471396175902}
+  m_RendererFeatureMap: 0f6742b6a6475ec4d85c5b03437d1f904556613af28fc55a1eb0d08afbfadb55
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
@@ -105,11 +105,11 @@ MonoBehaviour:
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 2
-  m_DepthPrimingMode: 0
-  m_CopyDepthMode: 1
+  m_DepthPrimingMode: 1
+  m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
---- !u!114 &5260169528512716934
+--- !u!114 &6186814471396175902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,12 +122,26 @@ MonoBehaviour:
   m_Name: ScreenSpaceOutlines
   m_EditorClassIdentifier: 
   m_Active: 1
-  renderPassEvent: 550
-  viewSpaceNormalsTextureSettings:
-    colourFormat: 0
-    depthBufferBits: 4
-    filterMode: 0
-    backgroundColour: {r: 1, g: 0, b: 0, a: 1}
+  renderPassEvent: 300
   outlinesLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 2305
+  outlinesOccluderLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  screenSpaceOutlineSettings:
+    outlineColour: {r: 0, g: 0, b: 0, a: 1}
+    outlineScale: 1.6
+    depthThreshold: 10
+    robertsCrossMultiplier: 220
+    normalThreshold: 0.9
+    SteepAngleThreshold: 0.61
+    SteepAngleMultiplier: 200
+  viewSpaceNormalsTextureSettings:
+    colourFormat: 4
+    depthBufferBits: 16
+    filterMode: 2
+    backgroundColour: {r: 0, g: 0, b: 0, a: 1}
+    perObjectData: 0
+    enableDynamicBatching: 1
+    enableInstancing: 1
