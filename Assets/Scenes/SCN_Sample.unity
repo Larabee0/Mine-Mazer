@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 416201511}
-  m_IndirectSpecularColor: {r: 0.4465791, g: 0.4964133, b: 0.57481784, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028386, g: 0.22571427, b: 0.3069231, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedFlowchart: {fileID: 0}
+  selectedFlowchart: {fileID: 528317543}
 --- !u!4 &229147804
 Transform:
   m_ObjectHideFlags: 1
@@ -681,8 +681,8 @@ MonoBehaviour:
   tutorialDelayTime: 2
   EudieWayPoint: {fileID: 0}
   caveAmbience: {fileID: 528317594}
-  skipTutorial: 1
-  skipToPickUpEudie: 1
+  skipTutorial: 0
+  skipToPickUpEudie: 0
 --- !u!114 &528317542
 MonoBehaviour:
   m_ObjectHideFlags: 2
