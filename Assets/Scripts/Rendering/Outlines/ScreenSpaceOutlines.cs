@@ -130,6 +130,10 @@ public class ScreenSpaceOutlines : ScriptableRendererFeature
         private readonly Material screenSpaceOutlineMaterial;
         private RenderTargetIdentifier cameraColourTarget;
 
+        private RTHandle cameraColourTargetHandle;
+        private RTHandle temporaryTargetHandle;
+        private bool rtHandles = false;
+
         private RenderTargetIdentifier temporaryBuffer;
         private int temporaryBufferID = Shader.PropertyToID("_TemporaryBuffer");
 
@@ -155,20 +159,17 @@ public class ScreenSpaceOutlines : ScriptableRendererFeature
         {
             RenderTextureDescriptor temporaryTargetDescriptor = renderingData.cameraData.cameraTargetDescriptor;
             temporaryTargetDescriptor.depthBufferBits = 0;
-
-            temporaryBuffer = new RenderTargetIdentifier(temporaryBufferID);
-
-            //cmd.GetTemporaryRT(temporaryBufferID, temporaryTargetDescriptor, FilterMode.Bilinear);
-
-            cameraColourTarget = renderingData.cameraData.renderer.cameraColorTarget;
+            if (rtHandles)
+            {
+                cameraColourTargetHandle = renderingData.cameraData.renderer.cameraColorTargetHandle;
+                RenderingUtils.ReAllocateIfNeeded(ref temporaryTargetHandle, temporaryTargetDescriptor, name: "_TemporaryBuffer");
+            }
+            else
+            {
+                temporaryBuffer = new RenderTargetIdentifier(temporaryBufferID);
+                cameraColourTarget = renderingData.cameraData.renderer.cameraColorTarget;
+            }
         }
-
-        // public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
-        // {
-        //     RenderTextureDescriptor temporaryTargetDescriptor = cameraTextureDescriptor;
-        //     temporaryTargetDescriptor.depthBufferBits = 0;
-        //     RenderingUtils.ReAllocateIfNeeded(ref temporaryBuffer, temporaryTargetDescriptor, name: "_TemporaryBuffer");
-        // }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
@@ -177,48 +178,141 @@ public class ScreenSpaceOutlines : ScriptableRendererFeature
                 return;
             }
             CommandBuffer cmd = CommandBufferPool.Get();
-            using(new ProfilingScope(cmd,new ProfilingSampler("ScreenSpaceOutlines")))
+            if (rtHandles)
             {
-                Blit(cmd, cameraColourTarget, temporaryBuffer);
-                Blit(cmd, temporaryBuffer, cameraColourTarget, screenSpaceOutlineMaterial);
+                NewRTHandles(cmd);
             }
+            else
+            {
+                ObseleteRTHandles(cmd);
+            }
+            
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
         }
 
+        private void ObseleteRTHandles(CommandBuffer cmd)
+        {
+            using (new ProfilingScope(cmd, new ProfilingSampler("ScreenSpaceOutlines")))
+            {
+                Blit(cmd, cameraColourTarget, temporaryBuffer);
+                Blit(cmd, temporaryBuffer, cameraColourTarget, screenSpaceOutlineMaterial);
+            }
+        }
+
+        private void NewRTHandles(CommandBuffer cmd)
+        {
+            using (new ProfilingScope(cmd, new ProfilingSampler("ScreenSpaceOutlines")))
+            {
+                //Blit(cmd, cameraColourTargetHandle, temporaryTargetHandle);
+                Blitter.BlitCameraTexture(cmd, cameraColourTargetHandle, cameraColourTargetHandle, screenSpaceOutlineMaterial,0);
+                //Blit(cmd, cameraColourTargetHandle, cameraColourTargetHandle, screenSpaceOutlineMaterial);
+            }
+        }
+
         public override void OnCameraCleanup(CommandBuffer cmd)
         {
-            cmd.ReleaseTemporaryRT(temporaryBufferID);
+            if(!rtHandles)
+                cmd.ReleaseTemporaryRT(temporaryBufferID);
         }
 
         public void Dispose()
         {
-            //temporaryBuffer?.Release();
+            temporaryTargetHandle?.Release();
+        }
+    }
+
+    private class ColorBlitPass : ScriptableRenderPass
+    {
+        ProfilingSampler m_ProfilingSampler = new ProfilingSampler("ColorBlit");
+        Material m_Material;
+        RTHandle m_CameraColorTarget;
+
+        public ColorBlitPass(RenderPassEvent renderPassEvent, Material material,ScreenSpaceOutlineSettings screenSpaceOutlineSettings)
+        {
+            m_Material = material; //new Material(Shader.Find("Hidden/Outlines"));
+            m_Material.SetColor("_Color", screenSpaceOutlineSettings.outlineColour);
+            m_Material.SetFloat("_OutlineScale", screenSpaceOutlineSettings.outlineScale);
+
+            m_Material.SetFloat("_DepthThreshold", screenSpaceOutlineSettings.depthThreshold);
+            m_Material.SetFloat("_RobertsCrossMultiplier", screenSpaceOutlineSettings.robertsCrossMultiplier);
+
+            m_Material.SetFloat("_NormalThreshold", screenSpaceOutlineSettings.normalThreshold);
+
+            m_Material.SetFloat("_SteepAngleThreshold", screenSpaceOutlineSettings.SteepAngleThreshold);
+            m_Material.SetFloat("_SteepAngleMultiplier", screenSpaceOutlineSettings.SteepAngleMultiplier);
+            this.renderPassEvent = renderPassEvent;
+        }
+
+        public void SetTarget(RTHandle colorHandle)
+        {
+            m_CameraColorTarget = colorHandle;
+        }
+
+        public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
+        {
+            ConfigureTarget(m_CameraColorTarget);
+        }
+
+        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        {
+            var cameraData = renderingData.cameraData;
+            if (cameraData.camera.cameraType != CameraType.Game)
+                return;
+
+            if (m_Material == null)
+                return;
+
+            CommandBuffer cmd = CommandBufferPool.Get();
+            using (new ProfilingScope(cmd, m_ProfilingSampler))
+            {
+                Blitter.BlitCameraTexture(cmd, m_CameraColorTarget, m_CameraColorTarget, m_Material, 0);
+            }
+            context.ExecuteCommandBuffer(cmd);
+            cmd.Clear();
+
+            CommandBufferPool.Release(cmd);
         }
     }
 
     [SerializeField] private RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
     [SerializeField] private LayerMask outlinesLayerMask;
     [SerializeField] private LayerMask outlinesOccluderLayerMask;
-
+    // private Material outlineMaterial;
+    // [SerializeField] private Shader outlineShader;
     [SerializeField] private ScreenSpaceOutlineSettings screenSpaceOutlineSettings;
     [SerializeField] private ViewSpaceNormalTextureSettings viewSpaceNormalsTextureSettings;
 
     private ViewSpaceNormalsTexturePass viewSpaceNormalsTexturePass;
     private ScreenSpaceOutlinePass screenSpaceOutlinePass;
-
+    private ColorBlitPass exampleBlitPass;
 
     public override void Create()
     {
         viewSpaceNormalsTexturePass = new ViewSpaceNormalsTexturePass(renderPassEvent, outlinesLayerMask, outlinesOccluderLayerMask, viewSpaceNormalsTextureSettings);
         screenSpaceOutlinePass = new ScreenSpaceOutlinePass(renderPassEvent,screenSpaceOutlineSettings);
+        //outlineMaterial = CoreUtils.CreateEngineMaterial(outlineShader);
+        //exampleBlitPass = new ColorBlitPass(renderPassEvent, outlineMaterial, screenSpaceOutlineSettings);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         renderer.EnqueuePass(viewSpaceNormalsTexturePass);
+        //if (renderingData.cameraData.cameraType == CameraType.Game)
+        //    renderer.EnqueuePass(exampleBlitPass);
         renderer.EnqueuePass(screenSpaceOutlinePass);
     }
+
+    //public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
+    //{
+    //    if (renderingData.cameraData.cameraType == CameraType.Game)
+    //    {
+    //        // Calling ConfigureInput with the ScriptableRenderPassInput.Color argument
+    //        // ensures that the opaque texture is available to the Render Pass.
+    //        exampleBlitPass.ConfigureInput(ScriptableRenderPassInput.Color);
+    //        exampleBlitPass.SetTarget(renderer.cameraColorTargetHandle);
+    //    }
+    //}
 
     protected override void Dispose(bool disposing)
     {
@@ -227,5 +321,6 @@ public class ScreenSpaceOutlines : ScriptableRendererFeature
         {
             screenSpaceOutlinePass.Dispose();
         }
+        //CoreUtils.Destroy(outlineMaterial);
     }
 }
