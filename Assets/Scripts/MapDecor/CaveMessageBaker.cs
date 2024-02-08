@@ -129,6 +129,41 @@ public class CaveMessageBaker : MonoBehaviour
         AssetDatabase.Refresh();
     }
 
+    public void Load()
+    {
+        string targetPath = prefabsDirectory + "/" + folderName;
+        if (!Directory.Exists(prefabsDirectory))
+        {
+            Debug.LogError("Specified Directory does not exist.");
+            return;
+        }
+        if (!Directory.Exists(targetPath))
+        {
+            Debug.LogError("Specified Directory does not exist.");
+            return;
+        }
+        targetPath = Application.dataPath + "/" + folderName;
+        string editableAssetPath = targetPath + "/" + assetName + "_EDITABLE" + ".ecm";
+
+
+        XmlSerializer reader = new(typeof(EditableMessage));
+        StreamReader file = new(editableAssetPath);
+        EditableMessage editableMessage = (EditableMessage)reader.Deserialize(file);
+        file.Close();
+
+        backgroundImageIndex = editableMessage.backgroundImageIndex;
+        backgroundTint = editableMessage.backgroundTint;
+        dimentions = editableMessage.dimentions;
+        messageParts = new MessageSection[editableMessage.sections.Length];
+        dependsOn = editableMessage.dependsOn;
+
+        for (int i = 0; i < messageParts.Length; i++)
+        {
+            messageParts[i] = new(editableMessage.sections[i]);
+        }
+        Preview();
+    }
+
     private string PackageText()
     {
         string pak = string.Empty;
@@ -206,6 +241,17 @@ public class MessageSection
         newLines = 0;
         alignment = TextAlignment.Left;
         colour = Color.white;
+    }
+
+    public MessageSection(MessageSection section)
+    {
+        text = section.text;
+        size = section.size;
+        italics = section.italics;
+        bold = section.bold;
+        newLines = section.newLines;
+        alignment = section.alignment;
+        colour = section.colour;
     }
 }
 #endif
