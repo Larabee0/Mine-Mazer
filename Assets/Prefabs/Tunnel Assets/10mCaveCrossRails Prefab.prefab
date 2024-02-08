@@ -336,6 +336,7 @@ GameObject:
   - component: {fileID: 7115210080915405535}
   - component: {fileID: 8351807840266759401}
   - component: {fileID: 6251257719773375700}
+  - component: {fileID: 4675634271081345191}
   m_Layer: 0
   m_Name: 10mCaveCrossRails Prefab
   m_TagString: Untagged
@@ -495,6 +496,7 @@ MonoBehaviour:
   strongKeepPosition: {x: 0, y: 0, z: 0}
   waypointName: 
   spawnRule: {fileID: 8351807840266759401}
+  sectionLightLevel: 0.202
   excludePrefabConnectionsIds: 206b0000266b0000246b0000286b0000886a0000386b00003c6b0000
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 27432
@@ -549,6 +551,26 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 0093bdd867981e5459f1e51bcd7e2990, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &4675634271081345191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4301971218139400115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -12.019837}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 4.6646132
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 0
 --- !u!1001 &627492633159177806
 PrefabInstance:
   m_ObjectHideFlags: 0

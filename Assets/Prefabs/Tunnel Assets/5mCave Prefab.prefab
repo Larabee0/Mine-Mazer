@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 7541396775899075963}
   - component: {fileID: -6903181322850615606}
   - component: {fileID: -1596307782486745787}
+  - component: {fileID: 7178605889716267704}
   m_Layer: 0
   m_Name: 5mCave Prefab
   m_TagString: Untagged
@@ -366,6 +367,7 @@ MonoBehaviour:
   strongKeepPosition: {x: 0, y: 0, z: 0}
   waypointName: 
   spawnRule: {fileID: -6903181322850615606}
+  sectionLightLevel: 0.202
   excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 27424
@@ -420,6 +422,26 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: eb0c7cd80817ee94ea60d28829c8c974, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &7178605889716267704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176323169833114417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -6.7448196}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 2.772719
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 0
 --- !u!1 &8582775816916939885
 GameObject:
   m_ObjectHideFlags: 0

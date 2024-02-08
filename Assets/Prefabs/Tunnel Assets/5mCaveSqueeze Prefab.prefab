@@ -230,6 +230,7 @@ GameObject:
   - component: {fileID: 7544748717809826148}
   - component: {fileID: -851804242554496158}
   - component: {fileID: 6855246517236569578}
+  - component: {fileID: 2817166753522620581}
   m_Layer: 0
   m_Name: 5mCaveSqueeze Prefab
   m_TagString: Untagged
@@ -373,6 +374,7 @@ MonoBehaviour:
   strongKeepPosition: {x: 0, y: 0, z: 0}
   waypointName: 
   spawnRule: {fileID: -851804242554496158}
+  sectionLightLevel: 0.202
   excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 27428
@@ -427,6 +429,26 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: f4a5417e0c5fd594ea21a7b02248e7dc, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &2817166753522620581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8067933336209886050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -7.1220703}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 3.0042381
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 0
 --- !u!1 &8537734873157505293
 GameObject:
   m_ObjectHideFlags: 0
