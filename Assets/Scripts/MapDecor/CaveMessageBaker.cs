@@ -14,7 +14,7 @@ public class CaveMessageBaker : MonoBehaviour
     public int backgroundImageIndex;
     public Color backgroundTint = Color.white;
     public int width = 700;
-    public Color incrementColour = Color.black;
+    public Color pageSelectColour = Color.black;
     
     public string[] dependsOn;
     public bool randomlyFound = true;
@@ -48,7 +48,7 @@ public class CaveMessageBaker : MonoBehaviour
                 VisualElement messageContainer = document.rootVisualElement.Q("MessagePreview");
                 MessageContainer container = new(messageContainer)
                 {
-                    PageIncremenetColour = incrementColour
+                    PageIncremenetColour = pageSelectColour
                 };
                 PreviewPage(container);
 
@@ -100,7 +100,7 @@ public class CaveMessageBaker : MonoBehaviour
             messageText = PackageText(),
             dependsOn = dependsOn,
             randomlyFound = randomlyFound,
-            pageIncrementColour = incrementColour
+            pageIncrementColour = pageSelectColour
         };
 
         EditableMessage editableMessage = new()
