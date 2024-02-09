@@ -13,13 +13,18 @@ public class CaveMessageBaker : MonoBehaviour
     public MessageSection[] messageParts;
     public int backgroundImageIndex;
     public Color backgroundTint = Color.white;
-    public Vector2Int dimentions = new (100,250);
-    public string assetName = "Example Message";
+    public int width = 700;
+    public Color incrementColour = Color.black;
+    
     public string[] dependsOn;
     public bool randomlyFound = true;
+    [Header("Debug Display")]
+    public int pageIndex = 0;
+    [Header("Save Directory Stuff")]
+    public string assetName = "Example Message";
     public string prefabsDirectory = "";
     public string folderName = "";
-    
+    [Header("Components and debug")]
     public UIDocument document;
     public VisualTreeAsset messagePrefab;
     public bool autoUpdate = false;
@@ -41,13 +46,15 @@ public class CaveMessageBaker : MonoBehaviour
             if (document.rootVisualElement != null && document.visualTreeAsset != null)
             {
                 VisualElement messageContainer = document.rootVisualElement.Q("MessagePreview");
-                MessageContainer container = new(messageContainer);
+                MessageContainer container = new(messageContainer)
+                {
+                    PageIncremenetColour = incrementColour
+                };
+                PreviewPage(container);
 
-                container.text.text = PackageText();
-
-                container.root.style.width = dimentions.x;
-                container.root.style.height = dimentions.y;
-                if(backgroundImageIndex < 0)
+                container.root.style.width = width;
+                //container.root.style.height = dimentions.y;
+                if (backgroundImageIndex < 0)
                 {
                     container.root.style.backgroundColor = backgroundTint;
                 }
@@ -57,10 +64,29 @@ public class CaveMessageBaker : MonoBehaviour
                 }
                 return;
             }
-            
+
         }
 
         Debug.LogError("Error with UI Document or VTA. Check assignments in inspector.");
+    }
+
+    private void PreviewPage(MessageContainer container)
+    {
+        string packedPages = PackageText();
+        string[] unpackedPages = packedPages.Split('¬', StringSplitOptions.RemoveEmptyEntries);
+
+        pageIndex = Mathf.Clamp(pageIndex, 0, unpackedPages.Length - 1);
+
+        container.text.text = unpackedPages[pageIndex];
+        if (unpackedPages.Length > 1)
+        {
+            container.pageIncrementContainer.style.display = DisplayStyle.Flex;
+            container.UpdatePageNumberDisplay(pageIndex, unpackedPages.Length);
+        }
+        else
+        {
+            container.pageIncrementContainer.style.display = DisplayStyle.None;
+        }
     }
 
     public void BakeDown()
@@ -70,10 +96,11 @@ public class CaveMessageBaker : MonoBehaviour
             assetName = assetName,
             backgroundIndex = backgroundImageIndex,
             backgroundTint = backgroundTint,
-            dimentions = dimentions,
+            dimentions = new Vector2Int(width,0),
             messageText = PackageText(),
             dependsOn = dependsOn,
             randomlyFound = randomlyFound,
+            pageIncrementColour = incrementColour
         };
 
         EditableMessage editableMessage = new()
@@ -81,7 +108,7 @@ public class CaveMessageBaker : MonoBehaviour
             assetName = assetName,
             backgroundImageIndex = backgroundImageIndex,
             backgroundTint = backgroundTint,
-            dimentions = dimentions,
+            dimentions = new Vector2Int(width,0),
             sections = new MessageSection[messageParts.Length],
             dependsOn = dependsOn,
         };
@@ -153,7 +180,7 @@ public class CaveMessageBaker : MonoBehaviour
 
         backgroundImageIndex = editableMessage.backgroundImageIndex;
         backgroundTint = editableMessage.backgroundTint;
-        dimentions = editableMessage.dimentions;
+        width = editableMessage.dimentions.x;
         messageParts = new MessageSection[editableMessage.sections.Length];
         dependsOn = editableMessage.dependsOn;
 
@@ -167,6 +194,35 @@ public class CaveMessageBaker : MonoBehaviour
     private string PackageText()
     {
         string pak = string.Empty;
+
+        Dictionary<int, List<MessageSection>> pageSort = new();
+        Dictionary<int, string> pageBake = new();
+        for (int i = 0; i < messageParts.Length; i++)
+        {
+            if (!pageSort.TryAdd(messageParts[i].pageNum, new() { messageParts[i] }))
+            {
+                pageSort[messageParts[i].pageNum].Add(messageParts[i]);
+            }
+        }
+
+        foreach(var pair in pageSort)
+        {
+            string pagePak = string.Empty;
+            pair.Value.ForEach(message => pagePak = string.Format("{0}{1}", pagePak, PackageSection(message)));
+            if(string.IsNullOrEmpty(pagePak) )
+            {
+                pagePak = "Empty String";
+            }
+            pagePak += "<br>";
+            pageBake.Add(pair.Key, pagePak);
+        }
+
+        foreach(var pair in pageBake)
+        {
+            pak = string.Format("{0}¬{1}", pak, pair.Value);
+        }
+        return pak;
+
         for (int i = 0; i < messageParts.Length; i++)
         {
             pak = string.Format("{0}{1}", pak, PackageSection(messageParts[i]));
@@ -231,6 +287,8 @@ public class MessageSection
     public int newLines = 0;
     public TextAlignment alignment = TextAlignment.Left;
     public Color colour = Color.white;
+    public int pageNum = 1;
+    public bool lumenLightRequired = false;
 
     public MessageSection()
     {
@@ -241,7 +299,9 @@ public class MessageSection
         newLines = 0;
         alignment = TextAlignment.Left;
         colour = Color.white;
-    }
+        pageNum = 1;
+        lumenLightRequired = false;
+}
 
     public MessageSection(MessageSection section)
     {
@@ -252,6 +312,8 @@ public class MessageSection
         newLines = section.newLines;
         alignment = section.alignment;
         colour = section.colour;
+        pageNum = section.pageNum;
+        lumenLightRequired = section.lumenLightRequired;
     }
 }
 #endif

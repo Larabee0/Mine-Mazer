@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465791, g: 0.4964133, b: 0.57481784, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -253,14 +253,18 @@ MonoBehaviour:
     newLines: 0
     alignment: 0
     colour: {r: 0.066037714, g: 0.044544306, b: 0.044544306, a: 1}
+    pageNum: 1
+    lumenLightRequired: 0
   - text: 'NAME: Coquina Siltstone<br>PRIORITY: Urgent Express <br><br>TITLE: Lumen
       Extraction System (LES), version 2.1.16 <br><br>SUMMARY:  '
     size: 30
     italics: 0
     bold: 0
-    newLines: 2
+    newLines: 1
     alignment: 0
     colour: {r: 0.066037714, g: 0.044544306, b: 0.044544306, a: 1}
+    pageNum: 1
+    lumenLightRequired: 0
   - text: "[A detailed diagram of a machine, complete with operating instructions
       and circuit diagrams, has been drawn in this space. Much of it is blurred with
       dust and grime, but you can tell it would have been used to break apart rock,
@@ -273,6 +277,8 @@ MonoBehaviour:
     newLines: 0
     alignment: 0
     colour: {r: 0.066037714, g: 0.044544306, b: 0.044544306, a: 1}
+    pageNum: 1
+    lumenLightRequired: 0
   - text: 'VOUCHING OFFICER(S): Chert Picrite, Arkose Claystone '
     size: 30
     italics: 1
@@ -280,12 +286,16 @@ MonoBehaviour:
     newLines: 2
     alignment: 0
     colour: {r: 0.066037714, g: 0.044544306, b: 0.044544306, a: 1}
+    pageNum: 1
+    lumenLightRequired: 0
   backgroundImageIndex: -1
   backgroundTint: {r: 0.5754717, g: 0.5253595, b: 0.49132252, a: 1}
-  dimentions: {x: 700, y: 820}
-  assetName: Form 378-B
+  width: 700
+  incrementColour: {r: 0, g: 0, b: 0, a: 1}
   dependsOn: []
-  randomlyFound: 0
+  randomlyFound: 1
+  pageIndex: 0
+  assetName: TestMultiPage
   prefabsDirectory: Assets
   folderName: Resources/Notes
   document: {fileID: 599204091}
@@ -323,8 +333,9 @@ MonoBehaviour:
   document: {fileID: 599204091}
   messagePrefab: {fileID: 9197481963319205126, guid: 9d01f63a273fd9a488bb24bedd2c464e,
     type: 3}
-  debugForceRandomOnStart: 0
-  debugLingerTime: 25
+  debugForceRandomOnStart: 1
+  debugInfiniteRandom: 1
+  debugLingerTime: 30
   messageAssetHashes: []
   unreadMessages: []
 --- !u!1 &652295663
