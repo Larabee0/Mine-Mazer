@@ -548,6 +548,8 @@ GameObject:
   - component: {fileID: 2742071741484992111}
   - component: {fileID: -7141117933906971303}
   - component: {fileID: 4571649418968064204}
+  - component: {fileID: 7745043349235102980}
+  - component: {fileID: 734283417317636682}
   m_Layer: 0
   m_Name: 10mCaveUpHalfCircle Prefab
   m_TagString: Untagged
@@ -716,6 +718,7 @@ MonoBehaviour:
   strongKeepPosition: {x: 0, y: 0, z: 0}
   waypointName: 
   spawnRule: {fileID: -7141117933906971303}
+  sectionLightLevel: 0.202
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 27442
@@ -770,6 +773,46 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: ef16ead45bcfd6541bcb8ce81746bf28, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &7745043349235102980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7695764492245604777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.5}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 3.6306493
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 0
+--- !u!114 &734283417317636682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7695764492245604777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: -19.715343, y: 10.076902, z: -2.5}
+  m_EndPoint: {x: -19.83831, y: 10.091085, z: 0.9956114}
+  m_Width: 2.7955666
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 0
 --- !u!1 &9207288404384216192
 GameObject:
   m_ObjectHideFlags: 0
