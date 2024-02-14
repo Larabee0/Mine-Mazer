@@ -193,7 +193,7 @@ public class TunnelSection : MonoBehaviour
         {
             for (int i = 0; i < boundingBoxes.Length; i++)
             {
-                Gizmos.matrix = math.mul(float4x4.TRS(transform.position, transform.rotation, Vector3.one), boundingBoxes[i].Matrix);
+                Gizmos.matrix = math.mul(float4x4.TRS(transform.position, transform.rotation, Vector3.one), boundingBoxes[i].LocalMatrix);
                 Gizmos.DrawWireCube(Vector3.zero, boundingBoxes[i].size);
             }
         }

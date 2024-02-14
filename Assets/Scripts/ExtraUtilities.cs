@@ -11,6 +11,20 @@ using UnityEngine;
 public static class ExtraUtilities
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static float3 TransformDirection(in this float4x4 m, in float3 d) => math.rotate(m, d);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static float3 TransformPoint(in this float4x4 m, in float3 p) => math.mul(m, new float4(p, 1)).xyz;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static float3 InverseTransformPoint(in this float4x4 m, in float3 p) => math.mul(math.inverse(m), new float4(p, 1)).xyz;
+    public static T Pop<T>(this List<T> list)
+    {
+        T result = list[^1];
+        list.RemoveAt(list.Count - 1);
+        return result;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color InverseLerp(Color a, Color b, Color value)
     {
         return (Vector4)math.unlerp((Vector4)a, (Vector4)b, (Vector4)value);

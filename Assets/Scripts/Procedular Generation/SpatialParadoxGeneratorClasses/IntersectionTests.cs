@@ -28,10 +28,28 @@ public partial class SpatialParadoxGenerator
         {
             secondaryConnector = GetConnectorFromSection(secondaryConnectors, out int secIndex);
 
-            bool noIntersections = IntersectionTest(primary, target, ref primaryConnector, ref secondaryConnector);
+            bool noIntersections = IntersectionTest(target, secondaryConnector.internalIndex);
+            //bool newPhysicsTestBurst = ManualCheckBox(target.orignalInstanceId, secondaryConnector.internalIndex);
+            //bool newPhysicsTestBurst = ManualCheckBoxBurst(target.orignalInstanceId, secondaryConnector.internalIndex);
+
+
+            //if (noIntersections != newPhysicsTestBurst)
+            //{
+            //    Debug.LogFormat("Test Mismatch Burst Test: {0} Old Test: {1}", newPhysicsTestBurst, noIntersections);
+            //    showIntersectionTests = true;
+            //    Debug.Break();
+            //    throw new System.Exception("Break loop");
+            //}
+            //else
+            //{
+            //    fromIntersecitonTests.Clear();
+            //    Debug.LogFormat("Test Agree");
+            //}
+
 
             if (noIntersections)
             {
+                ConnectorMultiply(primary, ref primaryConnector, ref secondaryConnector);
                 return true;
             }
             secondaryConnectors.RemoveAt(secIndex);
@@ -45,9 +63,48 @@ public partial class SpatialParadoxGenerator
     /// <param name="primary"></param>
     /// <param name="target"></param>
     /// <param name="primaryConnector"></param>
-    /// <param name="secondaryConnector"></param>
+    /// <param name="secondaryConnectorIndex"></param>
     /// <returns>True if the section will fit, false if not.</returns>
-    private bool IntersectionTest(TunnelSection primary, TunnelSection target, ref Connector primaryConnector, ref Connector secondaryConnector)
+    private bool IntersectionTest(TunnelSection target, int secondaryConnectorIndex)
+    {
+        //ConnectorMultiply(primary, ref primaryConnector, ref secondaryConnector);
+
+        int instanceID = target.GetInstanceID();
+        UnsafeList<UnsafeList<BoxTransform>> transformsContainer = sectionBoxTransforms[instanceID];
+        if (transformsContainer.Length == 0)
+        {
+            Debug.LogError("no transforms found for connector");
+            return false;
+        }
+
+        if (transformsContainer.Length <= secondaryConnectorIndex)
+        {
+            Debug.LogErrorFormat(gameObject, "returned transforms list does not contain index ({0}) for connector", secondaryConnectorIndex);
+        }
+
+        UnsafeList<BoxTransform> transforms = transformsContainer[secondaryConnectorIndex];
+        if (transforms.Length == 0)
+        {
+            Debug.LogError("no box transforms found");
+            return false;
+        }
+        for (int i = 0; i < target.BoundingBoxes.Length; i++)
+        {
+            BoxBounds boxBounds = target.BoundingBoxes[i];
+
+            BoxTransform m = transforms[i];
+            float3 position = m.pos;
+            Quaternion rotation = m.rot;
+            if (Physics.CheckBox(position, boxBounds.size * 0.5f, rotation, tunnelSectionLayerIndex, QueryTriggerInteraction.Ignore))
+            {
+
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static void ConnectorMultiply(TunnelSection primary, ref Connector primaryConnector, ref Connector secondaryConnector)
     {
         NativeReference<Connector> pri = new(primaryConnector, Allocator.TempJob);
         NativeReference<Connector> sec = new(secondaryConnector, Allocator.TempJob);
@@ -58,41 +115,5 @@ public partial class SpatialParadoxGenerator
         secondaryConnector = sec.Value;
         pri.Dispose();
         sec.Dispose();
-
-        int instanceID = target.GetInstanceID();
-        UnsafeList<UnsafeList<BoxTransform>> transformsContainer = sectionBoxTransforms[instanceID];
-        if (transformsContainer.Length == 0)
-        {
-            Debug.LogError("no transforms found for connector");
-            return false;
-        }
-
-        if (transformsContainer.Length <= secondaryConnector.internalIndex)
-        {
-            Debug.LogErrorFormat(gameObject, "returned transforms list does not contain index ({0}) for connector", secondaryConnector.internalIndex);
-        }
-
-        UnsafeList<BoxTransform> transforms = transformsContainer[secondaryConnector.internalIndex];
-        if (transforms.Length == 0)
-        {
-            Debug.LogError("no box transforms found");
-            return false;
-        }
-
-        for (int i = 0; i < target.BoundingBoxes.Length; i++)
-        {
-            BoxBounds boxBounds = target.BoundingBoxes[i];
-
-            BoxTransform m = transforms[i];
-            float3 position = m.pos;
-            Quaternion rotation = m.rot;
-
-            if (Physics.CheckBox(position, boxBounds.size * 0.5f, rotation, tunnelSectionLayerIndex, QueryTriggerInteraction.Ignore))
-            {
-                return false;
-            }
-        }
-        return true;
     }
-
 }

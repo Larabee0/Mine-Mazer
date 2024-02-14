@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -53,6 +54,10 @@ public partial class SpatialParadoxGenerator
     {
         float4x4 transformMatrix = CalculateSectionMatrix(primaryConnector, secondaryConnector);
         secondaryTransform.SetPositionAndRotation(transformMatrix.Translation(), transformMatrix.Rotation());
+        if(secondaryTransform.TryGetComponent(out TunnelSection section))
+        {
+            AddSection(section, transformMatrix);
+        }
     }
 
     private float4x4 CalculateSectionMatrix(Connector primary, Connector secondary)
@@ -145,7 +150,7 @@ public partial class SpatialParadoxGenerator
             Debug.LogException(new KeyNotFoundException(string.Format("Key: {0} not present in dictionary instanceIdToSection!", section.orignalInstanceId)), gameObject);
             Debug.LogErrorFormat(gameObject, "Likely section {0} has incorrect instance id of {1}", section.gameObject.name, section.orignalInstanceId);
         }
-
+        DestroySection(section.GetInstanceID());
         Destroy(section.gameObject);
     }
 

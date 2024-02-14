@@ -109,40 +109,35 @@ public partial class SpatialParadoxGenerator
             };
 
             handle = parallelMatrixCalculations
-                ? bmj.ScheduleParallel(nextSections.Count, 8, handle)
+                ? bmj.ScheduleParallel(nextSections.Count, 4, handle)
                 : bmj.Schedule(nextSections.Count, handle);
 
             priConn.Dispose(handle).Complete();
 
+            Debug.Log(nextSections.Count);
 
             List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreference), nextSections);
-            while (internalNextSections.Count > 0)
+            if (BIGparallelIntersectTests)
             {
-                int curInstanceID = internalNextSections.ElementAt(Random.Range(0, internalNextSections.Count));
-                targetSection = instanceIdToSection[curInstanceID];
-                if (RunIntersectionTests(primary, targetSection, ref primaryPreference, out secondaryPreference))
+                if (ParallelRandomiseIntersection(primary, ref primaryPreference, ref secondaryPreference, primaryConnectors, ref iterations, ref targetSection, priIndex, internalNextSections))
                 {
                     break;
                 }
-                internalNextSections.Remove(curInstanceID);
-                targetSection = null;
-                iterations--;
-                if (iterations <= 0)
+            }
+            else
+            {
+                if (RandomiseIntersection(primary, ref primaryPreference, ref secondaryPreference, primaryConnectors, ref iterations, ref targetSection, priIndex, internalNextSections))
                 {
-                    Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
+                    break;
                 }
             }
-            if (targetSection != null)
-            {
-                break;
-            }
-            primaryConnectors.RemoveAt(priIndex);
         }
 
         nativeNexSections.Dispose();
 
         if (targetSection == null)
         {
+            ConnectorMultiply(primary, ref primaryPreference, ref secondaryPreference);
             secondaryPreference = deadEndPlug.connectors[0];
             secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
             targetSection = deadEndPlug;
@@ -151,4 +146,34 @@ public partial class SpatialParadoxGenerator
         return targetSection;
     }
 
+    private bool RandomiseIntersection(TunnelSection primary, ref Connector primaryPreference, ref Connector secondaryPreference, List<Connector> primaryConnectors, ref int iterations, ref TunnelSection targetSection, int priIndex, List<int> internalNextSections)
+    {
+        while (internalNextSections.Count > 0)
+        {
+            int curInstanceID = internalNextSections.ElementAt(Random.Range(0, internalNextSections.Count));
+            targetSection = instanceIdToSection[curInstanceID];
+
+            bool intersectionTest = parallelIntersectTests
+                ? ParallelIntersectTest(primary, targetSection, ref primaryPreference, out secondaryPreference)
+                : RunIntersectionTests(primary, targetSection, ref primaryPreference, out secondaryPreference);
+
+            if (intersectionTest)
+            {
+                break;
+            }
+            internalNextSections.Remove(curInstanceID);
+            targetSection = null;
+            iterations--;
+            if (iterations <= 0)
+            {
+                Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
+            }
+        }
+        if (targetSection != null)
+        {
+            return true;
+        }
+        primaryConnectors.RemoveAt(priIndex);
+        return false;
+    }
 }

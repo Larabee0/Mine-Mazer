@@ -77,7 +77,7 @@ public class SectionBakerEditor : Editor
         {
             GameObject empty = new("BoundingBox");
             empty.transform.SetParent(section.transform, false);
-            empty.transform.SetLocalPositionAndRotation(box.center, Quaternion.Euler(box.oreintation));
+            empty.transform.SetLocalPositionAndRotation(box.LocalCenter, Quaternion.Euler(box.LocalOreintation));
             BoxCollider collider = empty.AddComponent<BoxCollider>();
             collider.size = box.size;
             empty.layer = (int)Mathf.Log(baker.tunnelSectionLayerMask.value, 2);
