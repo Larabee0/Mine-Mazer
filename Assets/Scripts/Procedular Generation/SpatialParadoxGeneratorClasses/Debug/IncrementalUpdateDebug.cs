@@ -16,17 +16,20 @@ public partial class SpatialParadoxGenerator
             for (int i = 0; i < mapTree[^1].Count; i++)
             {
                 yield return new WaitForSeconds(intersectTestHoldTime);
-                TunnelSection section = mapTree[^1][i];
-                if (section.Keep)
+                if (mapTree[^1][i].Instantiated)
                 {
-                    section.gameObject.SetActive(false);
-                    section.transform.parent = sectionGraveYard;
-                    ClearConnectors(section);
-                    mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.Position, section.Position), mapTree.Count - 1));
-                }
-                else
-                {
-                    DestroySection(section);
+                    TunnelSection section = mapTree[^1][i].sectionInstance;
+                    if (section.Keep)
+                    {
+                        section.gameObject.SetActive(false);
+                        section.transform.parent = sectionGraveYard;
+                        ClearConnectors(section);
+                        mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.Position, section.Position), mapTree.Count - 1));
+                    }
+                    else
+                    {
+                        DestroySection(section);
+                    }
                 }
             }
             mapTree.RemoveAt(mapTree.Count - 1);
@@ -43,12 +46,12 @@ public partial class SpatialParadoxGenerator
 
         UpdateMothBalledSections(newRoot);
 
-        List<List<TunnelSection>> newTree = new() { new() { newRoot } };
-        HashSet<TunnelSection> exceptWith = new(newTree[^1]);
+        
+        
         yield return new WaitForSeconds(intersectTestHoldTime);
 
         Debug.Log("Building new Tree..");
-        RecursiveTreeBuilder(newTree, exceptWith);
+        List<List<MapTreeElement>> newTree = RebuildTree(newRoot);
 
         Debug.LogFormat("New Tree Size {0}", newTree.Count);
         Debug.LogFormat("Original Tree Size {0}", mapTree.Count);
@@ -63,21 +66,24 @@ public partial class SpatialParadoxGenerator
             for (int i = 0; i < newTree[^1].Count; i++)
             {
                 yield return new WaitForSeconds(intersectTestHoldTime);
-                TunnelSection section = newTree[^1][i];
-                if (section.Keep)
+                if (newTree[^1][i].Instantiated)
                 {
-                    section.gameObject.SetActive(false);
-                    section.transform.parent = sectionGraveYard;
-                    if (!mothBalledSections.ContainsKey(section))
+                    TunnelSection section = newTree[^1][i].sectionInstance;
+                    if (section.Keep)
                     {
-                        ClearConnectors(section);
-                        mothBalledSections.Add(section, new(math.distancesq(newRoot.Position, section.Position), newTree.Count - 1));
+                        section.gameObject.SetActive(false);
+                        section.transform.parent = sectionGraveYard;
+                        if (!mothBalledSections.ContainsKey(section))
+                        {
+                            ClearConnectors(section);
+                            mothBalledSections.Add(section, new(math.distancesq(newRoot.Position, section.Position), newTree.Count - 1));
+                        }
                     }
-                }
-                else
-                {
-                    leafCounter++;
-                    DestroySection(section);
+                    else
+                    {
+                        leafCounter++;
+                        DestroySection(section);
+                    }
                 }
             }
             newTree.RemoveAt(newTree.Count - 1);
@@ -104,7 +110,7 @@ public partial class SpatialParadoxGenerator
 
 
         Debug.LogFormat("Grew {0} leaves", mapTree[^1].Count - oldSize);
-        curPlayerSection = newTree[0][0];
+        curPlayerSection = newTree[0][0].sectionInstance;
         if (curPlayerSection == null)
         {
             ResolvePlayerSection();

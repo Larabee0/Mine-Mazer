@@ -21,7 +21,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
 
     [Header("Runtime Map")]
     [SerializeField] private TunnelSection curPlayerSection;
-    [SerializeField] private List<List<TunnelSection>> mapTree = new();
+    [SerializeField] private List<List<MapTreeElement>> mapTree = new();
     // private Dictionary<int, int> sectionCounter = new();
     private Dictionary<TunnelSection, SectionDstData> mothBalledSections = new();
     private Dictionary<int, List<TunnelSection>> promoteSectionsDict = new();
@@ -36,7 +36,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     public Pluse OnMapUpdate;
     public Pluse OnEnterLadderSection;
     public Pluse OnEnterColonySection;
-    public List<List<TunnelSection>> MapTree => mapTree;
+    public List<List<MapTreeElement>> MapTree => mapTree;
     public TunnelSection CurPlayerSection => curPlayerSection;
 
     // these are quite unsafe lol
@@ -46,10 +46,19 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     NativeParallelHashMap<int, UnsafeList<BurstConnector>> sectionConnectorContainers; // connector structs for each section - these all have an identity matrix applied.
     NativeParallelHashMap<int, UnsafeList<float4x4>> sectionBoxMatrices; // local matrices of the bounding boxes of the section
 
-    NativeParallelHashMap<int, UnsafeList<InstancedBox>> incomingBoxBounds;
-    UnsafeList<TunnelSectionVirtual> VirtualPhysicsWorld;
+    NativeParallelHashMap<int, UnsafeList<InstancedBox>> incomingBoxBounds; // InstancedBox contains 2 unsafe lists for corners (8) and normals(6)
+    UnsafeList<TunnelSectionVirtual> VirtualPhysicsWorld; // TunnelSectionVirtual contains an unsafe list of InstancedBoxes
+    HashSet<int> virtualPhysicsWorldIds = new();
 
-    public List<SectionQueueItem> tunnelSectionQueue = new();
+    private TunnelSection nextPlayerSection;
+    private Coroutine incrementalUpdateProcess;
+    private Coroutine queuedUpdateProcess;
+
+    public List<SectionQueueItem> preProcessingQueue = new();
+    public Dictionary<int,SectionQueueItem> processingQueue = new();
+    public List<SectionQueueItem> postProcessingQueue = new();
+
+    public bool SectionsInProcessingQueue => preProcessingQueue.Count > 0 || processingQueue.Count > 0 || postProcessingQueue.Count > 0;
 
     [Header("Generation Settings")]
     [SerializeField] private int ringRenderDst = 3; 
@@ -247,11 +256,19 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         
         AmbientLightController.Instance.FadeAmbientLight(curPlayerSection.AmbientLightLevel);
         AddSection(curPlayerSection, float4x4.TRS(curPlayerSection.transform.position, curPlayerSection.transform.rotation, Vector3.one));
+        virtualPhysicsWorldIds.Add(curPlayerSection.GetInstanceID());
         double startTime = Time.realtimeSinceStartupAsDouble;
         rejectBreakableWallAtConnections = true;
-        RecursiveBuilder(true);
-        if (mapProfiling) Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
-        OnMapUpdate?.Invoke();
-        StartCoroutine(BreakEditor());
+        if (incrementalBuilder)
+        {
+            StartCoroutine(IncrementalBuilder(true));
+        }
+        else
+        {
+            RecursiveBuilder(true);
+            if (mapProfiling) Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+            OnMapUpdate?.Invoke();
+            StartCoroutine(BreakEditor());
+        }
     }
 }

@@ -4,11 +4,12 @@ using UnityEngine;
 
 public partial class SpatialParadoxGenerator
 {
+
     private void RecursiveBuilder(bool initialArea = false)
     {
         while (mapTree.Count <= maxDst)
         {
-            List<TunnelSection> startSections = mapTree[^1];
+            List<MapTreeElement> startSections = mapTree[^1];
             mapTree.Add(new());
             FillSectionConnectors(startSections);
             if (initialArea)
@@ -17,8 +18,88 @@ public partial class SpatialParadoxGenerator
             }
         }
     }
+    private IEnumerator IncrementalBuilder(bool initialArea = false)
+    {
+        while (mapTree.Count <= maxDst)
+        {
+            List<MapTreeElement> startSections = mapTree[^1];
+            mapTree.Add(new());
+            yield return FillSectionConnectorsIncremental(startSections);
+            yield return PreProcessQueue();
+            if (initialArea)
+            {
+                rejectBreakableWallAtConnections = false;
+            }
+        }
+        yield return null;
+        OnMapUpdate?.Invoke();
+        yield return BreakEditor();
+    }
 
-    private void FillSectionConnectors(List<TunnelSection> startSections)
+
+    private IEnumerator FillSectionConnectorsIncremental(List<MapTreeElement> startSections)
+    {
+        if (promoteSectionsDict.Count > 0 && promoteSectionsDict.ContainsKey(mapTree.Count - 1))
+        {
+            int freeConnectors = GetFreeConnectorCount(startSections);
+            if (freeConnectors < promoteSectionsDict[mapTree.Count - 1].Count)
+            {
+                while (SectionsInProcessingQueue)
+                {
+                    yield return null;
+                }
+                // not enough free connectors, go in a level and regenerate.
+                Debug.LogWarningFormat("Regening ring {0} it does not have enough free connectors.", mapTree.Count - 2);
+                yield return RegenRingIncremental(mapTree.Count - 2);
+                yield break;
+            }
+            else
+            {
+                promoteSectionsList.AddRange(promoteSectionsDict[mapTree.Count - 1]);
+                promoteSectionsDict.Remove(mapTree.Count - 1);
+            }
+        }
+
+        for (int i = 0; i < startSections.Count; i++)
+        {
+            TunnelSection section = startSections[i].sectionInstance;
+            int freeConnectors = section.connectors.Length - section.InUse.Count;
+            for (int j = 0; j < freeConnectors; j++)
+            {
+                MapTreeElement sectionInstance = PickInstinateConnectDelayed(section);
+                mapTree[^1].Add(sectionInstance);
+            }
+        }
+
+        if (promoteSectionsList.Count > 0 && mapTree.Count <= maxDst)
+        {
+            if (promoteSectionsDict.ContainsKey(mapTree.Count))
+            {
+                promoteSectionsDict[mapTree.Count].AddRange(promoteSectionsList);
+            }
+            else
+            {
+                promoteSectionsDict.Add(mapTree.Count, new(promoteSectionsList));
+            }
+            promoteSectionsDict.Clear();
+        }
+        if (GetFreeConnectorCount(mapTree[^1]) == 0)
+        {
+            while (SectionsInProcessingQueue)
+            {
+                yield return null;
+            }
+            yield return RegenRingIncremental(mapTree.Count - 2);
+            yield break;
+        }
+        if (ringRenderDst < maxDst && mapTree.Count > ringRenderDst)
+        {
+            mapTree[^1].ForEach(section => section.SetRenderersEnabled(false));
+        }
+    }
+
+
+    private void FillSectionConnectors(List<MapTreeElement> startSections)
     {
         if (promoteSectionsDict.Count > 0 && promoteSectionsDict.ContainsKey(mapTree.Count - 1))
         {
@@ -39,12 +120,15 @@ public partial class SpatialParadoxGenerator
 
         for (int i = 0; i < startSections.Count; i++)
         {
-            TunnelSection section = startSections[i];
-            int freeConnectors = section.connectors.Length - section.InUse.Count;
-            for (int j = 0; j < freeConnectors; j++)
+            if (startSections[i].Instantiated)
             {
-                TunnelSection sectionInstance = PickInstinateConnect(section);
-                mapTree[^1].Add(sectionInstance);
+                TunnelSection section = startSections[i].sectionInstance;
+                int freeConnectors = section.connectors.Length - section.InUse.Count;
+                for (int j = 0; j < freeConnectors; j++)
+                {
+                    TunnelSection sectionInstance = PickInstinateConnect(section);
+                    mapTree[^1].Add(sectionInstance);
+                }
             }
         }
 
@@ -79,14 +163,17 @@ public partial class SpatialParadoxGenerator
         List<TunnelSection> curList = recursiveConstruction[^1];
         for (int i = 0; i < curList.Count; i++)
         {
-            TunnelSection sec = curList[i];
-            List<SectionAndConnector> SandCs = new(sec.connectorPairs.Values);
-            for (int j = 0; j < SandCs.Count; j++)
+            if (curList[i])
             {
-                SectionAndConnector SandC = SandCs[j];
-                if (!exceptWith.Contains(SandC.sectionInstance))
+                TunnelSection sec = curList[i];
+                List<SectionAndConnector> SandCs = new(sec.connectorPairs.Values);
+                for (int j = 0; j < SandCs.Count; j++)
                 {
-                    dstOne.Add(SandC.sectionInstance);
+                    SectionAndConnector SandC = SandCs[j];
+                    if (!exceptWith.Contains(SandC.sectionInstance))
+                    {
+                        dstOne.Add(SandC.sectionInstance);
+                    }
                 }
             }
         }
@@ -98,4 +185,33 @@ public partial class SpatialParadoxGenerator
         }
     }
 
+    private IEnumerator IncrementalTreeBuilder(List<List<MapTreeElement>> recursiveConstruction, HashSet<MapTreeElement> exceptWith)
+    {
+        exceptWith.UnionWith(recursiveConstruction[^1]);
+
+        HashSet<MapTreeElement> dstOne = new();
+        List<MapTreeElement> curList = recursiveConstruction[^1];
+        for (int i = 0; i < curList.Count; i++)
+        {
+            if (curList[i].Instantiated)
+            {
+                TunnelSection sec = curList[i].sectionInstance;
+                List<SectionAndConnector> SandCs = new(sec.connectorPairs.Values);
+                for (int j = 0; j < SandCs.Count; j++)
+                {
+                    SectionAndConnector SandC = SandCs[j];
+                    if (!exceptWith.Contains(SandC.sectionInstance))
+                    {
+                        dstOne.Add(SandC.sectionInstance);
+                    }
+                }
+            }
+        }
+        dstOne.ExceptWith(exceptWith);
+        if (dstOne.Count > 0)
+        {
+            recursiveConstruction.Add(new(dstOne));
+            yield return IncrementalTreeBuilder(recursiveConstruction, exceptWith);
+        }
+    }
 }

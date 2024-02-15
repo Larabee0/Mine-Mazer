@@ -9,17 +9,111 @@ using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
-public class SectionQueueItem
+public class MapTreeElement : IEqualityComparer<MapTreeElement>
 {
-    public BurstConnector primaryConnector;
-    public BurstConnector secondaryConnector;
-    public float4x4 secondaryMatrix = float4x4.zero;
-    public GameObject primaryInstance;
-    public GameObject secondaryPickedPrefab;
+    public TunnelSection sectionInstance;
+    public SectionQueueItem queuedSection;
+    
+    private bool renderersEnabled = true;
 
-    public bool MatrixCalculated => secondaryMatrix.Equals(float4x4.zero);
+    public bool Instantiated => sectionInstance != null;
+
+
+    public static implicit operator MapTreeElement(TunnelSection section) => new() { sectionInstance = section, renderersEnabled = section.RenderersEnabled };
+    public static implicit operator MapTreeElement(SectionQueueItem section)
+    {
+        MapTreeElement element = new() { queuedSection = section };
+        section.AddToTree(element);
+        return element;
+    }
+
+    public void SetRenderersEnabled(bool enabled)
+    {
+        renderersEnabled = enabled;
+        if (sectionInstance != null)
+        {
+            sectionInstance.SetRenderersEnabled(enabled);
+        }
+    }
+
+    public void SetInstance(TunnelSection instance)
+    {
+        if (queuedSection != null)
+        {
+            queuedSection = null;
+            sectionInstance = instance;
+            SetRenderersEnabled(renderersEnabled);
+        }
+    }
+
+    public bool Equals(MapTreeElement x, MapTreeElement y)
+    {
+        return x.sectionInstance.Equals(y.sectionInstance); 
+        return (x.sectionInstance == y.sectionInstance && (x.queuedSection == null || y.queuedSection == null))
+            || ((x.queuedSection != null || y.queuedSection != null) && x.queuedSection == y.queuedSection);
+    }
+
+    public int GetHashCode(MapTreeElement obj)
+    {
+        if(obj.sectionInstance != null) return obj.sectionInstance.GetHashCode();
+        if(obj.queuedSection != null) return obj.queuedSection.GetHashCode();
+        return GetHashCode();
+    }
 }
 
+
+public class SectionQueueItem
+{
+    public MapTreeElement treeElement;
+    public BurstConnector primaryConnector;
+    public BurstConnector secondaryConnector;
+    public TunnelSection primaryInstance;
+    public TunnelSection secondaryPickedPrefab;
+    public int physicsWorldTempId;
+    public int priConnInternalIndex;
+    public int secConnInternalIndex;
+
+    public float4x4 secondaryMatrix;
+    public bool MatrixCalculated = false;
+
+    public SectionQueueItem(TunnelSection primaryInstance, TunnelSection prefabSecondary, Connector primaryConnector, Connector secondaryConnector, int id)
+    {
+        this.primaryInstance = primaryInstance;
+        secondaryPickedPrefab = prefabSecondary;
+        this.primaryConnector = primaryConnector;
+        this.secondaryConnector = secondaryConnector;
+        physicsWorldTempId = id;
+        priConnInternalIndex = primaryConnector.internalIndex;
+        secConnInternalIndex = secondaryConnector.internalIndex;
+
+        StartConnection();
+    }
+
+    public void AddToTree(MapTreeElement tree)
+    {
+        treeElement = tree;
+    }
+
+    public void StartConnection()
+    {
+        primaryInstance.connectorPairs[priConnInternalIndex] = new(null, secConnInternalIndex);
+        primaryInstance.InUse.Add(priConnInternalIndex);
+    }
+
+    public void FinishConnection(TunnelSection secondaryInstance)
+    {
+        primaryInstance.connectorPairs[priConnInternalIndex] = new(secondaryInstance, secConnInternalIndex);
+        secondaryInstance.connectorPairs[secConnInternalIndex] = new(primaryInstance, priConnInternalIndex);
+        secondaryInstance.InUse.Add(secConnInternalIndex);
+        treeElement.SetInstance (secondaryInstance);
+    }
+
+
+    public BurstConnectorPair GetConnectorPair()
+    {
+        return new BurstConnectorPair() { id = physicsWorldTempId,primaryMatrix = primaryInstance.transform.localToWorldMatrix, primary = primaryConnector, secondary = secondaryConnector };
+    }
+}
 
 public struct TunnelSectionVirtual : INativeDisposable, IComparable<TunnelSectionVirtual>, IEqualityComparer<TunnelSectionVirtual>, IEquatable<TunnelSectionVirtual>
 {
@@ -27,6 +121,9 @@ public struct TunnelSectionVirtual : INativeDisposable, IComparable<TunnelSectio
     public float4x4 sectionTransform;
     public bool Changed;
     public int boundSection;
+    public int updateCount;
+    public bool temporary;
+
 
     public int CompareTo(TunnelSectionVirtual other)
     {

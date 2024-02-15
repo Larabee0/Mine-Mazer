@@ -78,6 +78,14 @@ public struct Connector : IEquatable<Connector>
     }
 }
 
+public struct BurstConnectorPair
+{
+    public int id;
+    public float4x4 primaryMatrix;
+    public BurstConnector primary;
+    public BurstConnector secondary;
+}
+
 public struct BurstConnector
 {
     public float4x4 localMatrix;
@@ -86,6 +94,15 @@ public struct BurstConnector
     public quaternion rotation;
 
     public static implicit operator BurstConnector(Connector connector) => new(connector);
+    public static implicit operator Connector(BurstConnector connector) => new()
+    { 
+        internalIndex = -1,
+        localPosition = connector.localMatrix.Translation(),
+        parentPos = connector.parentPos,
+        localRotation = connector.localMatrix.Rotation(),
+        rotation = connector.rotation,
+        position = connector.position
+    };
 
     public BurstConnector(Connector connector) 
     {
@@ -199,12 +216,15 @@ public class SectionAndConnector
 {
     public TunnelSection sectionInstance;
     public int internalIndex = 0;
-    public int instanceID;
+    public int instanceID = -1;
 
     public SectionAndConnector(TunnelSection section, int interalIndex)
     {
         sectionInstance = section;
         internalIndex = interalIndex;
-        instanceID = section.GetInstanceID();
+        if (section != null)
+        {
+            instanceID = section.GetInstanceID();
+        }
     }
 }

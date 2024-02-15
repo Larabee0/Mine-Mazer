@@ -208,48 +208,52 @@ namespace MazeGame.Navigation
             }
             miniMap.root.Clear();
             miniMap.mapAssembly.Clear();
-            List<List<TunnelSection>> mapTree = mapGenerator.MapTree;
+            List<List<MapTreeElement>> mapTree = mapGenerator.MapTree;
             float curHeight = mapGenerator.CurPlayerSection.Position.y;
             for (int i = 0; i < mapTree.Count; i++)
             {
-                List<TunnelSection> ring = mapTree[i];
+                List<MapTreeElement> ring = mapTree[i];
                 for (int j = 0; j < ring.Count; j++)
                 {
-                    int instanceid = ring[j].orignalInstanceId;
-                    if (miniMapAssets.ContainsKey(instanceid))
+                    if (ring[j].Instantiated)
                     {
-                        float sectioHieght = ring[j].Position.y;
-                        
-                        Color above = ring[j].explored ? aboveExplored : aboveUnExplored;
-                        Color below = ring[j].explored ? belowExplored : belowUnexplored;
-                        Color same = ring[j].explored ? explored : unexplored;
-
-                        Color tint = sectioHieght > curHeight ? above : same;
-                        tint = sectioHieght < curHeight ? below : tint;
-
-                        tint = ring[j] == mapGenerator.CurPlayerSection ? playerCurrent : tint;
-                        var trans = new BoxTransform
+                        TunnelSection section = ring[j].sectionInstance;
+                        int instanceid = section.orignalInstanceId;
+                        if (miniMapAssets.ContainsKey(instanceid))
                         {
-                            pos = ring[j].Position,
-                            rot = ring[j].Rotation
-                        };
-                        AddElement(instanceid, ring[j].name, tint, trans);
-                        if (ring[j].Keep)
-                        {
-                            trans = ring[j].StrongKeep
-                                ? new BoxTransform
-                                {
-                                    pos = ring[j].WaypointPosition,
-                                    rot = ring[j].Rotation
-                                }
-                                : new BoxTransform
-                                {
-                                    pos = ring[j].stagnationBeacon.transform.position,
-                                    rot = ring[j].stagnationBeacon.transform.rotation
-                                };
-                            AddElement(stagnationBeacon, instanceid, ring[j].name, Color.white, trans);
-                            miniMap.waypoints.Add(miniMap.mapAssembly[^1]);
-                            AddText(miniMap.mapAssembly[^1], ring[j].WaypointName);
+                            float sectioHieght = section.Position.y;
+
+                            Color above = section.explored ? aboveExplored : aboveUnExplored;
+                            Color below = section.explored ? belowExplored : belowUnexplored;
+                            Color same = section.explored ? explored : unexplored;
+
+                            Color tint = sectioHieght > curHeight ? above : same;
+                            tint = sectioHieght < curHeight ? below : tint;
+
+                            tint = section == mapGenerator.CurPlayerSection ? playerCurrent : tint;
+                            var trans = new BoxTransform
+                            {
+                                pos = section.Position,
+                                rot = section.Rotation
+                            };
+                            AddElement(instanceid, section.name, tint, trans);
+                            if (section.Keep)
+                            {
+                                trans = section.StrongKeep
+                                    ? new BoxTransform
+                                    {
+                                        pos = section.WaypointPosition,
+                                        rot = section.Rotation
+                                    }
+                                    : new BoxTransform
+                                    {
+                                        pos = section.stagnationBeacon.transform.position,
+                                        rot = section.stagnationBeacon.transform.rotation
+                                    };
+                                AddElement(stagnationBeacon, instanceid, section.name, Color.white, trans);
+                                miniMap.waypoints.Add(miniMap.mapAssembly[^1]);
+                                AddText(miniMap.mapAssembly[^1], section.WaypointName);
+                            }
                         }
                     }
                 }

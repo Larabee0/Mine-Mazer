@@ -37,6 +37,8 @@ public struct SetupConnectorsJob : IJobFor
 [BurstCompile]
 public struct BigMatrixJob : IJobFor
 {
+    private static readonly quaternion oneEightyOffset = quaternion.Euler(math.radians(0), math.radians(180), math.radians(0));
+
     [ReadOnly]
     public NativeReference<BurstConnector> connector;
 
@@ -90,7 +92,6 @@ public struct BigMatrixJob : IJobFor
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static float4x4 CalculateSectionMatrix(BurstConnector primary, BurstConnector secondary)
     {
-        quaternion oneEightyOffset = quaternion.Euler(math.radians(0), math.radians(180), math.radians(0));
         quaternion offsetPrimaryRot = math.mul(primary.rotation, oneEightyOffset);
         quaternion inverseSecondaryRot = math.inverse(secondary.rotation);
         quaternion newSecondaryRot = math.mul(inverseSecondaryRot, offsetPrimaryRot);
@@ -149,7 +150,7 @@ public struct ConnectorTransform : IJobFor
         BurstConnector primary = primaryConnectors[index];
         BurstConnector secondary = secondaryConnectors[index];
 
-        quaternion rotation = math.mul(math.inverse(secondary.rotation), math.mul(primary.rotation, quaternion.Euler(0, 180, 0)));
+        quaternion rotation = math.mul(math.inverse(secondary.rotation), math.mul(primary.rotation, quaternion.Euler(math.radians(0), math.radians(180), math.radians(0))));
         secondary.UpdateWorldPos(float4x4.TRS(primary.position, rotation, new(1)));
 
         float3 position = primary.position + (primary.position - secondary.position);
@@ -170,6 +171,7 @@ public struct UpdatePhysicsWorldTransforms : IJobFor
         if (VirtualPhysicsWorld[index].Changed)
         {
             TunnelSectionVirtual tsv = VirtualPhysicsWorld[index];
+            
             for (int i = 0; i < tsv.boxes.Length; i++)
             {
                 float4x4 matrix = math.mul(tsv.sectionTransform, tsv.boxes[i].boxBounds.LocalMatrix);
@@ -177,6 +179,7 @@ public struct UpdatePhysicsWorldTransforms : IJobFor
                 tsv.boxes.ElementAt(i).TransformNormals(matrix);
             }
             VirtualPhysicsWorld.ElementAt(index).Changed = false;
+            VirtualPhysicsWorld.ElementAt(index).updateCount++;
         }
     }
 }
@@ -312,5 +315,47 @@ public struct BoxCheckJob : IJobFor
     private bool IsBetweenOrdered(float val, float lowerBound, float upperBound)
     {
         return lowerBound <= val && val <= upperBound;
+    }
+}
+
+[BurstCompile]
+public struct FinalConnectorMulJob : IJobFor
+{
+    private static readonly quaternion oneEightyOffset = quaternion.Euler(math.radians(0), math.radians(180), math.radians(0));
+
+    [ReadOnly]
+    public NativeArray<BurstConnectorPair> connectorPairs;
+
+    [WriteOnly]
+    public NativeArray<float4x4> calculatedMatricies;
+
+    [WriteOnly]
+    public NativeArray<BurstConnector> primaryConnectors;
+
+    public void Execute(int index)
+    {
+        BurstConnectorPair pair = connectorPairs[index];
+        BurstConnector primary = pair.primary;
+        BurstConnector secondary = pair.secondary;
+        primary.UpdateWorldPos(pair.primaryMatrix);
+        secondary.UpdateWorldPos(float4x4.identity);
+        calculatedMatricies[index] = CalculateSectionMatrix(primary, secondary);
+        primaryConnectors[index] = primary;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static float4x4 CalculateSectionMatrix(BurstConnector primary, BurstConnector secondary)
+    {
+        quaternion offsetPrimaryRot = math.mul(primary.rotation, oneEightyOffset);
+        quaternion inverseSecondaryRot = math.inverse(secondary.rotation);
+        quaternion newSecondaryRot = math.mul(inverseSecondaryRot, offsetPrimaryRot);
+
+        secondary.UpdateWorldPos(float4x4.TRS(primary.position, newSecondaryRot, new(1)));
+        float priLocalY = primary.localMatrix.Translation().y;
+        float secLocalY = secondary.localMatrix.Translation().y;
+        float3 position = primary.position + (primary.position - secondary.position);
+        position.y = primary.parentPos.y + (priLocalY - secLocalY);
+
+        return float4x4.TRS(position, newSecondaryRot, new(1));
     }
 }

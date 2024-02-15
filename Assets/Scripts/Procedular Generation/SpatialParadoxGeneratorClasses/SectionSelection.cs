@@ -47,19 +47,68 @@ public partial class SpatialParadoxGenerator
 
         TransformSection(primary, pickedInstance, priPref, secPref); // transform the new section
 
-        if (pickedSection != deadEndPlug && !rejectBreakableWallAtConnections)
-        {
-            if (forceBreakableWallAtConnections || Random.value < breakableWallAtConnectionChance)
-            {
-                BreakableWall breakableInstance = Instantiate(breakableWall, pickedInstance.transform);
-                Connector conn = breakableInstance.connector;
-                conn.UpdateWorldPos(breakableWall.transform.localToWorldMatrix);
-                TransformSection(breakableInstance.transform, priPref, conn);
-            }
-        }
+        InstantiateBreakableWalls(pickedSection, pickedInstance, priPref);
 
         Physics.SyncTransforms(); /// push changes to physics world now instead of next fixed update, required for <see cref="RunIntersectionTests(TunnelSection, TunnelSection, out Connector, out Connector)"/>
         return pickedInstance;
+    }
+
+    private MapTreeElement PickInstinateConnectDelayed(TunnelSection primary)
+    {
+        TunnelSection pickedSection = null;
+        TunnelSection pickedInstance = null;
+        Connector priPref = Connector.Empty, secPref = Connector.Empty;
+        if (promoteSectionsList.Count > 0)
+        {
+            List<int> internalSections = new(promoteSectionsList.Count);
+            promoteSectionsList.ForEach(section => internalSections.Add(section.orignalInstanceId));
+            pickedSection = PickSection(primary, internalSections, out priPref, out secPref);
+            if (!internalSections.Contains(pickedSection.GetInstanceID())) // returned dead end.
+            {
+                List<int> nextSections = FilterSections(primary);
+                pickedSection = PickSection(primary, nextSections, out priPref, out secPref);
+
+                return EnqueueSection(primary,pickedSection,priPref, secPref);
+
+                //pickedInstance = InstinateSection(pickedSection);
+            }
+            else // reinstance section
+            {
+                int index = internalSections.IndexOf(pickedSection.GetInstanceID());
+                pickedInstance = promoteSectionsList[index];
+                pickedInstance.gameObject.SetActive(true);
+                pickedInstance.CollidersEnabled = true;
+                promoteSectionsList.RemoveAt(index);
+            }
+        }
+        else
+        {
+            List<int> nextSections = FilterSections(primary);
+            pickedSection = PickSection(primary, nextSections, out priPref, out secPref);
+
+            return EnqueueSection(primary, pickedSection, priPref, secPref);
+
+            // pickedInstance = InstinateSection(pickedSection);
+        }
+        if (pickedInstance != null)
+        {
+            TransformSection(primary, pickedInstance, priPref, secPref); // transform the new section
+
+            InstantiateBreakableWalls(pickedSection, pickedInstance, priPref);
+        }
+        return pickedInstance;
+    }
+
+    private void InstantiateBreakableWalls(TunnelSection pickedSection, TunnelSection pickedInstance, Connector priPref)
+    {
+        if (pickedSection != deadEndPlug && !rejectBreakableWallAtConnections && (forceBreakableWallAtConnections || Random.value < breakableWallAtConnectionChance))
+        {
+            BreakableWall breakableInstance = Instantiate(breakableWall, pickedInstance.transform);
+            Connector conn = breakableInstance.connector;
+           //  priPref.UpdateWorldPos(Unity.Mathematics.float4x4.identity);
+            conn.UpdateWorldPos(breakableWall.transform.localToWorldMatrix);
+            TransformSection(breakableInstance.transform, priPref, conn);
+        }
     }
 
     /// <summary>
@@ -107,17 +156,18 @@ public partial class SpatialParadoxGenerator
                 boxBounds = sectionBoxMatrices,
                 matrices = sectionBoxTransforms
             };
-
+            int length = nextSections.Count;
+            int batches = Mathf.Max(4, length / SystemInfo.processorCount);
             handle = parallelMatrixCalculations
-                ? bmj.ScheduleParallel(nextSections.Count, 4, handle)
-                : bmj.Schedule(nextSections.Count, handle);
+                ? bmj.ScheduleParallel(length, batches, handle)
+                : bmj.Schedule(length, handle);
 
             priConn.Dispose(handle).Complete();
 
-            Debug.Log(nextSections.Count);
+            // Debug.Log(length);
 
             List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreference), nextSections);
-            if (BIGparallelIntersectTests)
+            if (BigParallelIntersectTests)
             {
                 if (ParallelRandomiseIntersection(primary, ref primaryPreference, ref secondaryPreference, primaryConnectors, ref iterations, ref targetSection, priIndex, internalNextSections))
                 {

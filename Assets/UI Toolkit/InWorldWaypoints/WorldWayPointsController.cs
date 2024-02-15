@@ -116,16 +116,16 @@ namespace MazeGame.Navigation
 
         private void MapUpdateEvent()
         {
-            List<List<TunnelSection>> mapTree = mapGenerator.MapTree;
+            List<List<MapTreeElement>> mapTree = mapGenerator.MapTree;
             HashSet<TunnelSection> waypointable = new();
             for (int i = 0; i < mapTree.Count; i++)
             {
-                List<TunnelSection> ring = mapTree[i];
+                List<MapTreeElement> ring = mapTree[i];
                 for (int j = 0; j < ring.Count; j++)
                 {
-                    if (ring[j].Keep)
+                    if (ring[j].Instantiated && ring[j].sectionInstance.Keep)
                     {
-                        waypointable.Add(ring[j]);
+                        waypointable.Add(ring[j].sectionInstance);
                     }
                 }
             }

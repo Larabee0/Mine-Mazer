@@ -15,7 +15,7 @@ public partial class SpatialParadoxGenerator
         while (mapTree.Count <= maxDst)
         {
             yield return new WaitForSeconds(distanceListPauseTime);
-            List<TunnelSection> startSections = mapTree[^1];
+            List<MapTreeElement> startSections = mapTree[^1];
 
             mapTree.Add(new());
 
@@ -29,7 +29,7 @@ public partial class SpatialParadoxGenerator
     /// </summary>
     /// <param name="startSections"></param>
     /// <returns></returns>
-    private IEnumerator FillSectionConnectorsDebug(List<TunnelSection> startSections)
+    private IEnumerator FillSectionConnectorsDebug(List<MapTreeElement> startSections)
     {
         /// promoteSectionsDict contains items when <see cref="CheckForSectionsPromotions"/> is called and finds mothballed sections that can be promoted.
         /// the dictionary much contain the key corrisponding the to current map ring index in order to be delt with this cycle.
@@ -60,12 +60,15 @@ public partial class SpatialParadoxGenerator
 
         for (int i = 0; i < startSections.Count; i++)
         {
-            TunnelSection section = startSections[i];
-            int freeConnectors = section.connectors.Length - section.InUse.Count;
-            for (int j = 0; j < freeConnectors; j++)
+            if (startSections[i].Instantiated)
             {
-                // pick a new section to connect to
-                yield return PickInstinateConnectDebug(section);
+                TunnelSection section = startSections[i].sectionInstance;
+                int freeConnectors = section.connectors.Length - section.InUse.Count;
+                for (int j = 0; j < freeConnectors; j++)
+                {
+                    // pick a new section to connect to
+                    yield return PickInstinateConnectDebug(section);
+                }
             }
         }
 

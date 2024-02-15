@@ -235,6 +235,25 @@ public partial class SpatialParadoxGenerator
         return freeConnectors;
     }
 
+    private int GetFreeConnectorCount(List<MapTreeElement> sections)
+    {
+        int freeConnectors = 0;
+        for (int i = 0; i < sections.Count; i++)
+        {
+            if (sections[i].Instantiated)
+            {
+                TunnelSection section = sections[i].sectionInstance;
+                freeConnectors += section.connectors.Length - section.InUse.Count;
+            }
+            else
+            {
+                TunnelSection section = sections[i].queuedSection.secondaryPickedPrefab;
+                freeConnectors += section.connectors.Length - 1;
+            }
+        }
+        return freeConnectors;
+    }
+
     private void CheckForSectionsPromotions()
     {
         Debug.LogFormat(gameObject, "promoteList: {0} promoteDict: {1}", promoteSectionsList.Count, promoteSectionsDict.Count);
