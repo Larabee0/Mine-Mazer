@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class PlayerUIController : MonoBehaviour
@@ -31,6 +32,13 @@ public class PlayerUIController : MonoBehaviour
 
     private VisualElement screenFade;
     private VisualElement miniMapContainer;
+    private VisualElement crossHair;
+
+    public bool ShowCrosshair
+    {
+        get => crossHair.style.display == DisplayStyle.Flex;
+        set => crossHair.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
+    }
 
     [Header("Hunger bar settings")]
     private float curHunger;
@@ -58,6 +66,7 @@ public class PlayerUIController : MonoBehaviour
         miniMapContainer = Root.Q("MiniMap");
         screenFade = Root.Q("ScreenFade");
         hungerBar = Root.Q<ProgressBar>("HungerBar");
+        crossHair = Root.Q("CrossHair");
         hungerBarProgress = hungerBar[0][0][0];
         screenFade.style.display = DisplayStyle.None;
         StartCoroutine(SetHungerBarProgress());
@@ -92,15 +101,18 @@ public class PlayerUIController : MonoBehaviour
     private IEnumerator FadeScreenOperation(float startAlpha, float endAlpha, float duration)
     {
         screenFade.style.display = DisplayStyle.Flex;
+        
 
-        for (float i = 0; i < duration; i += Time.deltaTime)
+        for (float i = 0; i <= duration; i += Time.deltaTime)
         {
             yield return null;
             float t = Mathf.InverseLerp(0, duration, i);
             float opacity = Mathf.Lerp(startAlpha, endAlpha, t);
             screenFade.style.opacity = opacity;
         }
-        if(endAlpha == 0)
+
+        screenFade.style.opacity = endAlpha;
+        if (endAlpha == 0)
         {
             yield return null;
             screenFade.style.display = DisplayStyle.None;

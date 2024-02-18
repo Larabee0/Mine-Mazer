@@ -1,5 +1,6 @@
 using Fungus;
 using MazeGame.Input;
+using MazeGame.Navigation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ public class TutorialStarter : MonoBehaviour
     [SerializeField] private float tutorialDelayTime = 2f;
     [SerializeField] private Transform EudieWayPoint;
     [SerializeField] private AudioSource caveAmbience;
+    public bool allowSceneChange = false;
     [Header("Debug")]
     public bool skipTutorial = false;
     public bool skipToPickUpEudie = false;
@@ -24,27 +26,18 @@ public class TutorialStarter : MonoBehaviour
         tutorialFlowChart = GetComponent<Flowchart>();
     }
 
-    private void Start()
-    {
+    public void StartTutorialScript()
+    { 
         tutorialFlowChart.SetBooleanVariable("Gamepad", InputManager.GamePadPresent);
         if (skipTutorial)
         {
+            allowSceneChange = true;
             SkipTutorial();
         }
         else
         {
             Tutorial_Backstory();
         }
-    }
-
-    public void PlayCaveAmbiance()
-    {
-        caveAmbience.Play();
-    }
-
-    private void SkipTutorial()
-    {
-        EudieHandOff();
     }
 
     private void Tutorial_Backstory()
@@ -54,8 +47,20 @@ public class TutorialStarter : MonoBehaviour
         tutorialFlowChart.ExecuteBlock("Tutorial Start");
     }
 
+    private void SkipTutorial()
+    {
+        EudieHandOff();
+    }
+
+    public void PlayCaveAmbiance()
+    {
+        allowSceneChange = true;
+        caveAmbience.Play();
+    }
+
     public void Tutorial_Camera()
     {
+
         flowChartDelayedExecute = StartCoroutine(DelayedFlowChartExecute("Tutorial Camera", tutorialDelayTime));
     }
 
@@ -66,6 +71,7 @@ public class TutorialStarter : MonoBehaviour
 
     public void EudieHandOff()
     {
+        PlayerUIController.Instance.ShowCrosshair = true;
         FindObjectOfType<Eudie_Tutorial>().ShowEudieWaypoint(skipToPickUpEudie);
     }
 
@@ -94,11 +100,12 @@ public class TutorialStarter : MonoBehaviour
 
     public void FadeIn()
     {
+        WorldWayPointsController.Instance.StartWWPC();
         PlayerUIController.Instance.FadeIn(screenFadeTime);
     }
 
     public void FadeOut()
     {
-        PlayerUIController.Instance.FadeOut(0);
+        PlayerUIController.Instance.FadeOut(screenFadeTime*0.5f);
     }
 }
