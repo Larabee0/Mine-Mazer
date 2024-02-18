@@ -203,6 +203,7 @@ GameObject:
   - component: {fileID: 2377281665050414085}
   - component: {fileID: 7509228367637486725}
   - component: {fileID: 8322381442699795188}
+  - component: {fileID: 7873265323809388630}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -413,6 +414,20 @@ MonoBehaviour:
   virtualhands: {fileID: 3913173581097030806}
   defaultItems: []
   itemNameTime: 1
+--- !u!114 &7873265323809388630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5356439156297477815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f91dcad20d96026488e672e54cf67ce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hungerLevel: 1
+  hungerSpeed: 1
 --- !u!1 &6730143712483946699
 GameObject:
   m_ObjectHideFlags: 0

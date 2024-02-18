@@ -18,7 +18,8 @@ public enum Item
     Eudie,
     StagnationBeacon,
     BrokenHeart,
-    Soup
+    Soup,
+    FicusWood
 }
 
 public enum ItemCategory
@@ -26,7 +27,8 @@ public enum ItemCategory
     Crystal,
     Mushroom,
     Equippment,
-    Lumenite
+    Lumenite,
+    Wood
 }
 
 public static class ItemUtility
@@ -68,9 +70,19 @@ public static class ItemUtility
                 Item.Eudie
             }
         },
+
+        {
+            ItemCategory.Wood, new ()
+            {
+                Item.FicusWood
+            }
+        }
     };
+
     private static Dictionary<Item, ItemCategory> itemToCategory = null;
+
     public static Dictionary<ItemCategory, HashSet<Item>> CategoryToItems => categoryToItems;
+
     public static Dictionary<Item, ItemCategory> ItemToCategory
     {
         get
@@ -190,12 +202,12 @@ public class MapResource : MonoBehaviour, IInteractable
         gameObject.SetActive(active);
     }
 
-    public virtual void PlaceItem()
+    public virtual bool PlaceItem()
     {
         if (Placeable)
         {
             Ray r = new(Camera.main.transform.position, Camera.main.transform.forward);
-            if (Physics.Raycast(r, out RaycastHit hitInfo, 5))
+            if (Physics.Raycast(r, out RaycastHit hitInfo, NPC_Interact.Instance.InteractRange))
             {
                 if (Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item))
                 {
@@ -208,9 +220,11 @@ public class MapResource : MonoBehaviour, IInteractable
                     item.SetMapResourceActive(true);
                     item.SetColliderActive(true);
 
-                    item.gameObject.transform.up = Vector3.up;
+                    item.gameObject.transform.up = hitInfo.normal;
+                    return true;
                 }
             }
         }
+        return false;
     }
 }

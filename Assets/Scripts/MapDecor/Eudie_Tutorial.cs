@@ -245,5 +245,6 @@ public class Eudie_Tutorial : NPCTrade
     public void GetLunch()
     {
         InteractMessage.Instance.SetObjective("Talk to Eudies friends in the colony & trade for food.");
+        Hunger.Instance.StartHunger();
     }
 }

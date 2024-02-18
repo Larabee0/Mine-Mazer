@@ -92,7 +92,7 @@ public class StagnationBeacon : MapResource
         base.Interact();
     }
 
-    public override void PlaceItem()
+    public override bool PlaceItem()
     {
         SpatialParadoxGenerator mapGenerator = FindObjectOfType<SpatialParadoxGenerator>();
         Ray r = new(Camera.main.transform.position, Camera.main.transform.forward);
@@ -111,7 +111,9 @@ public class StagnationBeacon : MapResource
                 item.SetMapResourceActive(true);
                 item.SetColliderActive(true);
                 mapGenerator.PlaceStatnationBeacon(hitSection, this);
+                return true;
             }
         }
+        return false;
     }
 }
