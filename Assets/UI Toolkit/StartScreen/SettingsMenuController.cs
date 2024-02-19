@@ -173,7 +173,7 @@ public class SettingsMenuController : UIToolkitBase
 
     private void CloseContrastBrightnessMenu()
     {
-        GameObject.FindAnyObjectByType<BrightnessConstrastImage>().gameObject.SetActive(false);
+        GameObject.FindAnyObjectByType<BrightnessConstrastImage>(FindObjectsInactive.Include).gameObject.SetActive(false);
         SetSettings();
         brightnessContrastWindow.style.display = DisplayStyle.None;
         settingsMain.style.display = DisplayStyle.Flex;
