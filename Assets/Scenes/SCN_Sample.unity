@@ -265,6 +265,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
+      propertyPath: tunnelSections.Array.data[15]
+      value: 
+      objectReference: {fileID: 7620240774403884024, guid: 536cf79977b17ae40bc8cc4764deef6d,
+        type: 3}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
       propertyPath: tunnelSections.Array.data[16]
       value: 
       objectReference: {fileID: 3526018208391867830, guid: c431316cf725fde469a6dd76a6cb2247,
@@ -310,7 +316,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 399645861}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85e50fc8aea858b4691bceccb3d020ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e0d6b02e07aa6c4eb0a661fecc2731c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetAmbientIntensity: 0
@@ -686,6 +692,7 @@ MonoBehaviour:
   tutorialDelayTime: 2
   EudieWayPoint: {fileID: 0}
   caveAmbience: {fileID: 528317594}
+  allowSceneChange: 0
   skipTutorial: 1
   skipToPickUpEudie: 1
 --- !u!114 &528317542
@@ -2581,6 +2588,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUi: {fileID: 2129518432}
+  settingsMenuPrefab: {fileID: 0}
   hungerProgressAnimationSpeed: 0
   hungerFlashFadeTime: 0
   lowHungerThreshold: 0

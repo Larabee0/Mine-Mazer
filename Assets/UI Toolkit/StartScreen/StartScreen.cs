@@ -14,7 +14,7 @@ public class StartScreen : MonoBehaviour
     [SerializeField] private TutorialStarter tutorialStarter;
     private VisualElement RootVisualElement => startScreenUI.rootVisualElement;
 
-    StartScreenController startScreenController;
+    StartMenuController startScreenController;
     SettingsMenuController settingsMenuController;
 
     private void Start()
@@ -59,10 +59,10 @@ public class StartScreen : MonoBehaviour
         {
             TemplateContainer container = settingsMenuPrefab.Instantiate();
             settingsMenuController = new SettingsMenuController(container.Q("Overlay"));
-            RootVisualElement.Q("Overlay").Add(settingsMenuController.RootVisualElement);
-            startScreenController.SetActive(false);
+            RootVisualElement.Q("Overlay").Add(settingsMenuController.RootVisualElement);            
             settingsMenuController.OnSettingsMenuClose += OpenStartScreen;
         }
+        startScreenController.SetActive(false);
         settingsMenuController.OpenSettings();
     }
 
@@ -70,53 +70,5 @@ public class StartScreen : MonoBehaviour
     {
         settingsMenuController.OnSettingsMenuClose-=OpenStartScreen;
         startScreenController.SetActive(true);
-    }
-}
-
-public class StartScreenController : UIToolkitBase
-{
-    private StartScreen startScreen;
-    private VisualElement buttonContainer;
-    private Button startButton;
-    private Button settingsButton;
-    private Button exitButton;
-    private Label loadProgress;
-
-    public StartScreenController(VisualElement rootVisualElement, StartScreen startScreen) : base(rootVisualElement)
-    {
-        this.startScreen = startScreen;
-        Query();
-        Bind();
-    }
-
-    public override void Query()
-    {
-        buttonContainer = RootVisualElement.Q("StartScreenButtonContainer");
-        startButton = RootVisualElement.Q<Button>("StartButton");
-        settingsButton = RootVisualElement.Q<Button>("SettingsButton");
-        exitButton = RootVisualElement.Q<Button>("ExitButton");
-    }
-
-    public override void Bind()
-    {
-        DoubleBindButton(startButton, delegate () { startScreen.LoadMainScene(); });
-        DoubleBindButton(settingsButton, delegate () { startScreen.OpenSettingsMenu(); });
-        DoubleBindButton(exitButton, delegate() { ExitApplication(); });
-    }
-
-    public void ExitApplication()
-    {
-        Debug.Log("Exit Button Pressed, calling Application.Quit");
-        Application.Quit();
-    }
-
-    public void UpdateLoadProgress(float value)
-    {
-
-    }
-
-    public void SetActive(bool active)
-    {
-        buttonContainer.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
     }
 }

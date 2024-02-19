@@ -218,7 +218,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
         mapTree.Add(new() { curPlayerSection });
 
-        AmbientLightController.Instance.FadeAmbientLight(curPlayerSection.AmbientLightLevel);
+        AmbientController.Instance.FadeAmbientLight(curPlayerSection.AmbientLightLevel);
 
         double startTime = Time.realtimeSinceStartupAsDouble;
         rejectBreakableWallAtConnections = true;

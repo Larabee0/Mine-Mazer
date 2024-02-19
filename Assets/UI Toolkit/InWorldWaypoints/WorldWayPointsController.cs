@@ -74,6 +74,14 @@ namespace MazeGame.Navigation
 
             mapGenerator.OnMapUpdate += MapUpdateEvent;
 
+            
+
+            root = DocRoot.Q("WayPoints");
+            
+        }
+        
+        private void OnEnable()
+        {
             if (InputManager.Instance != null)
             {
                 InputManager.Instance.OnLookDelta += OnLook;
@@ -85,12 +93,9 @@ namespace MazeGame.Navigation
                 Debug.LogError("No Input, UI cannot start");
                 enabled = false;
             }
-
-            root = DocRoot.Q("WayPoints");
-            
         }
 
-        private void OnApplicationQuit()
+        private void OnDisable()
         {
             if (InputManager.Instance != null)
             {

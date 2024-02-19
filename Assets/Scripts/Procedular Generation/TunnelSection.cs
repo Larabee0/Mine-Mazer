@@ -17,6 +17,7 @@ public class TunnelSection : MonoBehaviour
 
     [SerializeField] private SectionSpawnBaseRule spawnRule;
     [SerializeField] private float sectionLightLevel = 0.202f;
+    [SerializeField] private AudioClip sectionAmbience;
 
     [SerializeField] private List<int> excludePrefabConnectionsIds;
     [Header("Runtime Data")]
@@ -30,6 +31,7 @@ public class TunnelSection : MonoBehaviour
     // accessors 
     public Vector3 WaypointPosition => stagnationBeacon != null ? stagnationBeacon.transform.position : transform.TransformPoint(strongKeepPosition);
     public float AmbientLightLevel => sectionLightLevel;
+    public AudioClip AmbientNoise => sectionAmbience;
     public string WaypointName => stagnationBeacon != null ? stagnationBeacon.name : waypointName;
     public bool StrongKeep => strongKeep;
     public bool Keep

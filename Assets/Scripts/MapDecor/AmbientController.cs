@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AmbientLightController : MonoBehaviour
+public class AmbientController : MonoBehaviour
 {
-    private static AmbientLightController instance;
-    public static AmbientLightController Instance
+    private static AmbientController instance;
+    public static AmbientController Instance
     {
         get
         {
@@ -24,12 +24,52 @@ public class AmbientLightController : MonoBehaviour
         }
     }
 
+    [SerializeField] private AudioSource ambientNoiseMaker;
+    [SerializeField] private AudioSource transitoryNoiseMaker;
+    private AudioClip nextClip;
+    private Coroutine audioProcess = null;
+
     [SerializeField] private float targetAmbientIntensity;
     [SerializeField] private float fadeSpeed = 1f;
     private Coroutine allProcess = null;
     private void Awake()
     {
         Instance = this;
+        ambientNoiseMaker = FindAnyObjectByType<TutorialStarter>().GetComponent<AudioSource>();
+        transitoryNoiseMaker = gameObject.AddComponent<AudioSource>();
+        transitoryNoiseMaker.loop = true;
+        transitoryNoiseMaker.volume = 0;
+    }
+
+    public void ChangeTune(AudioClip newClip)
+    {
+        if(newClip == null || nextClip == newClip)
+        {
+            return;
+        }
+        nextClip = newClip;
+        audioProcess ??= StartCoroutine(FadeAmbience(newClip));
+    }
+
+    private IEnumerator FadeAmbience(AudioClip newClip)
+    {
+        transitoryNoiseMaker.clip = newClip;
+        transitoryNoiseMaker.Play();
+        for (float t = 0; t < 1; t += Time.deltaTime * fadeSpeed)
+        {
+            yield return null;
+            float fader = Mathf.InverseLerp(0, 1, t);
+            transitoryNoiseMaker.volume = fader;
+            ambientNoiseMaker.volume = 1 - fader;
+        }
+        (ambientNoiseMaker, transitoryNoiseMaker) = (transitoryNoiseMaker, ambientNoiseMaker);
+        ambientNoiseMaker.volume = 1;
+        transitoryNoiseMaker.volume = 0;
+        audioProcess = null;
+        if (nextClip != null && newClip != nextClip)
+        {
+            ChangeTune(nextClip);
+        }
     }
 
     public void FadeAmbientLight(float targetInensity, float fadeDuration)

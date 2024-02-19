@@ -55,10 +55,6 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        if (InputManager.Instance != null)
-        {
-            InputManager.Instance.scrollDirection += ScrollInventory;
-        }
     }
 
     private void Start()
@@ -68,8 +64,14 @@ public class Inventory : MonoBehaviour
             AddItem(defaultItems[i].ItemStats.type, 1, Instantiate(defaultItems[i]));
         }
     }
-    
-    private void OnApplicationQuit()
+    private void OnEnable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.scrollDirection += ScrollInventory;
+        }
+    }
+    private void OnDisable()
     {
         if (InputManager.Instance != null)
         {

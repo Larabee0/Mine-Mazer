@@ -1,3 +1,5 @@
+using MazeGame.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +32,12 @@ public class PlayerUIController : MonoBehaviour
 
     private VisualElement Root => playerUi.rootVisualElement;
 
+    private SettingsMenuController settingsMenu;
+    private VisualElement pauseButtonContainer;
+    private Button resume;
+    private Button settings;
+    private Button mainMenu;
+    private VisualElement overlay;
     private VisualElement screenFade;
     private VisualElement miniMapContainer;
     private VisualElement crossHair;
@@ -39,6 +47,10 @@ public class PlayerUIController : MonoBehaviour
         get => crossHair.style.display == DisplayStyle.Flex;
         set => crossHair.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
     }
+
+    public bool PauseMenuOpen => pauseButtonContainer.style.display == DisplayStyle.Flex;
+
+    [SerializeField] private VisualTreeAsset settingsMenuPrefab;
 
     [Header("Hunger bar settings")]
     private float curHunger;
@@ -63,6 +75,20 @@ public class PlayerUIController : MonoBehaviour
             Destroy(this);
             return;
         }
+        overlay = Root.Q("Overlay");
+        pauseButtonContainer = Root.Q("PauseButtonContainer");
+        resume = Root.Q<Button>("ResumeButton");
+        settings = Root.Q<Button>("SettingsButton");
+        mainMenu = Root.Q<Button>("MainMenuButton");
+
+        settings.RegisterCallback<ClickEvent>(ev => OpenSettingsMenu());
+        settings.RegisterCallback<NavigationSubmitEvent>(ev => OpenSettingsMenu());
+        resume.RegisterCallback<ClickEvent>(ev =>
+        {
+            SetPauseMenuActive(false);
+            InputManager.Instance.LockPointer();
+        });
+
         miniMapContainer = Root.Q("MiniMap");
         screenFade = Root.Q("ScreenFade");
         hungerBar = Root.Q<ProgressBar>("HungerBar");
@@ -71,8 +97,32 @@ public class PlayerUIController : MonoBehaviour
         screenFade.style.display = DisplayStyle.None;
         StartCoroutine(SetHungerBarProgress());
         SetHungerVisible(false);
+        SetPauseMenuActive(false);
+        mainMenu.SetEnabled(false);
+    }
+
+    private void OnEnable()
+    {
+        if(InputManager.Instance != null)
+        {
+            InputManager.Instance.pauseButton.OnButtonReleased += TogglePauseMenu;
+        }
     }
     
+    private void OnDisable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.pauseButton.OnButtonReleased -= TogglePauseMenu;
+        }
+    }
+
+    private void TogglePauseMenu()
+    {
+        InputManager.Instance.SetPointerLocked(PauseMenuOpen);
+        SetPauseMenuActive(!PauseMenuOpen);
+    }
+
     public void SetMiniMapVisible(bool visible)
     {
         miniMapContainer.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
@@ -82,6 +132,31 @@ public class PlayerUIController : MonoBehaviour
     {
         hungerBar.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
     }
+
+
+    public void OpenSettingsMenu()
+    {
+        if (settingsMenu == null)
+        {
+            TemplateContainer container = settingsMenuPrefab.Instantiate();
+            settingsMenu = new SettingsMenuController(container.Q("Overlay"));
+            Root.Q("Overlay").Add(settingsMenu.RootVisualElement);
+            settingsMenu.OnSettingsMenuClose += OpenPauseMenu;
+        }
+        SetPauseMenuActive(false);
+        settingsMenu.OpenSettings();
+    }
+
+    private void OpenPauseMenu()
+    {
+        SetPauseMenuActive(true);
+    }
+
+    public void SetPauseMenuActive(bool active)
+    {
+        pauseButtonContainer.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
 
     public void FadeIn(float duration = 1)
     {

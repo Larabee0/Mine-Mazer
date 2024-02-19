@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028386, g: 0.22571427, b: 0.3069231, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1852,11 +1852,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUi: {fileID: 290947041}
-  hungerProgressAnimationSpeed: 0
-  hungerFlashFadeTime: 0
-  lowHungerThreshold: 0
-  lowHungerColour: {r: 0, g: 0, b: 0, a: 0}
-  normalHungerColour: {r: 0, g: 0, b: 0, a: 0}
+  settingsMenuPrefab: {fileID: 9197481963319205126, guid: 91ea0259b4733844a8862e4eb470393a,
+    type: 3}
+  hungerProgressAnimationSpeed: 1
+  hungerFlashFadeTime: 0.27
+  lowHungerThreshold: 0.15
+  lowHungerColour: {r: 0.8, g: 0.21568628, b: 0.21568628, a: 1}
+  normalHungerColour: {r: 0.13725491, g: 0.65882355, b: 0.77254903, a: 1}
 --- !u!114 &290947037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2298,14 +2300,14 @@ GameObject:
   - component: {fileID: 684849612}
   - component: {fileID: 684849615}
   - component: {fileID: 684849614}
-  - component: {fileID: 684849613}
+  - component: {fileID: 684849616}
   m_Layer: 0
   m_Name: BrightnessContrastAdjustment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &684849612
 Transform:
   m_ObjectHideFlags: 0
@@ -2322,28 +2324,6 @@ Transform:
   m_Father: {fileID: 1725372456}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &684849613
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684849611}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &684849614
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2394,6 +2374,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684849611}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &684849616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684849611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc2171411bf13d4786fbc33a1d091b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1074741854
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2717,6 +2709,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EventSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845093926135913635, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: neverSave
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845093926135913635, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: alwaysReset
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
         type: 3}
@@ -3170,7 +3172,6 @@ GameObject:
   - component: {fileID: 2036723764}
   - component: {fileID: 2036723767}
   - component: {fileID: 2036723766}
-  - component: {fileID: 2036723765}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -3193,28 +3194,6 @@ Transform:
   m_Father: {fileID: 684849612}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &2036723765
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2036723763}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &2036723766
 MeshRenderer:
   m_ObjectHideFlags: 0

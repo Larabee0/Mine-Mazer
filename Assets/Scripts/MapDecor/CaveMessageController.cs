@@ -121,13 +121,14 @@ public class CaveMessageController : MonoBehaviour
         }
     }
 
-    private void OnApplicationQuit()
-    {
-        if(InputManager.Instance != null)
-        {
-            InputManager.Instance.advanceDialogueButton.OnButtonReleased -= CloseMessage;
-        }
-    }
+    //private void OnDisable()
+    //{
+    //    if(InputManager.Instance != null)
+    //    {
+    //        InputManager.Instance.advanceDialogueButton.OnButtonReleased -= CloseMessage;
+    //    }
+    //}
+
     public bool ShowRandomMessage(out Hash128 chosenMessage)
     {
         List<Hash128> pickAbleMessages = new(readableMessages);

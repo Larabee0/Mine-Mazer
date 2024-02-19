@@ -61,7 +61,7 @@ public class NPC_Interact : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
         if (InputManager.Instance != null)
         {
@@ -80,7 +80,7 @@ public class NPC_Interact : MonoBehaviour
         }
     }
 
-    private void OnApplicationQuit()
+    private void OnDisable()
     {
         if (InputManager.Instance != null)
         {
