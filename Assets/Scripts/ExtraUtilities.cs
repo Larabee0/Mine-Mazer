@@ -15,6 +15,7 @@ public static class ExtraUtilities
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float3 TransformPoint(in this float4x4 m, in float3 p) => math.mul(m, new float4(p, 1)).xyz;
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float3 InverseTransformPoint(in this float4x4 m, in float3 p) => math.mul(math.inverse(m), new float4(p, 1)).xyz;
     public static T Pop<T>(this List<T> list)

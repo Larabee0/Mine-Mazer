@@ -191,7 +191,8 @@ public partial class SpatialParadoxGenerator
         List<Connector> primaryConnectors,
         ref int iterations,
         ref TunnelSection targetSection,
-        int priIndex, List<int> internalNextSections)
+        int priIndex, List<int> internalNextSections,
+        JobHandle handle)
     {
         List<Connector> secondaryConnectors = new();
         List<int2> managedTests = new();
@@ -215,7 +216,7 @@ public partial class SpatialParadoxGenerator
             VirtualPhysicsWorld = VirtualPhysicsWorld,
             sectionIds = tests,
             outGoingChecks = results
-        }.ScheduleParallel(length, batches, new()).Complete();
+        }.ScheduleParallel(length, batches, handle).Complete();
         
         //Debug.Log(tests.Length);
 

@@ -7,7 +7,6 @@ using UnityEngine;
 
 public partial class SpatialParadoxGenerator
 {
-
     /// <summary>
     /// Based off the givne primary section, this picks a new section prefab, Instinates it and connects (transforms) it to the primay section
     /// </summary>
@@ -162,20 +161,32 @@ public partial class SpatialParadoxGenerator
                 ? bmj.ScheduleParallel(length, batches, handle)
                 : bmj.Schedule(length, handle);
 
-            priConn.Dispose(handle).Complete();
+            handle = priConn.Dispose(handle);
+            
 
             // Debug.Log(length);
 
             List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreference), nextSections);
             if (BigParallelIntersectTests)
             {
-                if (ParallelRandomiseIntersection(primary, ref primaryPreference, ref secondaryPreference, primaryConnectors, ref iterations, ref targetSection, priIndex, internalNextSections))
+                //handle.Complete();
+                if (ParallelRandomiseIntersection(primary,
+                    ref primaryPreference,
+                    ref secondaryPreference,
+                    primaryConnectors,
+                    ref iterations,
+                    ref targetSection,
+                    priIndex,
+                    internalNextSections,
+                    handle
+                ))
                 {
                     break;
                 }
             }
             else
             {
+                handle.Complete();
                 if (RandomiseIntersection(primary, ref primaryPreference, ref secondaryPreference, primaryConnectors, ref iterations, ref targetSection, priIndex, internalNextSections))
                 {
                     break;
