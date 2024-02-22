@@ -13,7 +13,61 @@ public class MapTreeElement : IEqualityComparer<MapTreeElement>
 {
     public TunnelSection sectionInstance;
     public SectionQueueItem queuedSection;
-    
+    public HashSet<int> temporaryInUse = new();
+    public Dictionary<int,SectionAndConnector> temporayPairs = new();
+
+    public HashSet<int> InUse
+    {
+        get
+        {
+            if(sectionInstance == null)
+            {
+                return temporaryInUse;
+            }
+            return sectionInstance.InUse;
+        }
+        set
+        {
+            if(sectionInstance == null)
+            {
+                temporaryInUse = value;
+            }
+            sectionInstance.InUse = value;
+        }
+    }
+
+    public Dictionary<int, SectionAndConnector> ConnectorPairs
+    {
+        get
+        {
+            if (sectionInstance == null)
+            {
+                return temporayPairs;
+            }
+            return sectionInstance.connectorPairs;
+        }
+        set
+        {
+            if (sectionInstance == null)
+            {
+                temporayPairs = value;
+            }
+            sectionInstance.connectorPairs = value;
+        }
+    }
+
+    public float4x4 LocalToWorld => sectionInstance != null
+                ? (float4x4)sectionInstance.transform.localToWorldMatrix
+                : queuedSection.secondaryMatrix;
+
+    public int ConnectorCount => sectionInstance != null
+                ? sectionInstance.connectors.Length
+                : queuedSection.pickedPrefab.connectors.Length;
+    public int FreeConnectors => ConnectorCount - InUse.Count;
+    public int OriginalInstanceId => sectionInstance != null ? sectionInstance.orignalInstanceId : queuedSection.pickedPrefab.orignalInstanceId;
+
+    public Connector[] Connectors => sectionInstance != null ? sectionInstance.connectors : queuedSection.pickedPrefab.connectors;
+
     private bool renderersEnabled = true;
 
     public bool Instantiated => sectionInstance != null;
@@ -42,15 +96,31 @@ public class MapTreeElement : IEqualityComparer<MapTreeElement>
         {
             queuedSection = null;
             sectionInstance = instance;
+            sectionInstance.InUse.UnionWith(temporaryInUse);
+            temporaryInUse.Clear();
+
+            foreach (var pair in temporayPairs)
+            {
+                sectionInstance.connectorPairs.TryAdd(pair.Key,pair.Value);
+            }
+            temporayPairs.Clear();
+            
             SetRenderersEnabled(renderersEnabled);
         }
+    }
+
+    public ConnectorMask GetConnectorMask(Connector connector)
+    {
+        if(sectionInstance == null)
+        {
+            return queuedSection.pickedPrefab.GetConnectorMask(connector);
+        }
+        return sectionInstance.GetConnectorMask(connector);
     }
 
     public bool Equals(MapTreeElement x, MapTreeElement y)
     {
         return x.sectionInstance.Equals(y.sectionInstance); 
-        return (x.sectionInstance == y.sectionInstance && (x.queuedSection == null || y.queuedSection == null))
-            || ((x.queuedSection != null || y.queuedSection != null) && x.queuedSection == y.queuedSection);
     }
 
     public int GetHashCode(MapTreeElement obj)
@@ -64,54 +134,61 @@ public class MapTreeElement : IEqualityComparer<MapTreeElement>
 
 public class SectionQueueItem
 {
-    public MapTreeElement treeElement;
+    public MapTreeElement newTreeElement;
     public BurstConnector primaryConnector;
-    public BurstConnector secondaryConnector;
-    public TunnelSection primaryInstance;
-    public TunnelSection secondaryPickedPrefab;
+    public BurstConnector newConnector;
+    public MapTreeElement primaryTreeElement;
+    public TunnelSection pickedPrefab;
     public int physicsWorldTempId;
     public int priConnInternalIndex;
-    public int secConnInternalIndex;
+    public int newConnInternalIndex;
 
     public float4x4 secondaryMatrix;
-    public bool MatrixCalculated = false;
 
-    public SectionQueueItem(TunnelSection primaryInstance, TunnelSection prefabSecondary, Connector primaryConnector, Connector secondaryConnector, int id)
+    public SectionQueueItem(MapTreeElement primaryInstance, TunnelSection prefabSecondary, Connector primaryConnector, Connector secondaryConnector, int id)
     {
-        this.primaryInstance = primaryInstance;
-        secondaryPickedPrefab = prefabSecondary;
+        this.primaryTreeElement = primaryInstance;
+        pickedPrefab = prefabSecondary;
         this.primaryConnector = primaryConnector;
-        this.secondaryConnector = secondaryConnector;
+        this.newConnector = secondaryConnector;
         physicsWorldTempId = id;
         priConnInternalIndex = primaryConnector.internalIndex;
-        secConnInternalIndex = secondaryConnector.internalIndex;
+        newConnInternalIndex = secondaryConnector.internalIndex;
 
-        StartConnection();
     }
 
     public void AddToTree(MapTreeElement tree)
     {
-        treeElement = tree;
+        newTreeElement = tree;
+        LinkSections();
     }
 
     public void StartConnection()
     {
-        primaryInstance.connectorPairs[priConnInternalIndex] = new(null, secConnInternalIndex);
-        primaryInstance.InUse.Add(priConnInternalIndex);
+        primaryTreeElement.ConnectorPairs[priConnInternalIndex] = new(null, newConnInternalIndex);
+        primaryTreeElement.InUse.Add(priConnInternalIndex);
     }
 
-    public void FinishConnection(TunnelSection secondaryInstance)
+    public void LinkSections()
     {
-        primaryInstance.connectorPairs[priConnInternalIndex] = new(secondaryInstance, secConnInternalIndex);
-        secondaryInstance.connectorPairs[secConnInternalIndex] = new(primaryInstance, priConnInternalIndex);
-        secondaryInstance.InUse.Add(secConnInternalIndex);
-        treeElement.SetInstance (secondaryInstance);
+        primaryTreeElement.ConnectorPairs[priConnInternalIndex] = new(newTreeElement, priConnInternalIndex);
+        newTreeElement.ConnectorPairs[priConnInternalIndex] = new(primaryTreeElement, priConnInternalIndex);
+        primaryTreeElement.InUse.Add(priConnInternalIndex);
+        newTreeElement.InUse.Add(newConnInternalIndex);
+    }
+
+    public void FinishConnection(TunnelSection newInstance)
+    {
+        primaryTreeElement.ConnectorPairs[priConnInternalIndex] = new(newInstance, newConnInternalIndex);
+        newInstance.connectorPairs[newConnInternalIndex] = new(primaryTreeElement, priConnInternalIndex);
+        newInstance.InUse.Add(newConnInternalIndex);
+        newTreeElement.SetInstance(newInstance);
     }
 
 
     public BurstConnectorPair GetConnectorPair()
     {
-        return new BurstConnectorPair() { id = physicsWorldTempId,primaryMatrix = primaryInstance.transform.localToWorldMatrix, primary = primaryConnector, secondary = secondaryConnector };
+        return new BurstConnectorPair() { id = physicsWorldTempId,primaryMatrix = primaryTreeElement.LocalToWorld, primary = primaryConnector, secondary = newConnector };
     }
 }
 

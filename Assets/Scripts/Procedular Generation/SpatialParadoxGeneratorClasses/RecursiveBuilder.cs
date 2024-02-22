@@ -33,17 +33,16 @@ public partial class SpatialParadoxGenerator
                 rejectBreakableWallAtConnections = false;
             }
         }
-        yield return null;
-        OnMapUpdate?.Invoke();
-        yield return BreakEditor();
+        //yield return PostProcessQueue();
+        //yield return BreakEditor();
     }
 
 
-    private IEnumerator FillSectionConnectorsIncremental(List<MapTreeElement> startSections)
+    private IEnumerator FillSectionConnectorsIncremental(List<MapTreeElement> startElements)
     {
         if (promoteSectionsDict.Count > 0 && promoteSectionsDict.ContainsKey(mapTree.Count - 1))
         {
-            int freeConnectors = GetFreeConnectorCount(startSections);
+            int freeConnectors = GetFreeConnectorCount(startElements);
             if (freeConnectors < promoteSectionsDict[mapTree.Count - 1].Count)
             {
                 while (SectionsInProcessingQueue)
@@ -62,19 +61,19 @@ public partial class SpatialParadoxGenerator
             }
         }
 
-        for (int i = 0; i < startSections.Count; i++)
+        for (int i = 0; i < startElements.Count; i++)
         {
-            TunnelSection section = startSections[i].sectionInstance;
-            int freeConnectors = section.connectors.Length - section.InUse.Count;
+            MapTreeElement startElement = startElements[i];
+            int freeConnectors = startElement.FreeConnectors;
             for (int j = 0; j < freeConnectors; j++)
             {
                 PickIntstinateConnectDelayed results = new()
                 {
                     pickSectionDelayedData = new()
                 };
-                yield return PickInstinateConnectDelayed(section, results);
-                MapTreeElement sectionInstance = results.treeEleement;
-                mapTree[^1].Add(sectionInstance);
+                yield return PickInstinateConnectDelayed(startElement, results);
+                MapTreeElement sectionElement = results.treeEleement;
+                mapTree[^1].Add(sectionElement);
             }
         }
 
@@ -177,9 +176,9 @@ public partial class SpatialParadoxGenerator
                 for (int j = 0; j < SandCs.Count; j++)
                 {
                     SectionAndConnector SandC = SandCs[j];
-                    if (!exceptWith.Contains(SandC.sectionInstance))
+                    if (!exceptWith.Contains(SandC.SectionInstance))
                     {
-                        dstOne.Add(SandC.sectionInstance);
+                        dstOne.Add(SandC.SectionInstance);
                     }
                 }
             }
@@ -207,9 +206,9 @@ public partial class SpatialParadoxGenerator
                 for (int j = 0; j < SandCs.Count; j++)
                 {
                     SectionAndConnector SandC = SandCs[j];
-                    if (!exceptWith.Contains(SandC.sectionInstance))
+                    if (!exceptWith.Contains(SandC.SectionInstance))
                     {
-                        dstOne.Add(SandC.sectionInstance);
+                        dstOne.Add(SandC.SectionInstance);
                     }
                 }
             }

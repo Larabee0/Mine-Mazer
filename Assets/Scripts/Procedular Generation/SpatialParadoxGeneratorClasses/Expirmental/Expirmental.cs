@@ -49,16 +49,16 @@ public partial class SpatialParadoxGenerator
         }
     }
 
-    public SectionQueueItem EnqueueSection(TunnelSection primaryInstance, TunnelSection prefabSecondary,Connector primaryConnector,Connector secondaryConnector)
+    public SectionQueueItem EnqueueSection(MapTreeElement primaryElement, TunnelSection prefabSecondary,Connector primaryConnector,Connector secondaryConnector)
     {
-        int temporaryID = primaryInstance.GetInstanceID();
+        int temporaryID = primaryElement.GetHashCode();
 
         while (virtualPhysicsWorldIds.Contains(temporaryID))
         {
             temporaryID = Random.Range(0, int.MaxValue);
         }
 
-        SectionQueueItem newQueue = new(primaryInstance, prefabSecondary, primaryConnector, secondaryConnector, temporaryID);
+        SectionQueueItem newQueue = new(primaryElement, prefabSecondary, primaryConnector, secondaryConnector, temporaryID);
         preProcessingQueue.Add(newQueue);
         virtualPhysicsWorldIds.Add(temporaryID);
         return newQueue;
@@ -97,18 +97,17 @@ public partial class SpatialParadoxGenerator
             item.primaryConnector = matrixJob.primaryConnectors[i];
             processingQueue.Remove(item.physicsWorldTempId);
             postProcessingQueue.Add(item);
-            AddSection(item.secondaryPickedPrefab,item.secondaryMatrix,item.physicsWorldTempId);
+            AddSection(item.pickedPrefab,item.secondaryMatrix,item.physicsWorldTempId);
         }
         matrixJob.connectorPairs.Dispose();
         matrixJob.calculatedMatricies.Dispose();
         matrixJob.primaryConnectors.Dispose();
         //UpdateVirtualPhysicsWorld();
-        yield return PostProcessQueue();
+        //yield return PostProcessQueue();
     }
 
     private IEnumerator PostProcessQueue()
     {
-        yield return null;
         double interationTime = Time.realtimeSinceStartupAsDouble;
         while (postProcessingQueue.Count > 0)
         {
@@ -122,12 +121,23 @@ public partial class SpatialParadoxGenerator
                 yield return null;
                 interationTime = Time.realtimeSinceStartupAsDouble;
             }
+
+            OnMapUpdate?.Invoke();
+        }
+    }
+
+    private IEnumerator PostProcessQueueInfinite()
+    {
+        while (true)
+        {
+            yield return PostProcessQueue();
+            yield return null;
         }
     }
 
     private void QueuedTunnInstantiate(SectionQueueItem item)
     {
-        TunnelSection sectionInstance = Instantiate(item.secondaryPickedPrefab, item.secondaryMatrix.Translation(), item.secondaryMatrix.Rotation(), transform);
+        TunnelSection sectionInstance = Instantiate(item.pickedPrefab, item.secondaryMatrix.Translation(), item.secondaryMatrix.Rotation(), transform);
         
         virtualPhysicsWorldIds.Remove(item.physicsWorldTempId);
         int physicsWorldIndex = VirtualPhysicsWorld.IndexOf(new TunnelSectionVirtual { boundSection = item.physicsWorldTempId });
@@ -141,8 +151,9 @@ public partial class SpatialParadoxGenerator
             AddSection(sectionInstance, item.secondaryMatrix);
         }
 
-        InstantiateBreakableWalls(item.secondaryPickedPrefab, sectionInstance, item.primaryConnector);
-        item.FinishConnection(sectionInstance);
+        InstantiateBreakableWalls(item.pickedPrefab, sectionInstance, item.primaryConnector);
+        //item.FinishConnection(sectionInstance);
+        item.newTreeElement.SetInstance(sectionInstance);
     }
 
     public void AddSection(TunnelSection sectionInstance, float4x4 matrix)
@@ -245,7 +256,7 @@ public partial class SpatialParadoxGenerator
             int2 connectorIndex = validSecondaryConnectors[UnityEngine.Random.Range(0, validSecondaryConnectors.Count)];
             secondaryPreference = secondaryConnectors[connectorIndex.y];
             targetSection = instanceIdToSection[connectorIndex.x];
-            ConnectorMultiply(primary, ref primaryPreference, ref secondaryPreference);
+            ConnectorMultiply(primary.transform.localToWorldMatrix, ref primaryPreference, ref secondaryPreference);
             return true;
         }
         targetSection = null;
@@ -263,7 +274,7 @@ public partial class SpatialParadoxGenerator
         public JobHandle handle;
     }
 
-    public IEnumerator ParallelRandomiseIntersection(TunnelSection primary,
+    public IEnumerator ParallelRandomiseIntersection(MapTreeElement primary,
         List<Connector> primaryConnectors,
         int priIndex, List<int> internalNextSections, ParallelRandInter iteratorData)
     {
@@ -316,7 +327,7 @@ public partial class SpatialParadoxGenerator
             int2 connectorIndex = validSecondaryConnectors[UnityEngine.Random.Range(0, validSecondaryConnectors.Count)];
             iteratorData.secondaryPreference = secondaryConnectors[connectorIndex.y];
             iteratorData.targetSection = instanceIdToSection[connectorIndex.x];
-            ConnectorMultiply(primary, ref iteratorData.primaryPreference, ref iteratorData.secondaryPreference);
+            ConnectorMultiply(primary.LocalToWorld, ref iteratorData.primaryPreference, ref iteratorData.secondaryPreference);
             iteratorData.success = true;
 
         }
@@ -369,7 +380,7 @@ public partial class SpatialParadoxGenerator
         int connectorIndex = validSecondaryConnectors[UnityEngine.Random.Range(0, validSecondaryConnectors.Count)];
         secondaryConnector = secondaryConnectors[connectorIndex];
 
-        ConnectorMultiply(primary, ref primaryConnector, ref secondaryConnector);
+        ConnectorMultiply(primary.transform.localToWorldMatrix, ref primaryConnector, ref secondaryConnector);
         return true;
     }
 

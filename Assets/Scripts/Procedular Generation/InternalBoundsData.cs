@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
@@ -214,17 +215,24 @@ public class ConnectorMask
 [Serializable]
 public class SectionAndConnector
 {
-    public TunnelSection sectionInstance;
+    public MapTreeElement element;
+    public TunnelSection SectionInstance =>element.sectionInstance;
     public int internalIndex = 0;
-    public int instanceID = -1;
-
-    public SectionAndConnector(TunnelSection section, int interalIndex)
+    public int InstanceID
     {
-        sectionInstance = section;
-        internalIndex = interalIndex;
-        if (section != null)
+        get
         {
-            instanceID = section.GetInstanceID();
+            if (SectionInstance != null)
+            {
+                SectionInstance.GetInstanceID();
+            }
+            return -1;
         }
+    }
+
+    public SectionAndConnector(MapTreeElement element, int interalIndex)
+    {
+        this.element = element;
+        internalIndex = interalIndex;
     }
 }

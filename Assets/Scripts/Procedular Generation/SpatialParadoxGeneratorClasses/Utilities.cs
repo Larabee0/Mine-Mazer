@@ -38,11 +38,11 @@ public partial class SpatialParadoxGenerator
         pairKeys.ForEach(key =>
         {
             SectionAndConnector sectionTwin = section.connectorPairs[key];
-            if (sectionTwin != null && sectionTwin.sectionInstance != null)
+            if (sectionTwin != null && sectionTwin.SectionInstance != null)
             {
-                sectionTwin.sectionInstance.connectorPairs[sectionTwin.internalIndex] = null;
-                sectionTwin.sectionInstance.InUse.Remove(sectionTwin.internalIndex);
-                sectionTwin.sectionInstance.connectorPairs.Remove(sectionTwin.internalIndex);
+                sectionTwin.SectionInstance.connectorPairs[sectionTwin.internalIndex] = null;
+                sectionTwin.SectionInstance.InUse.Remove(sectionTwin.internalIndex);
+                sectionTwin.SectionInstance.connectorPairs.Remove(sectionTwin.internalIndex);
             }
         });
 
@@ -163,6 +163,15 @@ public partial class SpatialParadoxGenerator
         primary.InUse.Add(primaryConnector.internalIndex);
         secondary.InUse.Add(secondaryConnector.internalIndex);
     }
+    private void TransformSection(MapTreeElement primary, TunnelSection secondary, Connector primaryConnector, Connector secondaryConnector)
+    {
+        TransformSection(secondary.transform, primaryConnector, secondaryConnector);
+
+        primary.ConnectorPairs[primaryConnector.internalIndex] = new(secondary, secondaryConnector.internalIndex);
+        secondary.connectorPairs[secondaryConnector.internalIndex] = new(primary, primaryConnector.internalIndex);
+        primary.InUse.Add(primaryConnector.internalIndex);
+        secondary.InUse.Add(secondaryConnector.internalIndex);
+    }
 
     public Connector GetConnectorFromSection(List<Connector> validConnectors, out int index)
     {
@@ -188,6 +197,24 @@ public partial class SpatialParadoxGenerator
         return connectors;
     }
 
+    private List<Connector> FilterConnectors(MapTreeElement element)
+    {
+        List<Connector> connectors = new(element.Connectors);
+
+        if (element.InUse.Count > 0)
+        {
+            for (int i = connectors.Count - 1; i >= 0; i--)
+            {
+                if (element.InUse.Contains(connectors[i].internalIndex))
+                {
+                    connectors.RemoveAt(i);
+                }
+            }
+        }
+
+        return connectors;
+    }
+
     private List<int> FilterSections(TunnelSection primary)
     {
         List<int> nextSections = new(tunnelSectionsByInstanceID);
@@ -200,6 +227,11 @@ public partial class SpatialParadoxGenerator
         nextSections.RemoveAll(element => !Spawnable(element, true));
 
         return nextSections;
+    }
+
+    public List<int> FilterSections(int originalInstanceId)
+    {
+        return FilterSections(instanceIdToSection[originalInstanceId]);
     }
 
     private List<int> FilterSectionsByConnector(ConnectorMask connector, List<int> sections)
@@ -247,7 +279,7 @@ public partial class SpatialParadoxGenerator
             }
             else
             {
-                TunnelSection section = sections[i].queuedSection.secondaryPickedPrefab;
+                TunnelSection section = sections[i].queuedSection.pickedPrefab;
                 freeConnectors += section.connectors.Length - 1;
             }
         }

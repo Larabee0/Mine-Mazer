@@ -58,7 +58,7 @@ public partial class SpatialParadoxGenerator
         public SectionDelayedOuts pickSectionDelayedData;
     }
 
-    private IEnumerator PickInstinateConnectDelayed(TunnelSection primary, PickIntstinateConnectDelayed pickedResult)
+    private IEnumerator PickInstinateConnectDelayed(MapTreeElement primary, PickIntstinateConnectDelayed pickedResult)
     {
         TunnelSection pickedSection = null;
         TunnelSection pickedInstance = null;
@@ -71,7 +71,7 @@ public partial class SpatialParadoxGenerator
             pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
             if (!internalSections.Contains(pickedSection.GetInstanceID())) // returned dead end.
             {
-                List<int> nextSections = FilterSections(primary);
+                List<int> nextSections = FilterSections(primary.OriginalInstanceId);
                 yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
                 priPref = pickedResult.pickSectionDelayedData.primaryPreference;
                 secPref = pickedResult.pickSectionDelayedData.secondaryPreference;
@@ -91,7 +91,7 @@ public partial class SpatialParadoxGenerator
         }
         else
         {
-            List<int> nextSections = FilterSections(primary);
+            List<int> nextSections = FilterSections(primary.OriginalInstanceId);
             yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
             pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
             priPref = pickedResult.pickSectionDelayedData.primaryPreference;
@@ -100,7 +100,7 @@ public partial class SpatialParadoxGenerator
 
             // pickedInstance = InstinateSection(pickedSection);
         }
-        if (pickedInstance != null)
+        if (pickedInstance != null && primary != null)
         {
             TransformSection(primary, pickedResult.pickSectionDelayedData.pickedSection, priPref, secPref); // transform the new section
 
@@ -207,7 +207,7 @@ public partial class SpatialParadoxGenerator
 
         if (targetSection == null)
         {
-            ConnectorMultiply(primary, ref primaryPreference, ref secondaryPreference);
+            ConnectorMultiply(primary.transform.localToWorldMatrix, ref primaryPreference, ref secondaryPreference);
             secondaryPreference = deadEndPlug.connectors[0];
             secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
             targetSection = deadEndPlug;
@@ -223,13 +223,13 @@ public partial class SpatialParadoxGenerator
         public TunnelSection pickedSection;
     }
 
-    private IEnumerator PickSectionDelayed(TunnelSection primary, List<int> nextSections,
+    private IEnumerator PickSectionDelayed(MapTreeElement primaryElement, List<int> nextSections,
         SectionDelayedOuts outs)
     {
         outs.primaryPreference = Connector.Empty;
         outs.secondaryPreference = Connector.Empty;
 
-        List<Connector> primaryConnectors = FilterConnectors(primary);
+        List<Connector> primaryConnectors = FilterConnectors(primaryElement);
 
         NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.Persistent);
 
@@ -250,7 +250,7 @@ public partial class SpatialParadoxGenerator
             JobHandle handle = new BurstConnectorMulJob
             {
                 connector = priConn,
-                sectionLTW = primary.transform.localToWorldMatrix
+                sectionLTW = primaryElement.LocalToWorld
             }.Schedule(new JobHandle());
 
             var bmj = new BigMatrixJob
@@ -269,49 +269,40 @@ public partial class SpatialParadoxGenerator
 
             handle = priConn.Dispose(handle);
 
-            List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(outs.primaryPreference), nextSections);
-            if (BigParallelIntersectTests)
+            List<int> internalNextSections = FilterSectionsByConnector(primaryElement.GetConnectorMask(outs.primaryPreference), nextSections);
+            
+            ParallelRandInter iteratorData = new()
             {
-                ParallelRandInter iteratorData = new()
-                {
-                    handle = handle,
-                    iterations = iterations,
-                    primaryPreference = outs.primaryPreference,
-                    secondaryPreference = outs.secondaryPreference,
-                    targetSection = targetSection,
-                };
-                yield return ParallelRandomiseIntersection(primary, primaryConnectors, priIndex, internalNextSections, iteratorData);
-                //handle.Complete();
-                targetSection = iteratorData.targetSection;
-                outs.primaryPreference = iteratorData.primaryPreference;
-                outs.secondaryPreference = iteratorData.secondaryPreference;
-                iterations = iteratorData.iterations;
-                if (iteratorData.success)
-                {
-                    break;
-                }
-                //if (ParallelRandomiseIntersection(primary,
-                //    ref primaryPreference,
-                //    ref secondaryPreference,
-                //    primaryConnectors,
-                //    ref iterations,
-                //    ref targetSection,
-                //    priIndex,
-                //    internalNextSections,
-                //    handle
-                //))
-                //{
-                //    break;
-                //}
-            }
-            else
+                handle = handle,
+                iterations = iterations,
+                primaryPreference = outs.primaryPreference,
+                secondaryPreference = outs.secondaryPreference,
+                targetSection = targetSection,
+            };
+            yield return ParallelRandomiseIntersection(primaryElement, primaryConnectors, priIndex, internalNextSections, iteratorData);
+            //handle.Complete();
+            targetSection = iteratorData.targetSection;
+            outs.primaryPreference = iteratorData.primaryPreference;
+            outs.secondaryPreference = iteratorData.secondaryPreference;
+            iterations = iteratorData.iterations;
+            if (iteratorData.success)
             {
-                handle.Complete();
-                if (RandomiseIntersection(primary, ref outs.primaryPreference, ref outs.secondaryPreference, primaryConnectors, ref iterations, ref targetSection, priIndex, internalNextSections))
-                {
-                    break;
-                }
+                break;
             }
+            //if (ParallelRandomiseIntersection(primary,
+            //    ref primaryPreference,
+            //    ref secondaryPreference,
+            //    primaryConnectors,
+            //    ref iterations,
+            //    ref targetSection,
+            //    priIndex,
+            //    internalNextSections,
+            //    handle
+            //))
+            //{
+            //    break;
+            //}
+            
         }
 
         nativeNexSections.Dispose();
@@ -319,12 +310,12 @@ public partial class SpatialParadoxGenerator
         if (targetSection == null)
         {
             Connector priPref = outs.primaryPreference, secPref = outs.secondaryPreference;
-            ConnectorMultiply(primary, ref priPref, ref secPref);
+            ConnectorMultiply(primaryElement.LocalToWorld, ref priPref, ref secPref);
             outs.primaryPreference = priPref; outs.secondaryPreference = secPref;
             outs.secondaryPreference = deadEndPlug.connectors[0];
             outs.secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
             targetSection = deadEndPlug;
-            Debug.LogWarning("Unable to find usable section, ending the tunnel.", primary);
+            Debug.LogWarning("Unable to find usable section, ending the tunnel.");
         }
         outs.pickedSection = targetSection;
     }
@@ -336,9 +327,7 @@ public partial class SpatialParadoxGenerator
             int curInstanceID = internalNextSections.ElementAt(Random.Range(0, internalNextSections.Count));
             targetSection = instanceIdToSection[curInstanceID];
 
-            bool intersectionTest = parallelIntersectTests
-                ? ParallelIntersectTest(primary, targetSection, ref primaryPreference, out secondaryPreference)
-                : RunIntersectionTests(primary, targetSection, ref primaryPreference, out secondaryPreference);
+            bool intersectionTest = RunIntersectionTests(primary, targetSection, ref primaryPreference, out secondaryPreference);
 
             if (intersectionTest)
             {

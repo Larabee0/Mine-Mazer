@@ -49,7 +49,7 @@ public partial class SpatialParadoxGenerator
 
             if (noIntersections)
             {
-                ConnectorMultiply(primary, ref primaryConnector, ref secondaryConnector);
+                ConnectorMultiply(primary.transform.localToWorldMatrix, ref primaryConnector, ref secondaryConnector);
                 return true;
             }
             secondaryConnectors.RemoveAt(secIndex);
@@ -104,11 +104,11 @@ public partial class SpatialParadoxGenerator
         return true;
     }
 
-    private static void ConnectorMultiply(TunnelSection primary, ref Connector primaryConnector, ref Connector secondaryConnector)
+    private static void ConnectorMultiply(float4x4 primaryMatrix, ref Connector primaryConnector, ref Connector secondaryConnector)
     {
         NativeReference<Connector> pri = new(primaryConnector, Allocator.TempJob);
         NativeReference<Connector> sec = new(secondaryConnector, Allocator.TempJob);
-        JobHandle handle1 = new ConnectorMulJob { connector = pri, sectionLTW = primary.transform.localToWorldMatrix }.Schedule(new JobHandle());
+        JobHandle handle1 = new ConnectorMulJob { connector = pri, sectionLTW = primaryMatrix, }.Schedule(new JobHandle());
         JobHandle handle2 = new ConnectorMulJob { connector = sec, sectionLTW = float4x4.identity }.Schedule(new JobHandle());
         JobHandle.CombineDependencies(handle1, handle2).Complete();
         primaryConnector = pri.Value;
