@@ -246,6 +246,80 @@ public partial class SpatialParadoxGenerator
         return false;
     }
 
+    public class ParallelRandInter
+    {
+        public Connector primaryPreference;
+        public Connector secondaryPreference;
+        public int iterations;
+        public TunnelSection targetSection;
+        public bool success;
+        public JobHandle handle;
+    }
+
+    public IEnumerator ParallelRandomiseIntersection(TunnelSection primary,
+        List<Connector> primaryConnectors,
+        int priIndex, List<int> internalNextSections, ParallelRandInter iteratorData)
+    {
+        List<Connector> secondaryConnectors = new();
+        List<int2> managedTests = new();
+        for (int i = 0; i < internalNextSections.Count; i++)
+        {
+            int id = internalNextSections[i];
+            List<Connector> secondaryConnectorsInner = FilterConnectors(instanceIdToSection[id]);
+            secondaryConnectors.AddRange(secondaryConnectorsInner);
+            secondaryConnectorsInner.ForEach(connector => managedTests.Add(new(id, connector.internalIndex)));
+        }
+
+        NativeArray<int2> tests = new(managedTests.ToArray(), Allocator.Persistent);
+        NativeArray<bool> results = new(managedTests.Count, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+
+        int length = tests.Length;
+        int batches = Mathf.Max(2, length / SystemInfo.processorCount);
+        iteratorData.handle = new BoxCheckJob
+        {
+            incomingMatrices = sectionBoxTransforms,
+            incomingBoxBounds = incomingBoxBounds,
+            VirtualPhysicsWorld = VirtualPhysicsWorld,
+            sectionIds = tests,
+            outGoingChecks = results
+        }.ScheduleParallel(length, batches, iteratorData.handle);
+        while (!iteratorData.handle.IsCompleted)
+        {
+            yield return null;
+        }
+        iteratorData.handle.Complete();
+        //Debug.Log(tests.Length);
+
+        List<int2> validSecondaryConnectors = new(tests.Length);
+        for (int i = 0; i < length; i++)
+        {
+            if (results[i])
+            {
+                validSecondaryConnectors.Add(new(tests[i].x, i));
+            }
+        }
+        tests.Dispose();
+        results.Dispose();
+
+        iteratorData.iterations++;
+        if (validSecondaryConnectors.Count > 0)
+        {
+
+            int2 connectorIndex = validSecondaryConnectors[UnityEngine.Random.Range(0, validSecondaryConnectors.Count)];
+            iteratorData.secondaryPreference = secondaryConnectors[connectorIndex.y];
+            iteratorData.targetSection = instanceIdToSection[connectorIndex.x];
+            ConnectorMultiply(primary, ref iteratorData.primaryPreference, ref iteratorData.secondaryPreference);
+            iteratorData.success = true;
+
+        }
+        else
+        {
+            iteratorData.targetSection = null;
+            primaryConnectors.RemoveAt(priIndex);
+            iteratorData.success = false;
+        }
+    }
+
     public bool ParallelIntersectTest(TunnelSection primary, TunnelSection target, ref Connector primaryConnector, out Connector secondaryConnector)
     {
         secondaryConnector = Connector.Empty;

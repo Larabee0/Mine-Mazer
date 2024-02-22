@@ -66,7 +66,12 @@ public partial class SpatialParadoxGenerator
             int freeConnectors = section.connectors.Length - section.InUse.Count;
             for (int j = 0; j < freeConnectors; j++)
             {
-                MapTreeElement sectionInstance = PickInstinateConnectDelayed(section);
+                PickIntstinateConnectDelayed results = new()
+                {
+                    pickSectionDelayedData = new()
+                };
+                yield return PickInstinateConnectDelayed(section, results);
+                MapTreeElement sectionInstance = results.treeEleement;
                 mapTree[^1].Add(sectionInstance);
             }
         }

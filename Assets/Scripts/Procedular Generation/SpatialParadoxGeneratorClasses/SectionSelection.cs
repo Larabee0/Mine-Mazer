@@ -52,7 +52,13 @@ public partial class SpatialParadoxGenerator
         return pickedInstance;
     }
 
-    private MapTreeElement PickInstinateConnectDelayed(TunnelSection primary)
+    public class PickIntstinateConnectDelayed
+    {
+        public MapTreeElement treeEleement;
+        public SectionDelayedOuts pickSectionDelayedData;
+    }
+
+    private IEnumerator PickInstinateConnectDelayed(TunnelSection primary, PickIntstinateConnectDelayed pickedResult)
     {
         TunnelSection pickedSection = null;
         TunnelSection pickedInstance = null;
@@ -61,13 +67,14 @@ public partial class SpatialParadoxGenerator
         {
             List<int> internalSections = new(promoteSectionsList.Count);
             promoteSectionsList.ForEach(section => internalSections.Add(section.orignalInstanceId));
-            pickedSection = PickSection(primary, internalSections, out priPref, out secPref);
+            yield return PickSectionDelayed(primary, internalSections, pickedResult.pickSectionDelayedData);
+            pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
             if (!internalSections.Contains(pickedSection.GetInstanceID())) // returned dead end.
             {
                 List<int> nextSections = FilterSections(primary);
-                pickedSection = PickSection(primary, nextSections, out priPref, out secPref);
+                yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
 
-                return EnqueueSection(primary,pickedSection,priPref, secPref);
+                pickedResult.treeEleement = EnqueueSection(primary, pickedResult.pickSectionDelayedData.pickedSection, priPref, secPref);
 
                 //pickedInstance = InstinateSection(pickedSection);
             }
@@ -83,19 +90,20 @@ public partial class SpatialParadoxGenerator
         else
         {
             List<int> nextSections = FilterSections(primary);
-            pickedSection = PickSection(primary, nextSections, out priPref, out secPref);
-
-            return EnqueueSection(primary, pickedSection, priPref, secPref);
+            yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
+            pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
+            pickedResult.treeEleement = EnqueueSection(primary, pickedResult.pickSectionDelayedData.pickedSection, priPref, secPref);
 
             // pickedInstance = InstinateSection(pickedSection);
         }
         if (pickedInstance != null)
         {
-            TransformSection(primary, pickedInstance, priPref, secPref); // transform the new section
+            TransformSection(primary, pickedResult.pickSectionDelayedData.pickedSection, priPref, secPref); // transform the new section
 
-            InstantiateBreakableWalls(pickedSection, pickedInstance, priPref);
+            InstantiateBreakableWalls(pickedSection, pickedResult.pickSectionDelayedData.pickedSection, priPref);
         }
-        return pickedInstance;
+        //pickedResult.outs.result = pickedResult.outs.result;
+        
     }
 
     private void InstantiateBreakableWalls(TunnelSection pickedSection, TunnelSection pickedInstance, Connector priPref)
@@ -205,6 +213,114 @@ public partial class SpatialParadoxGenerator
             Debug.LogWarning("Unable to find usable section, ending the tunnel.", primary);
         }
         return targetSection;
+    }
+
+    public class SectionDelayedOuts
+    {
+        public Connector primaryPreference;
+        public Connector secondaryPreference;
+        public TunnelSection pickedSection;
+    }
+
+    private IEnumerator PickSectionDelayed(TunnelSection primary, List<int> nextSections,
+        SectionDelayedOuts outs)
+    {
+        outs.primaryPreference = Connector.Empty;
+        outs.secondaryPreference = Connector.Empty;
+
+        List<Connector> primaryConnectors = FilterConnectors(primary);
+
+        NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.Persistent);
+
+        int iterations = maxInterations;
+        TunnelSection targetSection = null;
+
+        Physics.SyncTransforms();
+        while (targetSection == null && primaryConnectors.Count > 0)
+        {
+            outs.primaryPreference = GetConnectorFromSection(primaryConnectors, out int priIndex);
+
+            NativeReference<BurstConnector> priConn = new(new(outs.primaryPreference), Allocator.Persistent);
+            if (!priConn.IsCreated)
+            {
+                Debug.LogError("Failed to create priConnector native reference!", gameObject);
+                continue;
+            }
+            JobHandle handle = new BurstConnectorMulJob
+            {
+                connector = priConn,
+                sectionLTW = primary.transform.localToWorldMatrix
+            }.Schedule(new JobHandle());
+
+            var bmj = new BigMatrixJob
+            {
+                connector = priConn,
+                sectionIds = nativeNexSections,
+                sectionConnectors = sectionConnectorContainers,
+                boxBounds = sectionBoxMatrices,
+                matrices = sectionBoxTransforms
+            };
+            int length = nextSections.Count;
+            int batches = Mathf.Max(4, length / SystemInfo.processorCount);
+            handle = parallelMatrixCalculations
+                ? bmj.ScheduleParallel(length, batches, handle)
+                : bmj.Schedule(length, handle);
+
+            handle = priConn.Dispose(handle);
+
+            List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(outs.primaryPreference), nextSections);
+            if (BigParallelIntersectTests)
+            {
+                ParallelRandInter iteratorData = new()
+                {
+                    handle = handle,
+                    iterations = iterations,
+                    primaryPreference = outs.primaryPreference,
+                    secondaryPreference = outs.secondaryPreference,
+                    targetSection = targetSection,
+                };
+                yield return ParallelRandomiseIntersection(primary, primaryConnectors, priIndex, internalNextSections, iteratorData);
+                //handle.Complete();
+                targetSection = iteratorData.targetSection;
+                if (iteratorData.success)
+                {
+                    break;
+                }
+                //if (ParallelRandomiseIntersection(primary,
+                //    ref primaryPreference,
+                //    ref secondaryPreference,
+                //    primaryConnectors,
+                //    ref iterations,
+                //    ref targetSection,
+                //    priIndex,
+                //    internalNextSections,
+                //    handle
+                //))
+                //{
+                //    break;
+                //}
+            }
+            else
+            {
+                handle.Complete();
+                if (RandomiseIntersection(primary, ref outs.primaryPreference, ref outs.secondaryPreference, primaryConnectors, ref iterations, ref targetSection, priIndex, internalNextSections))
+                {
+                    break;
+                }
+            }
+        }
+
+        nativeNexSections.Dispose();
+
+        if (targetSection == null)
+        {
+            ConnectorMultiply(primary, ref outs.primaryPreference, ref outs.secondaryPreference);
+            outs.secondaryPreference = deadEndPlug.connectors[0];
+            outs.secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
+            targetSection = deadEndPlug;
+            Debug.LogWarning("Unable to find usable section, ending the tunnel.", primary);
+        }
+        outs.pickedSection = targetSection;
     }
 
     private bool RandomiseIntersection(TunnelSection primary, ref Connector primaryPreference, ref Connector secondaryPreference, List<Connector> primaryConnectors, ref int iterations, ref TunnelSection targetSection, int priIndex, List<int> internalNextSections)
