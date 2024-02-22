@@ -299,7 +299,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 1.08, y: 0.75, z: 0.63}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1171162734
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -404,7 +404,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 1.08, y: 0.75, z: 0.63}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1394629798
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -665,13 +665,13 @@ MonoBehaviour:
   a: {fileID: 1394629797}
   b: {fileID: 1171162733}
   rotOffsetA:
-    x: 45
+    x: 0
     y: 0
-    z: 45
+    z: 0
   rotOffsetB:
-    x: 45
+    x: 0
     y: 0
-    z: 45
+    z: 0
   overlap: 0
 --- !u!4 &1668467943
 Transform:

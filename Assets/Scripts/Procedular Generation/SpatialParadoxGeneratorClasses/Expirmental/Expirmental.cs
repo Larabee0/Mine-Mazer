@@ -502,6 +502,7 @@ public partial class SpatialParadoxGenerator
 
     private void OnDrawGizmos()
     {
+        if (!DrawVirtualPhysicsWorldColliders) { return; }
         if(!VirtualPhysicsWorld.IsCreated) { return; }
         if(VirtualPhysicsWorld.IsEmpty) { return; }
         Gizmos.color = Color.red;
