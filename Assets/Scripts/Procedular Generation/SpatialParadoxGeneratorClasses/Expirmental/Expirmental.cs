@@ -26,10 +26,17 @@ public partial class SpatialParadoxGenerator
 
     public void UpdateVirtualPhysicsWorld()
     {
-        new UpdatePhysicsWorldTransforms
+        UpdatePhyscisWorld(new()).Complete();
+    }
+
+    public JobHandle UpdatePhyscisWorld(JobHandle jobHandle)
+    {
+        int length = VirtualPhysicsWorld.Length;
+        int batches = Mathf.Max(2, length / SystemInfo.processorCount);
+        return new UpdatePhysicsWorldTransforms
         {
-            VirtualPhysicsWorld = VirtualPhysicsWorld,
-        }.ScheduleParallel(VirtualPhysicsWorld.Length, 64, new()).Complete();
+            VirtualPhysicsWorld = VirtualPhysicsWorld
+        }.ScheduleParallel(length, batches, jobHandle);
     }
 
     public void UpdateSectionTransform(int id, float4x4 matrix)
@@ -95,7 +102,7 @@ public partial class SpatialParadoxGenerator
         matrixJob.connectorPairs.Dispose();
         matrixJob.calculatedMatricies.Dispose();
         matrixJob.primaryConnectors.Dispose();
-        UpdateVirtualPhysicsWorld();
+        //UpdateVirtualPhysicsWorld();
         yield return PostProcessQueue();
     }
 
@@ -149,7 +156,7 @@ public partial class SpatialParadoxGenerator
         VirtualPhysicsWorld.Add(new TunnelSectionVirtual() { boundSection = id });
         InitiliseTSV(ref VirtualPhysicsWorld.ElementAt(VirtualPhysicsWorld.Length - 1), sectionInstance, matrix);
 
-        UpdateVirtualPhysicsWorld();
+        //UpdateVirtualPhysicsWorld();
     }
 
     public void AddSection(TunnelSection sectionInstance, float4x4 matrix, int id)
@@ -275,6 +282,7 @@ public partial class SpatialParadoxGenerator
 
         int length = tests.Length;
         int batches = Mathf.Max(2, length / SystemInfo.processorCount);
+        iteratorData.handle = UpdatePhyscisWorld(iteratorData.handle);
         iteratorData.handle = new BoxCheckJob
         {
             incomingMatrices = sectionBoxTransforms,

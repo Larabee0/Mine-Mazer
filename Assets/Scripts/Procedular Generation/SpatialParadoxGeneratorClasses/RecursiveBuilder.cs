@@ -20,6 +20,8 @@ public partial class SpatialParadoxGenerator
     }
     private IEnumerator IncrementalBuilder(bool initialArea = false)
     {
+        yield return null;
+        yield return null;
         while (mapTree.Count <= maxDst)
         {
             List<MapTreeElement> startSections = mapTree[^1];

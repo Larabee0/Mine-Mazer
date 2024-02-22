@@ -73,6 +73,8 @@ public partial class SpatialParadoxGenerator
             {
                 List<int> nextSections = FilterSections(primary);
                 yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
+                priPref = pickedResult.pickSectionDelayedData.primaryPreference;
+                secPref = pickedResult.pickSectionDelayedData.secondaryPreference;
 
                 pickedResult.treeEleement = EnqueueSection(primary, pickedResult.pickSectionDelayedData.pickedSection, priPref, secPref);
 
@@ -92,6 +94,8 @@ public partial class SpatialParadoxGenerator
             List<int> nextSections = FilterSections(primary);
             yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
             pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
+            priPref = pickedResult.pickSectionDelayedData.primaryPreference;
+            secPref = pickedResult.pickSectionDelayedData.secondaryPreference;
             pickedResult.treeEleement = EnqueueSection(primary, pickedResult.pickSectionDelayedData.pickedSection, priPref, secPref);
 
             // pickedInstance = InstinateSection(pickedSection);
@@ -171,9 +175,6 @@ public partial class SpatialParadoxGenerator
 
             handle = priConn.Dispose(handle);
             
-
-            // Debug.Log(length);
-
             List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreference), nextSections);
             if (BigParallelIntersectTests)
             {
@@ -282,6 +283,9 @@ public partial class SpatialParadoxGenerator
                 yield return ParallelRandomiseIntersection(primary, primaryConnectors, priIndex, internalNextSections, iteratorData);
                 //handle.Complete();
                 targetSection = iteratorData.targetSection;
+                outs.primaryPreference = iteratorData.primaryPreference;
+                outs.secondaryPreference = iteratorData.secondaryPreference;
+                iterations = iteratorData.iterations;
                 if (iteratorData.success)
                 {
                     break;
@@ -314,7 +318,9 @@ public partial class SpatialParadoxGenerator
 
         if (targetSection == null)
         {
-            ConnectorMultiply(primary, ref outs.primaryPreference, ref outs.secondaryPreference);
+            Connector priPref = outs.primaryPreference, secPref = outs.secondaryPreference;
+            ConnectorMultiply(primary, ref priPref, ref secPref);
+            outs.primaryPreference = priPref; outs.secondaryPreference = secPref;
             outs.secondaryPreference = deadEndPlug.connectors[0];
             outs.secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
             targetSection = deadEndPlug;
