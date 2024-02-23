@@ -4133,6 +4133,60 @@ Transform:
   m_Father: {fileID: 543450653113258062}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 59.679, z: 0}
+--- !u!1 &110672215
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 110672217}
+  - component: {fileID: 110672216}
+  m_Layer: 0
+  m_Name: Colliders
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!64 &110672216
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110672215}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2661389633042443272, guid: 93d2026fd5e99cf4d85897a5f4933282, type: 3}
+--- !u!4 &110672217
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110672215}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450653113258062}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &112972225
 GameObject:
   m_ObjectHideFlags: 0
@@ -80966,6 +81020,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 590369159185324429}
+  - {fileID: 110672217}
   - {fileID: 7320153766017569004}
   - {fileID: 303953023}
   - {fileID: 1772122244}
@@ -81556,6 +81611,7 @@ MonoBehaviour:
   - {fileID: 2011904805}
   additionalChildren:
   - {fileID: 5089410928876158090}
+  - {fileID: 110672215}
   prefabsDirectory: Assets/Prefabs
   folderName: Tunnel Assets
   tunnelSectionLayerMask:
@@ -87553,7 +87609,7 @@ MeshRenderer:
   - {fileID: 2100000, guid: 387cb0747d4bcd949a595c3e0af53838, type: 2}
   - {fileID: 2100000, guid: 00974d3f564bb2a41921682f3b4a9a76, type: 2}
   - {fileID: 2100000, guid: 3f4044cc71d713b46b423c8da8a82cb4, type: 2}
-  - {fileID: 2100000, guid: 2ab0f0453eabc2a49aa5986b7447a998, type: 2}
+  - {fileID: 2100000, guid: 85ca14460f7bb1b4184cf4a8ce27e13d, type: 2}
   - {fileID: 2100000, guid: 3f4044cc71d713b46b423c8da8a82cb4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
