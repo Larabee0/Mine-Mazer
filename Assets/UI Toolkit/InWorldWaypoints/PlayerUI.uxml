@@ -4,6 +4,7 @@
     <ui:VisualElement name="Main" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
         <ui:VisualElement picking-mode="Ignore" name="MiniMap" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/UI%20Toolkit/MiniMap/MiniMapOutput.renderTexture?fileID=8400000&amp;guid=6b5a7d27c18fcfa4491b21d2e27b571a&amp;type=2#MiniMapOutput&apos;); position: absolute; width: 384px; height: 384px; left: 32px; top: 32px;" />
         <ui:VisualElement name="WayPoints" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+        <ui:ProgressBar value="0.5" title="Hunger" name="HungerBar" high-value="1" class="waypointname" style="position: absolute; bottom: 32px; left: 32px; width: 300px; font-size: 43px; height: 84px;" />
     </ui:VisualElement>
     <ui:VisualElement name="CrossHair" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center;">
         <ui:VisualElement style="background-color: rgba(255, 255, 255, 0.53); height: 20px; width: 20px;" />
@@ -19,5 +20,12 @@
             <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="ObjectiveText" picking-mode="Ignore" class="waypointname" style="-unity-text-align: middle-center;" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="ScreenFade" style="flex-grow: 1; background-color: rgb(0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: none;" />
+    <ui:VisualElement picking-mode="Ignore" name="Overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center;">
+        <ui:VisualElement name="PauseButtonContainer" style="background-color: rgba(255, 255, 255, 0.55); padding-top: 30px; padding-right: 30px; padding-left: 30px; border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px;">
+            <ui:Button text="Resume" display-tooltip-when-elided="true" name="ResumeButton" class="TradeMainbutton" style="min-width: 350px;" />
+            <ui:Button text="Settings" display-tooltip-when-elided="true" name="SettingsButton" class="TradeMainbutton" style="min-width: 350px;" />
+            <ui:Button text="Main Menu" display-tooltip-when-elided="true" name="MainMenuButton" class="TradeMainbutton" style="min-width: 350px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="ScreenFade" picking-mode="Ignore" style="flex-grow: 1; background-color: rgb(0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: none;" />
 </ui:UXML>

@@ -27,9 +27,9 @@ public class Inventory : MonoBehaviour
     }
 
     public Dictionary<Item, int> inventory = new();
-    public Dictionary<Item, MapResource> assets = new();
+    public Dictionary<Item, List<MapResource>> assets = new();
     public Item? CurHeldItem => inventoryOrder.Count > 0 ? inventoryOrder[curIndex] : null;
-    public MapResource CurHeldAsset => inventoryOrder.Count > 0 ? assets[CurHeldItem.Value] : null;
+    public MapResource CurHeldAsset => inventoryOrder.Count > 0 ? assets[CurHeldItem.Value][0] : null;
 
     [SerializeField] private List<Item> inventoryOrder = new();
     [SerializeField] private int curIndex = -1;
@@ -55,10 +55,6 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        if (InputManager.Instance != null)
-        {
-            InputManager.Instance.scrollDirection += ScrollInventory;
-        }
     }
 
     private void Start()
@@ -68,8 +64,14 @@ public class Inventory : MonoBehaviour
             AddItem(defaultItems[i].ItemStats.type, 1, Instantiate(defaultItems[i]));
         }
     }
-    
-    private void OnApplicationQuit()
+    private void OnEnable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.scrollDirection += ScrollInventory;
+        }
+    }
+    private void OnDisable()
     {
         if (InputManager.Instance != null)
         {
@@ -82,18 +84,19 @@ public class Inventory : MonoBehaviour
         if (inventory.ContainsKey(itemType))
         {
             inventory[itemType] += quantity;
-            Destroy(itemInstance.gameObject);
+            assets[itemType].Add(itemInstance);
         }
         else
         {
             inventory.Add(itemType, quantity);
-            assets.Add(itemType, itemInstance);
-            itemInstance.SetColliderActive(false);
-            itemInstance.SetMapResourceActive(false);
-            itemInstance.transform.parent = virtualhands;
-            itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
+            assets.Add(itemType, new() { itemInstance });
             UpdateInventory();
         }
+        itemInstance.SetColliderActive(false);
+        itemInstance.SetMapResourceActive(false);
+        itemInstance.transform.parent = virtualhands;
+        itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
+        itemInstance.transform.localScale = itemInstance.heldScaleOffset;
     }
 
     public bool TryRemoveItem(Item item, int quantity)
@@ -101,13 +104,13 @@ public class Inventory : MonoBehaviour
         if(inventory.ContainsKey(item))
         {
             inventory[item]-=quantity;
-            
-            if(inventory[item] <= 0)
+
+            Destroy(assets[item][^1].gameObject);
+            assets[item].RemoveAt(assets[item].Count -1);
+            if (inventory[item] <= 0)
             {
                 inventory.Remove(item);
-                Destroy(assets[item].gameObject);
                 assets.Remove(item);
-                
             }
             UpdateInventory();
             return true;
@@ -122,10 +125,11 @@ public class Inventory : MonoBehaviour
         {
             inventory[item] -= quantity;
 
+            itemInstance = assets[item][^1];
+            assets[item].RemoveAt(assets[item].Count - 1);
             if (inventory[item] <= 0)
             {
                 inventory.Remove(item);
-                itemInstance = assets[item];
                 //Destroy(assets[item].gameObject);
                 assets.Remove(item);
 
@@ -234,9 +238,9 @@ public class Inventory : MonoBehaviour
 
     private void MoveItemToHand()
     {
-        if (assets.TryGetValue(inventoryOrder[curIndex], out MapResource switchTo))
+        if (assets.TryGetValue(inventoryOrder[curIndex], out List<MapResource> switchTo))
         {
-            if (heldItem == switchTo)
+            if (heldItem == switchTo[0])
             {
                 return;
             }
@@ -244,10 +248,10 @@ public class Inventory : MonoBehaviour
             {
                 heldItem.SetMapResourceActive(false);
             }
-            switchTo.SetMapResourceActive(true);
-            heldItem = switchTo;
+            switchTo[0].SetMapResourceActive(true);
+            heldItem = switchTo[0];
             StopAllCoroutines();
-            StartCoroutine(ShowItemNameTooltip(heldItem.ItemStats.name));
+            StartCoroutine(ShowItemNameTooltip(string.Format("{0} (x{1})",heldItem.ItemStats.name, inventory[inventoryOrder[curIndex]])));
         }
         else
         {

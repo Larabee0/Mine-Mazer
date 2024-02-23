@@ -133,9 +133,6 @@ GameObject:
   - component: {fileID: 7360536083873255685}
   - component: {fileID: 4699310440157599471}
   - component: {fileID: -3188724048700739943}
-  - component: {fileID: 178594305476892302}
-  - component: {fileID: 2318023018938617981}
-  - component: {fileID: 5591521929671679010}
   m_Layer: 0
   m_Name: 10mCaveCrossRoad Prefab
   m_TagString: Untagged
@@ -300,6 +297,7 @@ MonoBehaviour:
   waypointName: 
   spawnRule: {fileID: -3188724048700739943}
   sectionLightLevel: 0.202
+  sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
   excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 27434
@@ -323,77 +321,6 @@ MonoBehaviour:
   spawnLimit: -1
   generator: {fileID: 0}
   owner: 27434
---- !u!114 &178594305476892302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4911345596223159042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 1
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 6bbbf1fa2da2f9c4b877a796ffda46ef, type: 2}
-  m_BuildHeightMesh: 0
---- !u!114 &2318023018938617981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4911345596223159042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -12.062485}
-  m_EndPoint: {x: 0, y: 0, z: 2.5}
-  m_Width: 3.1911519
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
---- !u!114 &5591521929671679010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4911345596223159042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: -6.69889, y: 0, z: -5.001651}
-  m_EndPoint: {x: 6.4731708, y: 0, z: -4.990289}
-  m_Width: 3.5123982
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1 &5347814331144535809
 GameObject:
   m_ObjectHideFlags: 0

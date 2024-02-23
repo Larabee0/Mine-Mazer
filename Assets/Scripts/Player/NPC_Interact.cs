@@ -34,7 +34,7 @@ public class NPC_Interact : MonoBehaviour
     }
 
     [SerializeField] private Transform InteractorSource;
-    [SerializeField] private float InteractRange;
+    public float InteractRange;
     [SerializeField] private LayerMask npcLayer;
     [SerializeField] private Texture2D interactionIcon;
     [SerializeField] private float boxCastSize = 0.5f;
@@ -61,7 +61,7 @@ public class NPC_Interact : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
         if (InputManager.Instance != null)
         {
@@ -80,7 +80,7 @@ public class NPC_Interact : MonoBehaviour
         }
     }
 
-    private void OnApplicationQuit()
+    private void OnDisable()
     {
         if (InputManager.Instance != null)
         {

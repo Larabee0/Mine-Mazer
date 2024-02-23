@@ -78,6 +78,21 @@ namespace MazeGame.Navigation
                 return;
             }
             mapGenerator.OnMapUpdate += MapUpdateEvent;
+            minimapZoomOffset = textureResolution * (miniMapScale - 1);
+            minimapZoomOffset -= minimapCentreOffset;
+
+
+        }
+
+        private void Start()
+        {
+            ScaleMap(0.7f);
+            //DebugMap();
+        }
+
+        private void OnEnable()
+        {
+
             if (InputManager.Instance != null)
             {
                 InputManager.Instance.OnLookDelta += OnLook;
@@ -91,19 +106,9 @@ namespace MazeGame.Navigation
                 Debug.LogError("No Input, UI cannot start");
                 enabled = false;
             }
-            minimapZoomOffset = textureResolution * (miniMapScale - 1);
-            minimapZoomOffset -= minimapCentreOffset;
-
-
         }
 
-        private void Start()
-        {
-            ScaleMap(0);
-            //DebugMap();
-        }
-
-        private void OnApplicationQuit()
+        private void OnDisable()
         {
             if (InputManager.Instance != null)
             {
@@ -336,6 +341,7 @@ namespace MazeGame.Navigation
             element.asset.style.width = textureResolution;
             element.asset.style.position = Position.Absolute;
             element.asset.style.unityBackgroundImageTintColor = tint;
+            element.asset.pickingMode = PickingMode.Ignore;
             miniMap.mapAssembly.Add(element);
         }
 
@@ -351,6 +357,7 @@ namespace MazeGame.Navigation
             element.asset.style.alignItems = Align.Center;
             element.asset.style.justifyContent = Justify.Center;
             element.asset.Add(label);
+            element.asset.pickingMode = PickingMode.Ignore;
         }
 
         private void AddElement(int id,string name,Color tint, BoxTransform transform)

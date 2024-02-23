@@ -186,11 +186,6 @@ GameObject:
   - component: {fileID: 2880005831789526043}
   - component: {fileID: 3205104275630772647}
   - component: {fileID: -5356444298311868501}
-  - component: {fileID: 4490091546575930698}
-  - component: {fileID: 3211161390130486997}
-  - component: {fileID: 4794812283820103659}
-  - component: {fileID: 1787930006371948072}
-  - component: {fileID: 6528777848079633212}
   m_Layer: 0
   m_Name: CaveLarge2 Prefab
   m_TagString: Untagged
@@ -407,6 +402,7 @@ MonoBehaviour:
   waypointName: 
   spawnRule: {fileID: -5356444298311868501}
   sectionLightLevel: 0.202
+  sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
   excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 27272
@@ -430,117 +426,6 @@ MonoBehaviour:
   spawnLimit: -1
   generator: {fileID: 0}
   owner: 27272
---- !u!114 &4490091546575930698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974376745811405886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 1
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: c53fd6f27dfe6b44fb2faec7232d7629, type: 2}
-  m_BuildHeightMesh: 0
---- !u!114 &3211161390130486997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974376745811405886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -2.5}
-  m_EndPoint: {x: 0, y: 0, z: 2.5}
-  m_Width: 3.2287102
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
---- !u!114 &4794812283820103659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974376745811405886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: -8.922354, y: 0, z: -10.028631}
-  m_EndPoint: {x: -11.32917, y: 0, z: -9.985926}
-  m_Width: 2.1929111
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
---- !u!114 &1787930006371948072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974376745811405886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 8.307872, y: 0, z: -10.046904}
-  m_EndPoint: {x: 11.23464, y: 0, z: -10.032958}
-  m_Width: 2.9107254
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
---- !u!114 &6528777848079633212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974376745811405886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -21.527874}
-  m_EndPoint: {x: 0, y: 0, z: -18.712599}
-  m_Width: 2.5757625
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1 &3162706432211184873
 GameObject:
   m_ObjectHideFlags: 0

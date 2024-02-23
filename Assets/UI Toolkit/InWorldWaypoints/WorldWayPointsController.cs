@@ -41,9 +41,22 @@ namespace MazeGame.Navigation
         private readonly List<WorldWayPoint> waypoints = new();
 
         private Coroutine wayPointTransformProcess = null;
-
+        
         private void Awake()
         {
+            if (instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
+        }
+
+        public void StartWWPC()
+        {
+            mapGenerator = FindAnyObjectByType<SpatialParadoxGenerator>();
             if (mapGenerator == null || !mapGenerator.isActiveAndEnabled)
             {
                 Debug.LogError("No Map Generator or Map Generator Disabled");
@@ -61,6 +74,14 @@ namespace MazeGame.Navigation
 
             mapGenerator.OnMapUpdate += MapUpdateEvent;
 
+            
+
+            root = DocRoot.Q("WayPoints");
+            
+        }
+        
+        private void OnEnable()
+        {
             if (InputManager.Instance != null)
             {
                 InputManager.Instance.OnLookDelta += OnLook;
@@ -72,20 +93,9 @@ namespace MazeGame.Navigation
                 Debug.LogError("No Input, UI cannot start");
                 enabled = false;
             }
-
-            root = DocRoot.Q("WayPoints");
-            
-            if (instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(this);
-            }
         }
 
-        private void OnApplicationQuit()
+        private void OnDisable()
         {
             if (InputManager.Instance != null)
             {

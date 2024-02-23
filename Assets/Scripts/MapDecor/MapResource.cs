@@ -18,7 +18,12 @@ public enum Item
     Eudie,
     StagnationBeacon,
     BrokenHeart,
-    Soup
+    Soup,
+    FicusWood,
+    ClockworkMechanism,
+    GlanceiteResonator,
+    HeartNode,
+    SanctumMachine
 }
 
 public enum ItemCategory
@@ -26,7 +31,9 @@ public enum ItemCategory
     Crystal,
     Mushroom,
     Equippment,
-    Lumenite
+    Lumenite,
+    Wood,
+    Quest
 }
 
 public static class ItemUtility
@@ -57,7 +64,6 @@ public static class ItemUtility
                 Item.Torch,
                 Item.Pickaxe,
                 Item.StagnationBeacon,
-                Item.BrokenHeart,
                 Item.Soup
             }
         },
@@ -68,9 +74,29 @@ public static class ItemUtility
                 Item.Eudie
             }
         },
+
+        {
+            ItemCategory.Wood, new ()
+            {
+                Item.FicusWood
+            }
+        },
+        {
+            ItemCategory.Quest, new()
+            {
+                Item.BrokenHeart,
+                Item.ClockworkMechanism,
+                Item.GlanceiteResonator,
+                Item.HeartNode,
+                Item.SanctumMachine
+            }
+        }
     };
+
     private static Dictionary<Item, ItemCategory> itemToCategory = null;
+
     public static Dictionary<ItemCategory, HashSet<Item>> CategoryToItems => categoryToItems;
+
     public static Dictionary<Item, ItemCategory> ItemToCategory
     {
         get
@@ -125,6 +151,7 @@ public class MapResource : MonoBehaviour, IInteractable
     [SerializeField] protected Collider itemCollider;
     [SerializeField] protected ItemStats itemStats;
     [SerializeField] protected bool Placeable;
+    [SerializeField] protected bool Interactable = true;
     public Vector3 heldOrenintationOffset;
     public Vector3 heldpositonOffset;
     public Vector3 heldScaleOffset = Vector3.one;
@@ -148,6 +175,7 @@ public class MapResource : MonoBehaviour, IInteractable
     protected virtual void Awake()
     {
         originalScale = transform.localScale;
+        SetColliderActive(Interactable);
     }
 
     public virtual string GetToolTipText()
@@ -188,12 +216,12 @@ public class MapResource : MonoBehaviour, IInteractable
         gameObject.SetActive(active);
     }
 
-    public virtual void PlaceItem()
+    public virtual bool PlaceItem()
     {
         if (Placeable)
         {
             Ray r = new(Camera.main.transform.position, Camera.main.transform.forward);
-            if (Physics.Raycast(r, out RaycastHit hitInfo, 5))
+            if (Physics.Raycast(r, out RaycastHit hitInfo, NPC_Interact.Instance.InteractRange))
             {
                 if (Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item))
                 {
@@ -206,9 +234,11 @@ public class MapResource : MonoBehaviour, IInteractable
                     item.SetMapResourceActive(true);
                     item.SetColliderActive(true);
 
-                    item.gameObject.transform.up = Vector3.up;
+                    item.gameObject.transform.up = hitInfo.normal;
+                    return true;
                 }
             }
         }
+        return false;
     }
 }

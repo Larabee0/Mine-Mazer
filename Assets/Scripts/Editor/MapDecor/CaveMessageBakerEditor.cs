@@ -19,5 +19,9 @@ public class CaveMessageBakerEditor : Editor
         {
             baker.BakeDown();
         }
+        if (GUILayout.Button("Load"))
+        {
+            baker.Load();
+        }
     }
 }

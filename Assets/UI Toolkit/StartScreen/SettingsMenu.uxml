@@ -1,0 +1,40 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/InWorldWaypoints/IWWSS.uss?fileID=7433441132597879392&amp;guid=0eeddcfd0d863f14d941cff7a007fb69&amp;type=3#IWWSS" />
+    <Style src="project://database/Assets/UI%20Toolkit/Trading/TradingSS.uss?fileID=7433441132597879392&amp;guid=3ccd29607d44ac44991d679e9d9659f8&amp;type=3#TradingSS" />
+    <ui:VisualElement name="Overlay" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; align-items: center; justify-content: center;">
+        <ui:VisualElement name="SettingsContainer" style="background-color: rgba(255, 255, 255, 0.5); align-items: center; padding-left: 30px; padding-right: 30px; padding-top: 30px; padding-bottom: 0; border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; display: none;">
+            <ui:VisualElement style="flex-grow: 1; background-color: rgb(67, 66, 67); padding-left: 30px; padding-right: 30px; padding-top: 30px; padding-bottom: 30px; border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; margin-bottom: 30px;">
+                <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" class="waypointname" style="-unity-text-align: upper-center; -unity-text-outline-width: 0;" />
+                <ui:VisualElement style="flex-direction: row; justify-content: space-around;">
+                    <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); justify-content: space-between;">
+                        <ui:Label tabindex="-1" text="Invert Move Horizontal  Axis" display-tooltip-when-elided="true" class="waypointname" style="font-size: 18px; -unity-text-outline-width: 0;" />
+                        <ui:Label tabindex="-1" text="Invert Move Vertical Axis " display-tooltip-when-elided="true" class="waypointname" style="font-size: 18px; -unity-text-outline-width: 0;" />
+                        <ui:Label tabindex="-1" text="Invert Camera Horizontal Axis" display-tooltip-when-elided="true" class="waypointname" style="font-size: 18px; -unity-text-outline-width: 0;" />
+                        <ui:Label tabindex="-1" text="Invert Camera Vertical  Axis" display-tooltip-when-elided="true" class="waypointname" style="font-size: 18px; -unity-text-outline-width: 0;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); justify-content: space-between;">
+                        <ui:Toggle name="InverMoveHAxis" />
+                        <ui:Toggle name="InvertMoveVAxis" />
+                        <ui:Toggle name="InvertCameraHAxis" />
+                        <ui:Toggle name="InvertCameraVAxis" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Slider picking-mode="Ignore" label="Camera Senstivity" value="1" high-value="2" low-value="0.001" name="CameraSensitivty" style="min-width: 370px; -unity-font-definition: url(&apos;project://database/Assets/Fungus/Fonts/Amaranth/Amaranth-Regular%20SDF.asset?fileID=11400000&amp;guid=cb56843408cfcf54a894f7f7d707020f&amp;type=2#Amaranth-Regular SDF&apos;); color: rgb(255, 255, 255); font-size: 18px;" />
+            </ui:VisualElement>
+            <ui:Button text="Calibrate Constrast and Brightness" display-tooltip-when-elided="true" name="CalibrateScreen" class="TradeMainbutton" />
+            <ui:Button text="Finish" display-tooltip-when-elided="true" name="MainMenuButton" class="TradeMainbutton" />
+        </ui:VisualElement>
+        <ui:VisualElement name="BrightnessConstrastContainer" style="background-color: rgba(255, 255, 255, 0.13); align-items: stretch; padding-left: 30px; padding-right: 30px; padding-top: 30px; padding-bottom: 0; border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; position: absolute; flex-direction: row; top: 0; right: 0;">
+            <ui:VisualElement style="flex-grow: 1; background-color: rgb(67, 66, 67); padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px; border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; margin-bottom: 30px;">
+                <ui:Slider picking-mode="Ignore" label="Brightness" value="1.1" high-value="7.2" low-value="-5" name="BrightnessSlider" style="min-width: 370px; -unity-font-definition: url(&apos;project://database/Assets/Fungus/Fonts/Amaranth/Amaranth-Regular%20SDF.asset?fileID=11400000&amp;guid=cb56843408cfcf54a894f7f7d707020f&amp;type=2#Amaranth-Regular SDF&apos;); color: rgb(255, 255, 255); font-size: 18px;" />
+                <ui:Slider picking-mode="Ignore" label="Constrast" value="0" high-value="100" low-value="-100" name="ConstrastSlider" style="min-width: 370px; -unity-font-definition: url(&apos;project://database/Assets/Fungus/Fonts/Amaranth/Amaranth-Regular%20SDF.asset?fileID=11400000&amp;guid=cb56843408cfcf54a894f7f7d707020f&amp;type=2#Amaranth-Regular SDF&apos;); color: rgb(255, 255, 255); font-size: 18px;" />
+                <ui:Toggle label="Hide Stars" name="HideStars" style="-unity-font-definition: url(&apos;project://database/Assets/Fungus/Fonts/Amaranth/Amaranth-Regular%20SDF.asset?fileID=11400000&amp;guid=cb56843408cfcf54a894f7f7d707020f&amp;type=2#Amaranth-Regular SDF&apos;); color: rgb(255, 255, 255); font-size: 18px;" />
+                <ui:Label tabindex="-1" text="Adjust till four stars are barely visible." display-tooltip-when-elided="true" class="waypointname" style="-unity-text-align: upper-center; -unity-text-outline-width: 0; font-size: 25px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); padding-left: 30px; align-items: center;">
+                <ui:Button text="Finish" display-tooltip-when-elided="true" name="BackToSettings" class="TradeMainbutton" style="min-width: 370px;" />
+                <ui:Button text="Restore Default" display-tooltip-when-elided="true" name="ResetConstrastBrightnessButton" class="TradeMainbutton" style="min-width: 370px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

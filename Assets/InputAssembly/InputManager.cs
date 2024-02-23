@@ -149,6 +149,8 @@ namespace MazeGame.Input
 
         public ButtonEventContainer advanceDialogueButton;
 
+        public ButtonEventContainer pauseButton;
+
         private void Awake()
         {
             // if no static instance, set it to this, otherwise destroy ourselves.
@@ -195,6 +197,8 @@ namespace MazeGame.Input
 
             advanceDialogueButton = new(this, DialogueActions.AdvanceDialogue);
 
+            pauseButton = new(this, PlayerActions.Pause);
+
            // navigationSubmitButton = new(this, eventSystemInput.submit.action);
         }
 
@@ -214,9 +218,10 @@ namespace MazeGame.Input
                 southButton.Bind();
                 interactButton.Bind();
                 advanceDialogueButton.Bind();
+                pauseButton.Bind();
 
                 PlayerActions.Reload.canceled += ReloadScene;
-                northButton.OnButtonReleased += Quit;
+                //northButton.OnButtonReleased += Quit;
             }
         }
 
@@ -236,20 +241,16 @@ namespace MazeGame.Input
                 southButton.Unbind();
                 interactButton.Unbind();
                 advanceDialogueButton.Unbind();
+                pauseButton.Unbind();
 
                 PlayerActions.Reload.canceled -= ReloadScene;
-                northButton.OnButtonReleased -= Quit;
+                //northButton.OnButtonReleased -= Quit;
             }
         }
 
         private void ReloadScene(InputAction.CallbackContext context)
         {
             SceneManager.LoadScene(0);
-        }
-
-        private void Quit()
-        {
-            Application.Quit();
         }
 
         public void UnlockPointer()
@@ -264,6 +265,18 @@ namespace MazeGame.Input
             Cursor.lockState = CursorLockMode.Locked;
             PlayerActions.Enable();
             DialogueActions.Disable();
+        }
+
+        public void SetPointerLocked(bool locked)
+        {
+            if(locked)
+            {
+                LockPointer();
+            }
+            else
+            {
+                UnlockPointer();
+            }
         }
 
         public void SetUIToolkitFocus()

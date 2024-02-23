@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7584554955853665862}
   - component: {fileID: 7875438145863607054}
   - component: {fileID: 4575697493249359502}
-  - component: {fileID: 5061587268487968223}
+  - component: {fileID: 1606485108606532387}
   m_Layer: 0
   m_Name: Mushroom Soup
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7584554955853665862
 MeshFilter:
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.86857224, y: 0.26841494, z: 0.86857235}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5061587268487968223
+--- !u!114 &1606485108606532387
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 610009994766557773}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd5432609c4ea33419fb78c1a1c7618d, type: 3}
+  m_Script: {fileID: 11500000, guid: 84581fd309e166545a27a652b5187deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemCollider: {fileID: 4575697493249359502}
@@ -123,8 +123,10 @@ MonoBehaviour:
     name: Mushroom Soup
     type: 11
   Placeable: 0
-  heldOrenintationOffset: {x: -49.93, y: 0, z: 0}
-  heldpositonOffset: {x: 0, y: 0, z: 0}
-  heldScaleOffset: {x: 1, y: 1, z: 1}
+  Interactable: 1
+  heldOrenintationOffset: {x: -33.65, y: 4, z: -7.39}
+  heldpositonOffset: {x: -0.15, y: -0.12, z: -0.21}
+  heldScaleOffset: {x: 0.34, y: 0.34, z: 0.34}
   placementPositionOffset: {x: 0, y: 0, z: 0}
   toolTipNameOverride: 
+  consumeable: 1

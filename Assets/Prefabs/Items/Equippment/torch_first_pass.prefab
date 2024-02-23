@@ -287,11 +287,11 @@ MonoBehaviour:
   itemStats:
     name: Torch
     type: 6
-  Placeable: 0
+  Placeable: 1
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
-  placementPositionOffset: {x: 0, y: 0, z: 0}
+  placementPositionOffset: {x: 0, y: 0.217, z: 0}
   toolTipNameOverride: 
   maxDst: 5
   transitionSpeed: 15
@@ -376,7 +376,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6930482079107848499}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0

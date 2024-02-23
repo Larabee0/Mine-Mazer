@@ -107,6 +107,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": ""Clamp(min=-1,max=1)"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""4c41011a-6f1b-46de-a5ca-9793cef3378f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -205,17 +214,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Steam Deck & Controller"",
-                    ""action"": ""North"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3497ac90-a7a5-4abf-80ad-3908917618b6"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""North"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -481,6 +479,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f8662911-3991-43a5-9031-318248907c71"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9d1aa5e5-24b6-4d6e-a022-7dff1173d916"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -969,6 +989,72 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""dd161546-d7c2-4ed0-9365-f0f11fd465d8"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ScrollWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""a03539cd-8eb7-445b-9b6e-aac14b78beaa"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ScrollWheel"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f00f072f-a3db-404c-b280-bc1d64285569"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ScrollWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""2036f7aa-4cf5-406b-aa19-9aa9314fb2c2"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ScrollWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2966cba8-99d9-4476-b3f4-36ebec883a33"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ScrollWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""cc47aacd-a570-4531-b8f4-8cc71f2ae33d"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ScrollWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
                     ""id"": ""0dffd358-08ad-482f-bf8f-2c10d935f224"",
                     ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
@@ -1137,6 +1223,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_MinimapZoomIn = m_Player.FindAction("MinimapZoomIn", throwIfNotFound: true);
         m_Player_MinimapZoomOut = m_Player.FindAction("MinimapZoomOut", throwIfNotFound: true);
         m_Player_ItemScroll = m_Player.FindAction("ItemScroll", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1222,6 +1309,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MinimapZoomIn;
     private readonly InputAction m_Player_MinimapZoomOut;
     private readonly InputAction m_Player_ItemScroll;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1235,6 +1323,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @MinimapZoomIn => m_Wrapper.m_Player_MinimapZoomIn;
         public InputAction @MinimapZoomOut => m_Wrapper.m_Player_MinimapZoomOut;
         public InputAction @ItemScroll => m_Wrapper.m_Player_ItemScroll;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1271,6 +1360,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ItemScroll.started += instance.OnItemScroll;
             @ItemScroll.performed += instance.OnItemScroll;
             @ItemScroll.canceled += instance.OnItemScroll;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1302,6 +1394,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ItemScroll.started -= instance.OnItemScroll;
             @ItemScroll.performed -= instance.OnItemScroll;
             @ItemScroll.canceled -= instance.OnItemScroll;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1512,6 +1607,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnMinimapZoomIn(InputAction.CallbackContext context);
         void OnMinimapZoomOut(InputAction.CallbackContext context);
         void OnItemScroll(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

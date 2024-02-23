@@ -14,10 +14,6 @@ GameObject:
   - component: {fileID: 8233018590910846955}
   - component: {fileID: 7226286589360190076}
   - component: {fileID: -1886313466182116042}
-  - component: {fileID: 2291184658699222064}
-  - component: {fileID: 1845488189327687312}
-  - component: {fileID: 1587476570702419157}
-  - component: {fileID: 7625624487239293496}
   m_Layer: 0
   m_Name: 20mCaveTJunction Prefab
   m_TagString: Untagged
@@ -86,7 +82,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 387cb0747d4bcd949a595c3e0af53838, type: 2}
-  - {fileID: 2100000, guid: 9adf9d158b8d8c74d91f35ec1e3d726e, type: 2}
+  - {fileID: 2100000, guid: 00974d3f564bb2a41921682f3b4a9a76, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -184,6 +180,7 @@ MonoBehaviour:
   waypointName: 
   spawnRule: {fileID: -1886313466182116042}
   sectionLightLevel: 0.202
+  sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 27446
@@ -207,97 +204,6 @@ MonoBehaviour:
   spawnLimit: -1
   generator: {fileID: 0}
   owner: 27446
---- !u!114 &2291184658699222064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171612208962928746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 1
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 92c6c8cbff9546c42b701e2c55db2b1a, type: 2}
-  m_BuildHeightMesh: 0
---- !u!114 &1845488189327687312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171612208962928746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 1.5143616, y: 0, z: 0.038677543}
-  m_EndPoint: {x: -0.9619663, y: 0, z: 0.01758629}
-  m_Width: 2.5422146
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
---- !u!114 &1587476570702419157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171612208962928746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 9.993027, y: 0, z: -11.099291}
-  m_EndPoint: {x: 9.997182, y: 0, z: -8.993281}
-  m_Width: 2.0033743
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
---- !u!114 &7625624487239293496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 171612208962928746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 9.974462, y: 0, z: 8.45558}
-  m_EndPoint: {x: 9.988639, y: 0, z: 11.005887}
-  m_Width: 2.4888995
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1 &2319835659622089281
 GameObject:
   m_ObjectHideFlags: 0
