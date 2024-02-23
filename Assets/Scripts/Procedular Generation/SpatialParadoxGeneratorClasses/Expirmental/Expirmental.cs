@@ -5,8 +5,6 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public partial class SpatialParadoxGenerator
@@ -255,7 +253,7 @@ public partial class SpatialParadoxGenerator
         if (validSecondaryConnectors.Count > 0)
         {
 
-            int2 connectorIndex = validSecondaryConnectors[UnityEngine.Random.Range(0, validSecondaryConnectors.Count)];
+            int2 connectorIndex = validSecondaryConnectors[Random.Range(0, validSecondaryConnectors.Count)];
             secondaryPreference = secondaryConnectors[connectorIndex.y];
             targetSection = instanceIdToSection[connectorIndex.x];
             ConnectorMultiply(primary.transform.localToWorldMatrix, ref primaryPreference, ref secondaryPreference);
