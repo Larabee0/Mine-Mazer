@@ -10,10 +10,12 @@ public class TradeOption
     public string tradeUIText;
     public string tradeCloseSuccessBlock;
     [Header("Takes")]
+    public ItemCategory category;
     public bool specific;
     public Item specificItem;
-    public ItemCategory category;
     public int takeQuantity = 1;
+    public Item[] specificItems;
+    public int[] takeQuantities;
     [Header("Gives")]
     public MapResource givenItem;
     public int giveQuantity = 1;
@@ -62,7 +64,11 @@ public class NPCTrade : Interact_Example
         if (TradingUI.Instance)
         {
             TradingUI.Instance.OnTradeClose += TradeClose;
-            if(option.specific)
+            if(option.specificItems.Length > 0 && option.specificItems.Length == option.takeQuantities.Length)
+            {
+                TradingUI.Instance.OpenTradingMulti(option.specificItems, option.givenItem, option.takeQuantities, option.giveQuantity, option.tradeUIText);
+            }
+            else if(option.specific)
             {
                 TradingUI.Instance.OpenTrading(option.specificItem, option.givenItem, option.takeQuantity, option.giveQuantity, option.tradeUIText);
             }
