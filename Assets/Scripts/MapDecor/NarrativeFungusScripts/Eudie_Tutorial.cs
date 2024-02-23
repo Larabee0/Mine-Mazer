@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Eudie_Tutorial : NPCTrade
 {
@@ -205,6 +206,7 @@ public class Eudie_Tutorial : NPCTrade
         {
             WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP);
             eudieWWP = null;
+            GetComponent<NavMeshAgent>().enabled = false;
         }
         eudieState = EudieContext.EudieInInventory;
         eudieItem.PickUpEudieItem();
@@ -222,6 +224,7 @@ public class Eudie_Tutorial : NPCTrade
         SpatialParadoxGenerator mapGen = FindObjectOfType<SpatialParadoxGenerator>();
         mapGen.OnEnterLadderSection -= LadderBark;
         mapGen.OnEnterColonySection -= EnterColonyBark;
+        GetComponent<NavMeshAgent>().enabled = true;
 
         eudieItem.putDownEudieToolTip = true;
         if (Inventory.Instance.CurHeldItem != Item.Eudie)
