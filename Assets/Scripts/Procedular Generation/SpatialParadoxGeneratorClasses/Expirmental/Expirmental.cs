@@ -16,6 +16,8 @@ public partial class SpatialParadoxGenerator
     public bool parallelIntersectTests = true;
     public bool BigParallelIntersectTests = true;
     public bool incrementalBuilder = true;
+    public bool runPostProcessLast = false;
+    public bool breakEditorAfterInitialGen = false;
     public float maxTimeInstantiatingPerFrame = 8;
 
     List<InstancedBox> fromIntersecitonTests = new();
@@ -111,7 +113,7 @@ public partial class SpatialParadoxGenerator
         double interationTime = Time.realtimeSinceStartupAsDouble;
         while (postProcessingQueue.Count > 0)
         {
-            var item = postProcessingQueue.Pop();
+            var item = postProcessingQueue.Dequeue();
             QueuedTunnInstantiate(item);
 
             double timeCheck = (Time.realtimeSinceStartupAsDouble - interationTime) * 1000;
@@ -121,7 +123,7 @@ public partial class SpatialParadoxGenerator
                 yield return null;
                 interationTime = Time.realtimeSinceStartupAsDouble;
             }
-
+            yield return null;
             OnMapUpdate?.Invoke();
         }
     }

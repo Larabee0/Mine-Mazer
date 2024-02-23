@@ -262,7 +262,10 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         if (incrementalBuilder)
         {
             StartCoroutine(IncrementalBuilder(true));
-            StartCoroutine(PostProcessQueueInfinite());
+            if (!runPostProcessLast)
+            {
+                StartCoroutine(PostProcessQueueInfinite());
+            }
         }
         else
         {

@@ -25,6 +25,13 @@ public static class ExtraUtilities
         return result;
     }
 
+    public static T Dequeue<T>(this List<T> list)
+    {
+        T result = list[0];
+        list.RemoveAt(0);
+        return result;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color InverseLerp(Color a, Color b, Color value)
     {

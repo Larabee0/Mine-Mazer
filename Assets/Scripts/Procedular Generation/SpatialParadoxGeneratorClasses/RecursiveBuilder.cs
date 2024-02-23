@@ -33,8 +33,14 @@ public partial class SpatialParadoxGenerator
                 rejectBreakableWallAtConnections = false;
             }
         }
-        //yield return PostProcessQueue();
-        //yield return BreakEditor();
+        if (runPostProcessLast)
+        {
+            yield return PostProcessQueue();
+        }
+        if (breakEditorAfterInitialGen)
+        {
+            yield return BreakEditor();
+        }
     }
 
 
