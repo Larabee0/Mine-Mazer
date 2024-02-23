@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 227, y: 287.5}
+  scrollPos: {x: 528, y: 612.5}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 404
@@ -106,9 +106,8 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 6858030004934602223}
-  selectedCommands:
-  - {fileID: 5742931850889015204}
+  - {fileID: 4851527555704932999}
+  selectedCommands: []
   variables:
   - {fileID: 282212345067375591}
   description: 
@@ -1705,19 +1704,23 @@ MonoBehaviour:
   tradeOptions:
   - tradeUIText: Trade 1 Mushroom for 1 Mushroom Soup
     tradeCloseSuccessBlock: Give Crystal
+    category: 1
     specific: 0
     specificItem: 0
-    category: 1
     takeQuantity: 1
+    specificItems: 
+    takeQuantities: 
     givenItem: {fileID: 1606485108606532387, guid: 27d472563310f3f429b08d25582fd113,
       type: 3}
     giveQuantity: 1
   - tradeUIText: Trade 1 Crystal for 1 Velvet Bud
     tradeCloseSuccessBlock: Give mushrooms
+    category: 0
     specific: 0
     specificItem: 0
-    category: 0
     takeQuantity: 1
+    specificItems: 
+    takeQuantities: 
     givenItem: {fileID: 7997864154563303630, guid: 0a09be007c6dd7c4b869b76bf64edde5,
       type: 3}
     giveQuantity: 1

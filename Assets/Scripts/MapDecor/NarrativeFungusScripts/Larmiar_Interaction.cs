@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Larmiar_Interaction : Interact_Example
+public class Larmiar_Interaction : NPCTrade
 {
     [SerializeField] private ItemStats[] itemsOfInterestKeys;
 

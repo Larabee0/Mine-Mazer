@@ -43,6 +43,8 @@ public class TradingUI : MonoBehaviour
     private int takeQuantity;
     private int giveQuantity;
 
+    private Dictionary<Item, int> specificMultiTradeTargets;
+
     public BoolPluse OnTradeClose;
 
     private void Awake()
@@ -77,6 +79,22 @@ public class TradingUI : MonoBehaviour
         this.takeQuantity = takeQuantity;
         this.giveQuantity = giveQuantity;
         givenItem = give;
+        InternalOpen();
+    }
+
+    public void OpenTradingMulti(Item[] targets, MapResource give, int[] takeQuantities, int giveQuantity, string tradingText)
+    {
+        specific = true;
+        targetText = tradingText;
+        this.giveQuantity = giveQuantity;
+        givenItem = give;
+
+        specificMultiTradeTargets = new(targets.Length);
+        for (int i = 0; i < targets.Length; i++)
+        {
+            specificMultiTradeTargets.TryAdd(targets[i], takeQuantities[i]);
+        }
+
         InternalOpen();
     }
 
@@ -179,6 +197,12 @@ public class TradingUI : MonoBehaviour
             Inventory.Instance.AddItem(givenItem.ItemStats.type, giveQuantity, Instantiate(givenItem));
 
             Inventory.Instance.TryMoveItemToHand(givenItem.ItemStats.type);
+        }
+        if(withdrawn && specificMultiTradeTargets.Count > 0)
+        {
+            specificMultiTradeTargets.Remove(item);
+            Repaint();
+            return;
         }
 
         CloseTrading(withdrawn);
