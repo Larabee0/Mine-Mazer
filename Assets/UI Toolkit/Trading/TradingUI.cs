@@ -198,7 +198,7 @@ public class TradingUI : MonoBehaviour
 
             Inventory.Instance.TryMoveItemToHand(givenItem.ItemStats.type);
         }
-        if(withdrawn && specificMultiTradeTargets.Count > 0)
+        if(withdrawn && specificMultiTradeTargets != null && specificMultiTradeTargets.Count > 0)
         {
             specificMultiTradeTargets.Remove(item);
             Repaint();

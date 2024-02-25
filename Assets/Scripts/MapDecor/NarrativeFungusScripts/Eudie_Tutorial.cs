@@ -168,10 +168,10 @@ public class Eudie_Tutorial : NPCTrade
     {
         InteractMessage.Instance.SetObjective("Break out of the current cave");
         eudieState = EudieContext.MineWall;
-
+        Vector3 yOffset = new(0, 1.5f, 0);
         for (int i = 0; i < tutorialAreaWalls.Length; i++)
         {
-            wallWWP[i] = WorldWayPointsController.Instance.AddwayPoint(tutorialAreaWalls[i].GetToolTipText(), tutorialAreaWalls[i].transform.position, Color.green);
+            wallWWP[i] = WorldWayPointsController.Instance.AddwayPoint(tutorialAreaWalls[i].GetToolTipText(), tutorialAreaWalls[i].transform.position+ yOffset, Color.green);
         }
     }
 
