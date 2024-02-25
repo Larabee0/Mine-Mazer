@@ -139,6 +139,7 @@ public class Eudie_Tutorial : NPCTrade
             {
                 tutorialAreaWalls[i].OnWallBreak -= OnWallBroken;
             }
+            PlayerUIController.Instance.SetMiniMapVisible(true);
         }
         else
         {

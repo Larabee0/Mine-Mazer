@@ -32,7 +32,10 @@ public class TutorialStarter : MonoBehaviour
         if (skipTutorial)
         {
             allowSceneChange = true;
-            SkipTutorial();
+            LockPointer();
+            FadeOut();
+            Invoke(nameof(SkipTutorial), 10f);
+            // SkipTutorial();
         }
         else
         {
@@ -49,6 +52,7 @@ public class TutorialStarter : MonoBehaviour
 
     private void SkipTutorial()
     {
+        FadeIn();
         EudieHandOff();
     }
 

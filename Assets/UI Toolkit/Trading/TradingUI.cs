@@ -131,6 +131,16 @@ public class TradingUI : MonoBehaviour
         {
             tradablePlayerItems = Inventory.Instance.GetAllItemsMatchingCategory(targetCategory);
         }
+        else if(specific && specificMultiTradeTargets !=null&& specificMultiTradeTargets.Count > 0)
+        {
+            foreach (var item in specificMultiTradeTargets)
+            {
+                if(Inventory.Instance.TryGetItem(item.Key,out KeyValuePair<Item, int> pair))
+                {
+                    tradablePlayerItems.Add(pair.Key, pair.Value);
+                }
+            }
+        }
         else if (Inventory.Instance.TryGetItem(targetItem, out KeyValuePair<Item, int> pair))
         {
             tradablePlayerItems.Add(pair.Key, pair.Value);
@@ -192,17 +202,19 @@ public class TradingUI : MonoBehaviour
         bool withdrawn = (Inventory.Instance.CanTrade(item, takeQuantity)
             && Inventory.Instance.TryRemoveItem(item, takeQuantity));
 
-        if (withdrawn && givenItem != null)
+        
+        if(withdrawn && specificMultiTradeTargets != null && specificMultiTradeTargets.Count > 1)
+        {
+            specificMultiTradeTargets.Remove(item);
+            buttonContainer.Clear();
+            Repaint();
+            return;
+        }
+        else if (withdrawn && givenItem != null)
         {
             Inventory.Instance.AddItem(givenItem.ItemStats.type, giveQuantity, Instantiate(givenItem));
 
             Inventory.Instance.TryMoveItemToHand(givenItem.ItemStats.type);
-        }
-        if(withdrawn && specificMultiTradeTargets != null && specificMultiTradeTargets.Count > 0)
-        {
-            specificMultiTradeTargets.Remove(item);
-            Repaint();
-            return;
         }
 
         CloseTrading(withdrawn);

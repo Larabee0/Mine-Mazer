@@ -1675,8 +1675,8 @@ MonoBehaviour:
   EudieWayPoint: {fileID: 0}
   caveAmbience: {fileID: 278139836}
   allowSceneChange: 0
-  skipTutorial: 0
-  skipToPickUpEudie: 0
+  skipTutorial: 1
+  skipToPickUpEudie: 1
 --- !u!114 &278139882
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -1744,7 +1744,7 @@ MonoBehaviour:
   scrollPos: {x: -262, y: 231}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
-  blockViewHeight: 290
+  blockViewHeight: 638
   zoom: 1
   scrollViewRect:
     serializedVersion: 2
@@ -1753,7 +1753,7 @@ MonoBehaviour:
     width: 0
     height: 0
   selectedBlocks:
-  - {fileID: 278139882}
+  - {fileID: 278139865}
   selectedCommands: []
   variables:
   - {fileID: 278139878}
