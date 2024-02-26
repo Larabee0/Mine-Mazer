@@ -51,6 +51,10 @@ public class CaveMessageController : MonoBehaviour
 
     private void Awake()
     {
+        if(document == null)
+        {
+            return;
+        }
         document.rootVisualElement.Q("MessagePreview")?.Clear();
         // if (mapGenerator == null || !mapGenerator.isActiveAndEnabled)
         // {
@@ -187,6 +191,7 @@ public class CaveMessageController : MonoBehaviour
                 if (InputManager.Instance != null)
                 {
                     InputManager.Instance.UnlockPointer();
+                    InputManager.Instance.advanceDialogueButton.OnButtonReleased += CloseMessage;
                 }
             }
             else
@@ -209,6 +214,8 @@ public class CaveMessageController : MonoBehaviour
             if (InputManager.Instance != null)
             {
                 InputManager.Instance.LockPointer();
+                InputManager.Instance.advanceDialogueButton.OnButtonReleased -= CloseMessage;
+
             }
         }
     }
