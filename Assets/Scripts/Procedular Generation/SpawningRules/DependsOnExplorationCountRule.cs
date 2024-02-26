@@ -9,7 +9,7 @@ public class DependsOnExplorationCountRule : SectionSpawnBaseRule
 
     public override bool UpdateSpawnStatus()
     {
-        spawnable = base.UpdateSpawnStatus() && exploreThreshold < ExplorationStatistics.UniqueSectionsVisited;
+        spawnable = base.UpdateSpawnStatus() && exploreThreshold < ExplorationStatistics.UniqueSpawnSectionsCount;
         return spawnable;
     }
 }

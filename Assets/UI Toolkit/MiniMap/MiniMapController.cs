@@ -68,7 +68,7 @@ namespace MazeGame.Navigation
             miniMapAssets = mapGenerator.GenerateMiniMapTextures();
             
 
-            pixelsPerUnit = (textureResolution/2) / viewPortSize;
+            pixelsPerUnit = (textureResolution*0.5f) / viewPortSize;
 
             player = FindObjectOfType<Improved_Movement>().transform;
             if (player == null)
@@ -335,7 +335,7 @@ namespace MazeGame.Navigation
 
         private void AddElement(Texture2D texture, int id, string name, Color tint, BoxTransform transform)
         {
-            var element = new MiniMapElement { asset = new VisualElement() { name = name }, originalInstanceId = id, transform = transform };
+            var element = new MiniMapElement { asset = new VisualElement() { name = name, usageHints = UsageHints.DynamicTransform }, originalInstanceId = id, transform = transform };
             element.asset.style.backgroundImage = texture;
             element.asset.style.height = textureResolution;
             element.asset.style.width = textureResolution;
@@ -349,7 +349,8 @@ namespace MazeGame.Navigation
         {
             Label label = new()
             {
-                text = text
+                text = text,
+                usageHints = UsageHints.DynamicTransform
             };
             // label.style.position = Position.Absolute;
             label.AddToClassList("WayPointText");

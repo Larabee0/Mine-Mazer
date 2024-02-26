@@ -115,6 +115,8 @@ GameObject:
   - component: {fileID: 5553069560891393393}
   - component: {fileID: 285248818618233971}
   - component: {fileID: 4826421006413197842}
+  - component: {fileID: 5251074453420521393}
+  - component: {fileID: 2320003456939715745}
   m_Layer: 0
   m_Name: Larimar_FlowChart
   m_TagString: Untagged
@@ -150,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 421.0167, y: 294.9673}
+  scrollPos: {x: 195.0167, y: 135.96729}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 462
@@ -162,8 +164,9 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 6435114277988613773}
-  selectedCommands: []
+  - {fileID: 6473319390707484522}
+  selectedCommands:
+  - {fileID: 2320003456939715745}
   variables:
   - {fileID: 5231702147049221985}
   - {fileID: 6418257119880607288}
@@ -346,7 +349,7 @@ MonoBehaviour:
   nodeRect:
     serializedVersion: 2
     x: 373.5
-    y: 164.5
+    y: 165.5
     width: 128
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -362,6 +365,7 @@ MonoBehaviour:
   - {fileID: 7785535628243086167}
   - {fileID: 4323239674753095096}
   - {fileID: 7144202109911513139}
+  - {fileID: 5251074453420521393}
   - {fileID: 1241051259850452395}
   suppressAllAutoSelections: 0
 --- !u!114 &2948585265468345950
@@ -513,6 +517,7 @@ MonoBehaviour:
   - {fileID: 9090157815257734438}
   - {fileID: 2587412924343004864}
   - {fileID: 1805214919419014254}
+  - {fileID: 2320003456939715745}
   - {fileID: 5083993053599264755}
   suppressAllAutoSelections: 0
 --- !u!114 &2101536998556301983
@@ -4258,8 +4263,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 302.48233
-    y: 209.57924
+    x: 326.48233
+    y: 267.57922
     width: 123
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -4783,6 +4788,40 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
+--- !u!114 &5251074453420521393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143202003496811353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a200dbd67304446a3019434503338a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 112
+  indentLevel: 0
+  targetObject: {fileID: 5440170227525759856}
+  methodName: Larmiar_SetMinesMove
+  delay: 0
+--- !u!114 &2320003456939715745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143202003496811353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a200dbd67304446a3019434503338a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 113
+  indentLevel: 0
+  targetObject: {fileID: 5440170227525759856}
+  methodName: 
+  delay: 0
 --- !u!1001 &3640801247560296312
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4921,7 +4960,7 @@ MonoBehaviour:
     takeQuantity: 0
     specificItems: 090000000d0000000e0000000a000000
     takeQuantities: 01000000010000000100000001000000
-    givenItem: {fileID: 1122575385525659583, guid: 8e4de2d7bfc838c4b834f63093d6dae7,
+    givenItem: {fileID: 2314420320342596863, guid: 8e4de2d7bfc838c4b834f63093d6dae7,
       type: 3}
     giveQuantity: 1
   itemsOfInterestKeys:

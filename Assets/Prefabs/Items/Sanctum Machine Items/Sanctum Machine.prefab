@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6323494939760934384}
   - component: {fileID: 8402664792172431698}
   - component: {fileID: 8060972898161057969}
-  - component: {fileID: 1122575385525659583}
+  - component: {fileID: 2314420320342596863}
   - component: {fileID: 6478384255900044047}
   m_Layer: 8
   m_Name: Sanctum Machine
@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8402664792172431698
 MeshFilter:
@@ -85,7 +85,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1122575385525659583
+--- !u!114 &2314420320342596863
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7773960325557121639}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd5432609c4ea33419fb78c1a1c7618d, type: 3}
+  m_Script: {fileID: 11500000, guid: dd350fe226db3154da0bd136a03ccf92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemCollider: {fileID: 6478384255900044047}

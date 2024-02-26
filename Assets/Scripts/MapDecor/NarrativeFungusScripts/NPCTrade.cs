@@ -83,7 +83,7 @@ public class NPCTrade : Interact_Example
         }
     }
 
-    private void TradeClose(bool newValue)
+    protected virtual void TradeClose(bool newValue)
     {
         TradingUI.Instance.OnTradeClose -= TradeClose;
         if (newValue && curOption != null)

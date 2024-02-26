@@ -81,6 +81,10 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         {
             UpdateMap();
         }
+        if (section.SanctumPartSpawnPoint != null)
+        {
+            SpawnSanctumPartRandom(section.SanctumPartSpawnPoint);
+        }
         if (section.HasLadder)
         {
             OnEnterLadderSection?.Invoke();
@@ -88,6 +92,19 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         if (section.IsColony)
         {
             OnEnterColonySection?.Invoke();
+        }
+    }
+
+    public void SpawnSanctumPartRandom(Transform parent)
+    {
+        List<MapResource> resources = Inventory.Instance.GetMissingSanctumParts();
+        if (resources.Count == 0||!ExplorationStatistics.AllowSanctumPartSpawn)
+        {
+            return;
+        }
+        if(Random.value <= sanctumPartSpawnChance)
+        {
+            Instantiate(resources[Random.Range(0, resources.Count)], parent);
         }
     }
 }
