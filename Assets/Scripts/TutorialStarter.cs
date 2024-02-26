@@ -24,6 +24,14 @@ public class TutorialStarter : MonoBehaviour
     private void Awake()
     {
         tutorialFlowChart = GetComponent<Flowchart>();
+        TutorialStarter[] tutors = FindObjectsOfType<TutorialStarter>();
+        for (int i = 0; i < tutors.Length; i++)
+        {
+            if (tutors[i].allowSceneChange)
+            {
+                Destroy(tutors[i].gameObject);
+            }
+        }
     }
 
     public void StartTutorialScript()

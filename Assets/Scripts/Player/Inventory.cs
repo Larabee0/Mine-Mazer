@@ -136,6 +136,10 @@ public class Inventory : MonoBehaviour
                 assets.Remove(item);
 
             }
+            if (assets.TryGetValue(item, out var value) && value.Count == 0)
+            {
+                assets.Remove(item);
+            }
             UpdateInventory();
             return true;
         }

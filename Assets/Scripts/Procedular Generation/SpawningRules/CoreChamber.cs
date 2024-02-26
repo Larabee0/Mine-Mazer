@@ -10,7 +10,7 @@ public class CoreChamber : DependsOnExplorationCountRule
     protected int startIndex = -1;
     public override bool UpdateSpawnStatus()
     {
-        if (visited&&ExplorationStatistics.UniqueVistedSections.Contains(dependsOnVisited.orignalInstanceId))
+        if (!visited&&ExplorationStatistics.UniqueVistedSections.Contains(dependsOnVisited.orignalInstanceId))
         {
             visited = true;
             startIndex = ExplorationStatistics.UniqueSpawnSectionsCount;

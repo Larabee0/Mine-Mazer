@@ -260,6 +260,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
+      propertyPath: sanctumPartSpawnChance
+      value: 0.222
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
       propertyPath: tunnelSections.Array.size
       value: 18
       objectReference: {fileID: 0}
@@ -601,7 +606,7 @@ PrefabInstance:
     - target: {fileID: 8322381442699795188, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: defaultItems.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8322381442699795188, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}

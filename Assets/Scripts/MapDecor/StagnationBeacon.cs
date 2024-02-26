@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class StagnationBeacon : MapResource
+public class StagnationBeacon : SanctumPart
 {
     [Header("Animations")]
     [SerializeField] private bool Animated = true;
@@ -114,6 +114,7 @@ public class StagnationBeacon : MapResource
                 item.SetMapResourceActive(true);
                 item.SetColliderActive(true);
                 mapGenerator.PlaceStatnationBeacon(hitSection, this);
+                OnItemPickedUp?.Invoke();
                 return true;
             }
         }

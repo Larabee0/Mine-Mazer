@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class PlayerUIController : MonoBehaviour
@@ -72,7 +73,7 @@ public class PlayerUIController : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
         overlay = Root.Q("Overlay");
@@ -88,7 +89,22 @@ public class PlayerUIController : MonoBehaviour
             SetPauseMenuActive(false);
             InputManager.Instance.LockPointer();
         });
+        resume.RegisterCallback<NavigationSubmitEvent>(ev =>
+        {
+            SetPauseMenuActive(false);
+            InputManager.Instance.LockPointer();
+        });
+        mainMenu.RegisterCallback<ClickEvent>(ev =>
+        {
 
+            SetPauseMenuActive(false);
+            SceneManager.LoadScene(0);
+        });
+        mainMenu.RegisterCallback<NavigationSubmitEvent>(ev =>
+        {
+            SetPauseMenuActive(false);
+            SceneManager.LoadScene(0);
+        });
         miniMapContainer = Root.Q("MiniMap");
         screenFade = Root.Q("ScreenFade");
         hungerBar = Root.Q<ProgressBar>("HungerBar");
@@ -98,7 +114,7 @@ public class PlayerUIController : MonoBehaviour
         StartCoroutine(SetHungerBarProgress());
         SetHungerVisible(false);
         SetPauseMenuActive(false);
-        mainMenu.SetEnabled(false);
+        //mainMenu.SetEnabled(false);
     }
 
     private void OnEnable()

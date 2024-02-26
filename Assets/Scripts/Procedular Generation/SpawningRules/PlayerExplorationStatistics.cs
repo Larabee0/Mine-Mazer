@@ -30,8 +30,9 @@ public class PlayerExplorationStatistics : MonoBehaviour
     public bool PlayerMQSeenSanctumHandover => playerMQSeenSanctumHandover;
 
 
-    public void Increment()
+    public void Increment(int originalInstanceId)
     {
+        uniqueIdVistedSections.Add(originalInstanceId);
         uniqueSpawnSectionsCount++;
     }
 

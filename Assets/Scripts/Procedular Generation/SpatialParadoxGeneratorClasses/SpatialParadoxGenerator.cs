@@ -51,6 +51,8 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     [SerializeField, Min(1)] private int maxDst = 3;
     [SerializeField, Range(0, 1)] private float breakableWallAtConnectionChance = 0.5f;
     [SerializeField, Range(0, 1)] private float sanctumPartSpawnChance = 0.5f;
+    [SerializeField] private int sanctumPartUniqueSectionCooldown = 3;
+    private int sanctumPartCooldown;
     [Space]
     [SerializeField] private LayerMask tunnelSectionLayerMask;
     [SerializeField, Min(1000)] private int maxInterations = 1000000; /// max iterations allowed for <see cref="PickSection(TunnelSection, List{int}, out Connector, out Connector)"/>
@@ -94,7 +96,6 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private void Start()
     {
         // InputManager.Instance.interactButton.OnButtonReleased += PlaceStagnationBeacon;
-        sanctumPartSpawnChance = 0;
         tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
 
