@@ -113,6 +113,11 @@ public partial class SpatialParadoxGenerator
         return update ? instanceIdToSection[id].UpdateRule() : instanceIdToSection[id].Spawnable;
     }
 
+    private int GetSpawnDebt(int id)
+    {
+        return instanceIdToSection[id].SpawnDebt;
+    }
+
     private TunnelSection InstinateSection(int index)
     {
         return InstinateSection(instanceIdToSection[tunnelSectionsByInstanceID[index]]);
@@ -193,7 +198,15 @@ public partial class SpatialParadoxGenerator
         }
 
         nextSections.RemoveAll(element => !Spawnable(element, true));
-
+        int curLength = nextSections.Count;
+        for (int i = 0; i < curLength; i++)
+        {
+            int debt = GetSpawnDebt(nextSections[i]) - 1;
+            for (int j = 0; j < debt; j++)
+            {
+                nextSections.Add(nextSections[i]);
+            }
+        }
         return nextSections;
     }
 

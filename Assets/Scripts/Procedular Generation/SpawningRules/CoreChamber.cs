@@ -10,15 +10,22 @@ public class CoreChamber : DependsOnExplorationCountRule
     protected int startIndex = -1;
     public override bool UpdateSpawnStatus()
     {
-        if (!visited&&ExplorationStatistics.UniqueVistedSections.Contains(dependsOnVisited.orignalInstanceId))
+        spawnable = false;
+        if (!visited && ExplorationStatistics.UniqueVistedSections.Contains(dependsOnVisited.orignalInstanceId))
         {
             visited = true;
             startIndex = ExplorationStatistics.UniqueSpawnSectionsCount;
         }
-        if(startIndex != -1)
+        if (startIndex != -1)
         {
-           return base.UpdateSpawnStatus() && startIndex + exploreThreshold < ExplorationStatistics.UniqueSpawnSectionsCount;
+            spawnable =  base.UpdateSpawnStatus() && startIndex + exploreThreshold < ExplorationStatistics.UniqueSpawnSectionsCount;
         }
-        return false;
+        return spawnable;
+    }
+    public override void ResetRule()
+    {
+        base.ResetRule();
+        startIndex = -1;
+        visited = false;
     }
 }

@@ -51,7 +51,7 @@ public class CaveMessageController : MonoBehaviour
 
     private void Awake()
     {
-        if(document == null)
+        if(document == null||document.rootVisualElement == null)
         {
             return;
         }

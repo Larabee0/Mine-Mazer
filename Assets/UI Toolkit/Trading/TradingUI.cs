@@ -199,6 +199,10 @@ public class TradingUI : MonoBehaviour
 
     private void TradeButtonPress(Item item)
     {
+        if(specificMultiTradeTargets != null && specificMultiTradeTargets.Count > 1)
+        {
+            takeQuantity = specificMultiTradeTargets[item];
+        }
         bool withdrawn = Inventory.Instance.CanTrade(item, takeQuantity)
             && Inventory.Instance.TryRemoveItem(item, takeQuantity);
 

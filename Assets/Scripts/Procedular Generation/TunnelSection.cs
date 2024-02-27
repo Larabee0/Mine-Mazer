@@ -59,6 +59,7 @@ public class TunnelSection : MonoBehaviour
     }
 
     public bool Spawnable => spawnRule.Spawnable;
+    public int SpawnDebt => spawnRule.SpawnDebt;
 
     public Texture2D MiniMapAsset => miniMapAsset;
     public Vector3 Position => transform.position;
@@ -119,6 +120,7 @@ public class TunnelSection : MonoBehaviour
             spawnRule.owner = orignalInstanceId;
             spawnRule.generator = generator;
             InstanceCount = 0;
+            spawnRule.ResetRule();
         }
         if(excludeConnectorSections.Count != connectors.Length)
         {

@@ -93,7 +93,6 @@ GameObject:
   - component: {fileID: 7322450963275697851}
   - component: {fileID: 5155441884731086041}
   - component: {fileID: 9131980416804200506}
-  - component: {fileID: 3644402268734738092}
   - component: {fileID: 5565711090550300665}
   - component: {fileID: 537341034047476534}
   - component: {fileID: 5412182527503903689}
@@ -117,6 +116,7 @@ GameObject:
   - component: {fileID: 4826421006413197842}
   - component: {fileID: 5251074453420521393}
   - component: {fileID: 2320003456939715745}
+  - component: {fileID: 1722314867986878758}
   m_Layer: 0
   m_Name: Larimar_FlowChart
   m_TagString: Untagged
@@ -164,7 +164,7 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 258695008945345258}
+  - {fileID: 79690824711012695}
   selectedCommands: []
   variables:
   - {fileID: 5231702147049221985}
@@ -284,13 +284,13 @@ MonoBehaviour:
   description: 
   eventHandler: {fileID: 0}
   commandList:
-  - {fileID: 6320201086087227952}
+  - {fileID: 9131980416804200506}
+  - {fileID: 5565711090550300665}
+  - {fileID: 1722314867986878758}
   - {fileID: 4522151897867345174}
   - {fileID: 8761338216629757528}
   - {fileID: 7927919657267501775}
-  - {fileID: 9131980416804200506}
-  - {fileID: 5565711090550300665}
-  - {fileID: 3644402268734738092}
+  - {fileID: 6320201086087227952}
   - {fileID: 2101536998556301983}
   - {fileID: 7169940398749594941}
   suppressAllAutoSelections: 0
@@ -4119,20 +4119,6 @@ MonoBehaviour:
   vector3Data:
     vector3Ref: {fileID: 0}
     vector3Val: {x: 0, y: 0, z: 0}
---- !u!114 &3644402268734738092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6143202003496811353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93cb9773f2ca04e2bbf7a68ccfc23267, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 85
-  indentLevel: 0
 --- !u!114 &5565711090550300665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4821,6 +4807,20 @@ MonoBehaviour:
   targetObject: {fileID: 5440170227525759856}
   methodName: Larimar_EnableSancumtParts
   delay: 0
+--- !u!114 &1722314867986878758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143202003496811353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93cb9773f2ca04e2bbf7a68ccfc23267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 114
+  indentLevel: 0
 --- !u!1001 &3640801247560296312
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class Larmiar_Interaction : NPCTrade
     [SerializeField] private ItemStats[] itemsOfInterestKeys;
 
     public static PlayerExplorationStatistics explorationStatistics;
+
     public void GetPlayerExplorationStatistics()
     {
         explorationStatistics = FindObjectOfType<PlayerExplorationStatistics>();
@@ -35,8 +36,8 @@ public class Larmiar_Interaction : NPCTrade
         if(newValue && curOption != null)
         {
             explorationStatistics.SetAllowSanctumPartSpawn(false, true);
+            InteractMessage.Instance.SetObjective("Take Sanctum Machine to Mother Quartz");
         }
-        
     }
 
     public void Larmiar_SetMinesMove()
@@ -52,7 +53,6 @@ public class Larmiar_Interaction : NPCTrade
         }
 
         explorationStatistics.SetLarmiar_MinesMove();
-
     }
 
     public void Larimar_EnableSancumtParts()
@@ -67,5 +67,6 @@ public class Larmiar_Interaction : NPCTrade
             }
         }
         explorationStatistics.SetAllowSanctumPartSpawn(true);
+        InteractMessage.Instance.SetObjective("Look out for strange items.");
     }
 }

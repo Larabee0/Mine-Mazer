@@ -3737,10 +3737,11 @@ MonoBehaviour:
   sectionAmbience: {fileID: 8300000, guid: 42640ae51c8400948b1ca1773533ec99, type: 3}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 27876
+  orignalInstanceId: 39814
   strongKeep: 1
   hasLadder: 0
   isColony: 1
+  sanctumPartsSpawnPoint: {fileID: 0}
   explored: 0
 --- !u!114 &2206222050835317255
 MonoBehaviour:
@@ -3757,8 +3758,9 @@ MonoBehaviour:
   spawnable: 0
   spawnLimit: 1
   generator: {fileID: 0}
-  owner: 27876
-  exploreThreshold: 2
+  owner: 39814
+  exploreThreshold: 3
+  aggressiveSpawning: 1
 --- !u!1 &1760621962523203306
 GameObject:
   m_ObjectHideFlags: 0

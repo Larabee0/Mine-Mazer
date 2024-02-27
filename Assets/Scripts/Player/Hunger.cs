@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,7 @@ public class Hunger : MonoBehaviour
     [SerializeField] private float hungerLevel = 1;
     [SerializeField] private float hungerSpeed = 1;
     public float CurrentHungerLevel => hungerLevel;
+    public Action OnStarvedToDeath;
 
     private void Awake()
     {
@@ -43,7 +45,6 @@ public class Hunger : MonoBehaviour
 
     private void Start()
     {
-        hungerLevel = PlayerUIController.Instance.LowHungerThreshold;
         PlayerUIController.Instance.SetHungerBarProgress(hungerLevel);
     }
 
@@ -61,7 +62,7 @@ public class Hunger : MonoBehaviour
             PlayerUIController.Instance.SetHungerBarProgress(CurrentHungerLevel);
             yield return null;
         }
-        // die of starvation        
+        OnStarvedToDeath?.Invoke();
     }
 
     public void SetToFull()

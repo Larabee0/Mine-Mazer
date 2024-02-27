@@ -64,6 +64,7 @@ public class PlayerUIController : MonoBehaviour
     private ProgressBar hungerBar;
     private VisualElement hungerBarProgress;
     private Coroutine hungerBarFlashProcess;
+    private Coroutine fadeScreenProcess = null;
 
     private void Awake()
     {
@@ -186,7 +187,11 @@ public class PlayerUIController : MonoBehaviour
 
     public void FadeScreen(float startAlpha, float endAlpha, float duration)
     {
-        StartCoroutine(FadeScreenOperation(startAlpha, endAlpha, duration));
+        if (fadeScreenProcess != null)
+        {
+            StopCoroutine(fadeScreenProcess);
+        }
+        fadeScreenProcess =StartCoroutine(FadeScreenOperation(startAlpha, endAlpha, duration));
     }
 
     private IEnumerator FadeScreenOperation(float startAlpha, float endAlpha, float duration)
@@ -208,6 +213,7 @@ public class PlayerUIController : MonoBehaviour
             yield return null;
             screenFade.style.display = DisplayStyle.None;
         }
+        fadeScreenProcess = null;
     }
 
     public void StartHungerFlash()

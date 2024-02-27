@@ -181,6 +181,12 @@ namespace MazeGame.Navigation
             root.Remove(waypoint.wayPointRoot);
         }
 
+        public void ClearWaypoints()
+        {
+            waypoints.Clear();
+            root.Clear();
+        }
+
         private void AddwayPoint(TunnelSection section, Color tint)
         {
             waypoints.Add(new TunnelWayPoint(section, waypointTemplate.Instantiate()));
@@ -189,6 +195,10 @@ namespace MazeGame.Navigation
 
         public WorldWayPoint AddwayPoint(string text, Vector3 position, Color tint, int iconIndex = 1)
         {
+            if(root == null)
+            {
+                StartWWPC();
+            }
             waypoints.Add(new WorldWayPoint(position, waypointTemplate.Instantiate().Q("WorldWaypoint")));
 
             AddWayPoint(text, iconIndex, tint);

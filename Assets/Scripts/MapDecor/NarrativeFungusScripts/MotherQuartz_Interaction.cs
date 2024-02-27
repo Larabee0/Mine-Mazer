@@ -1,4 +1,5 @@
 using Fungus;
+using MazeGame.Navigation;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,12 @@ public class MotherQuartz_Interaction : Larmiar_Interaction
 
     public void EndGame()
     {
+        PlayerUIController.Instance.SetHungerVisible(false);
+        PlayerUIController.Instance.ShowCrosshair = false;
+        PlayerUIController.Instance.SetMiniMapVisible(false);
+        InteractMessage.Instance.ClearObjective();
+        InteractMessage.Instance.HideInteraction(true);
+        WorldWayPointsController.Instance.ClearWaypoints();
         SceneManager.LoadScene(0);
     }
 
@@ -58,6 +65,7 @@ public class MotherQuartz_Interaction : Larmiar_Interaction
             }
         }
         explorationStatistics.SetMQ_LeaveBad();
+        InteractMessage.Instance.SetObjective("Find a way to help Mother Quartz");
     }
 
     public void MQ_LeaveGood()
@@ -72,6 +80,7 @@ public class MotherQuartz_Interaction : Larmiar_Interaction
             }
         }
         explorationStatistics.SetMQ_LeaveGood();
+        InteractMessage.Instance.SetObjective("Find a way to help Mother Quartz");
     }
 
     public void MQ_ISee()

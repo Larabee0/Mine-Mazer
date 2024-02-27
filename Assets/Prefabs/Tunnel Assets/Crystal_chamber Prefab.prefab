@@ -1310,7 +1310,8 @@ MonoBehaviour:
   spawnLimit: 1
   generator: {fileID: 0}
   owner: 0
-  exploreThreshold: 3
+  exploreThreshold: 5
+  aggressiveSpawning: 0
   dependsOnVisited: {fileID: 7620240774403884024, guid: 536cf79977b17ae40bc8cc4764deef6d,
     type: 3}
 --- !u!1 &5015067364582979621
@@ -2253,27 +2254,27 @@ PrefabInstance:
     - target: {fileID: 5103000701793148845, guid: 3241fbcaa6b690045abcb926bc74b031,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.091448
+      value: -19.2
       objectReference: {fileID: 0}
     - target: {fileID: 5103000701793148845, guid: 3241fbcaa6b690045abcb926bc74b031,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.97412527
+      value: 0.25544596
       objectReference: {fileID: 0}
     - target: {fileID: 5103000701793148845, guid: 3241fbcaa6b690045abcb926bc74b031,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5103000701793148845, guid: 3241fbcaa6b690045abcb926bc74b031,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.22600874
+      value: 0.96682334
       objectReference: {fileID: 0}
     - target: {fileID: 5103000701793148845, guid: 3241fbcaa6b690045abcb926bc74b031,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5103000701793148845, guid: 3241fbcaa6b690045abcb926bc74b031,
         type: 3}
@@ -2283,7 +2284,7 @@ PrefabInstance:
     - target: {fileID: 5103000701793148845, guid: 3241fbcaa6b690045abcb926bc74b031,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -26.124
+      value: 150.4
       objectReference: {fileID: 0}
     - target: {fileID: 5103000701793148845, guid: 3241fbcaa6b690045abcb926bc74b031,
         type: 3}
