@@ -130,6 +130,7 @@ public class SettingsMenuController : UIToolkitBase
         obj.gameObject.SetActive(true);
         brightnessContrastWindow.style.display = DisplayStyle.Flex;
         settingsMain.style.display = DisplayStyle.None;
+        finishButton.Focus();
     }
 
     private void GetSettings()
@@ -148,7 +149,6 @@ public class SettingsMenuController : UIToolkitBase
     {
         RootVisualElement.style.display = DisplayStyle.None;
         SetSettings();
-
         OnSettingsMenuClose?.Invoke();
     }
 
@@ -169,6 +169,7 @@ public class SettingsMenuController : UIToolkitBase
     {
         GetSettings();
         RootVisualElement.style.display = DisplayStyle.Flex;
+        calibrateScreenButton.Focus();
     }
 
     private void CloseContrastBrightnessMenu()
