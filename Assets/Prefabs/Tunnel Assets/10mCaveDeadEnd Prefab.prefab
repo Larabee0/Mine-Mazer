@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 4233013943535160681}
   - component: {fileID: -6912114443855155818}
   - component: {fileID: 3371044570951797698}
+  - component: {fileID: 839720863771511864}
   m_Layer: 0
   m_Name: 10mCaveDeadEnd Prefab
   m_TagString: Untagged
@@ -319,6 +320,26 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: b87154159cd30ac4a9bfd9d4c6c82355, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &839720863771511864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3431334257392131182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.5}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 0
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 1
+  m_Area: 0
 --- !u!1 &3593191823535046731
 GameObject:
   m_ObjectHideFlags: 0

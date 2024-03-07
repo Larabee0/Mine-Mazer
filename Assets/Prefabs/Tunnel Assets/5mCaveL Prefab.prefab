@@ -151,6 +151,7 @@ GameObject:
   - component: {fileID: 35608542359863082}
   - component: {fileID: 3510137756212225163}
   - component: {fileID: -6217031327501401290}
+  - component: {fileID: 5443610689211200408}
   m_Layer: 0
   m_Name: 5mCaveL Prefab
   m_TagString: Untagged
@@ -358,6 +359,26 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 33485e910edb027408d8b10abcf45a95, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &5443610689211200408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2766535010033487799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.5}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 0
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 1
+  m_Area: 0
 --- !u!1 &3046601394642490119
 GameObject:
   m_ObjectHideFlags: 0

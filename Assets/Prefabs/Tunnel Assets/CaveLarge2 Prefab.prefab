@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 3205104275630772647}
   - component: {fileID: -5356444298311868501}
   - component: {fileID: -7375710981014327976}
+  - component: {fileID: 7025408962573674052}
   m_Layer: 0
   m_Name: CaveLarge2 Prefab
   m_TagString: Untagged
@@ -450,7 +451,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_UseGeometry: 0
   m_DefaultArea: 0
-  m_GenerateLinks: 0
+  m_GenerateLinks: 1
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
@@ -460,6 +461,26 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: c53fd6f27dfe6b44fb2faec7232d7629, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &7025408962573674052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974376745811405886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.5}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 0
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 1
+  m_Area: 0
 --- !u!1 &2502987402056660746
 GameObject:
   m_ObjectHideFlags: 0

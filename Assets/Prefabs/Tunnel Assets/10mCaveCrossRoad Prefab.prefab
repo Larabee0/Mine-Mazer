@@ -165,6 +165,7 @@ GameObject:
   - component: {fileID: 4699310440157599471}
   - component: {fileID: -3188724048700739943}
   - component: {fileID: 8159154132902822256}
+  - component: {fileID: 813182700385617728}
   m_Layer: 0
   m_Name: 10mCaveCrossRoad Prefab
   m_TagString: Untagged
@@ -386,6 +387,26 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 6bbbf1fa2da2f9c4b877a796ffda46ef, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &813182700385617728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4911345596223159042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.5}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 0
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 1
+  m_Area: 0
 --- !u!1 &5347814331144535809
 GameObject:
   m_ObjectHideFlags: 0
