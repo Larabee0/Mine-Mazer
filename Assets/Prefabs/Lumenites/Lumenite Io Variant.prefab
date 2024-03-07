@@ -830,7 +830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: Io
-  nameColor: {r: 1, g: 1, b: 1, a: 1}
+  nameColor: {r: 0.023584902, g: 0.114315085, b: 1, a: 1}
   soundEffect: {fileID: 0}
   portraits: []
   portraitsFace: 0
@@ -2425,19 +2425,23 @@ MonoBehaviour:
   - tradeUIText: Io Likes Cinnabite according to Eudie and will trade it for a "Stagnation
       Beacon". Speak to Larimar about it.
     tradeCloseSuccessBlock: Trade Return
+    category: 0
     specific: 1
     specificItem: 5
-    category: 0
     takeQuantity: 1
+    specificItems: 
+    takeQuantities: 
     givenItem: {fileID: 8936344853926937464, guid: 12c8e986ba132d445ad84b4f8ee1af0c,
       type: 3}
     giveQuantity: 1
   - tradeUIText: Trade 1 Lumen Crystal for 1 Gold Trumpet Mycelium
     tradeCloseSuccessBlock: Trade Return
+    category: 0
     specific: 1
     specificItem: 0
-    category: 0
     takeQuantity: 1
+    specificItems: 
+    takeQuantities: 
     givenItem: {fileID: 3565088614593601416, guid: 3c8b3f5bd5efeee438dafb6b3e228702,
       type: 3}
     giveQuantity: 1

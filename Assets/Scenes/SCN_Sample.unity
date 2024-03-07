@@ -260,8 +260,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
+      propertyPath: sanctumPartSpawnChance
+      value: 0.222
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
       propertyPath: tunnelSections.Array.size
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -274,6 +279,12 @@ PrefabInstance:
       propertyPath: tunnelSections.Array.data[16]
       value: 
       objectReference: {fileID: 3526018208391867830, guid: c431316cf725fde469a6dd76a6cb2247,
+        type: 3}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: tunnelSections.Array.data[17]
+      value: 
+      objectReference: {fileID: 5690713400658837405, guid: f3cc95ca6faf29f4bb27eef3dbf3bef2,
         type: 3}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -589,8 +600,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7873265323809388630, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
+      propertyPath: hungerLevel
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7873265323809388630, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
       propertyPath: hungerSpeed
-      value: 0.001
+      value: 0.005
       objectReference: {fileID: 0}
     - target: {fileID: 8322381442699795188, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
@@ -601,13 +617,26 @@ PrefabInstance:
         type: 3}
       propertyPath: defaultItems.Array.data[0]
       value: 
-      objectReference: {fileID: 8936344853926937464, guid: 12c8e986ba132d445ad84b4f8ee1af0c,
+      objectReference: {fileID: 2314420320342596863, guid: 8e4de2d7bfc838c4b834f63093d6dae7,
         type: 3}
     - target: {fileID: 8322381442699795188, guid: e78a1712f70fb7344af802fa73a4a9cd,
         type: 3}
       propertyPath: defaultItems.Array.data[1]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4369113606985078775, guid: d9b2bfcd9bab0914ea0e3f1c30af3a68,
+        type: 3}
+    - target: {fileID: 8322381442699795188, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: defaultItems.Array.data[2]
+      value: 
+      objectReference: {fileID: 8210502871118432470, guid: 7f51eeb45c7da0945986fbf3057e8cf1,
+        type: 3}
+    - target: {fileID: 8322381442699795188, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: defaultItems.Array.data[3]
+      value: 
+      objectReference: {fileID: 4986538193756997104, guid: 3c48045021031404f97d30f9c0e3c38a,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5001022220323218391, guid: e78a1712f70fb7344af802fa73a4a9cd, type: 3}

@@ -43,6 +43,11 @@ public class PlayerSettings : MonoBehaviour
     private void Awake()
     {
         userSettingsPath = Path.Combine(Application.persistentDataPath, "userSettings.xml");
+        if(instance != null )
+        {
+            Destroy(gameObject);
+            return;
+        }
         instance = this;
         userSettings = new();
     }

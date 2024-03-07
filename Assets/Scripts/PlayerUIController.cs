@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class PlayerUIController : MonoBehaviour
@@ -63,6 +64,7 @@ public class PlayerUIController : MonoBehaviour
     private ProgressBar hungerBar;
     private VisualElement hungerBarProgress;
     private Coroutine hungerBarFlashProcess;
+    private Coroutine fadeScreenProcess = null;
 
     private void Awake()
     {
@@ -72,7 +74,7 @@ public class PlayerUIController : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
         overlay = Root.Q("Overlay");
@@ -88,7 +90,22 @@ public class PlayerUIController : MonoBehaviour
             SetPauseMenuActive(false);
             InputManager.Instance.LockPointer();
         });
+        resume.RegisterCallback<NavigationSubmitEvent>(ev =>
+        {
+            SetPauseMenuActive(false);
+            InputManager.Instance.LockPointer();
+        });
+        mainMenu.RegisterCallback<ClickEvent>(ev =>
+        {
 
+            SetPauseMenuActive(false);
+            SceneManager.LoadScene(0);
+        });
+        mainMenu.RegisterCallback<NavigationSubmitEvent>(ev =>
+        {
+            SetPauseMenuActive(false);
+            SceneManager.LoadScene(0);
+        });
         miniMapContainer = Root.Q("MiniMap");
         screenFade = Root.Q("ScreenFade");
         hungerBar = Root.Q<ProgressBar>("HungerBar");
@@ -98,7 +115,7 @@ public class PlayerUIController : MonoBehaviour
         StartCoroutine(SetHungerBarProgress());
         SetHungerVisible(false);
         SetPauseMenuActive(false);
-        mainMenu.SetEnabled(false);
+        //mainMenu.SetEnabled(false);
     }
 
     private void OnEnable()
@@ -170,7 +187,11 @@ public class PlayerUIController : MonoBehaviour
 
     public void FadeScreen(float startAlpha, float endAlpha, float duration)
     {
-        StartCoroutine(FadeScreenOperation(startAlpha, endAlpha, duration));
+        if (fadeScreenProcess != null)
+        {
+            StopCoroutine(fadeScreenProcess);
+        }
+        fadeScreenProcess =StartCoroutine(FadeScreenOperation(startAlpha, endAlpha, duration));
     }
 
     private IEnumerator FadeScreenOperation(float startAlpha, float endAlpha, float duration)
@@ -192,6 +213,7 @@ public class PlayerUIController : MonoBehaviour
             yield return null;
             screenFade.style.display = DisplayStyle.None;
         }
+        fadeScreenProcess = null;
     }
 
     public void StartHungerFlash()

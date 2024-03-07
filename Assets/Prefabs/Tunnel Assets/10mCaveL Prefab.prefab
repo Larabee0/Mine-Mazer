@@ -255,6 +255,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.91916, y: 3.39812, z: 5.3042}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &6737659688828744753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1936491052412202073}
+  m_Layer: 0
+  m_Name: Sphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1936491052412202073
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6737659688828744753}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.272, y: 0.065, z: -8.629}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1429367492707383238}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8528086382089099262
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,6 +399,7 @@ Transform:
   - {fileID: 1083857616196676660}
   - {fileID: 776073691789752956}
   - {fileID: 8535830143079142742}
+  - {fileID: 1936491052412202073}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -498,6 +530,7 @@ MonoBehaviour:
   strongKeep: 0
   hasLadder: 0
   isColony: 0
+  sanctumPartsSpawnPoint: {fileID: 1936491052412202073}
   explored: 0
 --- !u!114 &7031058899079477574
 MonoBehaviour:
