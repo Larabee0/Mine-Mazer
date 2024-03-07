@@ -493,7 +493,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc293867df07d5a40afe50f5bfda5fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueSectionsVisited: 0
+  uniqueSpawnSectionsCount: 0
+  allowSanctumPartSpawn: 0
+  playerLearnedFromlarimar: 0
+  playerHasSpokenToMQ: 0
+  playerMQLeaveBad: 0
+  playerMQLeaveGood: 0
+  playerMQSeenSanctumHandover: 0
 --- !u!114 &8322381442699795188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -511,6 +517,11 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   virtualhands: {fileID: 3913173581097030806}
   defaultItems: []
+  sanctumparts:
+  - {fileID: 922420609825426307, guid: 06cb1357421cf834c8b4cb89cc75c524, type: 3}
+  - {fileID: 4070836793030559488, guid: d9b2bfcd9bab0914ea0e3f1c30af3a68, type: 3}
+  - {fileID: 2209489424822638752, guid: 7f51eeb45c7da0945986fbf3057e8cf1, type: 3}
+  - {fileID: 4986538193756997104, guid: 3c48045021031404f97d30f9c0e3c38a, type: 3}
   itemNameTime: 1
 --- !u!114 &7873265323809388630
 MonoBehaviour:

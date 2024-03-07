@@ -105,6 +105,12 @@ namespace MazeGame.Navigation
             }
         }
 
+        // private void OnDrawGizmos()
+        // {
+        //     Gizmos.color = Color.magenta;
+        //     waypoints.ForEach(waypoint => Gizmos.DrawSphere(waypoint.CurPositon, 0.25f));
+        // }
+
         private void OnMove(Vector2 axis)
         {
             wayPointTransformProcess ??= StartCoroutine(UpdateWayPoints());
@@ -175,6 +181,12 @@ namespace MazeGame.Navigation
             root.Remove(waypoint.wayPointRoot);
         }
 
+        public void ClearWaypoints()
+        {
+            waypoints.Clear();
+            root.Clear();
+        }
+
         private void AddwayPoint(TunnelSection section, Color tint)
         {
             waypoints.Add(new TunnelWayPoint(section, waypointTemplate.Instantiate()));
@@ -183,7 +195,11 @@ namespace MazeGame.Navigation
 
         public WorldWayPoint AddwayPoint(string text, Vector3 position, Color tint, int iconIndex = 1)
         {
-            waypoints.Add(new WorldWayPoint(position, waypointTemplate.Instantiate()));
+            if(root == null)
+            {
+                StartWWPC();
+            }
+            waypoints.Add(new WorldWayPoint(position, waypointTemplate.Instantiate().Q("WorldWaypoint")));
 
             AddWayPoint(text, iconIndex, tint);
             return waypoints[^1];
@@ -196,18 +212,20 @@ namespace MazeGame.Navigation
             wayPoint.style.height = wayPointRes;
             wayPoint.style.width = wayPointRes;
             wayPoint.style.unityBackgroundImageTintColor = tint;
-
             waypoints[^1].Name = text;
             waypoints[^1].wayPointRoot.style.position = Position.Absolute;
             root.Add(waypoints[^1].wayPointRoot);
-            TransformWayPoint(waypoints[^1]);
+            wayPointTransformProcess ??= StartCoroutine(UpdateWayPoints());
         }
 
         private void TransformWayPoint(WorldWayPoint waypoint)
         {
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(waypoint.CurPositon);
+            Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(uiController.rootVisualElement.panel, new(screenPosition.x, screenPosition.y));
+            //panelPos = root.WorldToLocal(panelPos);
             waypoint.wayPointRoot.style.visibility = screenPosition.z > 0 ? Visibility.Visible : Visibility.Hidden;
-            waypoint.wayPointRoot.style.translate = new Translate(screenPosition.x, Screen.height - screenPosition.y);
+            float x = waypoint.wayPointRoot.resolvedStyle.width*0.5f ;
+            waypoint.wayPointRoot.style.translate = new Translate(panelPos.x - x, Screen.height - panelPos.y);
         }
     }
 
@@ -228,6 +246,7 @@ namespace MazeGame.Navigation
         {
             this.position = position;
             this.wayPointRoot = wayPointRoot;
+            this.wayPointRoot.style.visibility = Visibility.Hidden;
             texture = wayPointRoot.Q("WaypointImage");
             text = wayPointRoot.Q<Label>("WaypointName");
         }

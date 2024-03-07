@@ -27,8 +27,9 @@ public class TunnelSection : MonoBehaviour
     [SerializeField] private bool strongKeep = false;
     [SerializeField] private bool hasLadder = false;
     [SerializeField] private bool isColony = false;
-
+    [SerializeField] private Transform sanctumPartsSpawnPoint;
     // accessors 
+    public Transform SanctumPartSpawnPoint=>sanctumPartsSpawnPoint;
     public Vector3 WaypointPosition => stagnationBeacon != null ? stagnationBeacon.transform.position : transform.TransformPoint(strongKeepPosition);
     public float AmbientLightLevel => sectionLightLevel;
     public AudioClip AmbientNoise => sectionAmbience;
@@ -58,6 +59,7 @@ public class TunnelSection : MonoBehaviour
     }
 
     public bool Spawnable => spawnRule.Spawnable;
+    public int SpawnDebt => spawnRule.SpawnDebt;
 
     public Texture2D MiniMapAsset => miniMapAsset;
     public Vector3 Position => transform.position;
@@ -118,6 +120,7 @@ public class TunnelSection : MonoBehaviour
             spawnRule.owner = orignalInstanceId;
             spawnRule.generator = generator;
             InstanceCount = 0;
+            spawnRule.ResetRule();
         }
         if(excludeConnectorSections.Count != connectors.Length)
         {
@@ -142,8 +145,7 @@ public class TunnelSection : MonoBehaviour
 
     public void Spawned()
     {
-        if(spawnRule == null) return;
-        spawnRule.OnSpawned();
+        if (spawnRule != null) { spawnRule.OnSpawned(); }
     }
 
     public static float4x4 GetLTWConnectorMatrix(float4x4 ltw, Connector connector)

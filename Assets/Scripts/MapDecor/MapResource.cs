@@ -157,6 +157,7 @@ public class MapResource : MonoBehaviour, IInteractable
     public Vector3 heldScaleOffset = Vector3.one;
     protected Vector3 originalScale;
     public Vector3 placementPositionOffset = Vector3.zero;
+    public Action OnItemPickedUp;
     [SerializeField,Tooltip("If left blank, falls back to ItemStats.name")] protected string toolTipNameOverride;
 
     protected virtual string ToolTipName
@@ -226,15 +227,16 @@ public class MapResource : MonoBehaviour, IInteractable
                 if (Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item))
                 {
                     Vector3 playerPos = Inventory.Instance.transform.position;
-                    Vector3 toPlayer = (playerPos - hitInfo.point).normalized;
+                    Vector3 toPlayer = (playerPos- hitInfo.point).normalized;
+                    toPlayer = Vector3.ProjectOnPlane(toPlayer, Vector3.up);
                     item.gameObject.transform.parent = FindObjectOfType<SpatialParadoxGenerator>().CurPlayerSection.transform;
                     item.gameObject.transform.position = hitInfo.point+ placementPositionOffset;
                     item.gameObject.transform.forward = toPlayer;
                     item.gameObject.transform.localScale = originalScale;
                     item.SetMapResourceActive(true);
                     item.SetColliderActive(true);
-
-                    item.gameObject.transform.up = hitInfo.normal;
+                    OnItemPickedUp?.Invoke();
+                    //item.gameObject.transform.up = hitInfo.normal;
                     return true;
                 }
             }

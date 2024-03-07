@@ -3518,7 +3518,6 @@ GameObject:
   - component: {fileID: 8376583618156584004}
   - component: {fileID: 7620240774403884024}
   - component: {fileID: 2206222050835317255}
-  - component: {fileID: 9009195180595996823}
   m_Layer: 0
   m_Name: Colony1 Split Town
   m_TagString: Untagged
@@ -3738,10 +3737,11 @@ MonoBehaviour:
   sectionAmbience: {fileID: 8300000, guid: 42640ae51c8400948b1ca1773533ec99, type: 3}
   excludePrefabConnectionsIds: 
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 27876
+  orignalInstanceId: 39814
   strongKeep: 1
   hasLadder: 0
   isColony: 1
+  sanctumPartsSpawnPoint: {fileID: 0}
   explored: 0
 --- !u!114 &2206222050835317255
 MonoBehaviour:
@@ -3758,39 +3758,9 @@ MonoBehaviour:
   spawnable: 0
   spawnLimit: 1
   generator: {fileID: 0}
-  owner: 27876
-  exploreThreshold: 2
---- !u!114 &9009195180595996823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1744198537644947954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 1
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 9d2674c0c47155740a1b33e6802255c0, type: 2}
-  m_BuildHeightMesh: 0
+  owner: 39814
+  exploreThreshold: 3
+  aggressiveSpawning: 1
 --- !u!1 &1760621962523203306
 GameObject:
   m_ObjectHideFlags: 0
@@ -20434,11 +20404,6 @@ PrefabInstance:
       propertyPath: itemId
       value: 52
       objectReference: {fileID: 0}
-    - target: {fileID: 605469111844276517, guid: e597f086973172c4fb57bd6cb8fbda03,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8038542065967557615, guid: e597f086973172c4fb57bd6cb8fbda03,
         type: 3}
       propertyPath: m_Name
@@ -20518,11 +20483,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7922493138652336308}
     m_Modifications:
-    - target: {fileID: 3894774884897260366, guid: e06221782e04aaf49b4b706d66363521,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5038549846130584084, guid: e06221782e04aaf49b4b706d66363521,
         type: 3}
       propertyPath: m_RootOrder
@@ -20602,11 +20562,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7922493138652336308}
     m_Modifications:
-    - target: {fileID: 1963803772826430391, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7539402208496337645, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: m_RootOrder
@@ -20765,11 +20720,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7922493138652336308}
     m_Modifications:
-    - target: {fileID: 3213019713351242170, guid: d5f31f2668e52b84ab8f03140f4e7989,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4177247209853908932, guid: d5f31f2668e52b84ab8f03140f4e7989,
         type: 3}
       propertyPath: Dialogue

@@ -15,4 +15,9 @@ public class SpawnOnce : SectionSpawnBaseRule
     {
         hasBeenSpawned=true;
     }
+    public override void ResetRule()
+    {
+        base.ResetRule();
+        hasBeenSpawned = false;
+    }
 }

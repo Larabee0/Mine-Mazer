@@ -34,7 +34,7 @@ public class CaveMessageInteractable : MonoBehaviour, IInteractable
         }
         else
         {
-            return "E to Read";
+            return "Click to Read";
         }
     }
 

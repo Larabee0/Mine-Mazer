@@ -28,6 +28,7 @@ public class StartScreen : MonoBehaviour
         PlayerUIController.Instance.ShowCrosshair = false;
         PlayerUIController.Instance.SetMiniMapVisible(false);
         startScreenController.SetActive(true);
+        tutorialStarter.FadeIn();
     }
 
     public void LoadMainScene()
@@ -42,6 +43,7 @@ public class StartScreen : MonoBehaviour
         /// Perhaps look at blocking final scene load with allowSceneActivation if it completes
         /// before the tutorial would unfade the camera.
         startScreenController. SetActive(false);
+        tutorialStarter.StopAllCoroutines();
         tutorialStarter.StartTutorialScript();
         yield return new WaitForSeconds(3.5f);
         AsyncOperation sceneLoadOp = SceneManager.LoadSceneAsync(1);
