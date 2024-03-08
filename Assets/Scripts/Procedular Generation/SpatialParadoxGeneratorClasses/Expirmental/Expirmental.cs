@@ -61,6 +61,7 @@ public partial class SpatialParadoxGenerator
         SectionQueueItem newQueue = new(primaryElement, prefabSecondary, primaryConnector, secondaryConnector, temporaryID);
         preProcessingQueue.Add(newQueue);
         virtualPhysicsWorldIds.Add(temporaryID);
+        HandleNewSectionInstance(prefabSecondary);
         return newQueue;
     }
 
@@ -138,7 +139,7 @@ public partial class SpatialParadoxGenerator
     private void QueuedTunnInstantiate(SectionQueueItem item)
     {
         TunnelSection sectionInstance = Instantiate(item.pickedPrefab, item.secondaryMatrix.Translation(), item.secondaryMatrix.Rotation(), transform);
-        
+        //TunnelSection sectionInstance = InstinateSection(item.pickedPrefab,item.secondaryMatrix.Translation(),item.secondaryMatrix.Rotation());
         virtualPhysicsWorldIds.Remove(item.physicsWorldTempId);
         int physicsWorldIndex = VirtualPhysicsWorld.IndexOf(new TunnelSectionVirtual { boundSection = item.physicsWorldTempId });
         if (physicsWorldIndex >= 0)

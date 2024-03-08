@@ -128,18 +128,23 @@ public partial class SpatialParadoxGenerator
         return InstinateSection(instanceIdToSection[tunnelSectionsByInstanceID[index]]);
     }
 
-    private TunnelSection InstinateSection(TunnelSection tunnelSection)
+    private TunnelSection InstinateSection(TunnelSection tunnelSection, Vector3? position = null, Quaternion? rotation = null)
     {
-        TunnelSection section = Instantiate(tunnelSection);
-
-        tunnelSection.InstanceCount++;
+        TunnelSection section = position.HasValue && rotation.HasValue
+            ? Instantiate(tunnelSection, position.Value, rotation.Value, transform)
+            : Instantiate(tunnelSection, transform);
         section.gameObject.SetActive(true);
-        section.transform.parent = transform;
+        HandleNewSectionInstance(tunnelSection);
+        return section;
+    }
+
+    private void HandleNewSectionInstance(TunnelSection tunnelSection)
+    {
         if (instanceIdToSection.TryGetValue(tunnelSection.orignalInstanceId, out TunnelSection original))
         {
+            original.InstanceCount++;
             original.Spawned();
         }
-        return section;
     }
 
     private void DestroySection(TunnelSection section)
