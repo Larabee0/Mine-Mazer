@@ -50,7 +50,7 @@ public class InteractMessage : MonoBehaviour
         interactText = uiController.rootVisualElement.Q<Label>("InteractText");
         objectiveText = uiController.rootVisualElement.Q<Label>("ObjectiveText");
         
-        HideInteraction();
+        HideInteraction(true);
         ClearObjective();
     }
 

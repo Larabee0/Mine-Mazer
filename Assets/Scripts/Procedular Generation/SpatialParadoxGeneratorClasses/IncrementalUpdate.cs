@@ -47,12 +47,9 @@ public partial class SpatialParadoxGenerator
             MakeRootNode(newSection);
 #endif
         mapUpdateProcess = null;
-        AmbientLightController.Instance.FadeAmbientLight(newSection.AmbientLightLevel);
-        if (!incrementalBuilder)
-        {
-            OnMapUpdate?.Invoke();
-        }
-        
+        AmbientController.Instance.FadeAmbientLight(newSection.AmbientLightLevel);
+        AmbientController.Instance.ChangeTune(newSection.AmbientNoise);
+        OnMapUpdate?.Invoke();
         //yield return null;
         //Debug.Break();
     }

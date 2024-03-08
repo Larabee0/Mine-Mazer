@@ -1,4 +1,5 @@
 using MazeGame.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private MapResource heldItem;
     [SerializeField] private Transform virtualhands;
     [SerializeField] private MapResource[] defaultItems;
+    [SerializeField] private MapResource[] sanctumparts;
     [SerializeField] private float itemNameTime = 1f;
 
     private void Awake()
@@ -55,10 +57,6 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        if (InputManager.Instance != null)
-        {
-            InputManager.Instance.scrollDirection += ScrollInventory;
-        }
     }
 
     private void Start()
@@ -68,8 +66,14 @@ public class Inventory : MonoBehaviour
             AddItem(defaultItems[i].ItemStats.type, 1, Instantiate(defaultItems[i]));
         }
     }
-    
-    private void OnApplicationQuit()
+    private void OnEnable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.scrollDirection += ScrollInventory;
+        }
+    }
+    private void OnDisable()
     {
         if (InputManager.Instance != null)
         {
@@ -131,6 +135,10 @@ public class Inventory : MonoBehaviour
                 //Destroy(assets[item].gameObject);
                 assets.Remove(item);
 
+            }
+            if (assets.TryGetValue(item, out var value) && value.Count == 0)
+            {
+                assets.Remove(item);
             }
             UpdateInventory();
             return true;
@@ -272,5 +280,18 @@ public class Inventory : MonoBehaviour
         InteractMessage.Instance.ShowInteraction(text, null, Color.white);
         yield return new WaitForSeconds(itemNameTime);
         InteractMessage.Instance.HideInteraction();
+    }
+
+    public List<MapResource> GetMissingSanctumParts()
+    {
+        List<MapResource> missingParts = new();
+        for (int i = 0; i < sanctumparts.Length; i++)
+        {
+            if (!CanTrade(sanctumparts[i].ItemStats.type))
+            {
+                missingParts.Add(sanctumparts[i]);
+            }
+        }
+        return missingParts;
     }
 }

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class StagnationBeacon : MapResource
+public class StagnationBeacon : SanctumPart
 {
     [Header("Animations")]
+    [SerializeField] private bool Animated = true;
     [SerializeField] private Transform sphere;
     [SerializeField] private Transform cylinder;
     [SerializeField] private Transform cubeA;
@@ -24,20 +25,22 @@ public class StagnationBeacon : MapResource
 
     private void OnEnable()
     {
-        sphereStartEnd = new()
+        if (Animated)
         {
-            c0 = (float3)sphere.localPosition - (dst * 0.5f),
-            c1 = (float3)sphere.localPosition + (dst * 0.5f),
-        };
-        cylinderStartEnd = new()
-        {
-            c0 = (float3)cylinder.localPosition - (dst * 0.5f),
-            c1 = (float3)cylinder.localPosition + (dst * 0.5f),
-        };
-        sphere.transform.localPosition = sphereStartEnd.c1;
-        cylinder.transform.localPosition = cylinderStartEnd.c0;
-
-        StartCoroutine(Animation());
+            sphereStartEnd = new()
+            {
+                c0 = (float3)sphere.localPosition - (dst * 0.5f),
+                c1 = (float3)sphere.localPosition + (dst * 0.5f),
+            };
+            cylinderStartEnd = new()
+            {
+                c0 = (float3)cylinder.localPosition - (dst * 0.5f),
+                c1 = (float3)cylinder.localPosition + (dst * 0.5f),
+            };
+            sphere.transform.localPosition = sphereStartEnd.c1;
+            cylinder.transform.localPosition = cylinderStartEnd.c0;
+            StartCoroutine(Animation());
+        }
     }
 
     private void OnDisable()
@@ -111,6 +114,7 @@ public class StagnationBeacon : MapResource
                 item.SetMapResourceActive(true);
                 item.SetColliderActive(true);
                 mapGenerator.PlaceStatnationBeacon(hitSection, this);
+                OnItemPickedUp?.Invoke();
                 return true;
             }
         }

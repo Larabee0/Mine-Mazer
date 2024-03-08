@@ -64,6 +64,9 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     [SerializeField] private int ringRenderDst = 3; 
     [SerializeField, Min(1)] private int maxDst = 3;
     [SerializeField, Range(0, 1)] private float breakableWallAtConnectionChance = 0.5f;
+    [SerializeField, Range(0, 1)] private float sanctumPartSpawnChance = 0.5f;
+    [SerializeField] private int sanctumPartUniqueSectionCooldown = 3;
+    private int sanctumPartCooldown;
     [Space]
     [SerializeField] private LayerMask tunnelSectionLayerMask;
     [SerializeField, Min(1000)] private int maxInterations = 1000000; /// max iterations allowed for <see cref="PickSection(TunnelSection, List{int}, out Connector, out Connector)"/>
@@ -107,7 +110,6 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private void Start()
     {
         // InputManager.Instance.interactButton.OnButtonReleased += PlaceStagnationBeacon;
-
         tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
 
@@ -253,8 +255,10 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         }
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
         mapTree.Add(new() { curPlayerSection });
+
+        AmbientController.Instance.FadeAmbientLight(curPlayerSection.AmbientLightLevel);
+
         
-        AmbientLightController.Instance.FadeAmbientLight(curPlayerSection.AmbientLightLevel);
         AddSection(curPlayerSection, float4x4.TRS(curPlayerSection.transform.position, curPlayerSection.transform.rotation, Vector3.one));
         virtualPhysicsWorldIds.Add(curPlayerSection.GetInstanceID());
         double startTime = Time.realtimeSinceStartupAsDouble;

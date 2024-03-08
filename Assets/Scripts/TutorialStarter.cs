@@ -1,9 +1,11 @@
 using Fungus;
 using MazeGame.Input;
+using MazeGame.Navigation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialStarter : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class TutorialStarter : MonoBehaviour
     [SerializeField] private float tutorialDelayTime = 2f;
     [SerializeField] private Transform EudieWayPoint;
     [SerializeField] private AudioSource caveAmbience;
+    public bool allowSceneChange = false;
     [Header("Debug")]
     public bool skipTutorial = false;
     public bool skipToPickUpEudie = false;
@@ -22,29 +25,31 @@ public class TutorialStarter : MonoBehaviour
     private void Awake()
     {
         tutorialFlowChart = GetComponent<Flowchart>();
+        TutorialStarter[] tutors = FindObjectsOfType<TutorialStarter>();
+        for (int i = 0; i < tutors.Length; i++)
+        {
+            if (tutors[i].allowSceneChange)
+            {
+                Destroy(tutors[i].gameObject);
+            }
+        }
     }
 
-    private void Start()
-    {
+    public void StartTutorialScript()
+    { 
         tutorialFlowChart.SetBooleanVariable("Gamepad", InputManager.GamePadPresent);
         if (skipTutorial)
         {
-            SkipTutorial();
+            allowSceneChange = true;
+            LockPointer();
+            FadeOut();
+            Invoke(nameof(SkipTutorial), 10f);
+            // SkipTutorial();
         }
         else
         {
             Tutorial_Backstory();
         }
-    }
-
-    public void PlayCaveAmbiance()
-    {
-        caveAmbience.Play();
-    }
-
-    private void SkipTutorial()
-    {
-        EudieHandOff();
     }
 
     private void Tutorial_Backstory()
@@ -54,8 +59,23 @@ public class TutorialStarter : MonoBehaviour
         tutorialFlowChart.ExecuteBlock("Tutorial Start");
     }
 
+    private void SkipTutorial()
+    {
+        FadeIn();
+
+        WorldWayPointsController.Instance.StartWWPC();
+        EudieHandOff();
+    }
+
+    public void PlayCaveAmbiance()
+    {
+        allowSceneChange = true;
+        caveAmbience.Play();
+    }
+
     public void Tutorial_Camera()
     {
+
         flowChartDelayedExecute = StartCoroutine(DelayedFlowChartExecute("Tutorial Camera", tutorialDelayTime));
     }
 
@@ -66,7 +86,9 @@ public class TutorialStarter : MonoBehaviour
 
     public void EudieHandOff()
     {
+        PlayerUIController.Instance.ShowCrosshair = true;
         FindObjectOfType<Eudie_Tutorial>().ShowEudieWaypoint(skipToPickUpEudie);
+        Hunger.Instance.OnStarvedToDeath += StarvedToDeath;
     }
 
     private IEnumerator DelayedFlowChartExecute(string command, float delayTime)
@@ -74,6 +96,24 @@ public class TutorialStarter : MonoBehaviour
         yield return new WaitForSeconds(delayTime);
         tutorialFlowChart.ExecuteBlock(command);
         flowChartDelayedExecute = null;
+    }
+
+    public void StarvedToDeath()
+    {
+        Hunger.Instance.OnStarvedToDeath -= StarvedToDeath;
+        PlayerUIController.Instance.SetHungerVisible(false);
+        PlayerUIController.Instance.ShowCrosshair = false;
+        PlayerUIController.Instance.SetMiniMapVisible(false);
+        InteractMessage.Instance.ClearObjective();
+        InteractMessage.Instance.HideInteraction(true);
+        WorldWayPointsController.Instance.ClearWaypoints();
+
+        tutorialFlowChart.ExecuteBlock("StarvedToDeath");
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 
     public void UnlockPointer()
@@ -99,6 +139,6 @@ public class TutorialStarter : MonoBehaviour
 
     public void FadeOut()
     {
-        PlayerUIController.Instance.FadeOut(0);
+        PlayerUIController.Instance.FadeOut(screenFadeTime*0.5f);
     }
 }

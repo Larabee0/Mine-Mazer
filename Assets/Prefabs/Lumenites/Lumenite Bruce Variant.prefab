@@ -647,7 +647,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: Bruce
-  nameColor: {r: 1, g: 1, b: 1, a: 1}
+  nameColor: {r: 0, g: 1, b: 0.10499692, a: 1}
   soundEffect: {fileID: 0}
   portraits: []
   portraitsFace: 0
@@ -1645,10 +1645,12 @@ MonoBehaviour:
   tradeOptions:
   - tradeUIText: Trade 1 Ficus Wood for 1 Torch
     tradeCloseSuccessBlock: Give Torches
+    category: 4
     specific: 1
     specificItem: 12
-    category: 4
     takeQuantity: 1
+    specificItems: 
+    takeQuantities: 
     givenItem: {fileID: 8048640736220625442, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2,
       type: 3}
     giveQuantity: 1

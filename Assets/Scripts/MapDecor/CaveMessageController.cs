@@ -35,6 +35,7 @@ public class CaveMessageController : MonoBehaviour
     [SerializeField] private UIDocument document;
     [SerializeField] private VisualTreeAsset messagePrefab;
     [SerializeField] private bool debugForceRandomOnStart = false;
+    [SerializeField] private bool debugInfiniteRandom = false;
     [SerializeField, Range(0.001f,60)] private float debugLingerTime = 25f;
 
 
@@ -50,6 +51,11 @@ public class CaveMessageController : MonoBehaviour
 
     private void Awake()
     {
+        if(document == null||document.rootVisualElement == null)
+        {
+            return;
+        }
+        document.rootVisualElement.Q("MessagePreview")?.Clear();
         // if (mapGenerator == null || !mapGenerator.isActiveAndEnabled)
         // {
         //     Debug.LogError("No Map Generator or Map Generator Disabled");
@@ -75,7 +81,7 @@ public class CaveMessageController : MonoBehaviour
             using StringReader stringReader = new(textAsset.text);
             XmlSerializer reader = new(typeof(MessageAsset));
             MessageAsset asset = (MessageAsset)reader.Deserialize(stringReader);
-
+            asset.Unpack();
             asset.hash = Hash128.Compute(asset.assetName);
 
             if (hashToMessage.TryAdd(asset.hash, asset))
@@ -97,25 +103,36 @@ public class CaveMessageController : MonoBehaviour
         UpdateReadableMessages();
         if (InputManager.Instance != null)
         {
-            InputManager.Instance.advanceDialogueButton.OnButtonReleased += CloseMessage;
+            //InputManager.Instance.advanceDialogueButton.OnButtonReleased += CloseMessage;
         }
         if (debugForceRandomOnStart)
         {
             Debug.Log("Testing random message show!");
-            if (ShowRandomMessage(out _))
+            DebugRandom();
+        }
+    }
+
+    private void DebugRandom()
+    {
+        if (ShowRandomMessage(out _))
+        {
+            Debug.LogFormat("Closing Test random message in {0} seconds!", debugLingerTime.ToString("0.0"));
+            Invoke(nameof(CloseMessage), debugLingerTime);
+            if (debugInfiniteRandom)
             {
-                Debug.LogFormat("Closing Test random message in {0} seconds!", debugLingerTime.ToString("0.0"));
-                Invoke(nameof(CloseMessage), debugLingerTime);
+                Invoke(nameof(DebugRandom), debugLingerTime+0.5f);
             }
         }
     }
-    private void OnApplicationQuit()
-    {
-        if(InputManager.Instance != null)
-        {
-            InputManager.Instance.advanceDialogueButton.OnButtonReleased -= CloseMessage;
-        }
-    }
+
+    //private void OnDisable()
+    //{
+    //    if(InputManager.Instance != null)
+    //    {
+    //        InputManager.Instance.advanceDialogueButton.OnButtonReleased -= CloseMessage;
+    //    }
+    //}
+
     public bool ShowRandomMessage(out Hash128 chosenMessage)
     {
         List<Hash128> pickAbleMessages = new(readableMessages);
@@ -174,6 +191,7 @@ public class CaveMessageController : MonoBehaviour
                 if (InputManager.Instance != null)
                 {
                     InputManager.Instance.UnlockPointer();
+                    InputManager.Instance.advanceDialogueButton.OnButtonReleased += CloseMessage;
                 }
             }
             else
@@ -196,6 +214,8 @@ public class CaveMessageController : MonoBehaviour
             if (InputManager.Instance != null)
             {
                 InputManager.Instance.LockPointer();
+                InputManager.Instance.advanceDialogueButton.OnButtonReleased -= CloseMessage;
+
             }
         }
     }
@@ -235,10 +255,26 @@ public class MessageContainer
 {
     public VisualElement root;
     public VisualElement messageBody;
+    public VisualElement pageIncrementContainer;
     public Label text;
+    public Label pageNumber;
+    public Button forwardButton;
+    public Button backButton;
     public Texture2D backgroundImage;
 
     public MessageAsset asset;
+    public int pageIndex = 0; 
+
+    public Color PageIncremenetColour
+    {
+        set
+        {
+
+            forwardButton.style.unityBackgroundImageTintColor = value;
+            backButton.style.unityBackgroundImageTintColor = value;
+            pageNumber.style.color = value;
+        }
+    }
 
     public MessageContainer(VisualElement root, MessageAsset asset, Texture2D backgroundImage = null)
     {
@@ -246,13 +282,23 @@ public class MessageContainer
         this.asset = asset;
         messageBody = root.Q("MessagePreview");
         text = messageBody.Q<Label>();
+        pageIncrementContainer = root.Q("PagePanel");
+        pageNumber = pageIncrementContainer.Q<Label>();
+        forwardButton = pageIncrementContainer.Q<Button>("PageForwardArrow");
+        backButton = pageIncrementContainer.Q<Button>("PageBackArrow");
+
+        forwardButton.style.unityBackgroundImageTintColor = (Color)asset.pageIncrementColour;
+        backButton.style.unityBackgroundImageTintColor = (Color)asset.pageIncrementColour;
+        pageNumber.style.color = (Color)asset.pageIncrementColour;
+
+
         this.backgroundImage = backgroundImage;
         messageBody.style.backgroundImage = backgroundImage;
 
-        text.text = asset.messageText;
+        text.text = asset.pages[pageIndex];
 
         messageBody.style.width = asset.dimentions.x;
-        messageBody.style.height = asset.dimentions.y;
+        //messageBody.style.height = asset.dimentions.y+20;
 
         if (asset.backgroundIndex < 0)
         {
@@ -262,13 +308,72 @@ public class MessageContainer
         {
             messageBody.style.unityBackgroundImageTintColor = (Color)asset.backgroundTint;
         }
+        if (asset.pages.Length <= 1)
+        {
+            pageIncrementContainer.style.display = DisplayStyle.None;
+        }
+
+        backButton.SetEnabled(false);
+        UpdatePageNumberDisplay(pageIndex, asset.pages.Length);
+        forwardButton.RegisterCallback<ClickEvent>(ev => NextPage());
+        backButton.RegisterCallback<ClickEvent>(ev => PreviousPage());
+        forwardButton.RegisterCallback<NavigationSubmitEvent>(ev => NextPage());
+        backButton.RegisterCallback<NavigationSubmitEvent>(ev => PreviousPage());
     }
+
     public MessageContainer(VisualElement root, Texture2D backgroundImage = null)
     {
         this.root = root;
         messageBody = root;
         text = root.Q<Label>();
         this.backgroundImage = backgroundImage;
+        pageIncrementContainer = root.Q("PagePanel");
+        pageNumber = pageIncrementContainer.Q<Label>();
+        forwardButton = pageIncrementContainer.Q<Button>("PageForwardArrow");
+        backButton = pageIncrementContainer.Q<Button>("PageBackArrow");
+    }
+
+    public void NextPage()
+    {
+        if(pageIndex < asset.pages.Length - 1)
+        {
+            pageIndex++;
+            UpdatePageNumberDisplay(pageIndex,asset.pages.Length);
+
+            text.text = asset.pages[pageIndex];
+            if (pageIndex == asset.pages.Length - 1)
+            {
+                forwardButton.SetEnabled(false);
+            }
+            if (pageIndex > 0)
+            {
+                backButton.SetEnabled(true);
+            }
+        }
+    }
+
+    public void UpdatePageNumberDisplay(int pageIndex, int totalPages)
+    {
+        pageNumber.text = string.Format("{0}/{1}", pageIndex + 1, totalPages);
+    }
+
+    public void PreviousPage()
+    {
+        if (pageIndex > 0)
+        {
+            pageIndex--;
+            text.text = asset.pages[pageIndex];
+            UpdatePageNumberDisplay(pageIndex, asset.pages.Length);
+
+            if (pageIndex == 0)
+            {
+                backButton.SetEnabled(false);
+            }
+            if (pageIndex < asset.pages.Length - 1)
+            {
+                forwardButton.SetEnabled(true);
+            }
+        }
     }
 }
 
@@ -282,7 +387,14 @@ public class MessageAsset
     public bool randomlyFound = true;
     public string messageText = "Sample Text.";
     public string[] dependsOn = new string[0];
+    public Color32 pageIncrementColour = Color.white;
     [XmlIgnore] public Hash128 hash;
     [XmlIgnore] public HashSet<Hash128> dependsOnHashes = new();
     [XmlIgnore] public bool shownToPlayer = false;
+    [XmlIgnore] public string[] pages;
+
+    public void Unpack()
+    {
+        pages = messageText.Split('¬', StringSplitOptions.RemoveEmptyEntries);
+    }
 }

@@ -53,10 +53,14 @@ namespace Fungus
         protected virtual void Awake()
         {
             writer = GetComponent<Writer>();
+        }
 
+        private void OnEnable()
+        {
             CheckEventSystem();
         }
-        private void OnApplicationQuit()
+
+        private void OnDisable()
         {
             if (newInputSystem && clickMode == ClickMode.ClickAnywhere)
             {
