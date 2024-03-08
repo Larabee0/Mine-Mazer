@@ -229,6 +229,8 @@ GameObject:
   - component: {fileID: 290371338472861755}
   - component: {fileID: 7544748717809826148}
   - component: {fileID: -851804242554496158}
+  - component: {fileID: -9166085773512565416}
+  - component: {fileID: 6150777981778060668}
   m_Layer: 0
   m_Name: 5mCaveSqueeze Prefab
   m_TagString: Untagged
@@ -380,6 +382,7 @@ MonoBehaviour:
   strongKeep: 0
   hasLadder: 0
   isColony: 0
+  sanctumPartsSpawnPoint: {fileID: 0}
   explored: 0
 --- !u!114 &-851804242554496158
 MonoBehaviour:
@@ -397,6 +400,57 @@ MonoBehaviour:
   spawnLimit: -1
   generator: {fileID: 0}
   owner: 27428
+--- !u!114 &-9166085773512565416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8067933336209886050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 1
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: f4a5417e0c5fd594ea21a7b02248e7dc, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!114 &6150777981778060668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8067933336209886050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.5}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 0
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 1
+  m_Area: 0
 --- !u!1 &8537734873157505293
 GameObject:
   m_ObjectHideFlags: 0
