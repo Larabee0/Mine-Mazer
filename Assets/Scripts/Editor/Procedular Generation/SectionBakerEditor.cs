@@ -59,7 +59,6 @@ public class SectionBakerEditor : Editor
         {
             section.connectors = new Connector[baker.ConnectorObjects.Length];
 
-            section.connectorPairs = new(section.connectors.Length);
             for (int i = 0; i < baker.ConnectorObjects.Length; i++)
             {
                 section.connectors[i] = new Connector()
@@ -68,7 +67,6 @@ public class SectionBakerEditor : Editor
                     localPosition = baker.ConnectorObjects[i].transform.localPosition,
                     localRotation = baker.ConnectorObjects[i].transform.localRotation
                 };
-                section.connectorPairs.Add(i,null);
             }
         }
 

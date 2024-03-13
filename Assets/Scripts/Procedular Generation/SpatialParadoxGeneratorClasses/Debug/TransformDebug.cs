@@ -14,8 +14,11 @@ public partial class SpatialParadoxGenerator
     /// <returns></returns>
     private IEnumerator TransformDebugging()
     {
-        curPlayerSection = InstinateSection(prefab1);
-        curPlayerSection.transform.position = new Vector3(0, 0, 0);
+        curPlayerSection = new()
+        {
+            sectionInstance = InstinateSection(prefab1)
+        };
+        curPlayerSection.sectionInstance.transform.position = new Vector3(0, 0, 0);
         TunnelSection newSection = InstinateSection(prefab2);
 
         yield return new WaitForSeconds(transformHoldTime);
@@ -23,16 +26,16 @@ public partial class SpatialParadoxGenerator
         secondaryObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
         while (true)
         {
-            for (int i = 0; i < curPlayerSection.connectors.Length; i++)
+            for (int i = 0; i < curPlayerSection.Connectors.Length; i++)
             {
-                Connector primaryConnector = curPlayerSection.connectors[i];
+                Connector primaryConnector = curPlayerSection.Connectors[i];
 
-                curPlayerSection.connectors[i] = primaryConnector;
+                curPlayerSection.Connectors[i] = primaryConnector;
                 for (int j = 0; j < newSection.connectors.Length; j++)
                 {
                     Connector secondaryConnector = newSection.connectors[j];
-                    primaryConnector.UpdateWorldPos(curPlayerSection.transform.localToWorldMatrix);
-                    secondaryConnector.UpdateWorldPos(curPlayerSection.transform.localToWorldMatrix);
+                    primaryConnector.UpdateWorldPos(curPlayerSection.sectionInstance.transform.localToWorldMatrix);
+                    secondaryConnector.UpdateWorldPos(curPlayerSection.sectionInstance.transform.localToWorldMatrix);
                     newSection.connectors[j] = secondaryConnector;
                     float4x4 matix = CalculateSectionMatrix(primaryConnector, secondaryConnector);
                     newSection.transform.SetPositionAndRotation(matix.Translation(), matix.Rotation());

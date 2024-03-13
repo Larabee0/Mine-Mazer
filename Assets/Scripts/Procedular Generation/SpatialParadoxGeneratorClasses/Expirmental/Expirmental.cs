@@ -49,20 +49,28 @@ public partial class SpatialParadoxGenerator
         }
     }
 
-    public SectionQueueItem EnqueueSection(MapTreeElement primaryElement, TunnelSection prefabSecondary,Connector primaryConnector,Connector secondaryConnector)
+    public MapTreeElement EnqueueSection(MapTreeElement primaryElement, TunnelSection prefabSecondary,Connector primaryConnector,Connector secondaryConnector)
     {
-        int temporaryID = primaryElement.GetHashCode();
+        int permanentID = primaryElement.GetHashCode();
 
-        while (virtualPhysicsWorldIds.Contains(temporaryID))
+        while (virtualPhysicsWorldIds.Contains(permanentID))
         {
-            temporaryID = Random.Range(0, int.MaxValue);
+            permanentID = Random.Range(0, int.MaxValue);
         }
 
-        SectionQueueItem newQueue = new(primaryElement, prefabSecondary, primaryConnector, secondaryConnector, temporaryID);
-        preProcessingQueue.Add(newQueue);
-        virtualPhysicsWorldIds.Add(temporaryID);
+        SectionQueueItem newQueue = new(primaryElement, prefabSecondary, primaryConnector, secondaryConnector, permanentID);
+        
+        virtualPhysicsWorldIds.Add(permanentID);
         HandleNewSectionInstance(prefabSecondary);
-        return newQueue;
+
+        MapTreeElement element = new()
+        {
+            queuedSection = newQueue,
+            UID = permanentID
+        };
+        //LinkSections(primaryElement, element, primaryConnector.internalIndex, secondaryConnector.internalIndex);
+        preProcessingQueue.Add(element);
+        return element;
     }
 
     private IEnumerator PreProcessQueue()
@@ -72,8 +80,8 @@ public partial class SpatialParadoxGenerator
         NativeArray<float4x4> matrixResults = new(preProcessingQueue.Count, Allocator.Persistent,NativeArrayOptions.UninitializedMemory);
         for (int i = 0; i < preProcessingQueue.Count; i++)
         {
-            matrixRequirments[i] = preProcessingQueue[i].GetConnectorPair();
-            processingQueue.Add(preProcessingQueue[i].physicsWorldTempId, preProcessingQueue[i]);
+            matrixRequirments[i] = preProcessingQueue[i].queuedSection.GetConnectorPair();
+            processingQueue.Add(preProcessingQueue[i].queuedSection.physicsWorldId, preProcessingQueue[i]);
         }
         preProcessingQueue.Clear();
 
@@ -93,18 +101,16 @@ public partial class SpatialParadoxGenerator
         yield return null;
         for (int i = 0; i < length; i++)
         {
-            var item = processingQueue[matrixJob.connectorPairs[i].id];
+            var item = processingQueue[matrixJob.connectorPairs[i].id].queuedSection;
             item.secondaryMatrix = matrixJob.calculatedMatricies[i];
             item.primaryConnector = matrixJob.primaryConnectors[i];
-            processingQueue.Remove(item.physicsWorldTempId);
-            postProcessingQueue.Add(item);
-            AddSection(item.pickedPrefab,item.secondaryMatrix,item.physicsWorldTempId);
+            postProcessingQueue.Add(processingQueue[matrixJob.connectorPairs[i].id]);
+            processingQueue.Remove(item.physicsWorldId);
+            AddSection(item.pickedPrefab,item.secondaryMatrix,item.physicsWorldId);
         }
         matrixJob.connectorPairs.Dispose();
         matrixJob.calculatedMatricies.Dispose();
         matrixJob.primaryConnectors.Dispose();
-        //UpdateVirtualPhysicsWorld();
-        //yield return PostProcessQueue();
     }
 
     private IEnumerator PostProcessQueue()
@@ -123,7 +129,6 @@ public partial class SpatialParadoxGenerator
                 interationTime = Time.realtimeSinceStartupAsDouble;
             }
             yield return null;
-            OnMapUpdate?.Invoke();
         }
     }
 
@@ -136,25 +141,15 @@ public partial class SpatialParadoxGenerator
         }
     }
 
-    private void QueuedTunnInstantiate(SectionQueueItem item)
+    private void QueuedTunnInstantiate(MapTreeElement item)
     {
-        TunnelSection sectionInstance = Instantiate(item.pickedPrefab, item.secondaryMatrix.Translation(), item.secondaryMatrix.Rotation(), transform);
-        //TunnelSection sectionInstance = InstinateSection(item.pickedPrefab,item.secondaryMatrix.Translation(),item.secondaryMatrix.Rotation());
-        virtualPhysicsWorldIds.Remove(item.physicsWorldTempId);
-        int physicsWorldIndex = VirtualPhysicsWorld.IndexOf(new TunnelSectionVirtual { boundSection = item.physicsWorldTempId });
-        if (physicsWorldIndex >= 0)
-        {
-            int instanceId = VirtualPhysicsWorld.ElementAt(physicsWorldIndex).boundSection = sectionInstance.GetInstanceID();
-            virtualPhysicsWorldIds.Add(instanceId);
-        }
-        else
-        {
-            AddSection(sectionInstance, item.secondaryMatrix);
-        }
-
-        InstantiateBreakableWalls(item.pickedPrefab, sectionInstance, item.primaryConnector);
-        //item.FinishConnection(sectionInstance);
-        item.newTreeElement.SetInstance(sectionInstance);
+        TunnelSection sectionInstance = Instantiate(item.queuedSection.pickedPrefab,
+            item.queuedSection.secondaryMatrix.Translation(),
+            item.queuedSection.secondaryMatrix.Rotation(),
+            transform);
+        
+        InstantiateBreakableWalls(item.queuedSection.pickedPrefab, sectionInstance, item.queuedSection.primaryConnector);
+        item.SetInstance(sectionInstance);
     }
 
     public void AddSection(TunnelSection sectionInstance, float4x4 matrix)
@@ -167,8 +162,6 @@ public partial class SpatialParadoxGenerator
         }
         VirtualPhysicsWorld.Add(new TunnelSectionVirtual() { boundSection = id });
         InitiliseTSV(ref VirtualPhysicsWorld.ElementAt(VirtualPhysicsWorld.Length - 1), sectionInstance, matrix);
-
-        //UpdateVirtualPhysicsWorld();
     }
 
     public void AddSection(TunnelSection sectionInstance, float4x4 matrix, int id)
@@ -194,7 +187,7 @@ public partial class SpatialParadoxGenerator
         }
     }
 
-    public void DestroySection(int id)
+    public void DestroySectionPhysicsWorld(int id)
     {
         int index = VirtualPhysicsWorld.IndexOf(new TunnelSectionVirtual() { boundSection = id });
         if (index >= 0)
@@ -202,67 +195,6 @@ public partial class SpatialParadoxGenerator
             VirtualPhysicsWorld[index].Dispose();
             VirtualPhysicsWorld.RemoveAt(index);
         }
-    }
-
-    public bool ParallelRandomiseIntersection(TunnelSection primary,
-        ref Connector primaryPreference,
-        ref Connector secondaryPreference,
-        List<Connector> primaryConnectors,
-        ref int iterations,
-        ref TunnelSection targetSection,
-        int priIndex, List<int> internalNextSections,
-        JobHandle handle)
-    {
-        List<Connector> secondaryConnectors = new();
-        List<int2> managedTests = new();
-        for (int i = 0; i < internalNextSections.Count; i++)
-        {
-            int id = internalNextSections[i];
-            List<Connector> secondaryConnectorsInner = FilterConnectors(instanceIdToSection[id]);
-            secondaryConnectors.AddRange(secondaryConnectorsInner);
-            secondaryConnectorsInner.ForEach(connector => managedTests.Add(new(id, connector.internalIndex)));
-        }
-
-        NativeArray<int2> tests = new(managedTests.ToArray(), Allocator.TempJob);
-        NativeArray<bool> results = new(managedTests.Count, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
-
-        int length = tests.Length;
-        int batches = Mathf.Max(2,length / SystemInfo.processorCount);
-        new BoxCheckJob
-        {
-            incomingMatrices = sectionBoxTransforms,
-            incomingBoxBounds = incomingBoxBounds,
-            VirtualPhysicsWorld = VirtualPhysicsWorld,
-            sectionIds = tests,
-            outGoingChecks = results
-        }.ScheduleParallel(length, batches, handle).Complete();
-        
-        //Debug.Log(tests.Length);
-
-        List<int2> validSecondaryConnectors = new(tests.Length);
-        for (int i = 0; i < length; i++)
-        {
-            if (results[i])
-            {
-                validSecondaryConnectors.Add(new(tests[i].x, i));
-            }
-        }
-        tests.Dispose();
-        results.Dispose();
-
-        iterations++;
-        if (validSecondaryConnectors.Count > 0)
-        {
-
-            int2 connectorIndex = validSecondaryConnectors[Random.Range(0, validSecondaryConnectors.Count)];
-            secondaryPreference = secondaryConnectors[connectorIndex.y];
-            targetSection = instanceIdToSection[connectorIndex.x];
-            ConnectorMultiply(primary.transform.localToWorldMatrix, ref primaryPreference, ref secondaryPreference);
-            return true;
-        }
-        targetSection = null;
-        primaryConnectors.RemoveAt(priIndex);
-        return false;
     }
 
     public class ParallelRandInter
@@ -284,7 +216,7 @@ public partial class SpatialParadoxGenerator
         for (int i = 0; i < internalNextSections.Count; i++)
         {
             int id = internalNextSections[i];
-            List<Connector> secondaryConnectorsInner = FilterConnectors(instanceIdToSection[id]);
+            List<Connector> secondaryConnectorsInner = FilterConnectorsOriginalIdOnly(instanceIdToSection[id]);
             secondaryConnectors.AddRange(secondaryConnectorsInner);
             secondaryConnectorsInner.ForEach(connector => managedTests.Add(new(id, connector.internalIndex)));
         }
@@ -292,6 +224,56 @@ public partial class SpatialParadoxGenerator
         NativeArray<int2> tests = new(managedTests.ToArray(), Allocator.Persistent);
         NativeArray<bool> results = new(managedTests.Count, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
 
+        int length = ScheduleBoxTests(iteratorData, tests, results);
+
+        while (!iteratorData.handle.IsCompleted)
+        {
+            yield return null;
+        }
+        iteratorData.handle.Complete();
+        List<int2> validSecondaryConnectors = GetValidSecondaryConnectors(tests, results, length);
+
+        CheckValidConnectors(primary, primaryConnectors, priIndex, iteratorData, secondaryConnectors, validSecondaryConnectors);
+
+        iteratorData.iterations++;
+    }
+
+    private void CheckValidConnectors(MapTreeElement primary, List<Connector> primaryConnectors, int priIndex, ParallelRandInter iteratorData, List<Connector> secondaryConnectors, List<int2> validSecondaryConnectors)
+    {
+        if (validSecondaryConnectors.Count > 0)
+        {
+            int2 connectorIndex = validSecondaryConnectors[UnityEngine.Random.Range(0, validSecondaryConnectors.Count)];
+            iteratorData.secondaryPreference = secondaryConnectors[connectorIndex.y];
+            iteratorData.targetSection = instanceIdToSection[connectorIndex.x];
+            ConnectorMultiply(primary.LocalToWorld, ref iteratorData.primaryPreference, ref iteratorData.secondaryPreference);
+            iteratorData.success = true;
+        }
+        else
+        {
+            iteratorData.targetSection = null;
+            primaryConnectors.RemoveAt(priIndex);
+            iteratorData.success = false;
+        }
+    }
+
+    private static List<int2> GetValidSecondaryConnectors(NativeArray<int2> tests, NativeArray<bool> results, int length)
+    {
+        List<int2> validSecondaryConnectors = new(tests.Length);
+        for (int i = 0; i < length; i++)
+        {
+            if (results[i])
+            {
+                validSecondaryConnectors.Add(new(tests[i].x, i));
+            }
+        }
+
+        tests.Dispose();
+        results.Dispose();
+        return validSecondaryConnectors;
+    }
+
+    private int ScheduleBoxTests(ParallelRandInter iteratorData, NativeArray<int2> tests, NativeArray<bool> results)
+    {
         int length = tests.Length;
         int batches = Mathf.Max(2, length / SystemInfo.processorCount);
         iteratorData.handle = UpdatePhyscisWorld(iteratorData.handle);
@@ -303,213 +285,7 @@ public partial class SpatialParadoxGenerator
             sectionIds = tests,
             outGoingChecks = results
         }.ScheduleParallel(length, batches, iteratorData.handle);
-        while (!iteratorData.handle.IsCompleted)
-        {
-            yield return null;
-        }
-        iteratorData.handle.Complete();
-        //Debug.Log(tests.Length);
-
-        List<int2> validSecondaryConnectors = new(tests.Length);
-        for (int i = 0; i < length; i++)
-        {
-            if (results[i])
-            {
-                validSecondaryConnectors.Add(new(tests[i].x, i));
-            }
-        }
-        tests.Dispose();
-        results.Dispose();
-
-        iteratorData.iterations++;
-        if (validSecondaryConnectors.Count > 0)
-        {
-
-            int2 connectorIndex = validSecondaryConnectors[UnityEngine.Random.Range(0, validSecondaryConnectors.Count)];
-            iteratorData.secondaryPreference = secondaryConnectors[connectorIndex.y];
-            iteratorData.targetSection = instanceIdToSection[connectorIndex.x];
-            ConnectorMultiply(primary.LocalToWorld, ref iteratorData.primaryPreference, ref iteratorData.secondaryPreference);
-            iteratorData.success = true;
-
-        }
-        else
-        {
-            iteratorData.targetSection = null;
-            primaryConnectors.RemoveAt(priIndex);
-            iteratorData.success = false;
-        }
-    }
-
-    public bool ParallelIntersectTest(TunnelSection primary, TunnelSection target, ref Connector primaryConnector, out Connector secondaryConnector)
-    {
-        secondaryConnector = Connector.Empty;
-        List<Connector> secondaryConnectors = FilterConnectors(target);
-
-        NativeArray<int2> tests = new(secondaryConnectors.Count, Allocator.TempJob);
-        NativeArray<bool> results = new(secondaryConnectors.Count, Allocator.TempJob,NativeArrayOptions.UninitializedMemory);
-        for (int i = 0; i < secondaryConnectors.Count; i++)
-        {
-            tests[i] = new(target.orignalInstanceId, secondaryConnectors[i].internalIndex);
-        }
-
-        new BoxCheckJob
-        {
-            incomingMatrices = sectionBoxTransforms,
-            incomingBoxBounds = incomingBoxBounds,
-            VirtualPhysicsWorld = VirtualPhysicsWorld,
-            sectionIds = tests,
-            outGoingChecks = results
-        }.ScheduleParallel(tests.Length, 64, new()).Complete();
-        
-
-        List<int> validSecondaryConnectors = new(secondaryConnectors.Count);
-        for (int i = 0; i < results.Length; i++)
-        {
-            if (results[i])
-            {
-                validSecondaryConnectors.Add(i);
-            }
-        }
-        tests.Dispose();
-        results.Dispose();
-
-        if(validSecondaryConnectors.Count == 0)
-        {
-            return false;
-        }
-
-        int connectorIndex = validSecondaryConnectors[UnityEngine.Random.Range(0, validSecondaryConnectors.Count)];
-        secondaryConnector = secondaryConnectors[connectorIndex];
-
-        ConnectorMultiply(primary.transform.localToWorldMatrix, ref primaryConnector, ref secondaryConnector);
-        return true;
-    }
-
-    public bool ManualCheckBoxBurst(int id, int connectorIndex)
-    {
-        NativeArray<int2> tests = new(new int2[] { new(id, connectorIndex) }, Allocator.TempJob);
-        NativeArray<bool> results = new(1, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
-        new BoxCheckJob
-        {
-            incomingMatrices = sectionBoxTransforms,
-            incomingBoxBounds = incomingBoxBounds,
-            VirtualPhysicsWorld = VirtualPhysicsWorld,
-            sectionIds = tests,
-            outGoingChecks = results
-        }.ScheduleParallel(1, 64, new()).Complete();
-        bool result = results[0];
-        results.Dispose();
-        tests.Dispose();
-
-        return result;
-    }
-
-    public bool ManualCheckBox(int id, int connectorIndex)
-    {
-        UpdateVirtualPhysicsWorld();
-        UnsafeList<InstancedBox> sectionBoxes = incomingBoxBounds[id];
-        UnsafeList<BoxTransform> sectionBoxTransforms = this.sectionBoxTransforms[id][connectorIndex];
-
-        for (int i = 0; i < sectionBoxes.Length; i++)
-        {
-            sectionBoxes.ElementAt(i).GetTransformedCorners(sectionBoxTransforms[i].Matrix);
-            sectionBoxes.ElementAt(i).TransformNormals(sectionBoxTransforms[i].Matrix);            
-        }
-
-        for (int i = 0; i < sectionBoxes.Length; i++)
-        {
-            if (CheckBox(sectionBoxes[i]))
-            {
-                fromIntersecitonTests.Add(new InstancedBox() { boxBounds = sectionBoxes[i].boxBounds, matrix = sectionBoxTransforms[i].Matrix });
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public bool CheckBox(InstancedBox box)
-    {
-        for (int i = 0; i < VirtualPhysicsWorld.Length; i++)
-        {
-            TunnelSectionVirtual sectionInstance = VirtualPhysicsWorld[i];
-
-            if (CheckBox(sectionInstance, box))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool CheckBox(TunnelSectionVirtual sectionInstance, InstancedBox box)
-    {
-        UnsafeList<InstancedBox> instancedBoxes = sectionInstance.boxes;
-        for (int i = 0; i < instancedBoxes.Length; i++)
-        {
-            if (CheckBox(instancedBoxes[i].normals, instancedBoxes[i].corners, box.normals, box.corners))
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    drawCorners.Add(instancedBoxes[i].corners[j]);
-                }
-                for (int j = 0; j < 8; j++)
-                {
-                    drawCorners.Add(box.corners[j]);
-                }
-
-                fromIntersecitonTests.Add(new InstancedBox() { boxBounds = instancedBoxes[i].boxBounds, matrix = math.mul(sectionInstance.sectionTransform, instancedBoxes[i].boxBounds.LocalMatrix) });
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private bool CheckBox(UnsafeList<float3> aNormals, UnsafeList<float3> aCorners, UnsafeList<float3> bNormals, UnsafeList<float3> bCorners)
-    {
-        for (int i = 0; i < aNormals.Length; i++)
-        {
-            SATTest(aNormals[i], aCorners, out float shape1Min, out float shape1Max);
-            SATTest(aNormals[i], bCorners, out float shape2Min, out float shape2Max);
-            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
-            {
-                return false;
-            }
-        }
-
-        for (int i = 0; i < bNormals.Length; i++)
-        {
-            SATTest(bNormals[i], aCorners, out float shape1Min, out float shape1Max);
-            SATTest(bNormals[i], bCorners, out float shape2Min, out float shape2Max);
-            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private void SATTest(float3 axis, UnsafeList<float3> ptSet, out float minAlong, out float maxAlong)
-    {
-        minAlong = float.MaxValue;
-        maxAlong = float.MinValue;
-        for (int i = 0; i < ptSet.Length; i++)
-        {
-            float dotVal = math.dot(ptSet[i], axis);
-            minAlong = (dotVal < minAlong) ? dotVal : minAlong;
-            maxAlong = (dotVal > maxAlong) ? dotVal : maxAlong;
-        }
-    }
-
-    private bool Overlaps(float min1, float max1, float min2, float max2)
-    {
-        return IsBetweenOrdered(min2, min1, max1) || IsBetweenOrdered(min1, min2, max2);
-    }
-
-    private bool IsBetweenOrdered(float val, float lowerBound, float upperBound)
-    {
-        return lowerBound <= val && val <= upperBound;
+        return length;
     }
 
     private void OnDrawGizmos()

@@ -21,6 +21,7 @@ public class TunnelSection : MonoBehaviour
 
     [SerializeField] private List<int> excludePrefabConnectionsIds;
     [Header("Runtime Data")]
+    public MapTreeElement treeElementParent;
     public GameObject stagnationBeacon;
     public int orignalInstanceId;
     private bool weakKeep = false;
@@ -63,6 +64,7 @@ public class TunnelSection : MonoBehaviour
 
     public Texture2D MiniMapAsset => miniMapAsset;
     public Vector3 Position => transform.position;
+    public Vector3 StrongKeepPosition => strongKeepPosition;
     public Quaternion Rotation => transform.rotation;
     private Renderer[] renderers;
 
@@ -94,11 +96,10 @@ public class TunnelSection : MonoBehaviour
 
     public BoxBounds[] BoundingBoxes => boundingBoxes;
 
-    public HashSet<int> InUse = new();
-    public Dictionary<int, SectionAndConnector> connectorPairs = new();
+    //public HashSet<int> InUse = new();
+    //public Dictionary<int, SectionAndConnector> connectorPairs = new();
 
     public List<int> ExcludePrefabConnections => excludePrefabConnectionsIds;
-
 
     public ConnectorMask GetConnectorMask(Connector connector)
     {
@@ -201,6 +202,5 @@ public class TunnelSection : MonoBehaviour
                 Gizmos.DrawWireCube(Vector3.zero, boundingBoxes[i].size);
             }
         }
-
     }
 }

@@ -229,7 +229,7 @@ public class MapResource : MonoBehaviour, IInteractable
                     Vector3 playerPos = Inventory.Instance.transform.position;
                     Vector3 toPlayer = (playerPos- hitInfo.point).normalized;
                     toPlayer = Vector3.ProjectOnPlane(toPlayer, Vector3.up);
-                    item.gameObject.transform.parent = FindObjectOfType<SpatialParadoxGenerator>().CurPlayerSection.transform;
+                    item.gameObject.transform.parent = FindObjectOfType<SpatialParadoxGenerator>().CurPlayerSection.sectionInstance.transform;
                     item.gameObject.transform.position = hitInfo.point+ placementPositionOffset;
                     item.gameObject.transform.forward = toPlayer;
                     item.gameObject.transform.localScale = originalScale;

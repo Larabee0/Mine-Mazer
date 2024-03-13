@@ -12,6 +12,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private TunnelSection startSection;
     [SerializeField] private TunnelSection deadEndPlug;
+    public int DeadEndPlugInstanceId =>deadEndPlug.orignalInstanceId;
     [SerializeField] private BreakableWall breakableWall;
     [SerializeField] private List<TunnelSection> tunnelSections;
     [SerializeField] private GameObject stagnationBeacon;
@@ -20,12 +21,12 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private List<int> tunnelSectionsByInstanceID;
 
     [Header("Runtime Map")]
-    [SerializeField] private TunnelSection curPlayerSection;
+    [SerializeField] private MapTreeElement curPlayerSection;
     [SerializeField] private List<List<MapTreeElement>> mapTree = new();
     // private Dictionary<int, int> sectionCounter = new();
-    private Dictionary<TunnelSection, SectionDstData> mothBalledSections = new();
-    private Dictionary<int, List<TunnelSection>> promoteSectionsDict = new();
-    List<TunnelSection> promoteSectionsList = new();
+    private Dictionary<MapTreeElement, SectionDstData> mothBalledSections = new();
+    private Dictionary<int, List<MapTreeElement>> promoteSectionsDict = new();
+    private List<MapTreeElement> promoteSectionsList = new();
     private int reRingInters = 0;
     private Transform sectionGraveYard; 
     private Coroutine mapUpdateProcess;
@@ -37,7 +38,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     public Pluse OnEnterLadderSection;
     public Pluse OnEnterColonySection;
     public List<List<MapTreeElement>> MapTree => mapTree;
-    public TunnelSection CurPlayerSection => curPlayerSection;
+    public MapTreeElement CurPlayerSection => curPlayerSection;
 
     // these are quite unsafe lol
     // Its fine, once initilised their capacity doesn't change and their values are accessed safely by seperate threads.
@@ -48,15 +49,15 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
 
     NativeParallelHashMap<int, UnsafeList<InstancedBox>> incomingBoxBounds; // InstancedBox contains 2 unsafe lists for corners (8) and normals(6)
     UnsafeList<TunnelSectionVirtual> VirtualPhysicsWorld; // TunnelSectionVirtual contains an unsafe list of InstancedBoxes
-    HashSet<int> virtualPhysicsWorldIds = new();
+    private HashSet<int> virtualPhysicsWorldIds = new();
 
-    private TunnelSection nextPlayerSection;
+    private MapTreeElement nextPlayerSection;
     private Coroutine incrementalUpdateProcess;
     private Coroutine queuedUpdateProcess;
 
-    public List<SectionQueueItem> preProcessingQueue = new();
-    public Dictionary<int,SectionQueueItem> processingQueue = new();
-    public List<SectionQueueItem> postProcessingQueue = new();
+    private List<MapTreeElement> preProcessingQueue = new();
+    private Dictionary<int, MapTreeElement> processingQueue = new();
+    private List<MapTreeElement> postProcessingQueue = new();
 
     public bool SectionsInProcessingQueue => preProcessingQueue.Count > 0 || processingQueue.Count > 0 || postProcessingQueue.Count > 0;
 
@@ -65,7 +66,6 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     [SerializeField, Min(1)] private int maxDst = 3;
     [SerializeField, Range(0, 1)] private float breakableWallAtConnectionChance = 0.5f;
     [SerializeField, Range(0, 1)] private float sanctumPartSpawnChance = 0.5f;
-    [SerializeField] private int sanctumPartUniqueSectionCooldown = 3;
     private int sanctumPartCooldown;
     [Space]
     [SerializeField] private LayerMask tunnelSectionLayerMask;
@@ -74,9 +74,8 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     [SerializeField] private Random.State seed; // override seed.
     [SerializeField] private bool parallelMatrixCalculations = false; // allow parallel Matrix calculations for big matrix job
     [SerializeField] private bool mapProfiling = false;
-    private int tunnelSectionLayerIndex;
-    private TunnelSection lastEnter;
-    private TunnelSection lastExit;
+    private MapTreeElement lastEnter;
+    private MapTreeElement lastExit;
     private bool forceBreakableWallAtConnections = false;
     private bool rejectBreakableWallAtConnections = false;
 
@@ -109,8 +108,6 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
 
     private void Start()
     {
-        // InputManager.Instance.interactButton.OnButtonReleased += PlaceStagnationBeacon;
-        tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
 
 #if UNITY_EDITOR
@@ -140,40 +137,13 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private void SetUpBurstDataStructures(List<int> nextSections)
     {
         double startTime = Time.realtimeSinceStartupAsDouble;
+
+        VirtualPhysicsWorld = new(nextSections.Count, Allocator.Persistent);
         sectionConnectorContainers = new(nextSections.Count, Allocator.Persistent);
         sectionBoxMatrices = new(nextSections.Count, Allocator.Persistent);
-        incomingBoxBounds = new(nextSections.Count,Allocator.Persistent);
-        VirtualPhysicsWorld = new(nextSections.Count, Allocator.Persistent);
+        incomingBoxBounds = new(nextSections.Count, Allocator.Persistent);
 
-        for (int i = 0; i < nextSections.Count; i++)
-        {
-            int id = nextSections[i];
-            TunnelSection section = instanceIdToSection[id];
-
-            // convert bounding box data to transform matrix (float4x4) to avoid unnessecary matrix calculations during map updates.
-            UnsafeList<float4x4> bounds = new(section.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            UnsafeList<InstancedBox> instancedBoxes = new(section.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            bounds.Resize(section.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
-            instancedBoxes.Resize(section.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
-            for (int j = 0; j < section.boundingBoxes.Length; j++)
-            {
-                bounds[j] = section.boundingBoxes[j].LocalMatrix;
-                instancedBoxes[j] = new(section.boundingBoxes[j]);
-            }
-            incomingBoxBounds.Add(id, instancedBoxes);
-            sectionBoxMatrices.Add(id, bounds);
-
-            // convert Connector data to BurstConnector to avoid unnessecary matrix calculations during map updates.
-            UnsafeList<BurstConnector> connectors = new(section.connectors.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            connectors.Resize(section.connectors.Length, NativeArrayOptions.UninitializedMemory);
-            for (int j = 0; j < section.connectors.Length; j++)
-            {
-                connectors[j] = new(section.connectors[j]);
-            }
-            sectionConnectorContainers.Add(id, connectors);
-
-            
-        }
+        SetupSectionStructures(nextSections);
 
         new SetupConnectorsJob
         {
@@ -182,6 +152,45 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         }.ScheduleParallel(nextSections.Count, 8, new JobHandle()).Complete();
         if (mapProfiling) Debug.LogFormat("Initial Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
 
+    }
+
+    private void SetupSectionStructures(List<int> nextSections)
+    {
+        for (int i = 0; i < nextSections.Count; i++)
+        {
+            int id = nextSections[i];
+            TunnelSection section = instanceIdToSection[id];
+            CreateTransformMatrices(id, section);
+            CreateBurstConnectors(id, section);
+        }
+    }
+
+    private void CreateTransformMatrices(int id, TunnelSection section)
+    {
+        // convert bounding box data to transform matrix (float4x4) to avoid unnessecary matrix calculations during map updates.
+        UnsafeList<float4x4> bounds = new(section.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        UnsafeList<InstancedBox> instancedBoxes = new(section.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        bounds.Resize(section.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
+        instancedBoxes.Resize(section.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
+        for (int j = 0; j < section.boundingBoxes.Length; j++)
+        {
+            bounds[j] = section.boundingBoxes[j].LocalMatrix;
+            instancedBoxes[j] = new(section.boundingBoxes[j]);
+        }
+        incomingBoxBounds.Add(id, instancedBoxes);
+        sectionBoxMatrices.Add(id, bounds);
+    }
+
+    private void CreateBurstConnectors(int id, TunnelSection section)
+    {
+        // convert Connector data to BurstConnector to avoid unnessecary matrix calculations during map updates.
+        UnsafeList<BurstConnector> connectors = new(section.connectors.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        connectors.Resize(section.connectors.Length, NativeArrayOptions.UninitializedMemory);
+        for (int j = 0; j < section.connectors.Length; j++)
+        {
+            connectors[j] = new(section.connectors[j]);
+        }
+        sectionConnectorContainers.Add(id, connectors);
     }
 
     private void SetUpBurstMatrices(List<int> sections, Allocator allocator)
@@ -203,7 +212,10 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
             }
             sectionBoxTransforms.Add(id, boxTransforms);
         }
-        if (mapProfiling) Debug.LogFormat("Matrix Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+        if (mapProfiling)
+        {
+            Debug.LogFormat("Matrix Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+        }
     }
 
     /// <summary>
@@ -247,36 +259,40 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         if (startSection == null)
         {
             int spawnIndex = Random.Range(0, tunnelSectionsByInstanceID.Count);
-            curPlayerSection = InstinateSection(spawnIndex);
+
+
+
+            curPlayerSection = new()
+            {
+                sectionInstance = InstinateSection(spawnIndex)                
+            };
         }
         else
         {
-            curPlayerSection = InstinateSection(startSection);
+            curPlayerSection = new()
+            {
+                sectionInstance = InstinateSection(startSection)
+            };
         }
-        curPlayerSection.transform.position = new Vector3(0, 0, 0);
+        curPlayerSection.sectionInstance.transform.position = new Vector3(0, 0, 0);
+        curPlayerSection.UID = curPlayerSection.sectionInstance.GetInstanceID();
+        curPlayerSection.sectionInstance.treeElementParent = curPlayerSection;
+        
+        AddSection(curPlayerSection.sectionInstance, float4x4.TRS(curPlayerSection.LocalToWorld.Translation(), curPlayerSection.LocalToWorld.Rotation(), Vector3.one));
+        
+        virtualPhysicsWorldIds.Add(curPlayerSection.UID);
+
+        rejectBreakableWallAtConnections = true;
+
         mapTree.Add(new() { curPlayerSection });
 
-        AmbientController.Instance.FadeAmbientLight(curPlayerSection.AmbientLightLevel);
+        StartCoroutine(IncrementalBuilder(true));
 
-        
-        AddSection(curPlayerSection, float4x4.TRS(curPlayerSection.transform.position, curPlayerSection.transform.rotation, Vector3.one));
-        virtualPhysicsWorldIds.Add(curPlayerSection.GetInstanceID());
-        double startTime = Time.realtimeSinceStartupAsDouble;
-        rejectBreakableWallAtConnections = true;
-        if (incrementalBuilder)
+        if (!runPostProcessLast)
         {
-            StartCoroutine(IncrementalBuilder(true));
-            if (!runPostProcessLast)
-            {
-                StartCoroutine(PostProcessQueueInfinite());
-            }
+            StartCoroutine(PostProcessQueueInfinite());
         }
-        else
-        {
-            RecursiveBuilder(true);
-            if (mapProfiling) Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
-            OnMapUpdate?.Invoke();
-            StartCoroutine(BreakEditor());
-        }
+
+        AmbientController.Instance.FadeAmbientLight(curPlayerSection.sectionInstance.AmbientLightLevel);
     }
 }

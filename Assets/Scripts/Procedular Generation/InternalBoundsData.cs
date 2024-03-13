@@ -218,17 +218,7 @@ public class SectionAndConnector
     public MapTreeElement element;
     public TunnelSection SectionInstance =>element.sectionInstance;
     public int internalIndex = 0;
-    public int InstanceID
-    {
-        get
-        {
-            if (SectionInstance != null)
-            {
-                SectionInstance.GetInstanceID();
-            }
-            return -1;
-        }
-    }
+    public int InstanceID => element.UID;
 
     public SectionAndConnector(MapTreeElement element, int interalIndex)
     {
