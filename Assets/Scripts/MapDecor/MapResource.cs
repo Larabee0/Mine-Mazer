@@ -5,25 +5,27 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum Item
+[Flags]
+public enum Item : int
 {
-    LumenCrystal,
-    GoldenTrumpetMycelium,
-    VelvetBud,
-    Versicolor,
-    Antarticite,
-    Cinnabite,
-    Torch,
-    Pickaxe,
-    Eudie,
-    StagnationBeacon,
-    BrokenHeart,
-    Soup,
-    FicusWood,
-    ClockworkMechanism,
-    GlanceiteResonator,
-    HeartNode,
-    SanctumMachine
+    None = 0,
+    LumenCrystal = 1,
+    GoldenTrumpetMycelium =2,
+    VelvetBud = 4,
+    Versicolor = 8,
+    Antarticite = 16,
+    Cinnabite = 32,
+    Torch = 64,
+    Pickaxe = 128,
+    Eudie = 256,
+    StagnationBeacon = 512,
+    BrokenHeart = 1024,
+    Soup = 2048,
+    FicusWood = 4096,
+    ClockworkMechanism = 8192,
+    GlanceiteResonator = 16384,
+    HeartNode = 32768,
+    SanctumMachine = 65536
 }
 
 public enum ItemCategory
