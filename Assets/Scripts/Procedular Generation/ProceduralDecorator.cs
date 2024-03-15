@@ -1,16 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class ProceduralDecorator : MonoBehaviour
 {
     [Header("Generated Points")]
-    [SerializeField] bool showProceduralPoints = true;
-    [SerializeField] private List<ProDecPoint> proceduralPoints;
-    [SerializeField] private float orientationRayLength = 0.2f;
-    [SerializeField] private int selectPoint;
+    [SerializeField] private bool showProceduralPoints = true;
+    public List<ProDecPoint> proceduralPoints;
+    public float orientationRayLength = 0.2f;
+    public int selectPoint;
     [SerializeField] private ProDecPoint selectedPoint;
     [Header("Common settings")]
     [SerializeField] private float maxRayDst = 100;
@@ -134,6 +136,7 @@ public class ProceduralDecorator : MonoBehaviour
     {
         if (proceduralPoints.Count > 0)
         {
+            selectPoint = Mathf.Clamp(selectPoint, 0, proceduralPoints.Count - 1);
             if (selectPoint != oldSelect)
             {
                 selectedPoint = proceduralPoints[selectPoint];
@@ -246,25 +249,42 @@ public class ProceduralDecorator : MonoBehaviour
 
         if (showProceduralPoints && proceduralPoints != null && proceduralPoints.Count > 0 && meshRayCaster != null)
         {
-            selectPoint = Mathf.Clamp(selectPoint,0, proceduralPoints.Count - 1);
+            selectPoint = Mathf.Clamp(selectPoint, 0, proceduralPoints.Count - 1);
             for (int i = 0; i < proceduralPoints.Count; i++)
             {
                 var point = proceduralPoints[i];
-                point.UpdateMatrix(meshRayCaster.transform.localToWorldMatrix);
-                Gizmos.matrix = point.LTWMatrix;
-                Gizmos.color = Color.gray;
                 if (selectPoint == i)
                 {
-                    Gizmos.color =Color.cyan;
+                    continue;
                 }
-                Gizmos.DrawCube(Vector3.zero, new Vector3(0.2f, 0.2f, 0.2f));
-                Gizmos.matrix = Matrix4x4.identity;
-                Gizmos.color = Color.green;
-                Gizmos.DrawRay(point.WorldPos, point.Forward * orientationRayLength);
-                Gizmos.color = Color.blue;
-                Gizmos.DrawRay(point.WorldPos, point.Up * orientationRayLength);
+                DrawPoint(i, point);
             }
+            DrawPoint(selectPoint, proceduralPoints[selectPoint]);
         }
+    }
+
+    public ProDecPoint GetPoint(int i)
+    {
+        ProDecPoint point = proceduralPoints[i];
+        point.UpdateMatrix(meshRayCaster.transform.localToWorldMatrix);
+        return point;
+    }
+
+    private void DrawPoint(int i, ProDecPoint point)
+    {
+        point.UpdateMatrix(meshRayCaster.transform.localToWorldMatrix);
+        Gizmos.matrix = point.LTWMatrix;
+        Gizmos.color = Color.gray;
+        if (selectPoint == i)
+        {
+            Gizmos.color = Color.cyan;
+        }
+        Gizmos.DrawCube(Vector3.zero, new Vector3(0.2f, 0.2f, 0.2f));
+        Gizmos.matrix = Matrix4x4.identity;
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(point.WorldPos, point.Forward * orientationRayLength);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(point.WorldPos, point.Up * orientationRayLength);
     }
 
     private SubMeshDescriptor GatherMeshData()
@@ -290,9 +310,36 @@ public class ProceduralDecorator : MonoBehaviour
         return subMesh;
     }
 
+    
+
     private bool RayCast(Vector3 pos, Vector3 dir, out RaycastHit hitInfo)
     {
         return Physics.Raycast(pos, dir, out hitInfo, maxRayDst, layerMasks.value);
+    }
+
+    public void RemoveSelected()
+    {
+        if (proceduralPoints == null || proceduralPoints.Count == 0) return;
+        Undo.RegisterCompleteObjectUndo(this, "Remove Selected");
+        proceduralPoints.RemoveAt(selectPoint);
+        selectPoint = Mathf.Clamp(selectPoint, 0, proceduralPoints.Count - 1);
+        SceneView.RepaintAll();
+    }
+
+    public void FocusSceneCamera()
+    {
+        if (meshRayCaster == null) return;
+        Vector3 pos = meshRayCaster.transform.TransformPoint(proceduralPoints[selectPoint].localPosition);
+        SceneView.lastActiveSceneView.Frame(new Bounds(pos, Vector3.one), false);
+    }
+
+    public void IncrementSelection(int increment)
+    {
+        int next = selectPoint + increment;
+        next = next >= proceduralPoints.Count ?  0: next;
+        next = next < 0 ? proceduralPoints.Count -1 : next;
+        selectPoint = next;
+        FocusSceneCamera();
     }
 }
 
