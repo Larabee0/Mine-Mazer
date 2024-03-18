@@ -158,6 +158,7 @@ public class MapResource : MonoBehaviour, IInteractable
     protected Vector3 originalScale;
     public Vector3 placementPositionOffset = Vector3.zero;
     public Action OnItemPickedUp;
+    public Action OnInventoryItemInteract;
     [SerializeField,Tooltip("If left blank, falls back to ItemStats.name")] protected string toolTipNameOverride;
 
     protected virtual string ToolTipName
@@ -189,6 +190,11 @@ public class MapResource : MonoBehaviour, IInteractable
         {
             return string.Format("Click to Pick Up {0}", ToolTipName);
         }
+    }
+
+    public virtual void InventoryInteract()
+    {
+        OnInventoryItemInteract?.Invoke();
     }
 
     public virtual void Interact()

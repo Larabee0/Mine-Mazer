@@ -47,6 +47,7 @@ public class BreakableWall : MonoBehaviour, IInteractable
     {
         if (PlayerCanBreak())
         {
+            Inventory.Instance.CurHeldAsset.InventoryInteract();
             BreakWall();
         }
     }
