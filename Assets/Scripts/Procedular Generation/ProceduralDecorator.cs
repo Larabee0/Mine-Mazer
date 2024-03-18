@@ -18,6 +18,7 @@ public class ProceduralDecorator : MonoBehaviour
     [SerializeField] private float maxRayDst = 100;
     [SerializeField] private LayerMask layerMasks;
     [SerializeField] private bool showHitNormals = true;
+    [SerializeField] private Item bulkAllowedItems;
     [Header("Point Raycaster")]
     [SerializeField] bool showBasicRayCaster = true;
     [SerializeField] private Transform raycaster;
@@ -340,6 +341,16 @@ public class ProceduralDecorator : MonoBehaviour
         next = next < 0 ? proceduralPoints.Count -1 : next;
         selectPoint = next;
         FocusSceneCamera();
+    }
+
+    public void BulkAllowFilter()
+    {
+        for (int i = 0; i < proceduralPoints.Count; i++)
+        {
+            ProDecPoint p = proceduralPoints[i];
+            p.allowedItems = bulkAllowedItems;
+            proceduralPoints[i] = p;
+        }
     }
 }
 

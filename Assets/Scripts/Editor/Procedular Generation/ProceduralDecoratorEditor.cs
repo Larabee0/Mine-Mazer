@@ -10,24 +10,37 @@ public class ProceduralDecoratorEditor : Editor
     private void OnSceneGUI()
     {
         ProceduralDecorator decorator = (ProceduralDecorator)target;
-        for (int i = 0; i < decorator.proceduralPoints.Count; i++)
+        
+        if (decorator.proceduralPoints.Count > 0)
         {
-            if (decorator.selectPoint == i) continue;
-            DrawProceduralHandle(i,decorator.GetPoint(i));
-        }
-        DrawProceduralHandle(decorator.selectPoint, decorator.GetPoint(decorator.selectPoint));
+            for (int i = 0; i < decorator.proceduralPoints.Count; i++)
+            {
+                if (decorator.selectPoint == i) continue;
+                if (DrawProceduralHandle(i, decorator.GetPoint(i)))
+                {
+                    decorator.selectPoint = i;
+                }
+            }
+            if (decorator.selectPoint < decorator.proceduralPoints.Count)
+            {
+                if (Event.current != null &&
+                        Event.current.isKey &&
+                        Event.current.type.Equals(EventType.KeyDown) &&
+                        Event.current.keyCode == KeyCode.Delete)
+                {
 
-        int controlID = GUIUtility.GetControlID(FocusType.Passive);
-        if (controlID ==
-            HandleUtility.nearestControl)
-        {
-            decorator.selectPoint = HandleUtility.nearestControl;
-            //decorator.FocusSceneCamera();
+                    Event.current.Use();
+                    decorator.RemoveSelected();
+                }
+                if (DrawProceduralHandle(decorator.selectPoint, decorator.GetPoint(decorator.selectPoint)))
+                {
+                    decorator.FocusSceneCamera();
+                }
+            }
         }
-
     }
-
-    private void DrawProceduralHandle(int i,ProDecPoint point)
+    
+    private bool DrawProceduralHandle(int i,ProDecPoint point)
     {
         ProceduralDecorator decorator = (ProceduralDecorator)target;
         Handles.matrix = point.LTWMatrix;
@@ -36,12 +49,14 @@ public class ProceduralDecoratorEditor : Editor
         {
             Handles.color = Color.cyan;
         }
-        Handles.CubeHandleCap(i, Vector3.zero, Quaternion.identity, 0.2f, EventType.Repaint);
-        Handles.matrix = Matrix4x4.identity;
-        Handles.color = Handles.zAxisColor;
-        Handles.DrawLine(point.WorldPos, point.WorldPos+( point.Forward * decorator.orientationRayLength));
-        Handles.color = Handles.yAxisColor;
-        Handles.DrawLine(point.WorldPos, point.WorldPos + (point.Up * decorator.orientationRayLength));
+        Vector3 camDir = (SceneView.currentDrawingSceneView.camera.transform.position- point.WorldPos).normalized;
+        camDir = point.LTWMatrix.inverse.MultiplyVector(camDir);
+        
+        if (Handles.Button(Vector3.zero, Quaternion.LookRotation(camDir), 0.1f, 0.1f, Handles.RectangleHandleCap))
+        {
+            return true;
+        }
+        return false;
     }
 
     public override void OnInspectorGUI()
@@ -66,6 +81,10 @@ public class ProceduralDecoratorEditor : Editor
             decorator.RemoveSelected();
         }
         DrawDefaultInspector();
+        if (GUILayout.Button("Set All To Bulk Allowed Items"))
+        {
+            decorator.BulkAllowFilter();
+        }
         if (GUILayout.Button("Decorate"))
         {
             decorator.Decorate();
