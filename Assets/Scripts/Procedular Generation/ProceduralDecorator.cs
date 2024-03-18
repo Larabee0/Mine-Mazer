@@ -18,9 +18,9 @@ public class ProceduralDecorator : MonoBehaviour
     [SerializeField] private float maxRayDst = 100;
     [SerializeField] private LayerMask layerMasks;
     [SerializeField] private bool showHitNormals = true;
-    [SerializeField] private Item bulkAllowedItems;
+    [SerializeField] private Item defaultAllowedItems;
     [Header("Point Raycaster")]
-    [SerializeField] bool showBasicRayCaster = true;
+    [SerializeField] bool enableBasicRayCaster = true;
     [SerializeField] private Transform raycaster;
     [SerializeField] private float spreadPlus = 180;
     [SerializeField] private float spreadMinus= -180;
@@ -28,7 +28,7 @@ public class ProceduralDecorator : MonoBehaviour
     [SerializeField] private Vector3 boxSize = new(0.2f, 0.2f, 0.2f);
 
     [Header("Mesh Raycaster")]
-    [SerializeField] bool showMeshRayCaster = true;
+    [SerializeField] bool enableMeshRayCaster = true;
     [SerializeField] bool meshFaceCasts = true;
     [SerializeField] bool meshVertexCasts = true;
     [SerializeField] private MeshFilter meshRayCaster;
@@ -40,7 +40,7 @@ public class ProceduralDecorator : MonoBehaviour
 
     public void Decorate()
     {
-        if (showMeshRayCaster && meshRayCaster != null)
+        if (enableMeshRayCaster && meshRayCaster != null)
         {
             SubMeshDescriptor subMesh = GatherMeshData();
 
@@ -60,7 +60,7 @@ public class ProceduralDecorator : MonoBehaviour
                         c1 = this.normals[i + 1],
                         c2 = this.normals[i + 2]
                     };
-                    Vector3 faceNormal = CalcNormalOfFace(vertices, normals);
+                    Vector3 faceNormal = FaceNormal(vertices, normals);
                     Vector3 faceCenter = (vertices[0] + vertices[1] + vertices[2]) / 3;
                     Vector3 pos = meshRayCaster.transform.TransformPoint(faceCenter);
                     Vector3 normal = meshRayCaster.transform.TransformDirection(faceNormal);
@@ -69,6 +69,7 @@ public class ProceduralDecorator : MonoBehaviour
                     {
                         proceduralPoints.Add(new()
                         {
+                            allowedItems = defaultAllowedItems,
                             localPosition = meshRayCaster.transform.InverseTransformPoint(hitInfo.point),
                             localOrientation = Quaternion.LookRotation(meshRayCaster.transform.InverseTransformDirection(hitInfo.normal)).eulerAngles,
                         });
@@ -87,6 +88,7 @@ public class ProceduralDecorator : MonoBehaviour
                     {
                         proceduralPoints.Add(new()
                         {
+                            allowedItems = defaultAllowedItems,
                             localPosition = meshRayCaster.transform.InverseTransformPoint(hitInfo.point),
                             localOrientation = Quaternion.LookRotation(meshRayCaster.transform.InverseTransformDirection(hitInfo.normal)).eulerAngles,
                         });
@@ -96,7 +98,7 @@ public class ProceduralDecorator : MonoBehaviour
             }
         }
 
-        if (showBasicRayCaster && raycaster != null && meshRayCaster != null)
+        if (enableBasicRayCaster && raycaster != null && meshRayCaster != null)
         {
             for (int i = 0; i < rayCount; i++)
             {
@@ -107,6 +109,7 @@ public class ProceduralDecorator : MonoBehaviour
                 {
                     proceduralPoints.Add(new()
                     {
+                        allowedItems = defaultAllowedItems,
                         localPosition = meshRayCaster.transform.InverseTransformPoint(hitInfo.point),
                         localOrientation = Quaternion.LookRotation(meshRayCaster.transform.InverseTransformDirection(hitInfo.normal)).eulerAngles,
                     });
@@ -120,7 +123,7 @@ public class ProceduralDecorator : MonoBehaviour
         proceduralPoints.Clear();
     }
 
-    private Vector3 CalcNormalOfFace(float3x3 pPositions, float3x3 pNormals )
+    private Vector3 FaceNormal(float3x3 pPositions, float3x3 pNormals )
     {
         Vector3 p0 = pPositions[1] - pPositions[0];
         Vector3 p1 = pPositions[2] - pPositions[0];
@@ -153,7 +156,7 @@ public class ProceduralDecorator : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if(showMeshRayCaster&&meshRayCaster != null)
+        if(enableMeshRayCaster&&meshRayCaster != null)
         {
             Gizmos.matrix = meshRayCaster.transform.localToWorldMatrix;
             Gizmos.color = Color.yellow;
@@ -176,7 +179,7 @@ public class ProceduralDecorator : MonoBehaviour
                         c1 = this.normals[i + 1],
                         c2 = this.normals[i + 2]
                     };
-                    Vector3 faceNormal = CalcNormalOfFace(vertices, normals);
+                    Vector3 faceNormal = FaceNormal(vertices, normals);
                     Vector3 faceCenter = (vertices[0] + vertices[1] + vertices[2]) / 3;
                     Vector3 pos = meshRayCaster.transform.TransformPoint(faceCenter);
                     Vector3 normal = meshRayCaster.transform.TransformDirection(faceNormal);
@@ -219,7 +222,7 @@ public class ProceduralDecorator : MonoBehaviour
         }
 
 
-        if (showBasicRayCaster&&raycaster != null)
+        if (enableBasicRayCaster&&raycaster != null)
         {
             Gizmos.matrix = raycaster.localToWorldMatrix;
             Gizmos.DrawCube(Vector3.zero, boxSize);
@@ -329,13 +332,14 @@ public class ProceduralDecorator : MonoBehaviour
 
     public void FocusSceneCamera()
     {
-        if (meshRayCaster == null) return;
+        if (meshRayCaster == null || proceduralPoints.Count == 0 || selectPoint  < proceduralPoints.Count) return;
         Vector3 pos = meshRayCaster.transform.TransformPoint(proceduralPoints[selectPoint].localPosition);
         SceneView.lastActiveSceneView.Frame(new Bounds(pos, Vector3.one), false);
     }
 
     public void IncrementSelection(int increment)
     {
+        if (proceduralPoints.Count == 0 || selectPoint < proceduralPoints.Count) return;
         int next = selectPoint + increment;
         next = next >= proceduralPoints.Count ?  0: next;
         next = next < 0 ? proceduralPoints.Count -1 : next;
@@ -348,7 +352,7 @@ public class ProceduralDecorator : MonoBehaviour
         for (int i = 0; i < proceduralPoints.Count; i++)
         {
             ProDecPoint p = proceduralPoints[i];
-            p.allowedItems = bulkAllowedItems;
+            p.allowedItems = defaultAllowedItems;
             proceduralPoints[i] = p;
         }
     }

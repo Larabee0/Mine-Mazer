@@ -21,7 +21,7 @@ public class ProceduralDecoratorEditor : Editor
                     decorator.selectPoint = i;
                 }
             }
-            if (decorator.selectPoint < decorator.proceduralPoints.Count)
+            if (decorator.selectPoint < decorator.proceduralPoints.Count && decorator.selectPoint >= 0)
             {
                 if (Event.current != null &&
                         Event.current.isKey &&
@@ -81,7 +81,7 @@ public class ProceduralDecoratorEditor : Editor
             decorator.RemoveSelected();
         }
         DrawDefaultInspector();
-        if (GUILayout.Button("Set All To Bulk Allowed Items"))
+        if (GUILayout.Button("Set All To Default Allowed Items"))
         {
             decorator.BulkAllowFilter();
         }

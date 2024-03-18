@@ -886,6 +886,18 @@ MonoBehaviour:
     localPosition: {x: 0.35939366, y: 2.932602, z: -3.518291}
     localOrientation: {x: 67.3244, y: 324.39865, z: -0.000008858569}
   - allowedItems: 0
+    localPosition: {x: 0.6279042, y: 2.766632, z: -4.4222116}
+    localOrientation: {x: 64.14674, y: 216.47528, z: -0.0000039157835}
+  - allowedItems: 0
+    localPosition: {x: 0.7649319, y: 3.1551995, z: -4.880163}
+    localOrientation: {x: 62.90883, y: 246.61017, z: 0}
+  - allowedItems: 0
+    localPosition: {x: -0.64127827, y: 2.9124207, z: -3.513196}
+    localOrientation: {x: 21.128948, y: 358.7077, z: -0.000000028603386}
+  - allowedItems: 0
+    localPosition: {x: -0.74280655, y: 2.9314747, z: -3.5110807}
+    localOrientation: {x: 20.52401, y: 355.6276, z: -0.000000056977473}
+  - allowedItems: 0
     localPosition: {x: -1.1382134, y: 1.1375707, z: -1.2116976}
     localOrientation: {x: 18.862165, y: 73.0587, z: 0.00000090222386}
   - allowedItems: 0
@@ -1099,6 +1111,9 @@ MonoBehaviour:
     localPosition: {x: -0.053944707, y: 2.4741912, z: 0.13879347}
     localOrientation: {x: 36.67586, y: 239.14879, z: -0.0000042580773}
   - allowedItems: 0
+    localPosition: {x: 1.7717569, y: 0.6816061, z: -1.2165217}
+    localOrientation: {x: 333.67184, y: 270.89758, z: 0.0000019051735}
+  - allowedItems: 0
     localPosition: {x: 1.0768771, y: 2.161881, z: -0.72145844}
     localOrientation: {x: 33.104977, y: 261.50458, z: 0}
   - allowedItems: 0
@@ -1242,6 +1257,9 @@ MonoBehaviour:
   - allowedItems: 0
     localPosition: {x: 1.602711, y: 1.5625098, z: -2.7476258}
     localOrientation: {x: 338.13177, y: 224.90334, z: -0.0000018399439}
+  - allowedItems: 0
+    localPosition: {x: 1.4587955, y: 0.82278955, z: -0.15133858}
+    localOrientation: {x: 294.74805, y: 244.04346, z: 0.000008157811}
   - allowedItems: 0
     localPosition: {x: -1.3405684, y: 0.3312364, z: -1.5221066}
     localOrientation: {x: 333.9445, y: 20.398539, z: -0.00000047517986}
@@ -2491,29 +2509,33 @@ MonoBehaviour:
     localPosition: {x: -0.49160087, y: 2.945759, z: -4.1966715}
     localOrientation: {x: 37.142696, y: 326.9072, z: 0}
   - allowedItems: 0
+    localPosition: {x: -1.2457699, y: 2.3835368, z: -4.1288166}
+    localOrientation: {x: 345.48248, y: 18.063047, z: -0.00000022048323}
+  - allowedItems: 0
     localPosition: {x: -1.3490262, y: 2.2819088, z: -3.7701817}
     localOrientation: {x: 356.61783, y: 160.7573, z: 0}
   - allowedItems: 0
     localPosition: {x: -0.3253801, y: 3.0149152, z: -1.252202}
     localOrientation: {x: 1.6823438, y: 47.442787, z: -0.000000053383868}
   orientationRayLength: 0.2
-  selectPoint: 72
+  selectPoint: 151
   selectedPoint:
     allowedItems: 0
-    localPosition: {x: -1.3490262, y: 2.2819088, z: -3.7701817}
-    localOrientation: {x: 356.61783, y: 160.7573, z: 0}
+    localPosition: {x: 0.35939366, y: 2.932602, z: -3.518291}
+    localOrientation: {x: 67.3244, y: 324.39865, z: -0.000008858569}
   maxRayDst: 100
   layerMasks:
     serializedVersion: 2
     m_Bits: 2048
   showHitNormals: 1
-  showBasicRayCaster: 0
+  defaultAllowedItems: 0
+  enableBasicRayCaster: 0
   raycaster: {fileID: 1857353270}
   spreadPlus: 120
   spreadMinus: -120
   rayCount: 13
   boxSize: {x: 0.2, y: 0.2, z: 0.2}
-  showMeshRayCaster: 0
+  enableMeshRayCaster: 0
   meshFaceCasts: 1
   meshVertexCasts: 0
   meshRayCaster: {fileID: 812284549}
