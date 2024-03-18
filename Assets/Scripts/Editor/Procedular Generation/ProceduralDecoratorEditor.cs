@@ -39,20 +39,43 @@ public class ProceduralDecoratorEditor : Editor
             }
         }
     }
-    
+    public bool Is01(float a)
+    {
+        return a > 0 && a < 1;
+    }
     private bool DrawProceduralHandle(int i,ProDecPoint point)
     {
         ProceduralDecorator decorator = (ProceduralDecorator)target;
-        Handles.matrix = point.LTWMatrix;
+        Vector3 viewPort = SceneView.currentDrawingSceneView.camera.WorldToViewportPoint(point.WorldPos);
+
+        if(!Is01(viewPort.x) || !Is01(viewPort.y))
+        {
+            return false;
+        }
+        if(viewPort.z < 0)
+        {
+            return false;
+        }
+
+        Vector3 camPos = SceneView.currentDrawingSceneView.camera.transform.position;
+        Vector3 camDir = decorator.invertHandles ? (point.WorldPos - camPos).normalized : (camPos - point.WorldPos).normalized;
+        Handles.matrix = Matrix4x4.TRS( point.WorldPos,Quaternion.LookRotation(camDir),Vector3.one);
+        //Handles.matrix = point.LTWMatrix;
         Handles.color = Color.gray;
         if (decorator.selectPoint == i)
         {
             Handles.color = Color.cyan;
         }
-        Vector3 camDir = (SceneView.currentDrawingSceneView.camera.transform.position- point.WorldPos).normalized;
-        camDir = point.LTWMatrix.inverse.MultiplyVector(camDir);
+        float dst = Mathf.Abs((point.WorldPos - camPos).magnitude);
+        if (dst > decorator.handleDrawRadius || dst < decorator.handleCullRadius)
+        {
+            return false;
+        }
         
-        if (Handles.Button(Vector3.zero, Quaternion.LookRotation(camDir), 0.1f, 0.1f, Handles.RectangleHandleCap))
+        
+        camDir = point.LTWMatrix.inverse.MultiplyVector(camDir);
+        // Quaternion.LookRotation(camDir)
+        if (Handles.Button(Vector3.zero, Quaternion.identity, 0.1f, 0.1f, Handles.RectangleHandleCap))
         {
             return true;
         }

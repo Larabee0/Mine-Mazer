@@ -5,9 +5,13 @@ using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
 public class ProceduralDecorator : MonoBehaviour
 {
+    [Header("Runtime")]
+    [SerializeField]private MapResource[] resources;
+    [SerializeField] private float coverage = 1f;
     [Header("Generated Points")]
     [SerializeField] private bool showProceduralPoints = true;
     public List<ProDecPoint> proceduralPoints;
@@ -18,6 +22,9 @@ public class ProceduralDecorator : MonoBehaviour
     [SerializeField] private float maxRayDst = 100;
     [SerializeField] private LayerMask layerMasks;
     [SerializeField] private bool showHitNormals = true;
+    public bool invertHandles = true;
+    public float handleDrawRadius = 100;
+    public float handleCullRadius = 0.01f;
     [SerializeField] private Item defaultAllowedItems;
     [Header("Point Raycaster")]
     [SerializeField] bool enableBasicRayCaster = true;
@@ -37,6 +44,27 @@ public class ProceduralDecorator : MonoBehaviour
     private List<Vector3> vertices =new() ;
     private List<Vector3> normals = new();
     private List<int> indices = new();
+
+    private void Start()
+    {
+        List<ProDecPoint> points = new(proceduralPoints);
+        while((float)points.Count / (float)proceduralPoints.Count > 1f- coverage)
+        {
+            int index = Random.Range(0, points.Count);
+            ProDecPoint point = points[index];
+            points.RemoveAt(index);
+            point.UpdateMatrix(meshRayCaster.transform.localToWorldMatrix);
+            MapResource trs = Instantiate(resources[Random.Range(0, resources.Length)], point.WorldPos, Quaternion.identity, transform);
+            trs.transform.up = point.Up;
+            if(trs.ItemStats.type == Item.Versicolor)
+            {
+                continue;
+            }
+            // trs.transform.RotateAroundLocal(Vector3.up, Random.Range(0, 359f));
+            trs.transform.Rotate(Vector3.up, Random.Range(0, 359f) , Space.Self);
+
+        }
+    }
 
     public void Decorate()
     {
@@ -285,9 +313,9 @@ public class ProceduralDecorator : MonoBehaviour
         }
         Gizmos.DrawCube(Vector3.zero, new Vector3(0.2f, 0.2f, 0.2f));
         Gizmos.matrix = Matrix4x4.identity;
-        Gizmos.color = Color.green;
-        Gizmos.DrawRay(point.WorldPos, point.Forward * orientationRayLength);
         Gizmos.color = Color.blue;
+        Gizmos.DrawRay(point.WorldPos, point.Forward * orientationRayLength);
+        Gizmos.color = Color.green;
         Gizmos.DrawRay(point.WorldPos, point.Up * orientationRayLength);
     }
 
@@ -332,14 +360,14 @@ public class ProceduralDecorator : MonoBehaviour
 
     public void FocusSceneCamera()
     {
-        if (meshRayCaster == null || proceduralPoints.Count == 0 || selectPoint  < proceduralPoints.Count) return;
+        if (meshRayCaster == null || proceduralPoints.Count == 0 ) return;
         Vector3 pos = meshRayCaster.transform.TransformPoint(proceduralPoints[selectPoint].localPosition);
         SceneView.lastActiveSceneView.Frame(new Bounds(pos, Vector3.one), false);
     }
 
     public void IncrementSelection(int increment)
     {
-        if (proceduralPoints.Count == 0 || selectPoint < proceduralPoints.Count) return;
+        if (proceduralPoints.Count == 0) return;
         int next = selectPoint + increment;
         next = next >= proceduralPoints.Count ?  0: next;
         next = next < 0 ? proceduralPoints.Count -1 : next;
@@ -367,8 +395,8 @@ public struct ProDecPoint
     public Vector3 localPosition;
     public Vector3 localOrientation;
     public Vector3 WorldPos => internalMatrix.GetPosition();
-    public Vector3 Forward => internalMatrix.rotation * Vector3.forward;
-    public Vector3 Up => internalMatrix.rotation * Vector3.up;
+    public Vector3 Forward => internalMatrix.rotation * Vector3.up;
+    public Vector3 Up => internalMatrix.rotation * Vector3.forward;
 
     private Matrix4x4 internalMatrix;
     public Matrix4x4 LTWMatrix=>internalMatrix;

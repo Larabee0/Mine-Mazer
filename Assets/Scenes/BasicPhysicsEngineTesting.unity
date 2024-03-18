@@ -123,6 +123,79 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &237604825
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.37842274
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -4.9878592
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.09828912
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.99515796
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -168.719
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171837018204868551, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356439156297477815, guid: e78a1712f70fb7344af802fa73a4a9cd,
+        type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e78a1712f70fb7344af802fa73a4a9cd, type: 3}
 --- !u!1 &564880954
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,7 +214,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &564880955
 AudioListener:
   m_ObjectHideFlags: 0
@@ -208,14 +281,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564880954}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: -0, y: -0.9987526, z: -0, w: -0.049932964}
+  m_LocalPosition: {x: -0.94, y: 1, z: -3.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -185.724, z: 0}
 --- !u!114 &564880958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,10 +341,15 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7828326497253743768, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1429367492707383238, guid: 2a118433d47760043984e4217cbe88eb,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1429367492707383238, guid: 2a118433d47760043984e4217cbe88eb,
         type: 3}
@@ -323,15 +401,60 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1820675240154699011, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4269815365287238860, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4911901052784995620, guid: 2a118433d47760043984e4217cbe88eb,
         type: 3}
       propertyPath: m_Materials.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5506024862464312451, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6564147179344476222, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6674858670456143202, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6759163784394604870, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8129435086377825582, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8403103537517632355, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8681580645595225079, guid: 2a118433d47760043984e4217cbe88eb,
         type: 3}
       propertyPath: m_Name
       value: 10mCaveL Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 8681580645595225079, guid: 2a118433d47760043984e4217cbe88eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -457,8 +580,86 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1286987792
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 740248430482604734, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_Name
+      value: EventSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 740248430482604734, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b397e3102ab06d14299ccf9b0a3a7391, type: 3}
 --- !u!1 &1394629796
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,7 +763,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1427374151
 GameObject:
@@ -607,7 +808,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1440173595
 GameObject:
@@ -702,7 +903,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &1440173598
 MonoBehaviour:
@@ -834,7 +1035,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1857353269
 GameObject:
@@ -860,14 +1061,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1857353269}
-  m_LocalRotation: {x: -0, y: -0.03552635, z: -0, w: 0.9993688}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.218, y: 0.87, z: -6.122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: -4.072, z: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1857353271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -880,20 +1081,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b04c6a53630d144cbb61e4e9a806b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resources:
+  - {fileID: 3565088614593601416, guid: 3c8b3f5bd5efeee438dafb6b3e228702, type: 3}
+  - {fileID: 7997864154563303630, guid: 0a09be007c6dd7c4b869b76bf64edde5, type: 3}
+  - {fileID: 678389460508024077, guid: e37c9161e520454408ee03a216c58578, type: 3}
+  - {fileID: 2734561250547876230, guid: 16310883cbb6ec24f96c43b8f5ab925f, type: 3}
+  - {fileID: 2540538277186201747, guid: 8e335f83c614acd44abc222d72fb057a, type: 3}
+  - {fileID: 6506559788001277901, guid: 8f71a7f6279df344a8bc612a68214abe, type: 3}
+  coverage: 0.5
   showProceduralPoints: 1
   proceduralPoints:
-  - allowedItems: 0
-    localPosition: {x: 0.35939366, y: 2.932602, z: -3.518291}
-    localOrientation: {x: 67.3244, y: 324.39865, z: -0.000008858569}
-  - allowedItems: 0
-    localPosition: {x: 0.6279042, y: 2.766632, z: -4.4222116}
-    localOrientation: {x: 64.14674, y: 216.47528, z: -0.0000039157835}
-  - allowedItems: 0
-    localPosition: {x: 0.7649319, y: 3.1551995, z: -4.880163}
-    localOrientation: {x: 62.90883, y: 246.61017, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.64127827, y: 2.9124207, z: -3.513196}
-    localOrientation: {x: 21.128948, y: 358.7077, z: -0.000000028603386}
   - allowedItems: 0
     localPosition: {x: -0.74280655, y: 2.9314747, z: -3.5110807}
     localOrientation: {x: 20.52401, y: 355.6276, z: -0.000000056977473}
@@ -907,23 +1104,11 @@ MonoBehaviour:
     localPosition: {x: -0.7830579, y: 2.314016, z: -1.0197439}
     localOrientation: {x: 37.98525, y: 160.25983, z: 0.0000010832363}
   - allowedItems: 0
-    localPosition: {x: -0.72344995, y: 2.5371783, z: -1.4790807}
-    localOrientation: {x: 64.83974, y: 119.03785, z: -0.000008032645}
-  - allowedItems: 0
-    localPosition: {x: -1.0317967, y: 2.8204763, z: -2.0553493}
-    localOrientation: {x: 47.66731, y: 269.51184, z: 0.0000025355803}
-  - allowedItems: 0
     localPosition: {x: -0.94599986, y: 0.55213743, z: -2.3873224}
     localOrientation: {x: 67.5922, y: 91.52897, z: 0.000004479441}
   - allowedItems: 0
-    localPosition: {x: -0.8830292, y: 0.3844702, z: -2.9798827}
-    localOrientation: {x: 26.134195, y: 51.814648, z: -0.0000009509991}
-  - allowedItems: 0
     localPosition: {x: -0.34504032, y: 2.9300191, z: -0.3522911}
     localOrientation: {x: 22.507557, y: 217.17589, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.6531639, y: 2.317824, z: -0.63871145}
-    localOrientation: {x: 32.220814, y: 334.1994, z: 0}
   - allowedItems: 0
     localPosition: {x: -0.014096677, y: 3.1614914, z: -1.1910377}
     localOrientation: {x: 15.852044, y: 212.59227, z: 0}
@@ -940,9 +1125,6 @@ MonoBehaviour:
     localPosition: {x: 0.18602951, y: 2.347502, z: -2.373252}
     localOrientation: {x: 65.26308, y: 246.33057, z: 0.000012241861}
   - allowedItems: 0
-    localPosition: {x: -1.0164475, y: 2.9549706, z: -3.375928}
-    localOrientation: {x: 62.973976, y: 92.713936, z: 0.000003757846}
-  - allowedItems: 0
     localPosition: {x: 0.45785493, y: 3.122705, z: -0.1321044}
     localOrientation: {x: 36.626934, y: 123.10139, z: 0.000002127686}
   - allowedItems: 0
@@ -952,35 +1134,17 @@ MonoBehaviour:
     localPosition: {x: 0.7814092, y: 2.445382, z: -1.7291393}
     localOrientation: {x: 28.900873, y: 336.36758, z: 0.0000004876158}
   - allowedItems: 0
-    localPosition: {x: 0.4426903, y: 2.5598838, z: -2.2441387}
-    localOrientation: {x: 63.203053, y: 69.35183, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.53536075, y: 2.6632452, z: -1.6801558}
-    localOrientation: {x: 63.851444, y: 119.61466, z: -0.000007749249}
-  - allowedItems: 0
     localPosition: {x: 0.6919277, y: 2.529603, z: -1.1678586}
     localOrientation: {x: 52.712704, y: 260.63867, z: 0.0000028186091}
   - allowedItems: 0
-    localPosition: {x: 0.6703915, y: 2.5554526, z: -1.5644002}
-    localOrientation: {x: 63.17197, y: 145.50633, z: 0}
-  - allowedItems: 0
     localPosition: {x: 0.3578459, y: 2.5267088, z: -2.180821}
     localOrientation: {x: 56.819202, y: 71.79371, z: 0.000006240093}
-  - allowedItems: 0
-    localPosition: {x: 0.7562531, y: 2.2791252, z: -2.3688097}
-    localOrientation: {x: 48.904987, y: 163.42213, z: 0}
   - allowedItems: 0
     localPosition: {x: 0.8794044, y: 2.5928788, z: -2.880415}
     localOrientation: {x: 72.54306, y: 303.1603, z: 0}
   - allowedItems: 0
     localPosition: {x: 0.7456652, y: 2.688774, z: -4.2111034}
     localOrientation: {x: 70.48392, y: 37.18082, z: -0.000005111322}
-  - allowedItems: 0
-    localPosition: {x: 1.2031505, y: 2.6542578, z: -5.270015}
-    localOrientation: {x: 40.076733, y: 37.164165, z: 0.0000022315542}
-  - allowedItems: 0
-    localPosition: {x: -0.9255382, y: 2.5340905, z: -4.2111053}
-    localOrientation: {x: 53.962902, y: 159.85704, z: -0.0000014512336}
   - allowedItems: 0
     localPosition: {x: -0.4091851, y: 2.8092275, z: -5.617815}
     localOrientation: {x: 42.044926, y: 64.44893, z: 0.0000022993554}
@@ -996,9 +1160,6 @@ MonoBehaviour:
   - allowedItems: 0
     localPosition: {x: 1.6148939, y: 2.9862876, z: -6.4997663}
     localOrientation: {x: 60.603573, y: 255.95856, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 1.2767326, y: 2.9546947, z: -6.702545}
-    localOrientation: {x: 42.408737, y: 76.77217, z: 0}
   - allowedItems: 0
     localPosition: {x: 4.17823, y: 2.3944001, z: -8.628278}
     localOrientation: {x: 40.430294, y: 199.43896, z: 0}
@@ -1045,9 +1206,6 @@ MonoBehaviour:
     localPosition: {x: 9.7253895, y: 2.7611294, z: -10.756479}
     localOrientation: {x: 77.481285, y: 61.002632, z: 0.000015755268}
   - allowedItems: 0
-    localPosition: {x: 5.6712685, y: 3.1034613, z: -9.29707}
-    localOrientation: {x: 28.580772, y: 95.604996, z: 0.000002916745}
-  - allowedItems: 0
     localPosition: {x: 5.7855144, y: 3.1085856, z: -9.271447}
     localOrientation: {x: 62.953854, y: 183.59468, z: 0.00000046940764}
   - allowedItems: 0
@@ -1090,20 +1248,11 @@ MonoBehaviour:
     localPosition: {x: 0.50920975, y: 2.7339087, z: -6.1893597}
     localOrientation: {x: 42.623753, y: 115.822685, z: -0.0000046412315}
   - allowedItems: 0
-    localPosition: {x: 0.809744, y: -0.022648934, z: -0.37344933}
-    localOrientation: {x: 273.79962, y: 351.7864, z: 0}
-  - allowedItems: 0
     localPosition: {x: 0.74340457, y: -0.015309547, z: -0.55561495}
     localOrientation: {x: 272.72598, y: 60.97264, z: 0.000107714965}
   - allowedItems: 0
-    localPosition: {x: -1.0573891, y: 2.7470088, z: -0.9382005}
-    localOrientation: {x: 24.798307, y: 155.3418, z: -0.00000047024844}
-  - allowedItems: 0
     localPosition: {x: -1.2297698, y: 2.809439, z: -0.103106976}
     localOrientation: {x: 44.993484, y: 88.781265, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.0926573, y: 2.360864, z: -1.3065934}
-    localOrientation: {x: 53.95019, y: 160.35834, z: 0.0000014507908}
   - allowedItems: 0
     localPosition: {x: -1.2127728, y: 2.2458947, z: -1.9629455}
     localOrientation: {x: 321.48486, y: 54.564095, z: 0}
@@ -1117,26 +1266,11 @@ MonoBehaviour:
     localPosition: {x: 1.0768771, y: 2.161881, z: -0.72145844}
     localOrientation: {x: 33.104977, y: 261.50458, z: 0}
   - allowedItems: 0
-    localPosition: {x: 1.1011695, y: 2.5416894, z: -0.12999964}
-    localOrientation: {x: 67.56733, y: 238.1955, z: -0.000008949461}
-  - allowedItems: 0
     localPosition: {x: -0.6720799, y: 2.7482882, z: -2.9134393}
     localOrientation: {x: 23.937561, y: 262.34668, z: -0.00000093411893}
   - allowedItems: 0
-    localPosition: {x: 1.0875587, y: 2.2578015, z: -0.9299607}
-    localOrientation: {x: 4.894691, y: 235.29892, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.0548851, y: 2.6248305, z: -4.459218}
-    localOrientation: {x: 328.39526, y: 69.21807, z: -0.0000020049076}
-  - allowedItems: 0
-    localPosition: {x: -1.7420914, y: 0.79064786, z: -2.623787}
-    localOrientation: {x: 356.54456, y: 17.49749, z: 0}
-  - allowedItems: 0
     localPosition: {x: -0.8147135, y: 2.5782366, z: -4.2315197}
     localOrientation: {x: 54.608707, y: 143.78497, z: -0.000004422497}
-  - allowedItems: 0
-    localPosition: {x: 1.5487998, y: 2.4309015, z: -2.962595}
-    localOrientation: {x: 27.046326, y: 268.12643, z: -0.0000028758232}
   - allowedItems: 0
     localPosition: {x: -1.4800851, y: 1.1278892, z: -4.5006056}
     localOrientation: {x: 322.12604, y: 6.838082, z: 0.00000027039945}
@@ -1144,41 +1278,20 @@ MonoBehaviour:
     localPosition: {x: 2.8143387, y: -0.016789585, z: -8.112775}
     localOrientation: {x: 273.86725, y: 137.32272, z: 0}
   - allowedItems: 0
-    localPosition: {x: 1.0223999, y: 2.6713588, z: -5.269388}
-    localOrientation: {x: 54.43538, y: 309.5046, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.0695393, y: 1.6249219, z: -6.6054115}
-    localOrientation: {x: 299.04437, y: 168.90118, z: 0}
-  - allowedItems: 0
     localPosition: {x: 1.5349547, y: 2.4684033, z: -3.1249666}
     localOrientation: {x: 27.046326, y: 268.12643, z: -0.0000028758232}
   - allowedItems: 0
     localPosition: {x: 0.6656273, y: 2.8098013, z: -5.638735}
     localOrientation: {x: 8.428039, y: 278.79086, z: -0.00000043154722}
   - allowedItems: 0
-    localPosition: {x: 0.6501458, y: 2.8716295, z: -5.6622334}
-    localOrientation: {x: 10.126619, y: 303.33926, z: -0.00000043364233}
-  - allowedItems: 0
     localPosition: {x: -0.62830734, y: 2.6590812, z: -4.855811}
     localOrientation: {x: 59.130867, y: 172.94722, z: -0.0000004160051}
-  - allowedItems: 0
-    localPosition: {x: 0.5296764, y: 3.1906223, z: -0.33965445}
-    localOrientation: {x: 80.95995, y: 275.4428, z: -0.000032602333}
   - allowedItems: 0
     localPosition: {x: 0.08115259, y: 2.8030667, z: -1.1688018}
     localOrientation: {x: 52.60604, y: 234.95303, z: -0.000002811739}
   - allowedItems: 0
-    localPosition: {x: -0.9422679, y: 0.55388075, z: -2.404665}
-    localOrientation: {x: 67.008316, y: 93.619225, z: 0.000004371628}
-  - allowedItems: 0
-    localPosition: {x: 0.6268336, y: 3.1370518, z: -3.559569}
-    localOrientation: {x: 18.908167, y: 214.91806, z: -0.00000045123588}
-  - allowedItems: 0
     localPosition: {x: 0.49447876, y: 2.7653124, z: -4.4222107}
     localOrientation: {x: 9.456148, y: 234.17043, z: 0.0000004327674}
-  - allowedItems: 0
-    localPosition: {x: -0.37736058, y: 0.3494132, z: -6.9832516}
-    localOrientation: {x: 42.64436, y: 9.528516, z: 0.000000290173}
   - allowedItems: 0
     localPosition: {x: 2.7657118, y: 2.822143, z: -8.14292}
     localOrientation: {x: 347.3557, y: 278.7117, z: -0.0000004374971}
@@ -1204,9 +1317,6 @@ MonoBehaviour:
     localPosition: {x: -1.4080558, y: 1.8046192, z: -1.2245197}
     localOrientation: {x: 340.03708, y: 71.070595, z: 0}
   - allowedItems: 0
-    localPosition: {x: -1.6106896, y: 1.8923314, z: -1.6391306}
-    localOrientation: {x: 322.1793, y: 139.02806, z: -0.0000010808172}
-  - allowedItems: 0
     localPosition: {x: -1.3981591, y: 1.7394552, z: -2.438304}
     localOrientation: {x: 36.517136, y: 86.20194, z: -0.0000042493266}
   - allowedItems: 0
@@ -1216,38 +1326,20 @@ MonoBehaviour:
     localPosition: {x: -1.5898522, y: 1.9666018, z: -5.378686}
     localOrientation: {x: 26.994604, y: 72.93828, z: 0.0000009581665}
   - allowedItems: 0
-    localPosition: {x: 0.4571712, y: 2.6174867, z: -6.7712717}
-    localOrientation: {x: 82.233376, y: 178.4237, z: 0.00000039486088}
-  - allowedItems: 0
     localPosition: {x: 3.1702955, y: 2.4309266, z: -9.552297}
     localOrientation: {x: 22.392204, y: 330.35474, z: -0.00000046169995}
   - allowedItems: 0
     localPosition: {x: 5.3906937, y: 2.8284397, z: -10.300746}
     localOrientation: {x: 85.06334, y: 108.13576, z: 0}
   - allowedItems: 0
-    localPosition: {x: 6.836975, y: 2.672699, z: -10.4635315}
-    localOrientation: {x: 8.332488, y: 283.01685, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 7.9660974, y: 0.27116218, z: -8.702983}
-    localOrientation: {x: 18.897202, y: 58.43996, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 9.40226, y: 0.0713258, z: -8.764765}
-    localOrientation: {x: 39.522827, y: 147.6614, z: 0.0000011068261}
+    localPosition: {x: 9.52, y: 0.0713258, z: -8.764765}
+    localOrientation: {x: -49.76, y: 147.6614, z: 0.0000011068261}
   - allowedItems: 0
     localPosition: {x: -1.5414889, y: 1.359917, z: -0.6993141}
     localOrientation: {x: 339.3077, y: 96.711426, z: -0.000000912647}
   - allowedItems: 0
-    localPosition: {x: 1.7061222, y: 1.7472439, z: -0.66058064}
-    localOrientation: {x: 60.480335, y: 6.2605724, z: 0.00000043319216}
-  - allowedItems: 0
-    localPosition: {x: 1.4853871, y: 1.3373137, z: -1.0458851}
-    localOrientation: {x: 303.49442, y: 246.7861, z: 0.000003094192}
-  - allowedItems: 0
     localPosition: {x: 1.5299529, y: 1.8905256, z: -1.6711521}
     localOrientation: {x: 34.315052, y: 350.19, z: -0.0000002584216}
-  - allowedItems: 0
-    localPosition: {x: 1.090172, y: 2.6570463, z: -0.70446825}
-    localOrientation: {x: 16.531965, y: 36.605095, z: 0}
   - allowedItems: 0
     localPosition: {x: 1.7939184, y: 1.9631871, z: -3.110445}
     localOrientation: {x: 28.478203, y: 269.59637, z: 0}
@@ -1270,41 +1362,11 @@ MonoBehaviour:
     localPosition: {x: 1.4101269, y: 2.3059688, z: -2.7941198}
     localOrientation: {x: 311.3296, y: 244.59044, z: 0}
   - allowedItems: 0
-    localPosition: {x: -0.0066640973, y: 3.0653644, z: -2.3911538}
-    localOrientation: {x: 315.00363, y: 46.125298, z: 0.0000048293655}
-  - allowedItems: 0
-    localPosition: {x: 0.056435227, y: -0.07160749, z: -1.2724519}
-    localOrientation: {x: 274.9334, y: 245.20099, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.3802515, y: -0.00022168271, z: -1.5047064}
-    localOrientation: {x: 282.76984, y: 340.19028, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.51616895, y: -0.04285266, z: -4.500948}
-    localOrientation: {x: 274.74573, y: 89.999985, z: 0.000020638596}
-  - allowedItems: 0
-    localPosition: {x: -0.19450623, y: -0.0185565, z: -1.6314225}
-    localOrientation: {x: 282.8886, y: 338.72675, z: -0.000003827612}
-  - allowedItems: 0
-    localPosition: {x: 1.091588, y: 2.8623228, z: -4.650462}
-    localOrientation: {x: 345.28546, y: 303.2885, z: -0.000000441362}
-  - allowedItems: 0
-    localPosition: {x: 0.34355426, y: 3.2251828, z: -5.495867}
-    localOrientation: {x: 0.3919997, y: 161.64293, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 3.257475, y: 2.4596567, z: -9.517987}
-    localOrientation: {x: 335.99994, y: 5.07472, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 1.4183873, y: 3.0716877, z: -7.7951107}
-    localOrientation: {x: 354.2765, y: 7.7283573, z: -0.000000080442305}
-  - allowedItems: 0
     localPosition: {x: 1.5057591, y: 2.3677456, z: -5.72062}
     localOrientation: {x: 53.615902, y: 159.91803, z: 0}
   - allowedItems: 0
     localPosition: {x: 0.9543182, y: 1.8372481, z: -8.905468}
     localOrientation: {x: 14.374589, y: 38.286674, z: -0.0000004406831}
-  - allowedItems: 0
-    localPosition: {x: 2.1435251, y: -0.012885597, z: -9.021042}
-    localOrientation: {x: 275.71075, y: 187.47165, z: -0.000008580027}
   - allowedItems: 0
     localPosition: {x: 3.474424, y: 0.547035, z: -10.626308}
     localOrientation: {x: 277.2953, y: 147.69907, z: 0}
@@ -1318,12 +1380,6 @@ MonoBehaviour:
     localPosition: {x: 6.556737, y: 2.2648423, z: -11.32135}
     localOrientation: {x: 342.46313, y: 313.712, z: 0.00000044769416}
   - allowedItems: 0
-    localPosition: {x: 5.251094, y: 0.0089431815, z: -9.525019}
-    localOrientation: {x: 276.39105, y: 42.165874, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 7.9125843, y: -0.036808744, z: -11.076352}
-    localOrientation: {x: 270.5432, y: 0, z: 0}
-  - allowedItems: 0
     localPosition: {x: 7.6226797, y: 2.572256, z: -11.032072}
     localOrientation: {x: 13.561631, y: 338.79556, z: 0}
   - allowedItems: 0
@@ -1333,14 +1389,8 @@ MonoBehaviour:
     localPosition: {x: 6.1514397, y: 0.31581482, z: -8.858328}
     localOrientation: {x: 273.21204, y: 201.34378, z: 0.000015237622}
   - allowedItems: 0
-    localPosition: {x: 9.060682, y: 3.0756376, z: -9.362863}
-    localOrientation: {x: 17.003603, y: 123.078, z: 0.00000089280115}
-  - allowedItems: 0
     localPosition: {x: 7.8163853, y: 0.275291, z: -8.959658}
     localOrientation: {x: 357.78656, y: 144.43141, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 9.401192, y: 3.2240884, z: -10.215993}
-    localOrientation: {x: 312.30698, y: 63.69425, z: -0.000005073661}
   - allowedItems: 0
     localPosition: {x: 9.61338, y: -0.045579806, z: -9.406311}
     localOrientation: {x: 270.76846, y: 135.01463, z: 0.00025461396}
@@ -1357,26 +1407,14 @@ MonoBehaviour:
     localPosition: {x: 3.6448236, y: 2.5949638, z: -8.691749}
     localOrientation: {x: 18.444605, y: 101.125595, z: -0.000000900007}
   - allowedItems: 0
-    localPosition: {x: 3.2733688, y: 1.7171204, z: -7.31065}
-    localOrientation: {x: 79.28473, y: 18.188103, z: -0.0000045919396}
-  - allowedItems: 0
     localPosition: {x: 4.1421776, y: 1.3110797, z: -11.1789665}
     localOrientation: {x: 315.86316, y: 27.365442, z: -0.0000011896321}
   - allowedItems: 0
     localPosition: {x: 4.4390144, y: 0.3326559, z: -10.704739}
     localOrientation: {x: 44.02699, y: 37.002296, z: 0}
   - allowedItems: 0
-    localPosition: {x: 3.5080638, y: 0.5425756, z: -10.715313}
-    localOrientation: {x: 274.53662, y: 181.56087, z: -0.0000013492605}
-  - allowedItems: 0
     localPosition: {x: 5.0671215, y: 0.043821827, z: -11.050039}
     localOrientation: {x: 304.21887, y: 17.303898, z: 0.0000007591046}
-  - allowedItems: 0
-    localPosition: {x: 5.2453933, y: -0.00016445108, z: -10.3190155}
-    localOrientation: {x: 275.54504, y: 168.09459, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 7.458668, y: 1.2575493, z: -8.341665}
-    localOrientation: {x: 55.943047, y: 284.2813, z: -0.0000030490999}
   - allowedItems: 0
     localPosition: {x: 7.6847763, y: 0.8455075, z: -8.649185}
     localOrientation: {x: 342.72208, y: 88.85403, z: 0.000001788241}
@@ -1390,9 +1428,6 @@ MonoBehaviour:
     localPosition: {x: 9.746407, y: 2.097652, z: -11.230541}
     localOrientation: {x: 74.38524, y: 311.17624, z: -0.000006343796}
   - allowedItems: 0
-    localPosition: {x: 9.124674, y: 1.5482097, z: -8.276338}
-    localOrientation: {x: 23.914934, y: 273.84918, z: 0}
-  - allowedItems: 0
     localPosition: {x: 7.763944, y: -0.03725818, z: -11.028983}
     localOrientation: {x: 270.5432, y: 0, z: 0}
   - allowedItems: 0
@@ -1405,17 +1440,11 @@ MonoBehaviour:
     localPosition: {x: 4.100319, y: -0.0010736315, z: -8.646302}
     localOrientation: {x: 272.4082, y: 276.28125, z: -0.00008127416}
   - allowedItems: 0
-    localPosition: {x: 5.133342, y: 0.0022532055, z: -9.151751}
-    localOrientation: {x: 273.3299, y: 118.70332, z: 0.000029396759}
-  - allowedItems: 0
     localPosition: {x: 2.849636, y: 0.34525102, z: -7.429117}
     localOrientation: {x: 330.6494, y: 170.42606, z: -0.0000002448765}
   - allowedItems: 0
     localPosition: {x: 2.7295804, y: 1.1629981, z: -7.0330086}
     localOrientation: {x: 334.23828, y: 223.86433, z: -0.0000009479953}
-  - allowedItems: 0
-    localPosition: {x: 5.4391813, y: 0.005286975, z: -10.199451}
-    localOrientation: {x: 275.0089, y: 161.3036, z: -0.000019556846}
   - allowedItems: 0
     localPosition: {x: 3.7263155, y: 0.5577742, z: -10.689796}
     localOrientation: {x: 298.5594, y: 35.836098, z: 0.0000035717553}
@@ -1423,17 +1452,11 @@ MonoBehaviour:
     localPosition: {x: 3.3885584, y: 0.37155086, z: -9.958783}
     localOrientation: {x: 306.65784, y: 91.69886, z: 0.0000057200914}
   - allowedItems: 0
-    localPosition: {x: 3.7953892, y: 1.1901414, z: -11.117592}
-    localOrientation: {x: 0.8931302, y: 96.55709, z: 0.000000026683665}
-  - allowedItems: 0
     localPosition: {x: 4.6448402, y: 2.4088984, z: -8.918017}
     localOrientation: {x: 56.576763, y: 208.75652, z: -0.0000046500204}
   - allowedItems: 0
     localPosition: {x: 5.1807537, y: 2.2277508, z: -8.2512}
     localOrientation: {x: 26.55857, y: 188.14536, z: -0.00000023862347}
-  - allowedItems: 0
-    localPosition: {x: 6.866972, y: 1.5937309, z: -11.588495}
-    localOrientation: {x: 3.293894, y: 101.362564, z: 0}
   - allowedItems: 0
     localPosition: {x: 5.544088, y: 2.6597395, z: -8.89207}
     localOrientation: {x: 3.4529288, y: 113.66022, z: 0.0000001069158}
@@ -1444,9 +1467,6 @@ MonoBehaviour:
     localPosition: {x: 6.6560307, y: 2.1942701, z: -8.709109}
     localOrientation: {x: 344.60815, y: 186.06888, z: 0.000000055345932}
   - allowedItems: 0
-    localPosition: {x: 8.981699, y: 1.4019364, z: -8.3731575}
-    localOrientation: {x: 289.09277, y: 257.44775, z: 0.000010440557}
-  - allowedItems: 0
     localPosition: {x: 7.722803, y: 2.4824095, z: -8.487939}
     localOrientation: {x: 48.546658, y: 64.4328, z: -0.0000025793377}
   - allowedItems: 0
@@ -1455,9 +1475,6 @@ MonoBehaviour:
   - allowedItems: 0
     localPosition: {x: 7.038658, y: 1.5190381, z: -8.590866}
     localOrientation: {x: 16.570864, y: 169.86243, z: 0.00000022269232}
-  - allowedItems: 0
-    localPosition: {x: 0.39164373, y: 3.1244726, z: -3.3687954}
-    localOrientation: {x: 343.19916, y: 236.53485, z: 0.00000044592085}
   - allowedItems: 0
     localPosition: {x: 0.6687769, y: 2.7721143, z: -3.9557734}
     localOrientation: {x: 10.394654, y: 338.94357, z: 0}
@@ -1471,14 +1488,8 @@ MonoBehaviour:
     localPosition: {x: -1.475636, y: 1.1927412, z: -3.447136}
     localOrientation: {x: 352.71198, y: 130.79686, z: 0}
   - allowedItems: 0
-    localPosition: {x: -1.5547551, y: 1.4959171, z: -3.0551205}
-    localOrientation: {x: 317.1601, y: 85.99131, z: 0.0000023287178}
-  - allowedItems: 0
     localPosition: {x: -0.29367375, y: 2.9094014, z: -3.1858988}
     localOrientation: {x: 57.24192, y: 134.05148, z: -0.000006311471}
-  - allowedItems: 0
-    localPosition: {x: 0.36247966, y: 3.2117658, z: -3.1235542}
-    localOrientation: {x: 81.92185, y: 249.61719, z: 0}
   - allowedItems: 0
     localPosition: {x: -1.0721371, y: 0.5128153, z: -1.9180517}
     localOrientation: {x: 279.35907, y: 77.2578, z: -0.0000105001045}
@@ -1486,47 +1497,8 @@ MonoBehaviour:
     localPosition: {x: -1.5674406, y: 1.4342058, z: -2.8979492}
     localOrientation: {x: 330.8115, y: 24.467802, z: -0.00000048897715}
   - allowedItems: 0
-    localPosition: {x: -0.68687105, y: -0.020654663, z: -2.5061874}
-    localOrientation: {x: 273.32895, y: 212.3175, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.28292888, y: -0.031100348, z: -2.108348}
-    localOrientation: {x: 285.9341, y: 145.42181, z: 0.000006219858}
-  - allowedItems: 0
-    localPosition: {x: 0.46295744, y: 3.2020574, z: -3.2411265}
-    localOrientation: {x: 82.471054, y: 269.5193, z: -0.000013031975}
-  - allowedItems: 0
-    localPosition: {x: 0.18079734, y: 3.2345016, z: -3.094501}
-    localOrientation: {x: 81.92185, y: 249.61719, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.3871186, y: 0.912612, z: -2.4295106}
-    localOrientation: {x: 298.11096, y: 236.01523, z: -0.0000036239767}
-  - allowedItems: 0
-    localPosition: {x: 1.8037417, y: 0.061893538, z: -7.441702}
-    localOrientation: {x: 276.17462, y: 77.083374, z: -0.000015875377}
-  - allowedItems: 0
     localPosition: {x: 0.39390722, y: 2.8353333, z: -4.117874}
     localOrientation: {x: 3.2807071, y: 321.31073, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.44820565, y: 2.826737, z: -4.07502}
-    localOrientation: {x: 3.2807071, y: 321.31073, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.6251799, y: 2.7614417, z: -3.974656}
-    localOrientation: {x: 10.394654, y: 338.94357, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.047385544, y: 3.2648711, z: -3.5803165}
-    localOrientation: {x: 82.38532, y: 98.72048, z: -0.000012886085}
-  - allowedItems: 0
-    localPosition: {x: -0.11876422, y: 3.2607377, z: -3.8910475}
-    localOrientation: {x: 80.99995, y: 90.30378, z: 0.0000218306}
-  - allowedItems: 0
-    localPosition: {x: -0.10478848, y: 3.2192187, z: -3.7441988}
-    localOrientation: {x: 322.30563, y: 101.925415, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.034535676, y: 3.1669178, z: -4.1625195}
-    localOrientation: {x: 0.26770672, y: 28.564745, z: 0.00000000667018}
-  - allowedItems: 0
-    localPosition: {x: -0.1212523, y: 3.1022086, z: -3.8890767}
-    localOrientation: {x: 350.14252, y: 122.1256, z: 0.0000004332835}
   - allowedItems: 0
     localPosition: {x: -0.07605916, y: 3.1415486, z: -3.1699872}
     localOrientation: {x: 18.259235, y: 103.99725, z: -0.0000017980828}
@@ -1534,56 +1506,23 @@ MonoBehaviour:
     localPosition: {x: -0.0828177, y: 2.918191, z: -2.737197}
     localOrientation: {x: 17.933462, y: 103.021324, z: 0.0000008973727}
   - allowedItems: 0
-    localPosition: {x: -1.5547553, y: 1.4959172, z: -3.0551205}
-    localOrientation: {x: 317.1601, y: 85.99131, z: 0.0000023287178}
-  - allowedItems: 0
     localPosition: {x: -0.28065085, y: 3.1128478, z: -3.5957122}
     localOrientation: {x: 24.599295, y: 65.87768, z: -0.0000018779913}
   - allowedItems: 0
     localPosition: {x: -1.3305657, y: 0.56097573, z: -3.4360228}
     localOrientation: {x: 340.37405, y: 172.2666, z: -0.00000011330403}
   - allowedItems: 0
-    localPosition: {x: 0.46827355, y: 2.9193487, z: -3.2221966}
-    localOrientation: {x: 354.5654, y: 274.4933, z: 0.00000042881436}
-  - allowedItems: 0
     localPosition: {x: 0.61694705, y: 2.3863122, z: -2.333064}
-    localOrientation: {x: 354.11594, y: 218.79631, z: 0.00000021457392}
-  - allowedItems: 0
-    localPosition: {x: 0.7125933, y: 2.397973, z: -2.408414}
     localOrientation: {x: 354.11594, y: 218.79631, z: 0.00000021457392}
   - allowedItems: 0
     localPosition: {x: -0.9080975, y: 0.36098528, z: -2.844028}
     localOrientation: {x: 315.92117, y: 72.12951, z: 0}
   - allowedItems: 0
-    localPosition: {x: -1.3611304, y: 0.94232875, z: -3.3634796}
-    localOrientation: {x: 352.71198, y: 130.79686, z: 0}
-  - allowedItems: 0
     localPosition: {x: -0.9653797, y: 0.43140852, z: -3.3021579}
     localOrientation: {x: 337.1308, y: 123.62579, z: 0}
   - allowedItems: 0
-    localPosition: {x: -0.5106801, y: 0.0082582515, z: -2.094674}
-    localOrientation: {x: 275.48145, y: 239.89745, z: 0.0000178756}
-  - allowedItems: 0
-    localPosition: {x: -0.5475459, y: -0.04729662, z: -2.7187724}
-    localOrientation: {x: 280.37018, y: 139.44243, z: 0.000009485976}
-  - allowedItems: 0
     localPosition: {x: -1.3147421, y: 0.91713846, z: -3.314663}
     localOrientation: {x: 352.71198, y: 130.79686, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.64106643, y: 3.150407, z: -3.5750833}
-    localOrientation: {x: 18.908167, y: 214.91806, z: -0.00000045123588}
-  - allowedItems: 0
-    localPosition: {x: 0.4548265, y: 3.1173615, z: -4.048376}
-    localOrientation: {x: 3.2807071, y: 321.31073, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.6065823, y: 3.178478, z: -3.675528}
-    localOrientation: {x: 62.99995, y: 269.86, z: 0.000003761187}
-  - allowedItems: 0
-    localPosition: {x: 6.52335, y: 2.3649676, z: -8.444334}
-    localOrientation: {x: 2.888572, y: 294.7649, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.40193668, y: 3.162503, z: -4.095377}
-    localOrientation: {x: 23.047285, y: 17.307747, z: 0.0000002319578}
   - allowedItems: 0
     localPosition: {x: -1.2196987, y: 0.43968645, z: -0.5911002}
     localOrientation: {x: 301.49496, y: 30.560633, z: -0.0000016342557}
@@ -1591,32 +1530,11 @@ MonoBehaviour:
     localPosition: {x: -1.2719629, y: 0.3000224, z: -3.6129227}
     localOrientation: {x: 353.59784, y: 170.12003, z: -0.000000053695715}
   - allowedItems: 0
-    localPosition: {x: -0.10670954, y: 2.9893732, z: -2.9398556}
-    localOrientation: {x: 20.09344, y: 91.41087, z: 0.0000009091079}
-  - allowedItems: 0
-    localPosition: {x: 0.44030535, y: 2.9095168, z: -3.2658052}
-    localOrientation: {x: 44.588802, y: 140.85945, z: 0.0000011988456}
-  - allowedItems: 0
-    localPosition: {x: 0.48512876, y: 2.9669695, z: -3.480198}
-    localOrientation: {x: 34.183464, y: 81.46269, z: -0.0000020641428}
-  - allowedItems: 0
     localPosition: {x: -1.2366929, y: 0.026137568, z: -4.4153748}
     localOrientation: {x: 302.9947, y: 90.00001, z: -0.000003135638}
   - allowedItems: 0
     localPosition: {x: -1.2250727, y: 0.021963205, z: -3.812549}
     localOrientation: {x: 303.0047, y: 91.586266, z: -0.000009404379}
-  - allowedItems: 0
-    localPosition: {x: 0.48463732, y: 3.0248666, z: -3.324594}
-    localOrientation: {x: 40.40268, y: 13.13753, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.54082966, y: 3.1162715, z: -3.997099}
-    localOrientation: {x: 10.021801, y: 325.05432, z: 0.00000021675066}
-  - allowedItems: 0
-    localPosition: {x: 0.8276025, y: -0.002647765, z: -5.99185}
-    localOrientation: {x: 275.9941, y: 33.93313, z: -0.000016351643}
-  - allowedItems: 0
-    localPosition: {x: 0.9962763, y: 2.4926753, z: -3.9114275}
-    localOrientation: {x: 11.644877, y: 3.9910803, z: 0.000000027241118}
   - allowedItems: 0
     localPosition: {x: -0.4649433, y: 0.40965393, z: -6.413642}
     localOrientation: {x: 4.572454, y: 54.236298, z: -0.00000021412492}
@@ -1630,41 +1548,8 @@ MonoBehaviour:
     localPosition: {x: -1.2180668, y: 0.110401645, z: -1.0057249}
     localOrientation: {x: 348.00015, y: 158.0961, z: 0}
   - allowedItems: 0
-    localPosition: {x: 0.58257496, y: 3.044208, z: -2.3309913}
-    localOrientation: {x: 3.079704, y: 124.68265, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 1.0101599, y: 2.859899, z: -2.6943598}
-    localOrientation: {x: 352.44568, y: 226.30406, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 1.1139516, y: 2.6474864, z: -3.6182184}
-    localOrientation: {x: 23.458496, y: 338.6925, z: -0.00000046534848}
-  - allowedItems: 0
-    localPosition: {x: 0.19145425, y: 2.4256918, z: -2.5580263}
-    localOrientation: {x: 28.760021, y: 119.75559, z: 0.0000019478261}
-  - allowedItems: 0
-    localPosition: {x: 0.49841273, y: 3.170359, z: -2.4053764}
-    localOrientation: {x: 80.1837, y: 236.90665, z: 0.000010015523}
-  - allowedItems: 0
-    localPosition: {x: 1.1821812, y: 2.8640156, z: -3.6009884}
-    localOrientation: {x: 319.17654, y: 336.35312, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 1.3694186, y: 2.5305133, z: -3.57519}
-    localOrientation: {x: 309.23047, y: 308.83203, z: -0.0000053998615}
-  - allowedItems: 0
-    localPosition: {x: 1.2034323, y: 2.7862947, z: -3.529626}
-    localOrientation: {x: 325.01694, y: 357.92072, z: 0.00000006512809}
-  - allowedItems: 0
-    localPosition: {x: 1.0684105, y: 2.9767325, z: -3.736641}
-    localOrientation: {x: 309.3479, y: 342.02325, z: -0.0000013465881}
-  - allowedItems: 0
-    localPosition: {x: 1.0148396, y: 2.9195104, z: -4.812607}
-    localOrientation: {x: 43.099792, y: 345.36722, z: 0.0000005846445}
-  - allowedItems: 0
     localPosition: {x: -0.6598985, y: 2.7454765, z: -5.3558636}
     localOrientation: {x: 54.546688, y: 47.25981, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.25086784, y: 3.2314577, z: -4.014307}
-    localOrientation: {x: 358.03558, y: 143.86414, z: 0}
   - allowedItems: 0
     localPosition: {x: 0.08354339, y: 2.7138774, z: -7.085498}
     localOrientation: {x: 46.002277, y: 26.962372, z: -0.000001229106}
@@ -1681,23 +1566,8 @@ MonoBehaviour:
     localPosition: {x: 1.6862484, y: 0.42256925, z: -5.6616755}
     localOrientation: {x: 309.7191, y: 182.90187, z: 0.00000016700733}
   - allowedItems: 0
-    localPosition: {x: 0.16795002, y: -0.0031469055, z: -3.7005005}
-    localOrientation: {x: 273.40466, y: 110.42183, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 1.60782, y: 1.9223281, z: -3.9337034}
-    localOrientation: {x: 302.68628, y: 285.27255, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.15019247, y: 0.007635579, z: -3.1614428}
-    localOrientation: {x: 273.864, y: 56.103436, z: 0}
-  - allowedItems: 0
     localPosition: {x: -1.4168516, y: 0.752796, z: -5.923029}
     localOrientation: {x: 334.0547, y: 72.6925, z: 0.0000009494686}
-  - allowedItems: 0
-    localPosition: {x: 0.91888255, y: -0.023076031, z: -0.53565073}
-    localOrientation: {x: 272.72598, y: 60.97264, z: 0.000107714965}
-  - allowedItems: 0
-    localPosition: {x: 1.0123546, y: 2.9700131, z: -3.5350094}
-    localOrientation: {x: 62.639965, y: 269.2774, z: -0.0000037154464}
   - allowedItems: 0
     localPosition: {x: -0.92576504, y: -0.04609587, z: -4.0548363}
     localOrientation: {x: 270.5439, y: 89.99982, z: 0}
@@ -1705,38 +1575,14 @@ MonoBehaviour:
     localPosition: {x: 1.3576031, y: 0.8134081, z: -3.686307}
     localOrientation: {x: 326.04465, y: 304.35516, z: 0.0000020585926}
   - allowedItems: 0
-    localPosition: {x: 1.4288042, y: 0.44563, z: -3.4083743}
-    localOrientation: {x: 324.87292, y: 220.96011, z: -0.0000010438888}
-  - allowedItems: 0
-    localPosition: {x: 1.7139444, y: 1.2437056, z: -3.8360558}
-    localOrientation: {x: 309.38242, y: 354.97327, z: -0.0000003363997}
-  - allowedItems: 0
-    localPosition: {x: 0.23437417, y: -0.049180273, z: -1.0381231}
-    localOrientation: {x: 274.9334, y: 245.20099, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.23052657, y: -0.030031476, z: -2.4151573}
-    localOrientation: {x: 284.7514, y: 153.22205, z: 0}
-  - allowedItems: 0
     localPosition: {x: -1.1431501, y: 0.6054001, z: -3.2350998}
     localOrientation: {x: 307.80774, y: 150.3558, z: 0.0000013927477}
   - allowedItems: 0
     localPosition: {x: -1.4327219, y: 1.3552992, z: -3.2317958}
     localOrientation: {x: 344.35043, y: 76.74263, z: -0.0000008866419}
   - allowedItems: 0
-    localPosition: {x: -1.3993499, y: 0.13357285, z: -3.8984404}
-    localOrientation: {x: 303.0047, y: 91.586266, z: -0.000009404379}
-  - allowedItems: 0
-    localPosition: {x: 0.4898371, y: 2.9808085, z: -3.4482489}
-    localOrientation: {x: 34.183464, y: 81.46269, z: -0.0000020641428}
-  - allowedItems: 0
     localPosition: {x: 0.96504915, y: 2.7078607, z: -3.4635973}
     localOrientation: {x: 43.804543, y: 140.8421, z: 0.0000011829947}
-  - allowedItems: 0
-    localPosition: {x: 0.89571977, y: 2.7208629, z: -4.3677635}
-    localOrientation: {x: 54.44429, y: 77.39081, z: -0.0000058729606}
-  - allowedItems: 0
-    localPosition: {x: 1.2306534, y: 2.4851723, z: -4.619648}
-    localOrientation: {x: 60.729076, y: 275.2869, z: 0.000010477038}
   - allowedItems: 0
     localPosition: {x: 1.0943416, y: 2.5832176, z: -5.358265}
     localOrientation: {x: 46.530506, y: 328.00983, z: -0.0000012410075}
@@ -1744,17 +1590,8 @@ MonoBehaviour:
     localPosition: {x: 1.6919509, y: 2.1649072, z: -3.1850958}
     localOrientation: {x: 27.047277, y: 268.19632, z: 0.0000009586159}
   - allowedItems: 0
-    localPosition: {x: 1.7447294, y: 1.3665365, z: -2.8998709}
-    localOrientation: {x: 15.598171, y: 200.99898, z: 0.00000022160486}
-  - allowedItems: 0
     localPosition: {x: 0.2956043, y: 2.640803, z: -7.3588924}
     localOrientation: {x: 38.75148, y: 39.35522, z: 0.0000010947665}
-  - allowedItems: 0
-    localPosition: {x: 1.7959034, y: 2.0117903, z: -4.402705}
-    localOrientation: {x: 26.999813, y: 270, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 3.3444285, y: 2.0767946, z: -7.2277546}
-    localOrientation: {x: 336.46014, y: 324.20963, z: -0.0000009312718}
   - allowedItems: 0
     localPosition: {x: 1.7330627, y: 1.3124944, z: -2.8792324}
     localOrientation: {x: 15.598171, y: 200.99898, z: 0.00000022160486}
@@ -1762,38 +1599,14 @@ MonoBehaviour:
     localPosition: {x: 1.6416029, y: 1.0506196, z: -3.263754}
     localOrientation: {x: 316.3382, y: 285.10303, z: 0.0000070810715}
   - allowedItems: 0
-    localPosition: {x: -0.7162868, y: -0.09190832, z: -3.2549648}
-    localOrientation: {x: 278.00034, y: 95.439445, z: -0.000012268743}
-  - allowedItems: 0
-    localPosition: {x: -0.9920212, y: 0.556766, z: -3.2207847}
-    localOrientation: {x: 307.66156, y: 149.95924, z: 0.000004192043}
-  - allowedItems: 0
     localPosition: {x: -1.1211845, y: 1.2370468, z: -5.4839725}
     localOrientation: {x: 342.5622, y: 67.39865, z: 0.00000089490084}
   - allowedItems: 0
     localPosition: {x: 0.98222816, y: 0.771984, z: -3.9240198}
     localOrientation: {x: 282.49158, y: 312.38367, z: -0.000015788994}
   - allowedItems: 0
-    localPosition: {x: -0.26139724, y: -0.043294534, z: -5.645034}
-    localOrientation: {x: 270.63025, y: 41.277145, z: -0.00015522557}
-  - allowedItems: 0
-    localPosition: {x: 1.1674461, y: 0.015797293, z: -6.423012}
-    localOrientation: {x: 275.29437, y: 24.32063, z: -0.000018505163}
-  - allowedItems: 0
-    localPosition: {x: 1.6844374, y: 1.3131149, z: -3.9313803}
-    localOrientation: {x: 303.9087, y: 352.35938, z: -0.00000076520706}
-  - allowedItems: 0
-    localPosition: {x: 1.7320125, y: 1.2396612, z: -3.8295207}
-    localOrientation: {x: 309.38242, y: 354.97327, z: -0.0000003363997}
-  - allowedItems: 0
     localPosition: {x: 1.8880907, y: 1.3063495, z: -3.7438498}
     localOrientation: {x: 24.635689, y: 354.8006, z: -0.000000117408625}
-  - allowedItems: 0
-    localPosition: {x: 1.7628534, y: 1.1192341, z: -3.412282}
-    localOrientation: {x: 274.11362, y: 10.293714, z: -0.000005950936}
-  - allowedItems: 0
-    localPosition: {x: 1.3420622, y: 2.3168159, z: -4.0028286}
-    localOrientation: {x: 23.712692, y: 2.5326672, z: -0.000000058281337}
   - allowedItems: 0
     localPosition: {x: -1.0612327, y: 2.8388538, z: -3.4060783}
     localOrientation: {x: 21.207165, y: 18.914057, z: 0}
@@ -1816,32 +1629,11 @@ MonoBehaviour:
     localPosition: {x: 1.4020283, y: 2.6047816, z: -2.776329}
     localOrientation: {x: 41.679432, y: 267.7698, z: 0}
   - allowedItems: 0
-    localPosition: {x: 1.6824682, y: 1.72647, z: -2.5946894}
-    localOrientation: {x: 308.95517, y: 161.30045, z: -0.0000020369587}
-  - allowedItems: 0
     localPosition: {x: 1.5462307, y: 0.22912572, z: -3.7043314}
     localOrientation: {x: 302.99625, y: 269.3985, z: 0}
   - allowedItems: 0
     localPosition: {x: -1.3774137, y: 1.4841337, z: -3.6412048}
     localOrientation: {x: 334.37894, y: 92.012085, z: -0.0000009468766}
-  - allowedItems: 0
-    localPosition: {x: 1.8407531, y: 0.89707947, z: -3.630826}
-    localOrientation: {x: 351.00058, y: 269.11493, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.5456575, y: 3.1505888, z: -0.89978456}
-    localOrientation: {x: 329.1367, y: 107.13307, z: 0.0000019892361}
-  - allowedItems: 0
-    localPosition: {x: 1.7628286, y: 1.0967782, z: -2.8119392}
-    localOrientation: {x: 20.017023, y: 197.67226, z: -0.00000045433262}
-  - allowedItems: 0
-    localPosition: {x: 0.17115138, y: -0.004888829, z: -3.7697845}
-    localOrientation: {x: 275.2772, y: 115.99682, z: -0.000018565444}
-  - allowedItems: 0
-    localPosition: {x: 1.589596, y: 0.7924277, z: -3.7726488}
-    localOrientation: {x: 347.72394, y: 1.6914501, z: 0.00000002730476}
-  - allowedItems: 0
-    localPosition: {x: -0.42370945, y: -0.021576071, z: -2.476678}
-    localOrientation: {x: 284.7514, y: 153.22205, z: 0}
   - allowedItems: 0
     localPosition: {x: 0.22665182, y: 2.9340184, z: -5.092472}
     localOrientation: {x: 71.799515, y: 44.38318, z: -0.000005466898}
@@ -1849,23 +1641,8 @@ MonoBehaviour:
     localPosition: {x: 1.6100338, y: 0.96009254, z: -3.5706267}
     localOrientation: {x: 328.54312, y: 325.5831, z: 0}
   - allowedItems: 0
-    localPosition: {x: 1.6399229, y: 0.7740225, z: -3.7738652}
-    localOrientation: {x: 350.06555, y: 5.8530736, z: 0.000000108346256}
-  - allowedItems: 0
-    localPosition: {x: 1.8290821, y: 1.3070397, z: -3.7036543}
-    localOrientation: {x: 54.008396, y: 139.7017, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.8476758, y: 2.6081214, z: -2.8298345}
-    localOrientation: {x: 37.409943, y: 89.91173, z: -0.000002149726}
-  - allowedItems: 0
     localPosition: {x: -1.8569229, y: 1.4385062, z: -2.4243488}
     localOrientation: {x: 5.04186, y: 92.5477, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.2800694, y: 1.1849778, z: -4.808154}
-    localOrientation: {x: 335.5788, y: 75.33355, z: 0.0000018753318}
-  - allowedItems: 0
-    localPosition: {x: 1.556173, y: 0.76643586, z: -3.6016016}
-    localOrientation: {x: 33.11922, y: 346.1632, z: 0.00000050969396}
   - allowedItems: 0
     localPosition: {x: 1.6852515, y: 0.6924111, z: -3.1286278}
     localOrientation: {x: 331.36877, y: 170.60939, z: -0.0000004863576}
@@ -1876,35 +1653,17 @@ MonoBehaviour:
     localPosition: {x: -1.4644797, y: 1.8655524, z: -3.6872272}
     localOrientation: {x: 25.4304, y: 132.60095, z: 0}
   - allowedItems: 0
-    localPosition: {x: 1.7143195, y: 0.54430854, z: -3.2057714}
-    localOrientation: {x: 331.36868, y: 170.60922, z: 0.00000024317902}
-  - allowedItems: 0
     localPosition: {x: 1.515121, y: 0.48852295, z: -3.377221}
     localOrientation: {x: 274.69153, y: 99.84219, z: 0}
   - allowedItems: 0
-    localPosition: {x: 1.6433831, y: 0.74687517, z: -3.6545596}
-    localOrientation: {x: 331.2204, y: 318.30203, z: 0}
-  - allowedItems: 0
     localPosition: {x: -1.3158673, y: 2.4618528, z: -2.301795}
     localOrientation: {x: 334.76385, y: 100.92961, z: 0.00000094385683}
-  - allowedItems: 0
-    localPosition: {x: -0.7031989, y: 2.678213, z: -3.924757}
-    localOrientation: {x: 42.82835, y: 75.86997, z: 0.0000023282823}
-  - allowedItems: 0
-    localPosition: {x: 1.7708573, y: 0.6748071, z: -3.530922}
-    localOrientation: {x: 332.99924, y: 269.0063, z: 0}
   - allowedItems: 0
     localPosition: {x: -0.9967562, y: 2.7561476, z: -1.9590664}
     localOrientation: {x: 27.195147, y: 181.80186, z: -0.00000002999637}
   - allowedItems: 0
     localPosition: {x: 2.0695872, y: 0.75284696, z: -5.359681}
     localOrientation: {x: 341.63126, y: 338.34692, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.8094361, y: -0.029795514, z: -5.5506105}
-    localOrientation: {x: 274.8069, y: 62.52694, z: 0.000020377289}
-  - allowedItems: 0
-    localPosition: {x: 0.9097096, y: -0.04428999, z: -5.1473923}
-    localOrientation: {x: 270.5855, y: 291.8766, z: 0.00016702556}
   - allowedItems: 0
     localPosition: {x: 1.4375817, y: 0.2650662, z: -4.995925}
     localOrientation: {x: 333.49146, y: 329.3725, z: -0.000000954078}
@@ -1915,32 +1674,14 @@ MonoBehaviour:
     localPosition: {x: -0.649106, y: 1.9125046, z: -5.9431267}
     localOrientation: {x: 7.2656026, y: 95.618706, z: 0.00000043034217}
   - allowedItems: 0
-    localPosition: {x: 0.35574353, y: -0.010304327, z: -5.1399937}
-    localOrientation: {x: 275.21567, y: 65.43241, z: -0.000018783672}
-  - allowedItems: 0
-    localPosition: {x: -1.3353491, y: 1.1928419, z: -4.611038}
-    localOrientation: {x: 335.5788, y: 75.33355, z: 0.0000018753318}
-  - allowedItems: 0
-    localPosition: {x: -1.3919852, y: 2.6291957, z: -3.01657}
-    localOrientation: {x: 46.195156, y: 92.351585, z: 0.0000024668254}
-  - allowedItems: 0
     localPosition: {x: -0.5459887, y: 2.7649095, z: -1.9105048}
     localOrientation: {x: 11.549965, y: 140.57059, z: 0}
   - allowedItems: 0
     localPosition: {x: 1.1463578, y: 0.5727946, z: -3.09338}
     localOrientation: {x: 343.74078, y: 217.95047, z: -0.00000044467149}
   - allowedItems: 0
-    localPosition: {x: -0.0067695975, y: -0.028526288, z: -2.92023}
-    localOrientation: {x: 285.22702, y: 307.69315, z: 0}
-  - allowedItems: 0
     localPosition: {x: -0.7905071, y: 2.5434113, z: -1.6272049}
     localOrientation: {x: 64.83974, y: 119.03785, z: -0.000008032645}
-  - allowedItems: 0
-    localPosition: {x: 0.37634256, y: -0.009362209, z: -3.4402008}
-    localOrientation: {x: 273.40466, y: 110.42183, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 1.5201392, y: 0.68369424, z: -4.2152576}
-    localOrientation: {x: 293.6659, y: 346.6281, z: -0.0000021269768}
   - allowedItems: 0
     localPosition: {x: 0.3873662, y: 3.1954167, z: -4.9822645}
     localOrientation: {x: 31.52956, y: 76.916725, z: -0.0000020032924}
@@ -1951,44 +1692,11 @@ MonoBehaviour:
     localPosition: {x: 1.6704538, y: 1.3011823, z: -4.1387634}
     localOrientation: {x: 61.8381, y: 218.09488, z: 0.0000036179556}
   - allowedItems: 0
-    localPosition: {x: -1.1180764, y: 1.7585104, z: -6.576358}
-    localOrientation: {x: 85.08323, y: 58.44512, z: 0.00003984571}
-  - allowedItems: 0
-    localPosition: {x: -1.625709, y: 0.80759984, z: -3.2040868}
-    localOrientation: {x: 29.057278, y: 34.841656, z: -0.0000009767073}
-  - allowedItems: 0
-    localPosition: {x: -1.4387718, y: 0.5983399, z: -2.9881592}
-    localOrientation: {x: 29.309689, y: 82.12248, z: -0.0000009791132}
-  - allowedItems: 0
-    localPosition: {x: -1.4357113, y: 0.5912596, z: -2.865631}
-    localOrientation: {x: 28.34586, y: 101.94852, z: -0.0000009700898}
-  - allowedItems: 0
-    localPosition: {x: -1.7843251, y: 1.0253661, z: -2.0288143}
-    localOrientation: {x: 354.54742, y: 170.51192, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.1377978, y: 0.39146307, z: -2.2188897}
-    localOrientation: {x: 350.96082, y: 171.56963, z: 0.00000010806375}
-  - allowedItems: 0
-    localPosition: {x: -1.1734194, y: 0.018696334, z: -2.372694}
-    localOrientation: {x: 303.12225, y: 101.01177, z: -0.0000031249292}
-  - allowedItems: 0
-    localPosition: {x: -0.5907332, y: -0.006212499, z: -2.2732143}
-    localOrientation: {x: 273.32895, y: 212.3175, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.0994319, y: -0.035693116, z: -2.6260633}
-    localOrientation: {x: 271.84503, y: 276.15424, z: 0.00005303132}
-  - allowedItems: 0
     localPosition: {x: -1.1879214, y: 0.5173852, z: -4.902006}
     localOrientation: {x: 313.74307, y: 23.168182, z: -0.0000012348015}
   - allowedItems: 0
     localPosition: {x: 2.0000172, y: 1.2794187, z: -4.7965317}
     localOrientation: {x: 351.1871, y: 239.88226, z: -0.00000043198682}
-  - allowedItems: 0
-    localPosition: {x: -0.606457, y: -0.09517483, z: -3.115755}
-    localOrientation: {x: 281.11487, y: 135.17996, z: 0.000008857622}
-  - allowedItems: 0
-    localPosition: {x: -0.7991519, y: -0.079530664, z: -3.1961422}
-    localOrientation: {x: 278.00034, y: 95.439445, z: -0.000012268743}
   - allowedItems: 0
     localPosition: {x: 3.1017547, y: 0.39389807, z: -9.963545}
     localOrientation: {x: 348.46066, y: 317.26334, z: 0.0000004356932}
@@ -1996,29 +1704,11 @@ MonoBehaviour:
     localPosition: {x: 3.6327474, y: 2.5468507, z: -9.922514}
     localOrientation: {x: 57.568195, y: 322.01617, z: 0}
   - allowedItems: 0
-    localPosition: {x: -1.2510157, y: 0.05024554, z: -2.7097821}
-    localOrientation: {x: 302.6513, y: 87.19546, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.21296692, y: -0.0052194614, z: -2.3007436}
-    localOrientation: {x: 284.7514, y: 153.22205, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.15075862, y: -0.07572759, z: -2.5069098}
-    localOrientation: {x: 274.82272, y: 260.9767, z: -0.00006092927}
-  - allowedItems: 0
     localPosition: {x: -0.34969205, y: 2.6872602, z: -2.8169603}
     localOrientation: {x: 48.21726, y: 157.15302, z: 0}
   - allowedItems: 0
-    localPosition: {x: 0.80742633, y: 3.0232995, z: -2.176691}
-    localOrientation: {x: 62.380543, y: 256.86176, z: 0.0000036832566}
-  - allowedItems: 0
     localPosition: {x: 0.4282861, y: 2.7571492, z: -2.8608499}
     localOrientation: {x: 36.63977, y: 295.36084, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.4343436, y: 0.9242612, z: -3.3661442}
-    localOrientation: {x: 33.45229, y: 81.86819, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.4486675, y: 0.51692647, z: -2.849194}
-    localOrientation: {x: 51.679478, y: 234.07245, z: -0.000005507682}
   - allowedItems: 0
     localPosition: {x: 0.2583966, y: 2.979438, z: -2.9006171}
     localOrientation: {x: 18.472609, y: 285.31952, z: 0}
@@ -2026,29 +1716,11 @@ MonoBehaviour:
     localPosition: {x: 1.894712, y: 1.4447248, z: -3.342496}
     localOrientation: {x: 10.048856, y: 269.12778, z: 0.0000008670752}
   - allowedItems: 0
-    localPosition: {x: -0.12550187, y: -0.010419372, z: -4.146679}
-    localOrientation: {x: 274.74582, y: 270, z: 0}
-  - allowedItems: 0
     localPosition: {x: 1.0560093, y: 0.1508547, z: -4.459341}
     localOrientation: {x: 14.336852, y: 250.91835, z: 0.0000008812176}
   - allowedItems: 0
     localPosition: {x: 1.3072752, y: 0.7450892, z: -1.7493906}
     localOrientation: {x: 354.63467, y: 281.06958, z: 0.00000021438267}
-  - allowedItems: 0
-    localPosition: {x: 0.10303423, y: 2.415598, z: -2.5316105}
-    localOrientation: {x: 65.66816, y: 228.76071, z: 0.0000041443222}
-  - allowedItems: 0
-    localPosition: {x: -1.7624946, y: 0.82288265, z: -3.0985246}
-    localOrientation: {x: 29.057278, y: 34.841656, z: -0.0000009767073}
-  - allowedItems: 0
-    localPosition: {x: -1.6820846, y: 0.6639743, z: -3.5994053}
-    localOrientation: {x: 26.133295, y: 169.26657, z: 0.00000023774797}
-  - allowedItems: 0
-    localPosition: {x: 0.5175944, y: 3.1294568, z: -4.0104923}
-    localOrientation: {x: 10.021801, y: 325.05432, z: 0.00000021675066}
-  - allowedItems: 0
-    localPosition: {x: 0.65164214, y: 3.1556427, z: -3.7749634}
-    localOrientation: {x: 62.99995, y: 269.86, z: 0.000003761187}
   - allowedItems: 0
     localPosition: {x: 0.46665204, y: 3.0489366, z: -3.6643991}
     localOrientation: {x: 41.485165, y: 153.7325, z: 0}
@@ -2056,62 +1728,17 @@ MonoBehaviour:
     localPosition: {x: -0.9985498, y: -0.057510212, z: -3.63734}
     localOrientation: {x: 278.00034, y: 95.439445, z: -0.000012268743}
   - allowedItems: 0
-    localPosition: {x: 0.8369228, y: 3.0612655, z: -3.7974796}
-    localOrientation: {x: 62.99995, y: 269.86, z: 0.000003761187}
-  - allowedItems: 0
     localPosition: {x: -0.4756608, y: 2.742397, z: -3.8802905}
     localOrientation: {x: 62.08672, y: 321.11722, z: 0.0000072951116}
   - allowedItems: 0
-    localPosition: {x: -0.5588144, y: -0.063470624, z: -3.708993}
-    localOrientation: {x: 282.73068, y: 289.14957, z: -0.000007748589}
-  - allowedItems: 0
-    localPosition: {x: -0.38409615, y: -0.026651826, z: -3.7477713}
-    localOrientation: {x: 274.8911, y: 255.961, z: -0.000020026502}
-  - allowedItems: 0
-    localPosition: {x: -0.53936136, y: -0.059175417, z: -3.7109299}
-    localOrientation: {x: 282.73068, y: 289.14957, z: -0.000007748589}
-  - allowedItems: 0
-    localPosition: {x: -1.3432708, y: 0.40339068, z: -3.5266037}
-    localOrientation: {x: 315.6187, y: 208.38548, z: 0.0000011945884}
-  - allowedItems: 0
-    localPosition: {x: -1.3779403, y: 0.31276, z: -3.612339}
-    localOrientation: {x: 314.15784, y: 209.32959, z: 0.0000012255636}
-  - allowedItems: 0
-    localPosition: {x: -1.103244, y: -0.035494655, z: -2.7188807}
-    localOrientation: {x: 271.84503, y: 276.15424, z: 0.00005303132}
-  - allowedItems: 0
     localPosition: {x: -1.1627694, y: 0.017426642, z: -2.3281536}
     localOrientation: {x: 303.12225, y: 101.01177, z: -0.0000031249292}
-  - allowedItems: 0
-    localPosition: {x: -1.0322502, y: -0.033646077, z: -2.5957246}
-    localOrientation: {x: 271.84503, y: 276.15424, z: 0.00005303132}
-  - allowedItems: 0
-    localPosition: {x: -1.4709021, y: 0.55979896, z: -3.3614287}
-    localOrientation: {x: 69.724945, y: 102.020836, z: -0.000009855189}
-  - allowedItems: 0
-    localPosition: {x: -1.8670962, y: 1.1595315, z: -3.4206781}
-    localOrientation: {x: 349.5892, y: 91.56563, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.6596403, y: 0.7258398, z: -3.6260433}
-    localOrientation: {x: 26.133295, y: 169.26657, z: 0.00000023774797}
-  - allowedItems: 0
-    localPosition: {x: -1.5123577, y: 0.54240525, z: -3.330037}
-    localOrientation: {x: 69.724945, y: 102.020836, z: -0.000009855189}
-  - allowedItems: 0
-    localPosition: {x: -0.5678586, y: 2.895939, z: -3.594263}
-    localOrientation: {x: 50.48686, y: 41.160194, z: 0.0000026837458}
   - allowedItems: 0
     localPosition: {x: -1.4565641, y: 1.8825941, z: -4.6899157}
     localOrientation: {x: 57.55667, y: 133.99782, z: 0}
   - allowedItems: 0
     localPosition: {x: -0.9173801, y: 2.5627403, z: -5.1643486}
     localOrientation: {x: 79.05096, y: 114.60081, z: 0.00002697028}
-  - allowedItems: 0
-    localPosition: {x: -1.5880862, y: 0.6972234, z: -3.5981903}
-    localOrientation: {x: 26.133295, y: 169.26657, z: 0.00000023774797}
-  - allowedItems: 0
-    localPosition: {x: 0.7928159, y: 3.040557, z: -2.269991}
-    localOrientation: {x: 63.216175, y: 257.97614, z: -0.00000378928}
   - allowedItems: 0
     localPosition: {x: 0.5076123, y: 2.8155825, z: -3.3347445}
     localOrientation: {x: 56.14601, y: 255.19449, z: -0.000009195544}
@@ -2122,77 +1749,14 @@ MonoBehaviour:
     localPosition: {x: 0.85735595, y: 2.8166783, z: -5.0203094}
     localOrientation: {x: 50.917862, y: 296.05017, z: -0.0000027085273}
   - allowedItems: 0
-    localPosition: {x: -1.4649642, y: 0.17725581, z: -3.8383021}
-    localOrientation: {x: 303.0047, y: 91.586266, z: -0.000009404379}
-  - allowedItems: 0
-    localPosition: {x: -0.4995966, y: -0.041257784, z: -3.9894514}
-    localOrientation: {x: 274.8911, y: 255.961, z: -0.000020026502}
-  - allowedItems: 0
-    localPosition: {x: -1.6058675, y: 0.34440652, z: -3.8536725}
-    localOrientation: {x: 333.0076, y: 91.85725, z: 0.0000009581478}
-  - allowedItems: 0
-    localPosition: {x: -0.6157018, y: -0.067825094, z: -3.7454376}
-    localOrientation: {x: 274.25546, y: 7.325465, z: -0.000005752757}
-  - allowedItems: 0
-    localPosition: {x: 0.10653359, y: -0.00016180288, z: -5.0013123}
-    localOrientation: {x: 274.74826, y: 253.56335, z: 0.000020627625}
-  - allowedItems: 0
     localPosition: {x: 2.265191, y: 0.9736569, z: -5.4025517}
     localOrientation: {x: 351.00424, y: 253.49564, z: -0.00000043220288}
   - allowedItems: 0
     localPosition: {x: -1.5943617, y: 0.41606393, z: -3.3768244}
     localOrientation: {x: 315.6187, y: 208.38548, z: 0.0000011945884}
   - allowedItems: 0
-    localPosition: {x: -1.8176866, y: 0.890174, z: -3.388177}
-    localOrientation: {x: 351.00922, y: 92.58992, z: -0.00000043219703}
-  - allowedItems: 0
     localPosition: {x: -1.3551996, y: 1.9245071, z: -1.5377579}
     localOrientation: {x: 78.26632, y: 141.81573, z: 0.0000083965515}
-  - allowedItems: 0
-    localPosition: {x: -0.08043596, y: 2.7837, z: -2.0352926}
-    localOrientation: {x: 75.41557, y: 257.89764, z: 0.000006781195}
-  - allowedItems: 0
-    localPosition: {x: -1.8066869, y: 0.8722863, z: -2.9676585}
-    localOrientation: {x: 317.12512, y: 160.88988, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.8315439, y: 0.92490304, z: -2.9233198}
-    localOrientation: {x: 349.4287, y: 86.632065, z: -0.0000008685145}
-  - allowedItems: 0
-    localPosition: {x: -1.8077629, y: 1.5448456, z: -2.4444895}
-    localOrientation: {x: 53.9891, y: 142.50008, z: 0.0000014521466}
-  - allowedItems: 0
-    localPosition: {x: -1.289089, y: 0.59920144, z: -3.355784}
-    localOrientation: {x: 301.74603, y: 141.0605, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.5072948, y: 1.19369, z: -3.4819574}
-    localOrientation: {x: 350.12613, y: 140.85358, z: 0.00000021665254}
-  - allowedItems: 0
-    localPosition: {x: -1.5819635, y: 1.2520102, z: -3.5565872}
-    localOrientation: {x: 74.454185, y: 181.5718, z: 0.00000039820188}
-  - allowedItems: 0
-    localPosition: {x: -1.5158201, y: 1.6069982, z: -3.218009}
-    localOrientation: {x: 74.002914, y: 249.15619, z: -0.000006196002}
-  - allowedItems: 0
-    localPosition: {x: -1.5898061, y: 1.6629176, z: -3.5718594}
-    localOrientation: {x: 74.002914, y: 249.15619, z: -0.000006196002}
-  - allowedItems: 0
-    localPosition: {x: -1.8713567, y: 1.5750074, z: -3.4678326}
-    localOrientation: {x: 8.9489765, y: 91.50729, z: 0.0000008642944}
-  - allowedItems: 0
-    localPosition: {x: -1.5846417, y: 1.2376033, z: -3.5047054}
-    localOrientation: {x: 74.454185, y: 181.5718, z: 0.00000039820188}
-  - allowedItems: 0
-    localPosition: {x: 0.26559648, y: -0.0063037165, z: -3.5903096}
-    localOrientation: {x: 273.40466, y: 110.42183, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.8840876, y: 1.279022, z: -3.1554122}
-    localOrientation: {x: 349.4287, y: 86.632065, z: -0.0000008685145}
-  - allowedItems: 0
-    localPosition: {x: -1.8034091, y: 1.5601019, z: -2.4625707}
-    localOrientation: {x: 48.206715, y: 146.8324, z: 0.0000025621719}
-  - allowedItems: 0
-    localPosition: {x: 0.55062276, y: 2.6243377, z: -6.2078285}
-    localOrientation: {x: 59.395287, y: 304.97797, z: 0.00000335397}
   - allowedItems: 0
     localPosition: {x: -1.3607154, y: 0.10666241, z: -4.078863}
     localOrientation: {x: 302.9947, y: 90.00001, z: -0.000003135638}
@@ -2200,26 +1764,14 @@ MonoBehaviour:
     localPosition: {x: -1.1084868, y: -0.044151437, z: -4.6588554}
     localOrientation: {x: 270.7201, y: 48.974167, z: -0.0001357855}
   - allowedItems: 0
-    localPosition: {x: -1.3188456, y: 0.07987128, z: -3.9780846}
-    localOrientation: {x: 303.0047, y: 91.586266, z: -0.000009404379}
-  - allowedItems: 0
-    localPosition: {x: -1.8175642, y: 0.82371897, z: -3.6181622}
-    localOrientation: {x: 351.00922, y: 92.58992, z: -0.00000043219703}
-  - allowedItems: 0
     localPosition: {x: -1.907897, y: 1.4347517, z: -4.2976418}
     localOrientation: {x: 8.999833, y: 90, z: -0.00000043220777}
   - allowedItems: 0
     localPosition: {x: 1.1847687, y: 2.1244075, z: -4.177759}
     localOrientation: {x: 56.5295, y: 261.03705, z: -0.0000030961442}
   - allowedItems: 0
-    localPosition: {x: -0.32488227, y: -0.026971934, z: -4.3316193}
-    localOrientation: {x: 274.74582, y: 270, z: 0}
-  - allowedItems: 0
     localPosition: {x: -1.3172889, y: 1.1337446, z: -4.643608}
     localOrientation: {x: 12.274618, y: 48.808838, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.3395757, y: -0.02492219, z: -3.8424969}
-    localOrientation: {x: 274.8911, y: 255.961, z: -0.000020026502}
   - allowedItems: 0
     localPosition: {x: 1.8156915, y: 1.8666508, z: -2.8976321}
     localOrientation: {x: 10.056042, y: 269.63217, z: 0}
@@ -2227,14 +1779,8 @@ MonoBehaviour:
     localPosition: {x: 2.0549016, y: 1.2943379, z: -5.3946686}
     localOrientation: {x: 25.736544, y: 243.45325, z: 0}
   - allowedItems: 0
-    localPosition: {x: 1.1358087, y: 2.4863675, z: -3.684741}
-    localOrientation: {x: 23.458496, y: 338.6925, z: -0.00000046534848}
-  - allowedItems: 0
     localPosition: {x: 1.8322105, y: 1.8259578, z: -1.0389442}
     localOrientation: {x: 6.2159047, y: 270.53485, z: 0.00000042941133}
-  - allowedItems: 0
-    localPosition: {x: -0.71186006, y: 3.0196548, z: -3.404871}
-    localOrientation: {x: 14.993117, y: 343.33566, z: -0.00000044193158}
   - allowedItems: 0
     localPosition: {x: -1.2150941, y: 2.4484363, z: -2.8704348}
     localOrientation: {x: 54.48549, y: 199.6271, z: 0}
@@ -2248,26 +1794,11 @@ MonoBehaviour:
     localPosition: {x: -0.32038063, y: 2.8457184, z: -1.7638264}
     localOrientation: {x: 25.104565, y: 302.9514, z: 0}
   - allowedItems: 0
-    localPosition: {x: -1.8782215, y: 1.2156694, z: -3.0026965}
-    localOrientation: {x: 355.57034, y: 92.56833, z: -0.00000021408286}
-  - allowedItems: 0
     localPosition: {x: -1.7532032, y: 1.719431, z: -2.6531487}
     localOrientation: {x: 44.266075, y: 196.07095, z: 0.0000005961221}
   - allowedItems: 0
-    localPosition: {x: -1.8558753, y: 1.6486825, z: -3.3205385}
-    localOrientation: {x: 8.9489765, y: 91.50729, z: 0.0000008642944}
-  - allowedItems: 0
-    localPosition: {x: 3.9060526, y: 0.00011682697, z: -8.899977}
-    localOrientation: {x: 275.01627, y: 0.3740305, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.6604254, y: 1.4685531, z: -3.277577}
-    localOrientation: {x: 281.66077, y: 228.55374, z: -0.00000844832}
-  - allowedItems: 0
     localPosition: {x: 0.9804554, y: 2.8364947, z: -3.7720318}
     localOrientation: {x: 344.40106, y: 264.9227, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.057396173, y: 2.86444, z: -2.1444254}
-    localOrientation: {x: 42.858368, y: 206.98816, z: 0}
   - allowedItems: 0
     localPosition: {x: -0.12919778, y: 2.796886, z: -2.0495968}
     localOrientation: {x: 75.41557, y: 257.89764, z: 0.000006781195}
@@ -2281,116 +1812,26 @@ MonoBehaviour:
     localPosition: {x: 1.2934921, y: 0.09324385, z: -2.5363216}
     localOrientation: {x: 307.77847, y: 265.62567, z: -0.0000027873314}
   - allowedItems: 0
-    localPosition: {x: -1.5129695, y: 1.6653547, z: -3.3065186}
-    localOrientation: {x: 344.86395, y: 36.12444, z: 0.00000044222836}
-  - allowedItems: 0
     localPosition: {x: 1.00184, y: 0.73691255, z: -4.1656675}
     localOrientation: {x: 316.986, y: 213.09352, z: 0.000002335309}
-  - allowedItems: 0
-    localPosition: {x: 2.9826946, y: 0.37173563, z: -10.035878}
-    localOrientation: {x: 336.9312, y: 327.59073, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.4275426, y: 2.0780196, z: -4.13521}
-    localOrientation: {x: 43.086212, y: 13.319423, z: -0.0000005845149}
   - allowedItems: 0
     localPosition: {x: -1.4782779, y: 2.1061628, z: -4.0894527}
     localOrientation: {x: 54.678894, y: 33.450516, z: 0.0000029534249}
   - allowedItems: 0
-    localPosition: {x: 0.16016763, y: -0.0007846672, z: -3.6076097}
-    localOrientation: {x: 273.40466, y: 110.42183, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.727807, y: 1.9608773, z: -2.7246218}
-    localOrientation: {x: 16.79579, y: 186.8595, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.79997575, y: 2.6721358, z: -2.9450617}
-    localOrientation: {x: 48.71638, y: 162.01784, z: -0.000001294014}
-  - allowedItems: 0
-    localPosition: {x: -1.5023441, y: 2.2373562, z: -3.9584274}
-    localOrientation: {x: 50.07729, y: 10.382278, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.4458377, y: 2.5758898, z: -2.9734282}
-    localOrientation: {x: 46.195156, y: 92.351585, z: 0.0000024668254}
-  - allowedItems: 0
-    localPosition: {x: -1.71192, y: 2.1116378, z: -3.7384148}
-    localOrientation: {x: 287.3273, y: 241.00902, z: 0.0000057332923}
-  - allowedItems: 0
-    localPosition: {x: -1.7238259, y: 2.1232438, z: -3.4690604}
-    localOrientation: {x: 26.990547, y: 91.64942, z: -0.000001916264}
-  - allowedItems: 0
     localPosition: {x: 1.1695259, y: -0.013952481, z: -3.6318593}
     localOrientation: {x: 302.72784, y: 269.08005, z: 0.000006316654}
-  - allowedItems: 0
-    localPosition: {x: -0.86673737, y: 2.9125447, z: -4.1413193}
-    localOrientation: {x: 346.67334, y: 299.12225, z: 0}
   - allowedItems: 0
     localPosition: {x: -0.71173644, y: 2.5619957, z: -3.9868412}
     localOrientation: {x: 25.905222, y: 274.43127, z: -0.0000009491456}
   - allowedItems: 0
-    localPosition: {x: 0.25788218, y: -0.003035715, z: -5.636615}
-    localOrientation: {x: 274.74826, y: 253.56335, z: 0.000020627625}
-  - allowedItems: 0
     localPosition: {x: 2.271649, y: 0.3614105, z: -7.2797546}
     localOrientation: {x: 316.8885, y: 237.7124, z: -0.000002339025}
-  - allowedItems: 0
-    localPosition: {x: -0.49045712, y: 2.8395238, z: -4.3810616}
-    localOrientation: {x: 57.030178, y: 323.647, z: -0.0000015688681}
-  - allowedItems: 0
-    localPosition: {x: -0.63728285, y: 3.0302672, z: -4.3363924}
-    localOrientation: {x: 21.19253, y: 303.84433, z: -0.00000091570166}
-  - allowedItems: 0
-    localPosition: {x: -0.003913164, y: 3.143782, z: -3.5433073}
-    localOrientation: {x: 4.8197703, y: 274.05017, z: 0.00000021420082}
-  - allowedItems: 0
-    localPosition: {x: -0.8216969, y: 2.9426641, z: -4.0046196}
-    localOrientation: {x: 22.03469, y: 200.6927, z: -0.00000092104995}
-  - allowedItems: 0
-    localPosition: {x: -1.2379144, y: 0.40252393, z: -3.57127}
-    localOrientation: {x: 303.01263, y: 160.66777, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.4020076, y: 2.417867, z: -4.0696163}
-    localOrientation: {x: 335.94794, y: 64.47285, z: -0.0000018699005}
-  - allowedItems: 0
-    localPosition: {x: -0.9994767, y: 2.818935, z: -4.799284}
-    localOrientation: {x: 19.608274, y: 279.3218, z: 0.0000009063328}
-  - allowedItems: 0
-    localPosition: {x: -0.86590767, y: 2.7938771, z: -4.239689}
-    localOrientation: {x: 29.948895, y: 276.02295, z: 0}
   - allowedItems: 0
     localPosition: {x: -1.297132, y: 2.536805, z: -3.4137955}
     localOrientation: {x: 315.93896, y: 104.857635, z: 0.000002376216}
   - allowedItems: 0
-    localPosition: {x: -1.374455, y: 2.6117332, z: -3.4224758}
-    localOrientation: {x: 315.93896, y: 104.857635, z: 0.000002376216}
-  - allowedItems: 0
-    localPosition: {x: -0.8796079, y: 3.025375, z: -3.5550022}
-    localOrientation: {x: 11.413593, y: 290.54608, z: -0.00000043549912}
-  - allowedItems: 0
-    localPosition: {x: -0.6938883, y: 3.1343956, z: -4.05739}
-    localOrientation: {x: 62.999992, y: 90.00001, z: 0.0000037611946}
-  - allowedItems: 0
-    localPosition: {x: -0.72732437, y: 3.1378782, z: -4.0510654}
-    localOrientation: {x: 357.98468, y: 24.62771, z: -0.00000005339388}
-  - allowedItems: 0
-    localPosition: {x: -0.63308287, y: 2.5388863, z: -3.971344}
-    localOrientation: {x: 20.518026, y: 358.48102, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.51278496, y: 3.0794127, z: -3.3973165}
-    localOrientation: {x: 44.13152, y: 212.21744, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.20859885, y: 3.1490078, z: -3.003551}
-    localOrientation: {x: 6.5428395, y: 305.56775, z: 0.00000042968537}
-  - allowedItems: 0
-    localPosition: {x: -0.2980795, y: -0.036224272, z: -5.1262827}
-    localOrientation: {x: 274.928, y: 254.33405, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.92326796, y: -0.02792953, z: -0.3334651}
-    localOrientation: {x: 272.72598, y: 60.97264, z: 0.000107714965}
-  - allowedItems: 0
     localPosition: {x: -0.93618214, y: -0.017338742, z: -0.8278141}
-    localOrientation: {x: 272.04288, y: 309.75247, z: 0.000047902206}
-  - allowedItems: 0
-    localPosition: {x: 0.03735587, y: 2.5298202, z: -2.6267862}
-    localOrientation: {x: 18.409061, y: 200.12936, z: -0.0000006748657}
+    localOrientation: {x: 243.7, y: 304.3, z: -15.5}
   - allowedItems: 0
     localPosition: {x: -1.8432, y: 0.876529, z: -4.0279236}
     localOrientation: {x: 351.00018, y: 90, z: 0.00000043220777}
@@ -2398,89 +1839,23 @@ MonoBehaviour:
     localPosition: {x: -1.1291628, y: 2.4323926, z: -4.180153}
     localOrientation: {x: 345.48248, y: 18.063047, z: -0.00000022048323}
   - allowedItems: 0
-    localPosition: {x: -0.9848623, y: 2.918397, z: -3.440054}
-    localOrientation: {x: 355.8472, y: 39.408413, z: 0}
-  - allowedItems: 0
     localPosition: {x: -1.3717129, y: 2.2676826, z: -2.698185}
     localOrientation: {x: 344.58432, y: 148.00551, z: 0.00000044281825}
-  - allowedItems: 0
-    localPosition: {x: -0.3530805, y: 2.7690463, z: -3.747161}
-    localOrientation: {x: 51.28796, y: 327.50888, z: -0.000002730299}
-  - allowedItems: 0
-    localPosition: {x: -1.34931, y: 2.6899476, z: -3.7556677}
-    localOrientation: {x: 44.998863, y: 90.50289, z: -0.0000024147882}
-  - allowedItems: 0
-    localPosition: {x: -0.55156726, y: 2.8670518, z: -3.9324255}
-    localOrientation: {x: 4.145043, y: 4.6304007, z: 0.000000040125595}
-  - allowedItems: 0
-    localPosition: {x: 0.16570699, y: 3.081075, z: -3.7924585}
-    localOrientation: {x: 356.32217, y: 214.88332, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.39342427, y: 3.217208, z: -3.857666}
-    localOrientation: {x: 80.99995, y: 90.30378, z: 0.0000218306}
-  - allowedItems: 0
-    localPosition: {x: 0.1565985, y: 3.1112566, z: -3.7788334}
-    localOrientation: {x: 351.90158, y: 224.44165, z: 0.00000043118678}
-  - allowedItems: 0
-    localPosition: {x: -0.64907837, y: 2.987593, z: -3.9052906}
-    localOrientation: {x: 292.8072, y: 355.7005, z: -0.0000005506348}
-  - allowedItems: 0
-    localPosition: {x: -0.5173224, y: 3.0799873, z: -3.9724064}
-    localOrientation: {x: 356.03235, y: 1.4754959, z: -0.0000000033430656}
-  - allowedItems: 0
-    localPosition: {x: -0.5262863, y: 2.9286973, z: -4.2415752}
-    localOrientation: {x: 21.19253, y: 303.84433, z: -0.00000091570166}
-  - allowedItems: 0
-    localPosition: {x: -0.6682663, y: 2.8931012, z: -4.1057854}
-    localOrientation: {x: 39.882744, y: 354.8165, z: -0.00000013907676}
   - allowedItems: 0
     localPosition: {x: -1.461824, y: 1.3876547, z: -4.7111416}
     localOrientation: {x: 320.11673, y: 354.53662, z: 0.00000013907783}
   - allowedItems: 0
-    localPosition: {x: -0.536679, y: 3.1698835, z: -3.3533502}
-    localOrientation: {x: 332.51038, y: 184.12074, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.6563685, y: 3.143799, z: -3.3429818}
-    localOrientation: {x: 340.07898, y: 193.35889, z: 0.00000022702802}
-  - allowedItems: 0
-    localPosition: {x: -0.54498804, y: 3.0814102, z: -2.2547884}
-    localOrientation: {x: 25.694912, y: 214.4465, z: -0.0000014211946}
-  - allowedItems: 0
-    localPosition: {x: -0.49494284, y: 3.1415102, z: -2.0244908}
-    localOrientation: {x: 347.47473, y: 113.42864, z: 0.0000008745884}
-  - allowedItems: 0
-    localPosition: {x: -0.03028649, y: 3.123807, z: -4.5063496}
-    localOrientation: {x: 32.02398, y: 249.47125, z: -0.0000010070148}
-  - allowedItems: 0
     localPosition: {x: -0.0069582164, y: 2.9800997, z: -4.1917477}
     localOrientation: {x: 1.4550126, y: 30.342993, z: 0.00000005337806}
-  - allowedItems: 0
-    localPosition: {x: 0.08691326, y: 3.016781, z: -4.175152}
-    localOrientation: {x: 55.168392, y: 343.4083, z: -0.0000014947892}
   - allowedItems: 0
     localPosition: {x: 0.1872515, y: 3.211353, z: -4.0689373}
     localOrientation: {x: 354.81168, y: 326.81204, z: 0}
   - allowedItems: 0
-    localPosition: {x: 0.07442558, y: 3.0798676, z: -4.6734886}
-    localOrientation: {x: 41.36801, y: 260.8986, z: -0.0000022752727}
-  - allowedItems: 0
     localPosition: {x: 1.2731262, y: 0.37070298, z: -5.4483128}
     localOrientation: {x: 313.35275, y: 269.42627, z: -0.0000024873668}
   - allowedItems: 0
-    localPosition: {x: 0.36839315, y: 0.0018855138, z: -6.127714}
-    localOrientation: {x: 275.25247, y: 277.12027, z: -0.000018652689}
-  - allowedItems: 0
-    localPosition: {x: -0.40559852, y: 2.9155765, z: -4.174938}
-    localOrientation: {x: 55.10396, y: 325.1006, z: 0}
-  - allowedItems: 0
-    localPosition: {x: 0.9938137, y: 0.65637016, z: -4.2501307}
-    localOrientation: {x: 316.986, y: 213.09352, z: 0.000002335309}
-  - allowedItems: 0
     localPosition: {x: -1.0772811, y: 0.759272, z: -3.038486}
     localOrientation: {x: 319.14893, y: 152.8342, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -0.1597169, y: -0.057774432, z: -2.9424334}
-    localOrientation: {x: 285.22702, y: 307.69315, z: 0}
   - allowedItems: 0
     localPosition: {x: -1.2086073, y: 0.96876955, z: -2.5201201}
     localOrientation: {x: 287.5383, y: 226.95895, z: 0.000005666454}
@@ -2497,37 +1872,25 @@ MonoBehaviour:
     localPosition: {x: 1.2059098, y: 2.1616669, z: -2.3216882}
     localOrientation: {x: 10.422068, y: 267.39227, z: -0.00000043404785}
   - allowedItems: 0
-    localPosition: {x: -0.7234775, y: -0.016805027, z: -0.906126}
-    localOrientation: {x: 274.86072, y: 127.55261, z: -0.000020151887}
-  - allowedItems: 0
-    localPosition: {x: 0.5246342, y: 2.6872797, z: -3.1527376}
-    localOrientation: {x: 32.79746, y: 229.08244, z: -0.0000010156829}
-  - allowedItems: 0
-    localPosition: {x: -0.6397548, y: 3.0237663, z: -4.3446045}
-    localOrientation: {x: 21.19253, y: 303.84433, z: -0.00000091570166}
-  - allowedItems: 0
-    localPosition: {x: -0.49160087, y: 2.945759, z: -4.1966715}
-    localOrientation: {x: 37.142696, y: 326.9072, z: 0}
-  - allowedItems: 0
-    localPosition: {x: -1.2457699, y: 2.3835368, z: -4.1288166}
-    localOrientation: {x: 345.48248, y: 18.063047, z: -0.00000022048323}
-  - allowedItems: 0
     localPosition: {x: -1.3490262, y: 2.2819088, z: -3.7701817}
     localOrientation: {x: 356.61783, y: 160.7573, z: 0}
   - allowedItems: 0
     localPosition: {x: -0.3253801, y: 3.0149152, z: -1.252202}
     localOrientation: {x: 1.6823438, y: 47.442787, z: -0.000000053383868}
   orientationRayLength: 0.2
-  selectPoint: 151
+  selectPoint: 116
   selectedPoint:
     allowedItems: 0
-    localPosition: {x: 0.35939366, y: 2.932602, z: -3.518291}
-    localOrientation: {x: 67.3244, y: 324.39865, z: -0.000008858569}
+    localPosition: {x: 2.849636, y: 0.34525102, z: -7.429117}
+    localOrientation: {x: 330.6494, y: 170.42606, z: -0.0000002448765}
   maxRayDst: 100
   layerMasks:
     serializedVersion: 2
     m_Bits: 2048
   showHitNormals: 1
+  invertHandles: 0
+  handleDrawRadius: 18.8
+  handleCullRadius: 0.4
   defaultAllowedItems: 0
   enableBasicRayCaster: 0
   raycaster: {fileID: 1857353270}
