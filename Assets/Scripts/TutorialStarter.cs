@@ -63,6 +63,7 @@ public class TutorialStarter : MonoBehaviour
     {
         FadeIn();
 
+        PlayerUIController.Instance.ShowCrosshair = true;
         WorldWayPointsController.Instance.StartWWPC();
         EudieHandOff();
     }
@@ -75,18 +76,45 @@ public class TutorialStarter : MonoBehaviour
 
     public void Tutorial_Camera()
     {
+        PlayerUIController.Instance.ShowCrosshair = true;
+        Invoke(nameof(TutCamExecute), tutorialDelayTime);
+        // flowChartDelayedExecute = StartCoroutine(DelayedFlowChartExecute("Tutorial Camera", tutorialDelayTime));
+    }
 
-        flowChartDelayedExecute = StartCoroutine(DelayedFlowChartExecute("Tutorial Camera", tutorialDelayTime));
+    private void TutCamExecute()
+    {
+        string cameraTutorialText = InputManager.GamePadPresent ? "Use Right Stick to look around" : "Use mouse to look around";
+        InteractMessage.Instance.ShowInteraction(cameraTutorialText, 0, Color.white);
+        InteractMessage.Instance.AllowAutoInteract(false);
+        Invoke(nameof(HideInteract), tutorialDelayTime);
+        Tutorial_Movement();
     }
 
     public void Tutorial_Movement()
     {
-        flowChartDelayedExecute = StartCoroutine(DelayedFlowChartExecute("Tutorial Movement", tutorialDelayTime));
+        Invoke(nameof(TutMovExecute), tutorialDelayTime*2.5f);
+        //flowChartDelayedExecute = StartCoroutine(DelayedFlowChartExecute("Tutorial Movement", tutorialDelayTime));
+    }
+
+    private void TutMovExecute()
+    {
+        string movementTutorialText = InputManager.GamePadPresent ? "Use Left Stick to move" : "Use WASD to move";
+
+        InteractMessage.Instance.AllowAutoInteract(true);
+        InteractMessage.Instance.ShowInteraction(movementTutorialText, 0, Color.white);
+        InteractMessage.Instance.AllowAutoInteract(false);
+        Invoke(nameof(HideInteract), tutorialDelayTime);
+        Invoke(nameof(EudieHandOff), tutorialDelayTime);
+    }
+
+    private void HideInteract()
+    {
+        InteractMessage.Instance.HideInteraction();
     }
 
     public void EudieHandOff()
     {
-        PlayerUIController.Instance.ShowCrosshair = true;
+        InteractMessage.Instance.AllowAutoInteract(true);
         FindObjectOfType<Eudie_Tutorial>().ShowEudieWaypoint(skipToPickUpEudie);
         Hunger.Instance.OnStarvedToDeath += StarvedToDeath;
     }

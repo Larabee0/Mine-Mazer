@@ -147,6 +147,10 @@ namespace MazeGame.Input
 
         public ButtonEventContainer interactButton;
 
+        public ButtonEventContainer placeItemButton;
+
+        public ButtonEventContainer mineButton;
+
         public ButtonEventContainer advanceDialogueButton;
 
         public ButtonEventContainer pauseButton;
@@ -195,6 +199,10 @@ namespace MazeGame.Input
 
             interactButton = new(this, PlayerActions.Interact);
 
+            placeItemButton = new(this, PlayerActions.PlaceItem);
+
+            mineButton = new(this, PlayerActions.Mine);
+
             advanceDialogueButton = new(this, DialogueActions.AdvanceDialogue);
 
             pauseButton = new(this, PlayerActions.Pause);
@@ -217,6 +225,8 @@ namespace MazeGame.Input
                 northButton.Bind();
                 southButton.Bind();
                 interactButton.Bind();
+                mineButton.Bind();
+                placeItemButton.Bind();
                 advanceDialogueButton.Bind();
                 pauseButton.Bind();
 
@@ -240,6 +250,8 @@ namespace MazeGame.Input
                 northButton.Unbind();
                 southButton.Unbind();
                 interactButton.Unbind();
+                mineButton.Unbind();
+                placeItemButton.Unbind();
                 advanceDialogueButton.Unbind();
                 pauseButton.Unbind();
 

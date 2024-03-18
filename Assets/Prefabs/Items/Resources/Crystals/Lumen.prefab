@@ -364,7 +364,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4422689919979105570}
-  m_LocalRotation: {x: -0.6828286, y: 0.1836984, z: -0.1836984, w: -0.6828286}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -597,7 +597,7 @@ Transform:
   - {fileID: 6204327862763015884}
   - {fileID: 2594783974824588904}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6506559788001277901
 MonoBehaviour:
@@ -617,6 +617,7 @@ MonoBehaviour:
     type: 0
   Placeable: 0
   Interactable: 1
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -627,7 +628,7 @@ MonoBehaviour:
   - {fileID: 4422689919979105570}
   - {fileID: 9090362618948946794}
   chosenVariant: {fileID: 0}
-  turnOnAllChance: 0
+  allChance: 0
 --- !u!1 &6606590934997642172
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,7 +653,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6606590934997642172}
-  m_LocalRotation: {x: -0.6828286, y: -0.1836984, z: -0.1836984, w: 0.6828286}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -706,7 +707,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9090362618948946794}
-  m_LocalRotation: {x: -0.3476922, y: -0.56830055, z: 0.28708342, w: 0.688279}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

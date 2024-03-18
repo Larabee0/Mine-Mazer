@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using MazeGame.Input;
 using MazeGame.Navigation;
+using System;
 
 //RYTECH. 2023. How to Make a Flexible Interaction System in 2 Minutes [C#] [Unity3D]. Available at: https://www.youtube.com/watch?v=K06lVKiY-sY [accessed 28 November 2023].
 interface IInteractable
 {
     public void Interact();
+    public bool RequiresPickaxe();
     public string GetToolTipText();
 }
 
@@ -66,6 +68,8 @@ public class NPC_Interact : MonoBehaviour
         if (InputManager.Instance != null)
         {
             InputManager.Instance.interactButton.OnButtonReleased += Interact;
+            InputManager.Instance.mineButton.OnButtonReleased += InteractMine;
+            InputManager.Instance.placeItemButton.OnButtonReleased += InteractPlace;
         }
     }
 
@@ -85,13 +89,37 @@ public class NPC_Interact : MonoBehaviour
         if (InputManager.Instance != null)
         {
             InputManager.Instance.interactButton.OnButtonReleased -= Interact;
+            InputManager.Instance.mineButton.OnButtonReleased -= InteractMine;
+            InputManager.Instance.placeItemButton.OnButtonReleased -= InteractPlace;
         }
     }
-    private void Interact()
+
+    private void InteractPlace()
     {
-        if(interactable== null && Inventory.Instance.CurHeldAsset != null)
+        if (interactable == null && Inventory.Instance.CurHeldAsset != null)
         {
             Inventory.Instance.CurHeldAsset.PlaceItem();
+        }
+    }
+
+    private void InteractMine()
+    {
+        if (interactable != null && interactable.RequiresPickaxe())
+        {
+            interactable?.Interact();
+        }
+    }
+
+    private void Interact()
+    {
+        if (interactable != null && interactable.RequiresPickaxe())
+        {
+            return;
+        }
+        else if(interactable == null && Inventory.Instance.CurHeldAsset != null)
+        {
+            return;
+            
         }
         else
         {

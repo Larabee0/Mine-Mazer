@@ -14,10 +14,11 @@ public class Eudie_Tutorial : NPCTrade
 
     [SerializeField] private Eudie_Item eudieItem;
     [SerializeField] private MapResource[] starterItems;
-    [SerializeField] private BreakableWall[] tutorialAreaWalls;
-    [SerializeField] private GameObject lumen;
-    private WorldWayPoint[] wallWWP;
-
+    [SerializeField] private MapResource lumen;
+    [SerializeField] private Transform gate;
+    [SerializeField] private ButtonInteractable gateButton;
+    [SerializeField] private Vector3 raisedPosition;
+    [SerializeField] private float raiseSpeed;
     private bool skipToPickUpEudie = false;
 
     [SerializeField] EudieContext eudieState = EudieContext.EudieSleep;
@@ -38,18 +39,7 @@ public class Eudie_Tutorial : NPCTrade
 
     private void Awake()
     {
-        lumen.SetActive(false);
-        if(tutorialAreaWalls.Length == 0)
-        {
-            Debug.LogError("Eudie has no tutorial break out walls assigned! The game cannot progress with out them", gameObject);
-        }
-
-        for (int i = 0; i < tutorialAreaWalls.Length; i++)
-        {
-            tutorialAreaWalls[i].OnWallBreak += OnWallBroken;
-        }
-
-        wallWWP = new WorldWayPoint[tutorialAreaWalls.Length];
+        gateButton.OnSuccessfulActivation += OnGateBeginOpening;
     }
 
 
@@ -136,10 +126,6 @@ public class Eudie_Tutorial : NPCTrade
         {
             RecieveStarterItems();
             PickUpEudie();
-            for (int i = 0; i < wallWWP.Length; i++)
-            {
-                tutorialAreaWalls[i].OnWallBreak -= OnWallBroken;
-            }
             PlayerUIController.Instance.SetMiniMapVisible(true);
         }
         else
@@ -156,39 +142,47 @@ public class Eudie_Tutorial : NPCTrade
             Inventory.Instance.AddItem(starterItems[i].ItemStats.type, 1, Instantiate(starterItems[i]));
         }
 
-        Inventory.Instance.TryMoveItemToHand(Item.Torch);
+        Inventory.Instance.TryMoveItemToHand(Item.Pickaxe);
     }
 
     public void PickupLumen()
     {
-        lumen.SetActive(true);
+        
+        eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Lumen Crystal", lumen.transform.position, Color.green);
+        lumen.OnItemPickedUp += RemoveLumenWaypoint;
         eudieState = EudieContext.LumenGather;
-        InteractMessage.Instance.SetObjective("Give Lumen to Eudie");
+        InteractMessage.Instance.SetObjective("Mine & Give Lumen to Eudie");
+    }
+
+    private void RemoveLumenWaypoint()
+    {
+        lumen.OnItemPickedUp -= RemoveLumenWaypoint;
+        WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP);
     }
 
     public void GivenLumen()
     {
-        InteractMessage.Instance.SetObjective("Break out of the current cave");
+        InteractMessage.Instance.SetObjective("Open the Gate with the Gate Activator and Lumen Torch");
+        eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Gate Activator",gateButton.transform.position,Color.green);
         eudieState = EudieContext.MineWall;
-        Vector3 yOffset = new(0, 1.5f, 0);
-        for (int i = 0; i < tutorialAreaWalls.Length; i++)
-        {
-            wallWWP[i] = WorldWayPointsController.Instance.AddwayPoint(tutorialAreaWalls[i].GetToolTipText(), tutorialAreaWalls[i].transform.position+ yOffset, Color.green);
-        }
     }
 
-    private void OnWallBroken()
+    private void OnGateBeginOpening()
     {
-        InteractMessage.Instance.ClearObjective();
+        gateButton.OnSuccessfulActivation -= OnGateBeginOpening;
+        WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP);
+        StartCoroutine(OpenGate());
+    }
 
-        for (int i = 0; i < wallWWP.Length; i++)
+    private IEnumerator OpenGate()
+    {
+        while (gate.transform.localPosition != raisedPosition)
         {
-            tutorialAreaWalls[i].OnWallBreak -= OnWallBroken;
-            if (wallWWP[i] != null )
-            {
-                WorldWayPointsController.Instance.RemoveWaypoint(wallWWP[i]);
-            }
+            gate.transform.localPosition = Vector3.MoveTowards(gate.transform.localPosition, raisedPosition, Time.deltaTime * raiseSpeed);
+            yield return null;
         }
+        gate.gameObject.SetActive(false);
+        InteractMessage.Instance.ClearObjective();
         Dialogue.ExecuteBlock("Player Breaks Wall"); // next tutorial blocl
         PlayerUIController.Instance.SetMiniMapVisible(true);
     }

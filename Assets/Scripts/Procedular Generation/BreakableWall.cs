@@ -83,8 +83,8 @@ public class BreakableWall : MonoBehaviour, IInteractable
         {
             string control = InputManager.GamePadPresent switch
             {
-                true => "A",
-                false => "Click"
+                true => "RT",
+                false => "Left Click"
             };
             return string.Format("{0} to Unblock", control);
         }
@@ -94,5 +94,10 @@ public class BreakableWall : MonoBehaviour, IInteractable
         }
 
         
+    }
+
+    public bool RequiresPickaxe()
+    {
+        return true;
     }
 }

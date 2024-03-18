@@ -57,4 +57,9 @@ public class CaveMessageInteractable : MonoBehaviour, IInteractable
             }
         }
     }
+
+    public bool RequiresPickaxe()
+    {
+        return false;
+    }
 }

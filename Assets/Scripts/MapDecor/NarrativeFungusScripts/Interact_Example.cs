@@ -45,4 +45,9 @@ public class Interact_Example : MonoBehaviour, IInteractable
             return string.Format("Click to Interact with {0}",Dialogue.GetComponent<Character>().NameText);
         }
     }
+
+    public virtual bool RequiresPickaxe()
+    {
+        return false;
+    }
 }
