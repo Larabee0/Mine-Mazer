@@ -144,11 +144,14 @@ public class ProceduralDecorator : MonoBehaviour
                 }
             }
         }
+
+        SceneView.RepaintAll();
     }
 
     public void ClearDecror()
     {
         proceduralPoints.Clear();
+        SceneView.RepaintAll();
     }
 
     private Vector3 FaceNormal(float3x3 pPositions, float3x3 pNormals )
