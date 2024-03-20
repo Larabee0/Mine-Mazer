@@ -154,12 +154,14 @@ public class MapResource : MonoBehaviour, IInteractable
     [SerializeField] protected ItemStats itemStats;
     [SerializeField] protected bool Placeable;
     [SerializeField] protected bool Interactable = true;
+    [SerializeField] protected bool requiresPickaxe = false;
     public Vector3 heldOrenintationOffset;
     public Vector3 heldpositonOffset;
     public Vector3 heldScaleOffset = Vector3.one;
     protected Vector3 originalScale;
     public Vector3 placementPositionOffset = Vector3.zero;
     public Action OnItemPickedUp;
+    public Action OnInventoryItemInteract;
     [SerializeField,Tooltip("If left blank, falls back to ItemStats.name")] protected string toolTipNameOverride;
 
     protected virtual string ToolTipName
@@ -183,14 +185,33 @@ public class MapResource : MonoBehaviour, IInteractable
 
     public virtual string GetToolTipText()
     {
-        if (InputManager.GamePadPresent)
+        if(requiresPickaxe)
         {
-            return string.Format("A to  Pick Up {0}", ToolTipName);
+            if (InputManager.GamePadPresent)
+            {
+                return string.Format("RT to  Mine {0}", ToolTipName);
+            }
+            else
+            {
+                return string.Format("Left Click to Mine {0}", ToolTipName);
+            }
         }
         else
         {
-            return string.Format("Click to Pick Up {0}", ToolTipName);
+            if (InputManager.GamePadPresent)
+            {
+                return string.Format("A to  Pick Up {0}", ToolTipName);
+            }
+            else
+            {
+                return string.Format("Left Click to Pick Up {0}", ToolTipName);
+            }
         }
+    }
+
+    public virtual void InventoryInteract()
+    {
+        OnInventoryItemInteract?.Invoke();
     }
 
     public virtual void Interact()
@@ -203,6 +224,7 @@ public class MapResource : MonoBehaviour, IInteractable
         {
             body.isKinematic = true;
         }
+        OnItemPickedUp?.Invoke();
         Inventory.Instance.AddItem(itemStats.type, 1,this);
     }
 
@@ -244,5 +266,10 @@ public class MapResource : MonoBehaviour, IInteractable
             }
         }
         return false;
+    }
+
+    public virtual bool RequiresPickaxe()
+    {
+        return requiresPickaxe;
     }
 }
