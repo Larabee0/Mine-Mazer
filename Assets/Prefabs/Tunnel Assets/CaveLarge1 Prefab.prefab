@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: -5732421837634516859}
   - component: {fileID: -2621792743373930804}
   - component: {fileID: 7507312057571940600}
+  - component: {fileID: 4940310785889527522}
   m_Layer: 0
   m_Name: CaveLarge1 Prefab
   m_TagString: Untagged
@@ -229,6 +230,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataFromBake:
+    orignalInstanceId: 0
+    originalInstance: {fileID: 0}
+    miniMapAsset: {fileID: 0}
+    excludePrefabConnections: []
+    connectors: []
+    boundingBoxes: []
+    excludeConnectorSections: []
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    spawnRule: {fileID: 0}
+    sectionLightLevel: 0
+    sectionAmbience: {fileID: 0}
+    excludePrefabConnectionsIds: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
   miniMapAsset: {fileID: 2800000, guid: 7fde157c6e15b274ca367f2408b14bfe, type: 3}
   excludePrefabConnections:
   - {fileID: 7541396775899075963, guid: 2e3fb2f25c7499740a8e78cd64cbd320, type: 3}
@@ -364,11 +382,11 @@ MonoBehaviour:
   sectionLightLevel: 0.202
   sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
   excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
-  stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 27448
   strongKeep: 0
   hasLadder: 0
   isColony: 0
+  stagnationBeacon: {fileID: 0}
+  orignalInstanceId: 27448
   sanctumPartsSpawnPoint: {fileID: 3400771833397583269}
   explored: 0
 --- !u!114 &-5732421837634516859
@@ -438,6 +456,157 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
+--- !u!114 &4940310785889527522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801700286422856763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d94a0d04ee60e4a9a3533fbe11781c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bakedData:
+    orignalInstanceId: 0
+    originalInstance: {fileID: 3803638923336616636}
+    miniMapAsset: {fileID: 2800000, guid: 7fde157c6e15b274ca367f2408b14bfe, type: 3}
+    excludePrefabConnections:
+    - {fileID: 7541396775899075963, guid: 2e3fb2f25c7499740a8e78cd64cbd320, type: 3}
+    - {fileID: 4699310440157599471, guid: 7a114b4e17d402448bdafb0f125ae068, type: 3}
+    - {fileID: 3803638923336616636}
+    - {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8, type: 3}
+    - {fileID: 7280747401053184910, guid: 5c6e2853f717f8c428620637ea73048f, type: 3}
+    - {fileID: 7544748717809826148, guid: 17cf9e69ff45f2d4db8a8e84c5559246, type: 3}
+    - {fileID: 1925884630686241207, guid: 47ecaaf294d32d345877b4d8b966f55e, type: 3}
+    connectors:
+    - localPosition: {x: 0, y: 1.5, z: 0}
+      localRotation: {x: -0, y: -0, z: -0, w: 1}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 0
+    - localPosition: {x: 10, y: 1.5, z: -10}
+      localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 1
+    - localPosition: {x: -10, y: 1.5, z: -10}
+      localRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 2
+    boundingBoxes:
+    - center:
+        x: 0
+        y: 1.6299992
+        z: -2.5
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 3.91916
+        y: 3.39812
+        z: -4.5
+    - center:
+        x: 7.5
+        y: 1.7030001
+        z: -10
+      oreintation:
+        x: -0
+        y: 90
+        z: -0
+      size:
+        x: 4.08905
+        y: 3.6961398
+        z: 4.5
+    - center:
+        x: 4.597704
+        y: 2.369999
+        z: -5.7477036
+      oreintation:
+        x: -0
+        y: 44.999996
+        z: -0
+      size:
+        x: 10.676901
+        y: 5.2602997
+        z: 3.4699802
+    - center:
+        x: -4.783003
+        y: 2.37
+        z: -14.887001
+      oreintation:
+        x: -0
+        y: 44.999996
+        z: -0
+      size:
+        x: 10.3526
+        y: 5.2602997
+        z: 3.4699802
+    - center:
+        x: -4.75
+        y: 2.369999
+        z: -5.85
+      oreintation:
+        x: -0
+        y: 315
+        z: 0
+      size:
+        x: 10.0322895
+        y: 5.2602997
+        z: 3.4699802
+    - center:
+        x: 0.2662983
+        y: 3.691
+        z: -10.546303
+      oreintation:
+        x: -0
+        y: 315
+        z: 0
+      size:
+        x: 10.247681
+        y: 7.8975997
+        z: 10.860201
+    - center:
+        x: 0
+        y: 1.6429996
+        z: -15.91
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 4.2008605
+        y: 3.6647298
+        z: 5.0046196
+    - center:
+        x: -7.5
+        y: 1.6429996
+        z: -10
+      oreintation:
+        x: -0
+        y: 90
+        z: -0
+      size:
+        x: 4.31566
+        y: 3.6647298
+        z: 4.5
+    excludeConnectorSections: []
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    spawnRule: {fileID: 0}
+    sectionLightLevel: 0.202
+    sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
+    excludePrefabConnectionsIds: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
+  targetOrigin: {fileID: 0}
 --- !u!1 &1879349557654696638
 GameObject:
   m_ObjectHideFlags: 0

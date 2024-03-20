@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -1886313466182116042}
   - component: {fileID: -3448590330050541790}
   - component: {fileID: 661965121756227056}
+  - component: {fileID: 514215644879380948}
   m_Layer: 0
   m_Name: 20mCaveTJunction Prefab
   m_TagString: Untagged
@@ -137,6 +138,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataFromBake:
+    orignalInstanceId: 0
+    originalInstance: {fileID: 0}
+    miniMapAsset: {fileID: 0}
+    excludePrefabConnections: []
+    connectors: []
+    boundingBoxes: []
+    excludeConnectorSections: []
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    spawnRule: {fileID: 0}
+    sectionLightLevel: 0
+    sectionAmbience: {fileID: 0}
+    excludePrefabConnectionsIds: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
   miniMapAsset: {fileID: 2800000, guid: 5a4bba4d52864dc40909ca8a2c8fc088, type: 3}
   excludePrefabConnections: []
   connectors:
@@ -217,11 +235,11 @@ MonoBehaviour:
   sectionLightLevel: 0.202
   sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
   excludePrefabConnectionsIds: 
-  stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 27446
   strongKeep: 0
   hasLadder: 0
   isColony: 0
+  stagnationBeacon: {fileID: 0}
+  orignalInstanceId: 27446
   sanctumPartsSpawnPoint: {fileID: 9161697088426887930}
   explored: 0
 --- !u!114 &-1886313466182116042
@@ -291,6 +309,102 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
+--- !u!114 &514215644879380948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171612208962928746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d94a0d04ee60e4a9a3533fbe11781c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bakedData:
+    orignalInstanceId: 0
+    originalInstance: {fileID: 7226286589360190076}
+    miniMapAsset: {fileID: 2800000, guid: 5a4bba4d52864dc40909ca8a2c8fc088, type: 3}
+    excludePrefabConnections: []
+    connectors:
+    - localPosition: {x: 0, y: 1.5, z: 0}
+      localRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 0
+    - localPosition: {x: 10, y: 1.5, z: 10}
+      localRotation: {x: 0, y: 0, z: 0, w: 1}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 1
+    - localPosition: {x: 10, y: 1.5, z: -10}
+      localRotation: {x: 0, y: 1, z: 0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 2
+    boundingBoxes:
+    - center:
+        x: 5
+        y: 1.4459991
+        z: 0
+      oreintation:
+        x: 0
+        y: 270
+        z: 0
+      size:
+        x: 3.91659
+        y: 3.892
+        z: 9.5
+    - center:
+        x: 10
+        y: 1.4459991
+        z: 0
+      oreintation:
+        x: 0
+        y: 270
+        z: 0
+      size:
+        x: 19.5
+        y: 3.892
+        z: 3.8848798
+    - center:
+        x: 7.256016
+        y: 1.4459991
+        z: 2.754364
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 2.14796
+        y: 3.892
+        z: 2.0913
+    - center:
+        x: 7.251259
+        y: 1.4459991
+        z: -2.8565044
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 2.14796
+        y: 3.892
+        z: 2.0913
+    excludeConnectorSections: []
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    spawnRule: {fileID: 0}
+    sectionLightLevel: 0.202
+    sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
+    excludePrefabConnectionsIds: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
+  targetOrigin: {fileID: 0}
 --- !u!1 &2319835659622089281
 GameObject:
   m_ObjectHideFlags: 0

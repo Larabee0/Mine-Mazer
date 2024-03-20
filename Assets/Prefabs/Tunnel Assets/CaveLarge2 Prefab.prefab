@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: -5356444298311868501}
   - component: {fileID: -7375710981014327976}
   - component: {fileID: 7025408962573674052}
+  - component: {fileID: 852514420936482008}
   m_Layer: 0
   m_Name: CaveLarge2 Prefab
   m_TagString: Untagged
@@ -219,6 +220,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataFromBake:
+    orignalInstanceId: 0
+    originalInstance: {fileID: 0}
+    miniMapAsset: {fileID: 0}
+    excludePrefabConnections: []
+    connectors: []
+    boundingBoxes: []
+    excludeConnectorSections: []
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    spawnRule: {fileID: 0}
+    sectionLightLevel: 0
+    sectionAmbience: {fileID: 0}
+    excludePrefabConnectionsIds: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
   miniMapAsset: {fileID: 2800000, guid: 7baf873c40c79fa49b38fc4d4cef5919, type: 3}
   excludePrefabConnections:
   - {fileID: 7541396775899075963, guid: 2e3fb2f25c7499740a8e78cd64cbd320, type: 3}
@@ -373,11 +391,11 @@ MonoBehaviour:
   sectionLightLevel: 0.202
   sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
   excludePrefabConnectionsIds: 206b00002a6b0000386b0000886a0000266b0000246b00003c6b0000
-  stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 27272
   strongKeep: 0
   hasLadder: 0
   isColony: 0
+  stagnationBeacon: {fileID: 0}
+  orignalInstanceId: 27272
   sanctumPartsSpawnPoint: {fileID: 4892355185815518648}
   explored: 0
 --- !u!114 &-5356444298311868501
@@ -447,6 +465,175 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
+--- !u!114 &852514420936482008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974376745811405886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d94a0d04ee60e4a9a3533fbe11781c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bakedData:
+    orignalInstanceId: 0
+    originalInstance: {fileID: 3205104275630772647}
+    miniMapAsset: {fileID: 2800000, guid: 7baf873c40c79fa49b38fc4d4cef5919, type: 3}
+    excludePrefabConnections:
+    - {fileID: 7541396775899075963, guid: 2e3fb2f25c7499740a8e78cd64cbd320, type: 3}
+    - {fileID: 4699310440157599471, guid: 7a114b4e17d402448bdafb0f125ae068, type: 3}
+    - {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962, type: 3}
+    - {fileID: 3205104275630772647}
+    - {fileID: 7280747401053184910, guid: 5c6e2853f717f8c428620637ea73048f, type: 3}
+    - {fileID: 7544748717809826148, guid: 17cf9e69ff45f2d4db8a8e84c5559246, type: 3}
+    - {fileID: 1925884630686241207, guid: 47ecaaf294d32d345877b4d8b966f55e, type: 3}
+    connectors:
+    - localPosition: {x: 0, y: 1.5, z: 0}
+      localRotation: {x: -0, y: -0, z: -0, w: 1}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 0
+    - localPosition: {x: 10, y: 1.5, z: -10}
+      localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 1
+    - localPosition: {x: -10, y: 1.5, z: -10}
+      localRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 2
+    - localPosition: {x: 0, y: 1.5, z: -20}
+      localRotation: {x: -0, y: 1, z: -0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 3
+    boundingBoxes:
+    - center:
+        x: 0
+        y: 1.9955
+        z: -2.5
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 3.91916
+        y: 4.1470656
+        z: 4.5
+    - center:
+        x: 8.0461
+        y: 2.395
+        z: -10
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 3.4058
+        y: 5
+        z: 4.325755
+    - center:
+        x: 3.7537966
+        y: 2.369999
+        z: -5.3263016
+      oreintation:
+        x: -0
+        y: 44.999996
+        z: -0
+      size:
+        x: 9.947731
+        y: 5.2602997
+        z: 3.4699802
+    - center:
+        x: -4.953002
+        y: 2.37
+        z: -14.307098
+      oreintation:
+        x: -0
+        y: 44.999996
+        z: -0
+      size:
+        x: 10.3526
+        y: 5.2602997
+        z: 3.4699802
+    - center:
+        x: 4.5908
+        y: 2.369999
+        z: -14.7209
+      oreintation:
+        x: -0
+        y: 315
+        z: 0
+      size:
+        x: 9.947731
+        y: 5.2602997
+        z: 3.868341
+    - center:
+        x: -4.919997
+        y: 2.369999
+        z: -5.270096
+      oreintation:
+        x: -0
+        y: 315
+        z: 0
+      size:
+        x: 10.0322895
+        y: 5.2602997
+        z: 3.4699802
+    - center:
+        x: 0.1007967
+        y: 3.691
+        z: -9.972107
+      oreintation:
+        x: -0
+        y: 315
+        z: 0
+      size:
+        x: 10.247681
+        y: 7.8975997
+        z: 10.559259
+    - center:
+        x: 0
+        y: 2.003
+        z: -18
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 4.31566
+        y: 4.384849
+        z: 3.5
+    - center:
+        x: -7.5
+        y: 2.0655
+        z: -10
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 4.5
+        y: 4.5098166
+        z: 3.9633799
+    excludeConnectorSections: []
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    spawnRule: {fileID: 0}
+    sectionLightLevel: 0.202
+    sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
+    excludePrefabConnectionsIds: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
+  targetOrigin: {fileID: 0}
 --- !u!1 &2502987402056660746
 GameObject:
   m_ObjectHideFlags: 0

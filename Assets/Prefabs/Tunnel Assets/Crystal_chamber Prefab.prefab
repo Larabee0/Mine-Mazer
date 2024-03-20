@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 5690713400658837405}
   - component: {fileID: 2402126789756135080}
   - component: {fileID: 2339923809335896465}
+  - component: {fileID: 1942237678627609201}
   m_Layer: 0
   m_Name: Crystal_chamber Prefab
   m_TagString: Untagged
@@ -444,6 +445,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataFromBake:
+    orignalInstanceId: 0
+    originalInstance: {fileID: 0}
+    miniMapAsset: {fileID: 0}
+    excludePrefabConnections: []
+    connectors: []
+    boundingBoxes: []
+    excludeConnectorSections: []
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    spawnRule: {fileID: 0}
+    sectionLightLevel: 0
+    sectionAmbience: {fileID: 0}
+    excludePrefabConnectionsIds: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
   miniMapAsset: {fileID: 2800000, guid: 73b183c3cfcd2944e84471c03217e707, type: 3}
   excludePrefabConnections: []
   connectors:
@@ -831,11 +849,11 @@ MonoBehaviour:
   sectionLightLevel: 0.65
   sectionAmbience: {fileID: 8300000, guid: ed9bc1d2e373e4e45a2617c3c06b49f5, type: 3}
   excludePrefabConnectionsIds: 
-  stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 39768
   strongKeep: 1
   hasLadder: 0
   isColony: 0
+  stagnationBeacon: {fileID: 0}
+  orignalInstanceId: 39768
   sanctumPartsSpawnPoint: {fileID: 0}
   explored: 0
 --- !u!114 &2402126789756135080
@@ -889,6 +907,408 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 03f34450e9e21a5418b28b17350d38a0, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &1942237678627609201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4764938545171276552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d94a0d04ee60e4a9a3533fbe11781c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bakedData:
+    orignalInstanceId: 0
+    originalInstance: {fileID: 5690713400658837405}
+    miniMapAsset: {fileID: 2800000, guid: 73b183c3cfcd2944e84471c03217e707, type: 3}
+    excludePrefabConnections: []
+    connectors:
+    - localPosition: {x: 0, y: 1.5, z: 0}
+      localRotation: {x: -0, y: -0, z: -0, w: 1}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 0
+    - localPosition: {x: 0, y: 1.5, z: -40}
+      localRotation: {x: -0, y: 1, z: -0, w: 0}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 1
+    - localPosition: {x: 10, y: 1.5, z: -20}
+      localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 2
+    - localPosition: {x: -30, y: 1.5, z: -20}
+      localRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 3
+    boundingBoxes:
+    - center:
+        x: 0
+        y: 2.0147
+        z: -2.5
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 3.91916
+        y: 4.1626997
+        z: 4.5
+    - center:
+        x: 0
+        y: 1.944
+        z: -37.5
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 3.91916
+        y: 4.02134
+        z: 4.5
+    - center:
+        x: 7.5
+        y: 2.0236
+        z: -20
+      oreintation:
+        x: -0
+        y: 90
+        z: -0
+      size:
+        x: 3.91916
+        y: 4.18071
+        z: 4.5
+    - center:
+        x: -27.5
+        y: 1.8967
+        z: -20
+      oreintation:
+        x: -0
+        y: 90
+        z: -0
+      size:
+        x: 3.91916
+        y: 3.9268699
+        z: 4.5
+    - center:
+        x: -26.010002
+        y: 2.0095
+        z: -17.23
+      oreintation:
+        x: -0
+        y: 46.877365
+        z: -0
+      size:
+        x: 3.91916
+        y: 4.1521597
+        z: 6.56166
+    - center:
+        x: -12.433998
+        y: 2.0185
+        z: -8.6715
+      oreintation:
+        x: -0
+        y: 59.67856
+        z: -0
+      size:
+        x: 3.91916
+        y: 4.17017
+        z: 26.639158
+    - center:
+        x: -24.07
+        y: 1.9594
+        z: -24.31
+      oreintation:
+        x: -0
+        y: 131.89503
+        z: -0
+      size:
+        x: 3.91916
+        y: 4.05226
+        z: 11.686601
+    - center:
+        x: -10.713898
+        y: 1.9594
+        z: -32.3595
+      oreintation:
+        x: -0
+        y: 115.95801
+        z: -0
+      size:
+        x: 3.91916
+        y: 4.05226
+        z: 21.342499
+    - center:
+        x: 3.7369995
+        y: 2.012
+        z: -30.0753
+      oreintation:
+        x: -0
+        y: 21.347279
+        z: -0
+      size:
+        x: 3.91916
+        y: 4.15762
+        z: 19.15523
+    - center:
+        x: 4.029999
+        y: 2.012
+        z: -10.35
+      oreintation:
+        x: -0
+        y: 336.07886
+        z: 0
+      size:
+        x: 3.91916
+        y: 4.15762
+        z: 19.15523
+    - center:
+        x: 3.8037987
+        y: 5.1539
+        z: -13.6847
+      oreintation:
+        x: -0
+        y: 336.73276
+        z: 0
+      size:
+        x: 3.2313504
+        y: 2.50538
+        z: 14.777611
+    - center:
+        x: 6.7579
+        y: 4.4946
+        z: -23.5204
+      oreintation:
+        x: -0
+        y: 19.515224
+        z: -0
+      size:
+        x: 1.36039
+        y: 1.1868
+        z: 8.31417
+    - center:
+        x: 3.290001
+        y: 4.4946
+        z: -30.83
+      oreintation:
+        x: -0
+        y: 30.538237
+        z: -0
+      size:
+        x: 1.3603901
+        y: 1.1868
+        z: 8.31417
+    - center:
+        x: -5.9834976
+        y: 4.5879
+        z: -32.6716
+      oreintation:
+        x: -0
+        y: 106.347916
+        z: -0
+      size:
+        x: 1.3603901
+        y: 1.37349
+        z: 16.060831
+    - center:
+        x: -17.162003
+        y: 5.1757
+        z: -27.4442
+      oreintation:
+        x: -0
+        y: 301.83038
+        z: 0
+      size:
+        x: 6.30367
+        y: 2.54898
+        z: 9.851901
+    - center:
+        x: -22.085999
+        y: 4.8164
+        z: -18.7363
+      oreintation:
+        x: -0
+        y: 327.29492
+        z: 0
+      size:
+        x: 3.69389
+        y: 1.8304199
+        z: 10.64637
+    - center:
+        x: -23.7313
+        y: 4.4945
+        z: -21.8244
+      oreintation:
+        x: -0
+        y: 327.29492
+        z: 0
+      size:
+        x: 2.613
+        y: 1.1864799
+        z: 9.8519
+    - center:
+        x: -12.197403
+        y: 5.4243
+        z: -11.7339
+      oreintation:
+        x: -0
+        y: 245.22813
+        z: 0
+      size:
+        x: 7.3582387
+        y: 3.04618
+        z: 21.926197
+    - center:
+        x: -1.7818985
+        y: 4.9175
+        z: -8.3349
+      oreintation:
+        x: -0
+        y: 285.16473
+        z: 0
+      size:
+        x: 7.6081905
+        y: 2.03241
+        z: 6.20693
+    - center:
+        x: 5.220001
+        y: 6.03
+        z: -23.57
+      oreintation:
+        x: -0
+        y: 286.925
+        z: 0
+      size:
+        x: 7.608188
+        y: 2.03241
+        z: 2.9787095
+    - center:
+        x: 1.7449989
+        y: 6.03
+        z: -28.9054
+      oreintation:
+        x: -0
+        y: 314.8147
+        z: 0
+      size:
+        x: 7.6081896
+        y: 2.03241
+        z: 3.96241
+    - center:
+        x: -5.4320984
+        y: 6.03
+        z: -30.0526
+      oreintation:
+        x: -0
+        y: 16.314322
+        z: -0
+      size:
+        x: 15.242942
+        y: 2.03241
+        z: 4.0282903
+    - center:
+        x: -18.754501
+        y: 6.03
+        z: -20.1571
+      oreintation:
+        x: -0
+        y: 57.229176
+        z: -0
+      size:
+        x: 5.0707703
+        y: 2.03241
+        z: 4.02829
+    - center:
+        x: -9.662201
+        y: 7.8
+        z: -18.6696
+      oreintation:
+        x: -0
+        y: 59.81294
+        z: -0
+      size:
+        x: 8.99801
+        y: 2.03241
+        z: 13.527169
+    - center:
+        x: 0.39250183
+        y: 7.8
+        z: -16.2774
+      oreintation:
+        x: -0
+        y: 139.36131
+        z: -0
+      size:
+        x: 6.6853404
+        y: 2.03241
+        z: 13.1917095
+    - center:
+        x: -1.4486008
+        y: 7.8
+        z: -23.1366
+      oreintation:
+        x: -0
+        y: 101.5172
+        z: -0
+      size:
+        x: 7.81449
+        y: 2.03241
+        z: 10.8967
+    - center:
+        x: -6.429596
+        y: 7.8
+        z: -27.1114
+      oreintation:
+        x: -0
+        y: 101.94606
+        z: -0
+      size:
+        x: 2.1024396
+        y: 2.03241
+        z: 13.828269
+    - center:
+        x: -9.186096
+        y: 8.05
+        z: -23.6005
+      oreintation:
+        x: -0
+        y: 101.08369
+        z: -0
+      size:
+        x: 4.2188897
+        y: 2.03241
+        z: 4.32117
+    - center:
+        x: -14.749298
+        y: 6.7125
+        z: -23.6012
+      oreintation:
+        x: -0
+        y: 121.82943
+        z: -0
+      size:
+        x: 2.8499298
+        y: 0.70728
+        z: 6.460399
+    excludeConnectorSections: []
+    strongKeepPosition: {x: -12.12, y: 2.15, z: -21}
+    waypointName: Core Chamber
+    spawnRule: {fileID: 0}
+    sectionLightLevel: 0.65
+    sectionAmbience: {fileID: 8300000, guid: ed9bc1d2e373e4e45a2617c3c06b49f5, type: 3}
+    excludePrefabConnectionsIds: 
+    strongKeep: 1
+    hasLadder: 0
+    isColony: 0
+  targetOrigin: {fileID: 0}
 --- !u!1 &6454347598331509218
 GameObject:
   m_ObjectHideFlags: 0

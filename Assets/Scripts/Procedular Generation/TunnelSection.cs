@@ -6,8 +6,13 @@ using UnityEngine;
 public class TunnelSection : MonoBehaviour
 {
     [Header("Baked data")]
+    public BakedTunnelSection dataFromBake;
+
+
+
     [SerializeField] private Texture2D miniMapAsset;
     [SerializeField] private List<TunnelSection> excludePrefabConnections = new();
+    public  List<TunnelSection> ExcludePrefabConnectionsTS => excludePrefabConnections;
     public Connector[] connectors;
 
     public BoxBounds[] boundingBoxes;
@@ -20,14 +25,14 @@ public class TunnelSection : MonoBehaviour
     [SerializeField] private AudioClip sectionAmbience;
 
     [SerializeField] private List<int> excludePrefabConnectionsIds;
+    [SerializeField] private bool strongKeep = false;
+    [SerializeField] private bool hasLadder = false;
+    [SerializeField] private bool isColony = false;
     [Header("Runtime Data")]
     public MapTreeElement treeElementParent;
     public GameObject stagnationBeacon;
     public int orignalInstanceId;
     private bool weakKeep = false;
-    [SerializeField] private bool strongKeep = false;
-    [SerializeField] private bool hasLadder = false;
-    [SerializeField] private bool isColony = false;
     [SerializeField] private Transform sanctumPartsSpawnPoint;
     // accessors 
     public Transform SanctumPartSpawnPoint=>sanctumPartsSpawnPoint;
@@ -95,9 +100,6 @@ public class TunnelSection : MonoBehaviour
     }
 
     public BoxBounds[] BoundingBoxes => boundingBoxes;
-
-    //public HashSet<int> InUse = new();
-    //public Dictionary<int, SectionAndConnector> connectorPairs = new();
 
     public List<int> ExcludePrefabConnections => excludePrefabConnectionsIds;
 
