@@ -34,17 +34,88 @@ public class CustomPhysics : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        DrawInteraction(aCorners,bCorners);
+    }
+
+    private static void DrawInteraction(float3[] aCorners, float3[] bCorners)
+    {
         if (aCorners == null || bCorners == null) return;
         Gizmos.color = Color.red;
         for (int i = 0; i < aCorners.Length; i++)
         {
-            Gizmos.DrawSphere(aCorners[i], 0.1f);
+            Gizmos.DrawSphere(aCorners[i], 0.01f);
         }
-        Gizmos.color = Color.green;
         for (int i = 0; i < bCorners.Length; i++)
         {
-            Gizmos.DrawSphere(bCorners[i], 0.1f);
+            Gizmos.DrawSphere(bCorners[i], 0.01f);
         }
+    }
+
+    public static bool CheckBox(ProDecPoint aBox, ProDecPoint bBox, bool drawInteraction = false)
+    {
+
+        BoxBounds a = ToBoxBounds(aBox);
+        BoxBounds b = ToBoxBounds(bBox);
+
+
+        float4x4 aWorldMatrix = math.mul(aBox.LTWMatrix, a.LocalMatrix);
+        float4x4 bWorldMatrix = math.mul(bBox.LTWMatrix, b.LocalMatrix);
+
+        InstancedBox instancedBoxA = new(a);
+        InstancedBox instancedBoxB = new(a);
+        instancedBoxA.TransformNormals(aWorldMatrix);
+        instancedBoxA.GetTransformedCorners(aWorldMatrix);
+
+        instancedBoxB.TransformNormals(bWorldMatrix);
+        instancedBoxB.GetTransformedCorners(bWorldMatrix);
+
+        float3[] aCorners = new float3[8];
+        float3[] bCorners = new float3[8];
+
+        for (int i = 0; i < 8; i++)
+        {
+            aCorners[i] = instancedBoxA.corners[i];
+            bCorners[i] = instancedBoxB.corners[i];
+        }
+
+        for (int i = 0; i < 8; i++)
+        {
+            aCorners[i] = instancedBoxA.corners[i];
+            bCorners[i] = instancedBoxB.corners[i];
+        }
+
+        if (drawInteraction)
+        {
+            DrawInteraction(aCorners, bCorners);
+        }
+
+        for (int i = 0; i < instancedBoxA.normals.Length; i++)
+        {
+            SATTest(instancedBoxA.normals[i], aCorners, out float shape1Min, out float shape1Max);
+            SATTest(instancedBoxA.normals[i], bCorners, out float shape2Min, out float shape2Max);
+            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
+            {
+                instancedBoxA.Dispose();
+                instancedBoxB.Dispose();
+                return false;
+            }
+        }
+
+        for (int i = 0; i < instancedBoxB.normals.Length; i++)
+        {
+            SATTest(instancedBoxB.normals[i], aCorners, out float shape1Min, out float shape1Max);
+            SATTest(instancedBoxB.normals[i], bCorners, out float shape2Min, out float shape2Max);
+            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
+            {
+                instancedBoxA.Dispose();
+                instancedBoxB.Dispose();
+                return false;
+            }
+        }
+        instancedBoxA.Dispose();
+        instancedBoxB.Dispose();
+        
+        return true;
     }
 
     private bool CheckBox(BoxCollider aBox, BoxCollider bBox)
@@ -115,17 +186,17 @@ public class CustomPhysics : MonoBehaviour
         return true;
     }
 
-    private bool Overlaps(float min1, float max1, float min2, float max2)
+    private static bool Overlaps(float min1, float max1, float min2, float max2)
     {
         return IsBetweenOrdered(min2, min1, max1) || IsBetweenOrdered(min1, min2, max2);
     }
 
-    private bool IsBetweenOrdered(float val, float lowerBound, float upperBound)
+    private static bool IsBetweenOrdered(float val, float lowerBound, float upperBound)
     {
         return lowerBound <= val && val <= upperBound;
     }
 
-    private void SATTest(float3 axis, float3[] ptSet, out float minAlong, out float maxAlong)
+    private static void SATTest(float3 axis, float3[] ptSet, out float minAlong, out float maxAlong)
     {
         minAlong = float.MaxValue;
         maxAlong = float.MinValue;
@@ -184,5 +255,20 @@ public class CustomPhysics : MonoBehaviour
             oreintation = Vector3.zero
         };
     }
-
+    
+    private static BoxBounds ToBoxBounds(ProDecPoint proDecPoint)
+    {
+        //return new BoxBounds()
+        //{
+        //    center = proDecPoint.localPosition,
+        //    size = new Vector3(0.2f, 0.2f, 0.2f),
+        //    oreintation = proDecPoint.localOrientation
+        //};
+        return new BoxBounds()
+        {
+            center = Vector3.zero,
+            size = new Vector3(0.2f, 0.2f, 0.2f),
+            oreintation = Vector3.zero
+        };
+    }
 }

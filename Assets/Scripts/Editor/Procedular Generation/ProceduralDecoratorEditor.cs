@@ -26,7 +26,7 @@ public class ProceduralDecoratorEditor : Editor
                 if (Event.current != null &&
                         Event.current.isKey &&
                         Event.current.type.Equals(EventType.KeyDown) &&
-                        Event.current.keyCode == KeyCode.Delete)
+                        (Event.current.keyCode == KeyCode.Delete || Event.current.keyCode == KeyCode.R))
                 {
 
                     Event.current.Use();
@@ -42,6 +42,26 @@ public class ProceduralDecoratorEditor : Editor
                     Event.current.Use();
                     decorator.IncrementSelection(1);
                     Repaint();
+                }
+                if (Event.current != null &&
+                        Event.current.isKey &&
+                        Event.current.type.Equals(EventType.KeyUp) &&
+                        Event.current.keyCode == KeyCode.J)
+                {
+
+                    Event.current.Use();
+                    decorator.IncrementSelection(-1);
+                    Repaint();
+                }
+
+                if (Event.current != null &&
+                        Event.current.isKey &&
+                        Event.current.type.Equals(EventType.KeyDown) &&
+                        Event.current.keyCode == KeyCode.F)
+                {
+
+                    Event.current.Use();
+                    decorator.FocusSceneCamera();
                 }
                 if (DrawProceduralHandle(decorator.selectPoint, decorator.GetPoint(decorator.selectPoint)))
                 {
@@ -97,6 +117,12 @@ public class ProceduralDecoratorEditor : Editor
     {
         
         ProceduralDecorator decorator = (ProceduralDecorator)target;
+
+        if (GUILayout.Button("Update Intersections"))
+        {
+            decorator.UpdateIntersections();
+            SceneView.RepaintAll();
+        }
         if (GUILayout.Button("Focus Scene Camera"))
         {
             decorator.FocusSceneCamera();
@@ -122,6 +148,11 @@ public class ProceduralDecoratorEditor : Editor
         if (GUILayout.Button("Set All To Default Allowed Items"))
         {
             decorator.BulkAllowFilter();
+            Repaint();
+        }
+        if (GUILayout.Button("Rotate all 90"))
+        {
+            decorator.RotateAll();
             Repaint();
         }
         if (GUILayout.Button("Decorate"))

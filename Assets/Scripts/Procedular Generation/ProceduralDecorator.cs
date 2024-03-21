@@ -19,6 +19,7 @@ public class ProceduralDecorator : MonoBehaviour
     public int selectPoint;
     [SerializeField] private ProDecPoint selectedPoint;
     [Header("Common settings")]
+    [SerializeField] private Vector3 rotationOffset = new Vector3(90, 0, 0);
     [SerializeField] private float maxRayDst = 100;
     [SerializeField] private LayerMask layerMasks;
     [SerializeField] private bool showHitNormals = true;
@@ -295,6 +296,7 @@ public class ProceduralDecorator : MonoBehaviour
         if (showProceduralPoints && proceduralPoints != null && proceduralPoints.Count > 0 && meshRayCaster != null)
         {
             selectPoint = Mathf.Clamp(selectPoint, 0, proceduralPoints.Count - 1);
+
             for (int i = 0; i < proceduralPoints.Count; i++)
             {
                 var point = proceduralPoints[i];
@@ -305,6 +307,28 @@ public class ProceduralDecorator : MonoBehaviour
                 DrawPoint(i, point);
             }
             DrawPoint(selectPoint, proceduralPoints[selectPoint]);
+
+        }
+    }
+
+    public void UpdateIntersections()
+    {
+        for (int i = 0; i < proceduralPoints.Count; i++)
+        {
+            bool intersect = false;
+            var point = proceduralPoints[i];
+            point.UpdateMatrix(meshRayCaster.transform.localToWorldMatrix);
+            for (int j = i; j < proceduralPoints.Count; j++)
+            {
+                if (i == j) continue;
+                var point2 = proceduralPoints[j];
+                point2.UpdateMatrix(meshRayCaster.transform.localToWorldMatrix);
+                intersect = !CustomPhysics.CheckBox(point, point2, false);
+                if (!intersect) break;
+            }
+            point.intersection = intersect;
+            proceduralPoints[i] = point;
+
         }
     }
 
@@ -319,10 +343,22 @@ public class ProceduralDecorator : MonoBehaviour
     {
         point.UpdateMatrix(meshRayCaster.transform.localToWorldMatrix);
         Gizmos.matrix = point.LTWMatrix;
-        Gizmos.color = Color.gray;
-        if (selectPoint == i)
+        
+        if (!point.intersection)
         {
-            Gizmos.color = Color.cyan;
+            Gizmos.color = Color.red;
+            if (selectPoint == i)
+            {
+                Gizmos.color = Color.green;
+            }
+        }
+        else
+        {
+            Gizmos.color = Color.gray;
+            if (selectPoint == i)
+            {
+                Gizmos.color = Color.cyan;
+            }
         }
         Gizmos.DrawCube(Vector3.zero, new Vector3(0.2f, 0.2f, 0.2f));
         Gizmos.matrix = Matrix4x4.identity;
@@ -400,6 +436,19 @@ public class ProceduralDecorator : MonoBehaviour
             proceduralPoints[i] = p;
         }
     }
+
+    public void RotateAll()
+    {
+        Undo.RegisterCompleteObjectUndo(this, "Rotate All");
+        for (int i = 0; i < proceduralPoints.Count; i++)
+        {
+            ProDecPoint p = proceduralPoints[i];
+            p.localOrientation += rotationOffset;
+
+            proceduralPoints[i] = p;
+        }
+        SceneView.RepaintAll();
+    }
 }
 
 
@@ -407,6 +456,7 @@ public class ProceduralDecorator : MonoBehaviour
 [System.Serializable]
 public struct ProDecPoint
 {
+    public bool intersection;
     public Item allowedItems;
     public Vector3 localPosition;
     public Vector3 localOrientation;
