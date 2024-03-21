@@ -11,7 +11,7 @@ public class ProceduralDecoratorEditor : Editor
     {
         ProceduralDecorator decorator = (ProceduralDecorator)target;
         
-        if (decorator.proceduralPoints.Count > 0)
+        if (decorator.proceduralPoints.Count > 0 && decorator.meshRayCaster != null)
         {
             for (int i = 0; i < decorator.proceduralPoints.Count; i++)
             {
@@ -31,6 +31,17 @@ public class ProceduralDecoratorEditor : Editor
 
                     Event.current.Use();
                     decorator.RemoveSelected();
+                    Repaint();
+                }
+                if (Event.current != null &&
+                        Event.current.isKey &&
+                        Event.current.type.Equals(EventType.KeyUp) &&
+                        Event.current.keyCode == KeyCode.L)
+                {
+
+                    Event.current.Use();
+                    decorator.IncrementSelection(1);
+                    Repaint();
                 }
                 if (DrawProceduralHandle(decorator.selectPoint, decorator.GetPoint(decorator.selectPoint)))
                 {
@@ -89,32 +100,40 @@ public class ProceduralDecoratorEditor : Editor
         if (GUILayout.Button("Focus Scene Camera"))
         {
             decorator.FocusSceneCamera();
+            Repaint();
         }
 
         if (GUILayout.Button("Next Point"))
         {
             decorator.IncrementSelection(1);
+            Repaint();
         }
         if (GUILayout.Button("Previous Point"))
         {
             decorator.IncrementSelection(-1);
+            Repaint();
         }
         if (GUILayout.Button("Delete Selected"))
         {
             decorator.RemoveSelected();
+            Repaint();
         }
         DrawDefaultInspector();
         if (GUILayout.Button("Set All To Default Allowed Items"))
         {
             decorator.BulkAllowFilter();
+            Repaint();
         }
         if (GUILayout.Button("Decorate"))
         {
             decorator.Decorate();
+
+            Repaint();
         }
         if(GUILayout.Button("Clear Decor"))
         {
             decorator.ClearDecror();
+            Repaint();
         }
     }
 }

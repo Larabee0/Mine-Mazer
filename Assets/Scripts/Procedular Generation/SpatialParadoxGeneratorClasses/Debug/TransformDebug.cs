@@ -31,12 +31,12 @@ public partial class SpatialParadoxGenerator
                 Connector primaryConnector = curPlayerSection.Connectors[i];
 
                 curPlayerSection.Connectors[i] = primaryConnector;
-                for (int j = 0; j < newSection.connectors.Length; j++)
+                for (int j = 0; j < newSection.dataFromBake.connectors.Length; j++)
                 {
-                    Connector secondaryConnector = newSection.connectors[j];
+                    Connector secondaryConnector = newSection.dataFromBake.connectors[j];
                     primaryConnector.UpdateWorldPos(curPlayerSection.sectionInstance.transform.localToWorldMatrix);
                     secondaryConnector.UpdateWorldPos(curPlayerSection.sectionInstance.transform.localToWorldMatrix);
-                    newSection.connectors[j] = secondaryConnector;
+                    newSection.dataFromBake.connectors[j] = secondaryConnector;
                     float4x4 matix = CalculateSectionMatrix(primaryConnector, secondaryConnector);
                     newSection.transform.SetPositionAndRotation(matix.Translation(), matix.Rotation());
                     Debug.LogFormat("i = {0} j = {1}", i, j);

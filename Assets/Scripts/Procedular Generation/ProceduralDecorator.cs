@@ -38,7 +38,7 @@ public class ProceduralDecorator : MonoBehaviour
     [SerializeField] bool enableMeshRayCaster = true;
     [SerializeField] bool meshFaceCasts = true;
     [SerializeField] bool meshVertexCasts = true;
-    [SerializeField] private MeshFilter meshRayCaster;
+    public MeshFilter meshRayCaster;
 
 
     private List<Vector3> vertices =new() ;
@@ -225,6 +225,11 @@ public class ProceduralDecorator : MonoBehaviour
                             Gizmos.DrawRay(hitInfo.point, hitInfo.normal);
                         }
                     }
+                    //else
+                    //{
+                    //    Gizmos.color = Color.yellow;
+                    //    Gizmos.DrawRay(raycaster.position, normal * maxRayDst);
+                    //}
                 }
             }
 
@@ -248,6 +253,11 @@ public class ProceduralDecorator : MonoBehaviour
                         }
                     }
 
+                    //else
+                    //{
+                    //    Gizmos.color = Color.yellow;
+                    //    Gizmos.DrawRay(raycaster.position, normal * maxRayDst);
+                    //}
                 });
             }
         }
@@ -358,7 +368,9 @@ public class ProceduralDecorator : MonoBehaviour
         Undo.RegisterCompleteObjectUndo(this, "Remove Selected");
         proceduralPoints.RemoveAt(selectPoint);
         selectPoint = Mathf.Clamp(selectPoint, 0, proceduralPoints.Count - 1);
+        selectedPoint = proceduralPoints[selectPoint];
         SceneView.RepaintAll();
+        
     }
 
     public void FocusSceneCamera()
@@ -375,6 +387,7 @@ public class ProceduralDecorator : MonoBehaviour
         next = next >= proceduralPoints.Count ?  0: next;
         next = next < 0 ? proceduralPoints.Count -1 : next;
         selectPoint = next;
+        selectedPoint = proceduralPoints[selectPoint];
         FocusSceneCamera();
     }
 

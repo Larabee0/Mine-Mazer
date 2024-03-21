@@ -24,6 +24,8 @@ public class SectionBakerEditor : Editor
 
     private void Bake(SectionBaker baker)
     {
+        Debug.LogError("needs updating for new Baked data section ");
+        return;
         if(baker.SectionModel == null) { baker.SectionModel = baker.transform.GetChild(0).gameObject;Debug.LogWarning("Section model unassigned getting first child. Check and try bake again."); return; }
         List<BoxBounds> boxBounds = new();
         for (int i = 0; i < baker.BoundsObjects.Length; i++)
@@ -55,20 +57,20 @@ public class SectionBakerEditor : Editor
         }
 
         section = prefab.AddComponent<TunnelSection>();
-        if (baker.ConnectorObjects != null)
-        {
-            section.connectors = new Connector[baker.ConnectorObjects.Length];
-
-            for (int i = 0; i < baker.ConnectorObjects.Length; i++)
-            {
-                section.connectors[i] = new Connector()
-                {
-                    internalIndex = i,
-                    localPosition = baker.ConnectorObjects[i].transform.localPosition,
-                    localRotation = baker.ConnectorObjects[i].transform.localRotation
-                };
-            }
-        }
+        // if (baker.ConnectorObjects != null)
+        // {
+        //     section.connectors = new Connector[baker.ConnectorObjects.Length];
+        // 
+        //     for (int i = 0; i < baker.ConnectorObjects.Length; i++)
+        //     {
+        //         section.connectors[i] = new Connector()
+        //         {
+        //             internalIndex = i,
+        //             localPosition = baker.ConnectorObjects[i].transform.localPosition,
+        //             localRotation = baker.ConnectorObjects[i].transform.localRotation
+        //         };
+        //     }
+        // }
 
 
         boxBounds.ForEach(box =>
@@ -81,7 +83,7 @@ public class SectionBakerEditor : Editor
             empty.layer = (int)Mathf.Log(baker.tunnelSectionLayerMask.value, 2);
         });
         
-        section.boundingBoxes = boxBounds.ToArray();
+        // section.boundingBoxes = boxBounds.ToArray();
 
         for (int i = 0; i < baker.ConnectorTriggers.Length; i++)
         {

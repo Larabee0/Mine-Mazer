@@ -7,7 +7,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Random = Unity.Mathematics.Random;
 
 public partial class SpatialParadoxGenerator
 {
@@ -39,7 +39,7 @@ public partial class SpatialParadoxGenerator
         }
         else
         {
-            Random.state = seed;
+            randomNG = new(math.max(seed, 1));
             GenerateInitialArea();
         }
     }

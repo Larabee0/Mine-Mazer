@@ -76,9 +76,9 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
             sanctumPartCooldown++;
             return;
         }
-        if(Random.value <= sanctumPartSpawnChance)
+        if(randomNG.NextFloat() <= sanctumPartSpawnChance)
         {
-            MapResource item = Instantiate(resources[Random.Range(0, resources.Count)], parent);
+            MapResource item = Instantiate(resources[randomNG.NextInt(0, resources.Count)], parent);
                 item.transform.localPosition = item.placementPositionOffset;
             item.OnItemPickedUp += delegate () { sanctumPartCooldown = -sanctumPartCooldown; };
         }

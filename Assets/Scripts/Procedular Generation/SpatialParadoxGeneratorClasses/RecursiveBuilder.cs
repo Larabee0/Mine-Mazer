@@ -26,6 +26,7 @@ public partial class SpatialParadoxGenerator
         }
         if (breakEditorAfterInitialGen)
         {
+            Debug.Log(randomNG.state);
             yield return BreakEditor();
         }
     }
@@ -34,7 +35,7 @@ public partial class SpatialParadoxGenerator
     {
         if (promoteSectionsDict.Count > 0 && promoteSectionsDict.ContainsKey(mapTree.Count - 1))
         {
-            int freeConnectors = GetFreeConnectorCount(startElements);
+            int freeConnectors = GetTotalFreeConnectorCount(startElements);
             if (freeConnectors < promoteSectionsDict[mapTree.Count - 1].Count)
             {
                 while (SectionsInProcessingQueue)
@@ -54,7 +55,7 @@ public partial class SpatialParadoxGenerator
         }
         yield return FillElementsMain(startElements);
 
-        if (GetFreeConnectorCount(mapTree[^1]) == 0)
+        if (GetTotalFreeConnectorCount(mapTree[^1]) == 0)
         {
             while (SectionsInProcessingQueue)
             {

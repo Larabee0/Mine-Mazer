@@ -63,7 +63,7 @@ public partial class SpatialParadoxGenerator
             }
             mapTree.RemoveAt(mapTree.Count - 1);
         }
-        CheckForSectionsPromotions();
+        CheckForSectionPromotions();
         reRingInters = 1;
         yield return IncrementalBuilder();
         reRingInters = 0;
@@ -223,7 +223,7 @@ public partial class SpatialParadoxGenerator
                 this.mothBalledSections[section] = newRootDstData;
             });
 
-            CheckForSectionsPromotions();
+            CheckForSectionPromotions();
         }
     }
 }

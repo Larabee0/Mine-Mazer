@@ -5,17 +5,16 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Random = Unity.Mathematics.Random;
 
 public partial class SpatialParadoxGenerator
 {
     [Header("Expirmental Debug")]
     public bool DrawVirtualPhysicsWorldColliders = true;
-    public bool parallelIntersectTests = true;
-    public bool BigParallelIntersectTests = true;
-    public bool incrementalBuilder = true;
     public bool runPostProcessLast = false;
     public bool breakEditorAfterInitialGen = false;
+    public bool disableMultiThreading = false;
+    public bool sameFrameComplete = false;
     public float maxTimeInstantiatingPerFrame = 8;
 
     List<InstancedBox> fromIntersecitonTests = new();
@@ -32,11 +31,21 @@ public partial class SpatialParadoxGenerator
     public JobHandle UpdatePhyscisWorld(JobHandle jobHandle)
     {
         int length = VirtualPhysicsWorld.Length;
-        int batches = Mathf.Max(2, length / SystemInfo.processorCount);
-        return new UpdatePhysicsWorldTransforms
+        if (disableMultiThreading)
         {
-            VirtualPhysicsWorld = VirtualPhysicsWorld
-        }.ScheduleParallel(length, batches, jobHandle);
+            return new UpdatePhysicsWorldTransforms
+            {
+                VirtualPhysicsWorld = VirtualPhysicsWorld
+            }.Schedule(length, jobHandle);
+        }
+        else
+        {
+            int batches = Mathf.Max(2, length / SystemInfo.processorCount);
+            return new UpdatePhysicsWorldTransforms
+            {
+                VirtualPhysicsWorld = VirtualPhysicsWorld
+            }.ScheduleParallel(length, batches, jobHandle);
+        }
     }
 
     public void UpdateSectionTransform(int id, float4x4 matrix)
@@ -55,7 +64,7 @@ public partial class SpatialParadoxGenerator
 
         while (virtualPhysicsWorldIds.Contains(permanentID))
         {
-            permanentID = Random.Range(0, int.MaxValue);
+            permanentID = randomNG.NextInt(0, int.MaxValue);
         }
 
         SectionQueueItem newQueue = new(primaryElement, prefabSecondary, primaryConnector, secondaryConnector, permanentID);
@@ -91,13 +100,32 @@ public partial class SpatialParadoxGenerator
     private IEnumerator ProcessQueue(FinalConnectorMulJob matrixJob)
     {
         int length = matrixJob.connectorPairs.Length;
-        int batches = Mathf.Max(2, length / SystemInfo.processorCount);
-        JobHandle handle = matrixJob.ScheduleParallel(length, batches, new JobHandle());
-        while (!handle.IsCompleted)
+        JobHandle handle;
+        if (disableMultiThreading)
         {
-            yield return null;
+            handle = matrixJob.Schedule(length, new JobHandle());
         }
-        handle.Complete();
+        else
+        {
+
+
+            int batches = Mathf.Max(2, length / SystemInfo.processorCount);
+             handle= matrixJob.ScheduleParallel(length, batches, new JobHandle());
+        }
+
+        if (sameFrameComplete)
+        {
+            handle.Complete();
+        }
+        else
+        {
+            while (!handle.IsCompleted)
+            {
+                yield return null;
+            }
+            handle.Complete();
+        }
+
         yield return null;
         for (int i = 0; i < length; i++)
         {
@@ -147,7 +175,7 @@ public partial class SpatialParadoxGenerator
             item.queuedSection.secondaryMatrix.Translation(),
             item.queuedSection.secondaryMatrix.Rotation(),
             transform);
-        
+        sectionInstance.gameObject.SetActive(true);
         InstantiateBreakableWalls(item.queuedSection.pickedPrefab, sectionInstance, item.queuedSection.primaryConnector);
         item.SetInstance(sectionInstance);
     }
@@ -216,7 +244,7 @@ public partial class SpatialParadoxGenerator
         for (int i = 0; i < internalNextSections.Count; i++)
         {
             int id = internalNextSections[i];
-            List<Connector> secondaryConnectorsInner = FilterConnectorsOriginalIdOnly(instanceIdToSection[id]);
+            List<Connector> secondaryConnectorsInner = FilterConnectorsByOriginalOnly(id);
             secondaryConnectors.AddRange(secondaryConnectorsInner);
             secondaryConnectorsInner.ForEach(connector => managedTests.Add(new(id, connector.internalIndex)));
         }
@@ -225,12 +253,18 @@ public partial class SpatialParadoxGenerator
         NativeArray<bool> results = new(managedTests.Count, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
 
         int length = ScheduleBoxTests(iteratorData, tests, results);
-
-        while (!iteratorData.handle.IsCompleted)
+        if (sameFrameComplete)
         {
-            yield return null;
+            iteratorData.handle.Complete();
         }
-        iteratorData.handle.Complete();
+        else
+        {
+            while (!iteratorData.handle.IsCompleted)
+            {
+                yield return null;
+            }
+            iteratorData.handle.Complete();
+        }
         List<int2> validSecondaryConnectors = GetValidSecondaryConnectors(tests, results, length);
 
         CheckValidConnectors(primary, primaryConnectors, priIndex, iteratorData, secondaryConnectors, validSecondaryConnectors);
@@ -242,7 +276,7 @@ public partial class SpatialParadoxGenerator
     {
         if (validSecondaryConnectors.Count > 0)
         {
-            int2 connectorIndex = validSecondaryConnectors[UnityEngine.Random.Range(0, validSecondaryConnectors.Count)];
+            int2 connectorIndex = validSecondaryConnectors[randomNG.NextInt(0, validSecondaryConnectors.Count)];
             iteratorData.secondaryPreference = secondaryConnectors[connectorIndex.y];
             iteratorData.targetSection = instanceIdToSection[connectorIndex.x];
             ConnectorMultiply(primary.LocalToWorld, ref iteratorData.primaryPreference, ref iteratorData.secondaryPreference);
@@ -275,16 +309,30 @@ public partial class SpatialParadoxGenerator
     private int ScheduleBoxTests(ParallelRandInter iteratorData, NativeArray<int2> tests, NativeArray<bool> results)
     {
         int length = tests.Length;
-        int batches = Mathf.Max(2, length / SystemInfo.processorCount);
         iteratorData.handle = UpdatePhyscisWorld(iteratorData.handle);
-        iteratorData.handle = new BoxCheckJob
+        if (disableMultiThreading)
         {
-            incomingMatrices = sectionBoxTransforms,
-            incomingBoxBounds = incomingBoxBounds,
-            VirtualPhysicsWorld = VirtualPhysicsWorld,
-            sectionIds = tests,
-            outGoingChecks = results
-        }.ScheduleParallel(length, batches, iteratorData.handle);
+            iteratorData.handle = new BoxCheckJob
+            {
+                incomingMatrices = sectionBoxTransforms,
+                incomingBoxBounds = incomingBoxBounds,
+                VirtualPhysicsWorld = VirtualPhysicsWorld,
+                sectionIds = tests,
+                outGoingChecks = results
+            }.Schedule(length, iteratorData.handle);
+        }
+        else
+        {
+            int batches = Mathf.Max(2, length / SystemInfo.processorCount);
+            iteratorData.handle = new BoxCheckJob
+            {
+                incomingMatrices = sectionBoxTransforms,
+                incomingBoxBounds = incomingBoxBounds,
+                VirtualPhysicsWorld = VirtualPhysicsWorld,
+                sectionIds = tests,
+                outGoingChecks = results
+            }.ScheduleParallel(length, batches, iteratorData.handle);
+        }
         return length;
     }
 

@@ -48,7 +48,7 @@ public partial class SpatialParadoxGenerator
 
         if (pickedInstance != null && primary != null)
         {
-            TransformSection(primary, pickedResult.treeEleement, priPref, secPref);
+            TransformSectionAndLink(primary, pickedResult.treeEleement, priPref, secPref);
 
             InstantiateBreakableWalls(pickedSection, pickedResult.treeEleement.sectionInstance, priPref);
         }
@@ -86,7 +86,7 @@ public partial class SpatialParadoxGenerator
 
     private void InstantiateBreakableWalls(TunnelSection pickedSection, TunnelSection pickedInstance, Connector priPref)
     {
-        if (pickedSection != deadEndPlug && !rejectBreakableWallAtConnections && (forceBreakableWallAtConnections || Random.value < breakableWallAtConnectionChance))
+        if (pickedSection != deadEndPlug && !rejectBreakableWallAtConnections && (forceBreakableWallAtConnections || randomNG.NextFloat() < breakableWallAtConnectionChance))
         {
             BreakableWall breakableInstance = Instantiate(breakableWall, pickedInstance.transform);
             Connector conn = breakableInstance.connector;
@@ -101,7 +101,7 @@ public partial class SpatialParadoxGenerator
         outs.primaryPreference = Connector.Empty;
         outs.secondaryPreference = Connector.Empty;
 
-        List<Connector> primaryConnectors = FilterConnectors(primaryElement);
+        List<Connector> primaryConnectors = FilterConnectorsByInuse(primaryElement);
 
         NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.Persistent);
 
@@ -111,7 +111,7 @@ public partial class SpatialParadoxGenerator
         Physics.SyncTransforms();
         while (targetSection == null && primaryConnectors.Count > 0)
         {
-            outs.primaryPreference = GetConnectorFromSection(primaryConnectors, out int priIndex);
+            outs.primaryPreference = GetRandomConnectorFromSection(primaryConnectors, out int priIndex);
 
             NativeReference<BurstConnector> priConn = new(new(outs.primaryPreference), Allocator.Persistent);
             if (!priConn.IsCreated)
@@ -150,7 +150,7 @@ public partial class SpatialParadoxGenerator
             Connector priPref = outs.primaryPreference, secPref = outs.secondaryPreference;
             ConnectorMultiply(primaryElement.LocalToWorld, ref priPref, ref secPref);
             outs.primaryPreference = priPref; outs.secondaryPreference = secPref;
-            outs.secondaryPreference = deadEndPlug.connectors[0];
+            outs.secondaryPreference = deadEndPlug.dataFromBake.connectors[0];
             outs.secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
             targetSection = deadEndPlug;
             Debug.LogWarning("Unable to find usable section, ending the tunnel.");
@@ -175,10 +175,16 @@ public partial class SpatialParadoxGenerator
             matrices = sectionBoxTransforms
         };
         int length = nextSections.Count;
-        int batches = Mathf.Max(4, length / SystemInfo.processorCount);
-        handle = parallelMatrixCalculations
-            ? bmj.ScheduleParallel(length, batches, handle)
-            : bmj.Schedule(length, handle);
+
+        if (disableMultiThreading)
+        {
+            handle = bmj.Schedule(length, handle);
+        }
+        else
+        {
+            int batches = Mathf.Max(4, length / SystemInfo.processorCount);
+            handle = bmj.ScheduleParallel(length, batches, handle);
+        }
 
         handle = priConn.Dispose(handle);
         return handle;

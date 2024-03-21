@@ -48,7 +48,7 @@ public class MapTreeElement
     public int FreeConnectors => ConnectorCount - inUse.Count;
     public int OriginalInstanceId => sectionInstance != null ? sectionInstance.orignalInstanceId : queuedSection.pickedPrefab.orignalInstanceId;
 
-    public Connector[] Connectors => sectionInstance != null ? sectionInstance.connectors : queuedSection.pickedPrefab.connectors;
+    public Connector[] Connectors => sectionInstance != null ? sectionInstance.dataFromBake.connectors : queuedSection.pickedPrefab.dataFromBake.connectors;
 
     private bool renderersEnabled = true;
     public bool Explored => sectionInstance != null ? sectionInstance.explored : false;
