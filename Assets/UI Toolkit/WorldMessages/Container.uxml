@@ -1,7 +1,12 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="Container" style="background-color: rgba(0, 0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center;">
-        <ui:VisualElement name="MessagePreview">
-            <ui:Label tabindex="-1" display-tooltip-when-elided="true" style="flex-grow: 1; white-space: normal; -unity-text-align: middle-left;" />
+        <ui:VisualElement name="MessagePreview" style="padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px;">
+            <ui:Label tabindex="-1" display-tooltip-when-elided="true" style="flex-grow: 1; white-space: normal; -unity-text-align: middle-left; margin-left: 8px; margin-bottom: 8px; padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px; margin-right: 8px; margin-top: 8px;" />
+            <ui:VisualElement name="PagePanel" style="background-color: rgba(0, 0, 0, 0); flex-direction: row-reverse; justify-content: center; padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px;">
+                <ui:Button display-tooltip-when-elided="true" name="PageForwardArrow" style="background-image: url(&apos;project://database/Packages/com.unity.render-pipelines.core/Editor/LookDev/Icons/d_RightArrow@2x.png?fileID=2800000&amp;guid=28d47cbaafc98254f8d4f6184dff22cd&amp;type=3#d_RightArrow@2x&apos;); background-color: rgba(0, 0, 0, 0); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); width: 96px; height: 96px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                <ui:Label tabindex="-1" text="1/6" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; font-size: 30px;" />
+                <ui:Button display-tooltip-when-elided="true" name="PageBackArrow" style="background-image: url(&apos;project://database/Packages/com.unity.render-pipelines.core/Editor/LookDev/Icons/d_LeftArrow@2x.png?fileID=2800000&amp;guid=90335e5423c010749a50f906b965fa54&amp;type=3#d_LeftArrow@2x&apos;); background-color: rgba(0, 0, 0, 0); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); width: 96px; height: 96px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

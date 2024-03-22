@@ -18,7 +18,12 @@ public enum Item
     Eudie,
     StagnationBeacon,
     BrokenHeart,
-    Soup
+    Soup,
+    FicusWood,
+    ClockworkMechanism,
+    GlanceiteResonator,
+    HeartNode,
+    SanctumMachine
 }
 
 public enum ItemCategory
@@ -26,7 +31,9 @@ public enum ItemCategory
     Crystal,
     Mushroom,
     Equippment,
-    Lumenite
+    Lumenite,
+    Wood,
+    Quest
 }
 
 public static class ItemUtility
@@ -57,7 +64,6 @@ public static class ItemUtility
                 Item.Torch,
                 Item.Pickaxe,
                 Item.StagnationBeacon,
-                Item.BrokenHeart,
                 Item.Soup
             }
         },
@@ -68,9 +74,29 @@ public static class ItemUtility
                 Item.Eudie
             }
         },
+
+        {
+            ItemCategory.Wood, new ()
+            {
+                Item.FicusWood
+            }
+        },
+        {
+            ItemCategory.Quest, new()
+            {
+                Item.BrokenHeart,
+                Item.ClockworkMechanism,
+                Item.GlanceiteResonator,
+                Item.HeartNode,
+                Item.SanctumMachine
+            }
+        }
     };
+
     private static Dictionary<Item, ItemCategory> itemToCategory = null;
+
     public static Dictionary<ItemCategory, HashSet<Item>> CategoryToItems => categoryToItems;
+
     public static Dictionary<Item, ItemCategory> ItemToCategory
     {
         get
@@ -125,11 +151,15 @@ public class MapResource : MonoBehaviour, IInteractable
     [SerializeField] protected Collider itemCollider;
     [SerializeField] protected ItemStats itemStats;
     [SerializeField] protected bool Placeable;
+    [SerializeField] protected bool Interactable = true;
+    [SerializeField] protected bool requiresPickaxe = false;
     public Vector3 heldOrenintationOffset;
     public Vector3 heldpositonOffset;
     public Vector3 heldScaleOffset = Vector3.one;
     protected Vector3 originalScale;
     public Vector3 placementPositionOffset = Vector3.zero;
+    public Action OnItemPickedUp;
+    public Action OnInventoryItemInteract;
     [SerializeField,Tooltip("If left blank, falls back to ItemStats.name")] protected string toolTipNameOverride;
 
     protected virtual string ToolTipName
@@ -148,18 +178,38 @@ public class MapResource : MonoBehaviour, IInteractable
     protected virtual void Awake()
     {
         originalScale = transform.localScale;
+        SetColliderActive(Interactable);
     }
 
     public virtual string GetToolTipText()
     {
-        if (InputManager.GamePadPresent)
+        if(requiresPickaxe)
         {
-            return string.Format("B to  Pick Up {0}", ToolTipName);
+            if (InputManager.GamePadPresent)
+            {
+                return string.Format("RT to  Mine {0}", ToolTipName);
+            }
+            else
+            {
+                return string.Format("Left Click to Mine {0}", ToolTipName);
+            }
         }
         else
         {
-            return string.Format("E to Pick Up {0}", ToolTipName);
+            if (InputManager.GamePadPresent)
+            {
+                return string.Format("A to  Pick Up {0}", ToolTipName);
+            }
+            else
+            {
+                return string.Format("Left Click to Pick Up {0}", ToolTipName);
+            }
         }
+    }
+
+    public virtual void InventoryInteract()
+    {
+        OnInventoryItemInteract?.Invoke();
     }
 
     public virtual void Interact()
@@ -168,7 +218,11 @@ public class MapResource : MonoBehaviour, IInteractable
         {
             return;
         }
-
+        if (TryGetComponent(out Rigidbody body))
+        {
+            body.isKinematic = true;
+        }
+        OnItemPickedUp?.Invoke();
         Inventory.Instance.AddItem(itemStats.type, 1,this);
     }
 
@@ -185,25 +239,35 @@ public class MapResource : MonoBehaviour, IInteractable
         gameObject.SetActive(active);
     }
 
-    public virtual void PlaceItem()
+    public virtual bool PlaceItem()
     {
         if (Placeable)
         {
             Ray r = new(Camera.main.transform.position, Camera.main.transform.forward);
-            if (Physics.Raycast(r, out RaycastHit hitInfo, 5))
+            if (Physics.Raycast(r, out RaycastHit hitInfo, NPC_Interact.Instance.InteractRange))
             {
                 if (Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item))
                 {
                     Vector3 playerPos = Inventory.Instance.transform.position;
-                    Vector3 toPlayer = (playerPos - hitInfo.point).normalized;
+                    Vector3 toPlayer = (playerPos- hitInfo.point).normalized;
+                    toPlayer = Vector3.ProjectOnPlane(toPlayer, Vector3.up);
                     item.gameObject.transform.parent = FindObjectOfType<SpatialParadoxGenerator>().CurPlayerSection.transform;
                     item.gameObject.transform.position = hitInfo.point+ placementPositionOffset;
                     item.gameObject.transform.forward = toPlayer;
                     item.gameObject.transform.localScale = originalScale;
                     item.SetMapResourceActive(true);
                     item.SetColliderActive(true);
+                    OnItemPickedUp?.Invoke();
+                    //item.gameObject.transform.up = hitInfo.normal;
+                    return true;
                 }
             }
         }
+        return false;
+    }
+
+    public virtual bool RequiresPickaxe()
+    {
+        return requiresPickaxe;
     }
 }

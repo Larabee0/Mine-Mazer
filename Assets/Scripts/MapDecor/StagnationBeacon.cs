@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class StagnationBeacon : MapResource
+public class StagnationBeacon : SanctumPart
 {
     [Header("Animations")]
+    [SerializeField] private bool Animated = true;
     [SerializeField] private Transform sphere;
     [SerializeField] private Transform cylinder;
     [SerializeField] private Transform cubeA;
@@ -24,20 +25,22 @@ public class StagnationBeacon : MapResource
 
     private void OnEnable()
     {
-        sphereStartEnd = new()
+        if (Animated)
         {
-            c0 = (float3)sphere.localPosition - (dst * 0.5f),
-            c1 = (float3)sphere.localPosition + (dst * 0.5f),
-        };
-        cylinderStartEnd = new()
-        {
-            c0 = (float3)cylinder.localPosition - (dst * 0.5f),
-            c1 = (float3)cylinder.localPosition + (dst * 0.5f),
-        };
-        sphere.transform.localPosition = sphereStartEnd.c1;
-        cylinder.transform.localPosition = cylinderStartEnd.c0;
-
-        StartCoroutine(Animation());
+            sphereStartEnd = new()
+            {
+                c0 = (float3)sphere.localPosition - (dst * 0.5f),
+                c1 = (float3)sphere.localPosition + (dst * 0.5f),
+            };
+            cylinderStartEnd = new()
+            {
+                c0 = (float3)cylinder.localPosition - (dst * 0.5f),
+                c1 = (float3)cylinder.localPosition + (dst * 0.5f),
+            };
+            sphere.transform.localPosition = sphereStartEnd.c1;
+            cylinder.transform.localPosition = cylinderStartEnd.c0;
+            StartCoroutine(Animation());
+        }
     }
 
     private void OnDisable()
@@ -92,7 +95,7 @@ public class StagnationBeacon : MapResource
         base.Interact();
     }
 
-    public override void PlaceItem()
+    public override bool PlaceItem()
     {
         SpatialParadoxGenerator mapGenerator = FindObjectOfType<SpatialParadoxGenerator>();
         Ray r = new(Camera.main.transform.position, Camera.main.transform.forward);
@@ -101,18 +104,20 @@ public class StagnationBeacon : MapResource
             TunnelSection upStack = hitInfo.transform.gameObject.GetComponentInParent<TunnelSection>();
             TunnelSection downStack = hitInfo.transform.gameObject.GetComponentInChildren<TunnelSection>();
             TunnelSection hitSection = upStack == null ? downStack : upStack;
-            if(hitSection != null && hitSection.stagnationBeacon == null && !hitSection.StrongKeep && Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item))
+            if (hitSection != null && hitSection.stagnationBeacon == null
+                && !hitSection.StrongKeep
+                && Inventory.Instance.TryRemoveItem(ItemStats.type, 1, out MapResource item) && item == this)
             {
-                if(item == this)
-                {
-                    item.gameObject.transform.position = hitInfo.point + placementPositionOffset;
-                    item.gameObject.transform.up = Vector3.up;
-                    item.gameObject.transform.localScale = originalScale;
-                    item.SetMapResourceActive(true);
-                    item.SetColliderActive(true);
-                    mapGenerator.PlaceStatnationBeacon(hitSection, this);
-                }
+                item.gameObject.transform.position = hitInfo.point + placementPositionOffset;
+                item.gameObject.transform.up = Vector3.up;
+                item.gameObject.transform.localScale = originalScale;
+                item.SetMapResourceActive(true);
+                item.SetColliderActive(true);
+                mapGenerator.PlaceStatnationBeacon(hitSection, this);
+                OnItemPickedUp?.Invoke();
+                return true;
             }
         }
+        return false;
     }
 }

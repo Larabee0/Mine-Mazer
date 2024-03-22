@@ -20,6 +20,9 @@ public class Improved_Movement : MonoBehaviour
     private Vector3 velocity;
     private bool useUpdateMove = true;
 
+    private bool invertH;
+    private bool invertV;
+
     private void Start() {
 
         isGrounded = true;
@@ -31,16 +34,36 @@ public class Improved_Movement : MonoBehaviour
             InputManager.Instance.OnMoveAxis += OnMoveEvent; // subscribe to Move Event from new input system
             InputManager.Instance.southButton.OnButtonReleased += OnJump; // subscribe to South Button Up from new input system
         }
+        if (PlayerSettings.Instance != null)
+        {
+            PlayerSettings.Instance.OnSettingsChanged += UpdateUserSettings;
+            UpdateUserSettings();
+        }
     }
 
     private void OnDestroy()
     {
+        if (PlayerSettings.Instance != null)
+        {
+            PlayerSettings.Instance.OnSettingsChanged -= UpdateUserSettings;
+        }
         if (InputManager.Instance != null)
-        { 
+        {
             // cleanup events binding by unsubscribing
             InputManager.Instance.OnMoveAxis -= OnMoveEvent;
             InputManager.Instance.southButton.OnButtonReleased -= OnJump;
         }
+    }
+
+    private void UpdateUserSettings()
+    {
+        if (PlayerSettings.Instance == null)
+        {
+            return;
+        }
+
+        invertH = PlayerSettings.Instance.userSettings.moveHInvert;
+        invertV = PlayerSettings.Instance.userSettings.moveVInvert;
     }
 
     private void OnJump()
@@ -86,6 +109,8 @@ public class Improved_Movement : MonoBehaviour
 
     private void Move(float x, float z)
     {
+        x = invertH ? -x : x;
+        z = invertV ? -z : z;
         Vector3 move = transform.right * x + transform.forward * z;
 
         controller.Move(speed * Time.deltaTime * move);

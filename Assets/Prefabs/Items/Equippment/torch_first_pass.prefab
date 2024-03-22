@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682697269214061684}
   m_LocalRotation: {x: -0.24036591, y: -0.0005364921, z: -0.1351358, w: 0.96122956}
-  m_LocalPosition: {x: -0.03, y: 0.137, z: 0.057}
+  m_LocalPosition: {x: -0.0274, y: 0.156, z: 0.0934}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,7 +44,7 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0, g: 0.5568628, b: 0.85098046, a: 1}
+  m_Color: {r: 0.9921569, g: 1, b: 0.30980393, a: 1}
   m_Intensity: 3.5
   m_Range: 10
   m_SpotAngle: 179
@@ -158,13 +158,13 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5255763955170142311}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0, g: 0.5568628, b: 0.85098046, a: 1}
-  m_Intensity: 0.58
-  m_Range: 10
+  m_Color: {r: 0.9921569, g: 1, b: 0.30980393, a: 1}
+  m_Intensity: 0.06
+  m_Range: 0.12
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -245,7 +245,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9069961890099616369}
-  - component: {fileID: 2186324674680031705}
+  - component: {fileID: 8048640736220625442}
   - component: {fileID: 1223650400416557067}
   m_Layer: 8
   m_Name: torch_first_pass
@@ -271,7 +271,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2186324674680031705
+--- !u!114 &8048640736220625442
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -280,15 +280,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 5481056113833604324}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd5432609c4ea33419fb78c1a1c7618d, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d890949a22be734eb403854c6f5bdaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemCollider: {fileID: 1223650400416557067}
   itemStats:
     name: Torch
     type: 6
+  Placeable: 1
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
+  heldpositonOffset: {x: 0, y: 0, z: 0}
+  heldScaleOffset: {x: 1, y: 1, z: 1}
+  placementPositionOffset: {x: 0, y: 0.217, z: 0}
   toolTipNameOverride: 
+  maxDst: 5
+  transitionSpeed: 15
+  lights:
+  - minBrightness: 0.01
+    maxBrightness: 0.06
+    light: {fileID: 3254894023452853708}
+  - minBrightness: 0.1
+    maxBrightness: 3.5
+    light: {fileID: 8610934922549146800}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 257
 --- !u!65 &1223650400416557067
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -351,7 +367,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6930482079107848499}
-  m_Mesh: {fileID: -1424314700506582731, guid: b1f0e3f8109bddc4ba002ffa7ab82d61, type: 3}
+  m_Mesh: {fileID: -1424314700506582731, guid: 5c1dba28c3f262f4294ba15128195b2d, type: 3}
 --- !u!23 &483500403596340045
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -360,7 +376,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6930482079107848499}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0

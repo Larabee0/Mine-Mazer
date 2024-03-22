@@ -50,17 +50,22 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     [SerializeField] private int ringRenderDst = 3; 
     [SerializeField, Min(1)] private int maxDst = 3;
     [SerializeField, Range(0, 1)] private float breakableWallAtConnectionChance = 0.5f;
+    [SerializeField, Range(0, 1)] private float sanctumPartSpawnChance = 0.5f;
+    [SerializeField] private int sanctumPartUniqueSectionCooldown = 3;
+    private int sanctumPartCooldown;
     [Space]
     [SerializeField] private LayerMask tunnelSectionLayerMask;
     [SerializeField, Min(1000)] private int maxInterations = 1000000; /// max iterations allowed for <see cref="PickSection(TunnelSection, List{int}, out Connector, out Connector)"/>
     [SerializeField] private bool randomSeed = true; // generate a new seed every application run or use old seed.
     [SerializeField] private Random.State seed; // override seed.
     [SerializeField] private bool parallelMatrixCalculations = false; // allow parallel Matrix calculations for big matrix job
+    [SerializeField] private bool mapProfiling = false;
     private int tunnelSectionLayerIndex;
     private TunnelSection lastEnter;
     private TunnelSection lastExit;
     private bool forceBreakableWallAtConnections = false;
     private bool rejectBreakableWallAtConnections = false;
+
 
     private void Awake()
     {
@@ -91,7 +96,6 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private void Start()
     {
         // InputManager.Instance.interactButton.OnButtonReleased += PlaceStagnationBeacon;
-
         tunnelSectionLayerIndex = tunnelSectionLayerMask.value;
         transform.position = Vector3.zero;
 
@@ -154,8 +158,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
             sectionIds = new NativeArray<int>(nextSections.ToArray(), Allocator.TempJob),
             sectionConnectors = sectionConnectorContainers
         }.ScheduleParallel(nextSections.Count, 8, new JobHandle()).Complete();
-
-        Debug.LogFormat("Initial Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+        if (mapProfiling) Debug.LogFormat("Initial Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
 
     }
 
@@ -178,7 +181,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
             }
             sectionBoxTransforms.Add(id, boxTransforms);
         }
-        Debug.LogFormat("Matrix Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+        if (mapProfiling) Debug.LogFormat("Matrix Prep Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
     }
 
     /// <summary>
@@ -217,10 +220,12 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         curPlayerSection.transform.position = new Vector3(0, 0, 0);
         mapTree.Add(new() { curPlayerSection });
 
+        AmbientController.Instance.FadeAmbientLight(curPlayerSection.AmbientLightLevel);
+
         double startTime = Time.realtimeSinceStartupAsDouble;
         rejectBreakableWallAtConnections = true;
         RecursiveBuilder(true);
-        Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
+        if (mapProfiling) Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
         OnMapUpdate?.Invoke();
     }
 }

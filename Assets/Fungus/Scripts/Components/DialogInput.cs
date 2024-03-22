@@ -53,8 +53,20 @@ namespace Fungus
         protected virtual void Awake()
         {
             writer = GetComponent<Writer>();
+        }
 
+        private void OnEnable()
+        {
             CheckEventSystem();
+        }
+
+        private void OnDisable()
+        {
+            if (newInputSystem && clickMode == ClickMode.ClickAnywhere)
+            {
+                InputManager.Instance.advanceDialogueButton.OnButtonPressed -= SetNextLineFlagNewInputSystem;
+                InputManager.Instance.advanceDialogueButton.OnButtonPressed -= SetClickAnywhereClickedFlag;
+            }
         }
 
         // There must be an Event System in the scene for Say and Menu input to work.

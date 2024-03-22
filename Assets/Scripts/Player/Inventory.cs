@@ -1,6 +1,8 @@
 using MazeGame.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -26,15 +28,16 @@ public class Inventory : MonoBehaviour
     }
 
     public Dictionary<Item, int> inventory = new();
-    public Dictionary<Item, MapResource> assets = new();
+    public Dictionary<Item, List<MapResource>> assets = new();
     public Item? CurHeldItem => inventoryOrder.Count > 0 ? inventoryOrder[curIndex] : null;
-    public MapResource CurHeldAsset => inventoryOrder.Count > 0 ? assets[CurHeldItem.Value] : null;
+    public MapResource CurHeldAsset => inventoryOrder.Count > 0 ? assets[CurHeldItem.Value][0] : null;
 
     [SerializeField] private List<Item> inventoryOrder = new();
     [SerializeField] private int curIndex = -1;
     [SerializeField] private MapResource heldItem;
     [SerializeField] private Transform virtualhands;
     [SerializeField] private MapResource[] defaultItems;
+    [SerializeField] private MapResource[] sanctumparts;
     [SerializeField] private float itemNameTime = 1f;
 
     private void Awake()
@@ -54,7 +57,6 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        InputManager.Instance.scrollDirection += ScrollInventory;
     }
 
     private void Start()
@@ -64,24 +66,39 @@ public class Inventory : MonoBehaviour
             AddItem(defaultItems[i].ItemStats.type, 1, Instantiate(defaultItems[i]));
         }
     }
+    private void OnEnable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.scrollDirection += ScrollInventory;
+        }
+    }
+    private void OnDisable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.scrollDirection -= ScrollInventory;
+        }
+    }
 
     public void AddItem(Item itemType, int quantity, MapResource itemInstance)
     {
         if (inventory.ContainsKey(itemType))
         {
             inventory[itemType] += quantity;
-            Destroy(itemInstance.gameObject);
+            assets[itemType].Add(itemInstance);
         }
         else
         {
             inventory.Add(itemType, quantity);
-            assets.Add(itemType, itemInstance);
-            itemInstance.SetColliderActive(false);
-            itemInstance.SetMapResourceActive(false);
-            itemInstance.transform.parent = virtualhands;
-            itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
+            assets.Add(itemType, new() { itemInstance });
             UpdateInventory();
         }
+        itemInstance.SetColliderActive(false);
+        itemInstance.SetMapResourceActive(false);
+        itemInstance.transform.parent = virtualhands;
+        itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
+        itemInstance.transform.localScale = itemInstance.heldScaleOffset;
     }
 
     public bool TryRemoveItem(Item item, int quantity)
@@ -89,13 +106,13 @@ public class Inventory : MonoBehaviour
         if(inventory.ContainsKey(item))
         {
             inventory[item]-=quantity;
-            
-            if(inventory[item] <= 0)
+
+            Destroy(assets[item][^1].gameObject);
+            assets[item].RemoveAt(assets[item].Count -1);
+            if (inventory[item] <= 0)
             {
                 inventory.Remove(item);
-                Destroy(assets[item].gameObject);
                 assets.Remove(item);
-                
             }
             UpdateInventory();
             return true;
@@ -110,13 +127,18 @@ public class Inventory : MonoBehaviour
         {
             inventory[item] -= quantity;
 
+            itemInstance = assets[item][^1];
+            assets[item].RemoveAt(assets[item].Count - 1);
             if (inventory[item] <= 0)
             {
                 inventory.Remove(item);
-                itemInstance = assets[item];
                 //Destroy(assets[item].gameObject);
                 assets.Remove(item);
 
+            }
+            if (assets.TryGetValue(item, out var value) && value.Count == 0)
+            {
+                assets.Remove(item);
             }
             UpdateInventory();
             return true;
@@ -196,7 +218,7 @@ public class Inventory : MonoBehaviour
     {
         int oldIndex = curIndex;
         Item oldCur = Item.LumenCrystal;
-        if (curIndex > 0)
+        if (curIndex >= 0)
         {
             oldCur = inventoryOrder[curIndex];
         }
@@ -210,7 +232,7 @@ public class Inventory : MonoBehaviour
 
         if(oldIndex >= 0)
         {
-            curIndex = inventoryOrder.IndexOf(oldCur);
+            curIndex = inventoryOrder.IndexOf(inventoryOrder.FirstOrDefault(item => item == oldCur));
         }
         
         if (curIndex == -1)
@@ -222,9 +244,9 @@ public class Inventory : MonoBehaviour
 
     private void MoveItemToHand()
     {
-        if (assets.TryGetValue(inventoryOrder[curIndex], out MapResource switchTo))
+        if (assets.TryGetValue(inventoryOrder[curIndex], out List<MapResource> switchTo))
         {
-            if (heldItem == switchTo)
+            if (heldItem == switchTo[0])
             {
                 return;
             }
@@ -232,10 +254,10 @@ public class Inventory : MonoBehaviour
             {
                 heldItem.SetMapResourceActive(false);
             }
-            switchTo.SetMapResourceActive(true);
-            heldItem = switchTo;
+            switchTo[0].SetMapResourceActive(true);
+            heldItem = switchTo[0];
             StopAllCoroutines();
-            StartCoroutine(NameItem(heldItem.ItemStats.name));
+            StartCoroutine(ShowItemNameTooltip(string.Format("{0} (x{1})",heldItem.ItemStats.name, inventory[inventoryOrder[curIndex]])));
         }
         else
         {
@@ -253,10 +275,23 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private IEnumerator NameItem(string text)
+    private IEnumerator ShowItemNameTooltip(string text)
     {
         InteractMessage.Instance.ShowInteraction(text, null, Color.white);
         yield return new WaitForSeconds(itemNameTime);
         InteractMessage.Instance.HideInteraction();
+    }
+
+    public List<MapResource> GetMissingSanctumParts()
+    {
+        List<MapResource> missingParts = new();
+        for (int i = 0; i < sanctumparts.Length; i++)
+        {
+            if (!CanTrade(sanctumparts[i].ItemStats.type))
+            {
+                missingParts.Add(sanctumparts[i]);
+            }
+        }
+        return missingParts;
     }
 }

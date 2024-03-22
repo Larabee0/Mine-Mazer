@@ -45,7 +45,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
 
     public void RemoveStagnationBeacon(StagnationBeacon beacon)
     {
-        if (beacon.targetSection.stagnationBeacon == beacon)
+        if (beacon.targetSection != null &&beacon.targetSection.stagnationBeacon == beacon)
         {
             beacon.targetSection.Keep = false;
             beacon.targetSection.stagnationBeacon = null;
@@ -75,7 +75,11 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         lastEnter = section;
         if (!section.explored)
         {
-            explorationStatistics.Increment();
+            explorationStatistics.Increment(section.orignalInstanceId);
+            if (section.SanctumPartSpawnPoint != null)
+            {
+                SpawnSanctumPartRandom(section.SanctumPartSpawnPoint);
+            }
         }
         if (lastExit != null)
         {
@@ -88,6 +92,23 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         if (section.IsColony)
         {
             OnEnterColonySection?.Invoke();
+        }
+    }
+
+
+    public void SpawnSanctumPartRandom(Transform parent)
+    {
+        List<MapResource> resources = Inventory.Instance.GetMissingSanctumParts();
+        if (resources.Count == 0||!ExplorationStatistics.AllowSanctumPartSpawn || sanctumPartCooldown < 0)
+        {
+            sanctumPartCooldown++;
+            return;
+        }
+        if(Random.value <= sanctumPartSpawnChance)
+        {
+            MapResource item = Instantiate(resources[Random.Range(0, resources.Count)], parent);
+                item.transform.localPosition = item.placementPositionOffset;
+            item.OnItemPickedUp += delegate () { sanctumPartCooldown = -sanctumPartCooldown; };
         }
     }
 }

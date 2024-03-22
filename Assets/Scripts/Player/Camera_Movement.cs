@@ -8,13 +8,20 @@ using UnityEngine.InputSystem;
 public class Camera_Movement : MonoBehaviour
 {
     public float mouseSensitivity = 100f;
+    private float sensitivityMultiplier = 1f;
+    private bool invertH;
+    private bool invertV;
     public Transform playerBody;
     float xRotation = 0f;
 
 
     void Start()
     {
-
+        if(PlayerSettings.Instance != null)
+        {
+            PlayerSettings.Instance.OnSettingsChanged += UpdateUserSettings;
+            UpdateUserSettings();
+        }
         /// new input system additions, will use old input system if there is no <see cref="InputManager"/> instance
         if(InputManager.Instance != null)
         {
@@ -32,13 +39,28 @@ public class Camera_Movement : MonoBehaviour
         Look(mouseX, mouseY);
     }
 
-
     private void OnDestroy()
     {
+        if (PlayerSettings.Instance != null)
+        {
+            PlayerSettings.Instance.OnSettingsChanged -= UpdateUserSettings;
+        }
         if (InputManager.Instance != null)
         {
             InputManager.Instance.OnLookDelta -= OnLookEvent; // cleanup event binding by unsubscribing
         }
+    }
+
+    private void UpdateUserSettings()
+    {
+        if (PlayerSettings.Instance == null)
+        {
+            return;
+        }
+
+        sensitivityMultiplier = PlayerSettings.Instance.userSettings.cameraSens;
+        invertH = PlayerSettings.Instance.userSettings.cameraHInvert;
+        invertV = PlayerSettings.Instance.userSettings.cameraVInvert;
     }
 
     // new input system event recieves the mouse XY as an event in a vector2.
@@ -56,8 +78,11 @@ public class Camera_Movement : MonoBehaviour
         {
             return;
         }
-        deltaX *= mouseSensitivity * Time.deltaTime;
-        deltaY *= mouseSensitivity * Time.deltaTime;
+        deltaX *= sensitivityMultiplier *mouseSensitivity * Time.deltaTime;
+        deltaY *= sensitivityMultiplier * mouseSensitivity * Time.deltaTime;
+
+        deltaX = invertH ? -deltaX : deltaX;
+        deltaY = invertV ? -deltaY : deltaY;
 
         xRotation -= deltaY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);

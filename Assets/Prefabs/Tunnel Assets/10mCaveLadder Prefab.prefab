@@ -269,6 +269,8 @@ GameObject:
   - component: {fileID: 977384089479776006}
   - component: {fileID: 1296708680027945885}
   - component: {fileID: 1173406888214272067}
+  - component: {fileID: 1705734541920274952}
+  - component: {fileID: 3940405534971295583}
   m_Layer: 0
   m_Name: 10mCaveLadder Prefab
   m_TagString: Untagged
@@ -418,12 +420,15 @@ MonoBehaviour:
   strongKeepPosition: {x: 0, y: 0, z: 0}
   waypointName: 
   spawnRule: {fileID: 1173406888214272067}
+  sectionLightLevel: 0.202
+  sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
   excludePrefabConnectionsIds: 3a6b0000
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 27450
   strongKeep: 0
   hasLadder: 1
   isColony: 0
+  sanctumPartsSpawnPoint: {fileID: 0}
   explored: 0
 --- !u!114 &1173406888214272067
 MonoBehaviour:
@@ -441,6 +446,57 @@ MonoBehaviour:
   spawnLimit: -1
   generator: {fileID: 0}
   owner: 27450
+--- !u!114 &1705734541920274952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3879073284189379631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 1
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: f2ea45438dadb124397e72767d270f23, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!114 &3940405534971295583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3879073284189379631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.5}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_Width: 0
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 1
+  m_Area: 0
 --- !u!1 &4846029518679545828
 GameObject:
   m_ObjectHideFlags: 0

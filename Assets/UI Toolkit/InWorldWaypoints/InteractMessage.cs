@@ -26,12 +26,14 @@ public class InteractMessage : MonoBehaviour
     }
 
     [SerializeField] private UIDocument uiController;
+    [SerializeField] private Texture2D[] backgroundTextures;
     private VisualElement texture;
     private Label interactText;
     private Label objectiveText;
     private VisualElement interactRoot;
     private VisualElement objectiveRoot;
     private bool open = false;
+    private bool allowAutoInteract = true;
 
     private void Awake()
     {
@@ -50,20 +52,38 @@ public class InteractMessage : MonoBehaviour
         interactText = uiController.rootVisualElement.Q<Label>("InteractText");
         objectiveText = uiController.rootVisualElement.Q<Label>("ObjectiveText");
         
-        HideInteraction();
+        HideInteraction(true);
         ClearObjective();
+    }
+
+    public void AllowAutoInteract(bool autoInteract)
+    {
+        allowAutoInteract = autoInteract;
+    }
+
+    public void ShowInteraction(string message)
+    {
+        ShowInteraction(message, null, Color.white);
+    }
+
+    public void ShowInteraction(string message, int textureIndex, Color tint)
+    {
+        ShowInteraction(message, backgroundTextures[textureIndex], tint);
     }
 
     public void ShowInteraction(string message, Texture2D texture, Color tint)
     {
-        StopAllCoroutines();
-        interactText.text = message;
-        this.texture.style.backgroundImage = texture;
-        this.texture.style.unityBackgroundImageTintColor = tint;
+        if (allowAutoInteract)
+        {
+            StopAllCoroutines();
+            interactText.text = message;
+            this.texture.style.backgroundImage = texture;
+            this.texture.style.unityBackgroundImageTintColor = tint;
 
-        interactRoot.style.opacity = 1;
-        interactRoot.style.display = DisplayStyle.Flex;
-        open = true;
+            interactRoot.style.opacity = 1;
+            interactRoot.style.display = DisplayStyle.Flex;
+            open = true;
+        }
     }
 
     public void SetObjective(string objective)
@@ -78,7 +98,12 @@ public class InteractMessage : MonoBehaviour
         objectiveRoot.style.display = DisplayStyle.None;
     }
 
-    public void HideInteraction(bool now = false)
+    public void HideInteraction()
+    {
+        HideInteraction(false);
+    }
+
+    public void HideInteraction(bool now)
     {
         StopAllCoroutines();
         if (now)
