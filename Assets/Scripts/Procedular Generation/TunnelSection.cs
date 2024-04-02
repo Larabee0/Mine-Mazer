@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TunnelSection : MonoBehaviour
 {
@@ -9,7 +11,7 @@ public class TunnelSection : MonoBehaviour
     [SerializeField] private Texture2D miniMapAsset;
     [SerializeField] private List<TunnelSection> excludePrefabConnections = new();
     public Connector[] connectors;
-
+    private NavMeshLink[] links;
     public BoxBounds[] boundingBoxes;
     public List<ConnectorMask> excludeConnectorSections = new();
     [SerializeField] private Vector3 strongKeepPosition;
@@ -99,6 +101,27 @@ public class TunnelSection : MonoBehaviour
 
     public List<int> ExcludePrefabConnections => excludePrefabConnectionsIds;
 
+    private void Awake()
+    {
+        var curlinks = GetComponents<NavMeshLink>();
+        
+        for (int i = 0; i < curlinks.Length; i++)
+        {
+            Destroy(curlinks[i]);
+        }
+
+        if(links == null)
+        {
+            links = new NavMeshLink[connectors.Length];
+            for (int i = 0; i < links.Length; i++)
+            {
+                var link = links[i] = gameObject.AddComponent<NavMeshLink>();
+                link.autoUpdate = true;
+                link.startPoint = connectors[i].localPosition + new Vector3(0,-1.5f,0);
+                link.endPoint = connectors[i].localPosition + new Vector3(0, -1.5f, 0) + (connectors[i].localRotation * Vector3.forward *2.5f);
+            }
+        }
+    }
 
     public ConnectorMask GetConnectorMask(Connector connector)
     {

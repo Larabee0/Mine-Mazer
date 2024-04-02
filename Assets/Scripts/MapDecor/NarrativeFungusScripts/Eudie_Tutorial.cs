@@ -126,6 +126,8 @@ public class Eudie_Tutorial : NPCTrade
         {
             RecieveStarterItems();
             PickUpEudie();
+
+            Inventory.Instance.AddItem(tradeOptions[0].givenItem.ItemStats.type, 1, Instantiate( tradeOptions[0].givenItem));
             PlayerUIController.Instance.SetMiniMapVisible(true);
         }
         else
@@ -170,7 +172,8 @@ public class Eudie_Tutorial : NPCTrade
     private void OnGateBeginOpening()
     {
         gateButton.OnSuccessfulActivation -= OnGateBeginOpening;
-        WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP);
+        if(eudieWWP != null) { WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP); }
+        
         StartCoroutine(OpenGate());
     }
 
