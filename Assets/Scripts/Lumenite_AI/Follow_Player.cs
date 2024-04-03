@@ -18,8 +18,7 @@ public class Follow_Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (agent.enabled)
+        if (agent.gameObject.activeInHierarchy&&agent.isOnNavMesh)
         {
             agent.destination = player.transform.position;
         }

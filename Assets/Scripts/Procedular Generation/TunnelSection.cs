@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TunnelSection : MonoBehaviour
 {
     [Header("Baked data")]
+
+    private NavMeshLink[] links;
     public BakedTunnelSection dataFromBake;
 
 
@@ -102,6 +106,29 @@ public class TunnelSection : MonoBehaviour
     public BoxBounds[] BoundingBoxes => dataFromBake.boundingBoxes;
 
     public List<int> ExcludePrefabConnections => dataFromBake.ExcludePrefabConnectionsIds;
+
+
+    private void Awake()
+    {
+        var curlinks = GetComponents<NavMeshLink>();
+        
+        for (int i = 0; i < curlinks.Length; i++)
+        {
+            Destroy(curlinks[i]);
+        }
+
+        if(links == null)
+        {
+            links = new NavMeshLink[dataFromBake.connectors.Length];
+            for (int i = 0; i < links.Length; i++)
+            {
+                var link = links[i] = gameObject.AddComponent<NavMeshLink>();
+                link.autoUpdate = true;
+                link.startPoint = dataFromBake.connectors[i].localPosition + new Vector3(0,-1.5f,0);
+                link.endPoint = dataFromBake.connectors[i].localPosition + new Vector3(0, -1.5f, 0) + (dataFromBake.connectors[i].localRotation * Vector3.forward *2.5f);
+            }
+        }
+    }
 
     public ConnectorMask GetConnectorMask(Connector connector)
     {
