@@ -117,7 +117,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         this.originalInstances = new GameObject("Original Instances").transform;
         this.originalInstances.parent = transform;
         this.originalInstances.localPosition = Vector3.zero;
-
+        tunnelSections.ForEach(section => section.Build(this));
         instanceIdToSection = new Dictionary<int, TunnelSection>(tunnelSections.Count);
         instanceIdToBakedData = new Dictionary<int, BakedTunnelSection>(tunnelSections.Count);
         tunnelSectionsByInstanceID = new(tunnelSections.Count);
@@ -133,10 +133,11 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
             Destroy(originalInstances[i].GetComponent<SectionSpawnBaseRule>());
 
             bakedData.Add(originalInstances[i].GetComponent<TunnelSectionData>().bakedData);
-            bakedData[i].Build(this, tunnelSections[i].GetInstanceID());
+            bakedData[i].SetSpawnRule(tunnelSections[i].GetComponent<SectionSpawnBaseRule>());
+            bakedData[i].Build(this, tunnelSections[i].orignalInstanceId);
             Destroy(originalInstances[i].GetComponent<TunnelSectionData>());
-
-            tunnelSectionsByInstanceID.Add(originalInstances[i].orignalInstanceId);
+            
+            tunnelSectionsByInstanceID.Add(tunnelSections[i].orignalInstanceId);
             instanceIdToSection.TryAdd(tunnelSectionsByInstanceID[^1], originalInstances[i]);
             instanceIdToBakedData.TryAdd(tunnelSectionsByInstanceID[^1], bakedData[i]);
         }
@@ -167,6 +168,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         {
             prefab.dataFromBake = prefab.GetComponent<TunnelSectionData>().bakedData;
             prefab.dataFromBake.excludeConnectorSections.ForEach(connector => connector.Build());
+            prefab.dataFromBake.SetSpawnRule(prefab.GetComponent<SectionSpawnBaseRule>());
             prefab.dataFromBake.Build(this, prefab.GetInstanceID(), true);
             prefab.Build(this);
             tunnelSectionsByInstanceID.Add(prefab.orignalInstanceId);

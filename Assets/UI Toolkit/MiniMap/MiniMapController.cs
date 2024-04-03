@@ -256,7 +256,7 @@ namespace MazeGame.Navigation
                     }
                     else if(instanceid != mapGenerator.DeadEndPlugInstanceId)
                     {
-                        Debug.LogErrorFormat("Missing minimap asset for original instance id {0}", instanceid);
+                        Debug.LogErrorFormat("Missing minimap asset for original instance id {0} {1}", instanceid,section.GameObjectName);
                     }
                 }
             }

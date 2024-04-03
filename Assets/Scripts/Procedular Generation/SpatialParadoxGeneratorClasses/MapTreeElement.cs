@@ -43,7 +43,8 @@ public class MapTreeElement
                 ? (float4x4)sectionInstance.transform.localToWorldMatrix
                 : queuedSection.secondaryMatrix;
     public Vector3 WaypointPosition => sectionInstance != null ? sectionInstance.WaypointPosition : LocalToWorld.TransformPoint(dataFromBake.StrongKeepPosition);
-    
+
+    public string GameObjectName => sectionInstance != null ? sectionInstance.gameObject.name : queuedSection.pickedPrefab.gameObject.name;
     public string WaypointName => sectionInstance != null ? sectionInstance.WaypointName: dataFromBake.WaypointName;
     public int ConnectorCount => Connectors.Length;
     public int FreeConnectors => ConnectorCount - inUse.Count;
