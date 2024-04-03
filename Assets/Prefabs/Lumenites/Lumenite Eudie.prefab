@@ -2616,19 +2616,23 @@ MonoBehaviour:
   tradeOptions:
   - tradeUIText: Give the Lumen to Eudie
     tradeCloseSuccessBlock: Trade Lumen
-    specific: 1
-    specificItem: 0
     category: 0
+    specific: 1
+    specificItem: 1
     takeQuantity: 1
+    specificItems: 
+    takeQuantities: 
     givenItem: {fileID: 0}
     giveQuantity: 0
   eudieWaypoint: {fileID: 4151477205938020254}
   eudieItem: {fileID: 6876458769479377363}
   starterItems:
   - {fileID: 2427611828371672613, guid: 7e2e54d9c459107468e3889920e81a3d, type: 3}
-  - {fileID: 2186324674680031705, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2, type: 3}
-  tutorialAreaWalls: []
   lumen: {fileID: 0}
+  gate: {fileID: 0}
+  gateButton: {fileID: 0}
+  raisedPosition: {x: 0, y: 0, z: 0}
+  raiseSpeed: 0
   eudieState: 0
 --- !u!114 &7349502459724333951
 MonoBehaviour:
@@ -2664,9 +2668,10 @@ MonoBehaviour:
   itemCollider: {fileID: 6832543622599297263}
   itemStats:
     name: Eudie
-    type: 8
+    type: 256
   Placeable: 0
   Interactable: 1
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 213.47002, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
