@@ -128,26 +128,6 @@ public class BakedTunnelSection
         set => spawnRule.InstancesCount = value;
     }
 
-    //public BakedTunnelSection(TunnelSection originalInstance)
-    //{
-    //    this.originalInstance = originalInstance;
-    //    miniMapAsset = originalInstance.MiniMapAsset;
-    //
-    //    excludePrefabConnections = new(originalInstance.ExcludePrefabConnectionsTS);
-    //
-    //    connectors = new Connector[originalInstance.connectors.Length];
-    //    boundingBoxes = new BoxBounds[originalInstance.boundingBoxes.Length];
-    //    Array.Copy(originalInstance.connectors, connectors, connectors.Length);
-    //    Array.Copy(originalInstance.boundingBoxes, boundingBoxes, boundingBoxes.Length);
-    //
-    //    strongKeepPosition = originalInstance.StrongKeepPosition;
-    //    waypointName = originalInstance.WaypointName;
-    //    sectionLightLevel = originalInstance.AmbientLightLevel;
-    //    sectionAmbience = originalInstance.AmbientNoise;
-    //    strongKeep = originalInstance.StrongKeep;
-    //    hasLadder = originalInstance.HasLadder;
-    //    isColony = originalInstance.IsColony;
-    //}
 
     public ConnectorMask GetConnectorMask(Connector connector)
     {

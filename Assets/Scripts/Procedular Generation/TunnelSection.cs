@@ -81,6 +81,7 @@ public class TunnelSection : MonoBehaviour
     public Vector3 StrongKeepPosition => dataFromBake.StrongKeepPosition;
     public Quaternion Rotation => transform.rotation;
     private Renderer[] renderers;
+    private Light[] lights;
 
     private bool renderersEnabled = true;
     public bool RenderersEnabled 
@@ -187,11 +188,19 @@ public class TunnelSection : MonoBehaviour
     {
         renderersEnabled = enabled;
         renderers = GetComponentsInChildren<Renderer>();
+        lights = GetComponentsInChildren<Light>();
         for (int i = 0; i < renderers.Length; i++)
         {
             if (renderers[i] != null)
             {
                 renderers[i].enabled = enabled;
+            }
+        }
+        for (int i = 0; i < lights.Length; i++)
+        {
+            if (lights[i] != null)
+            {
+                lights[i].enabled = enabled;
             }
         }
     }
@@ -238,6 +247,8 @@ public class TunnelSection : MonoBehaviour
 
         double interationTime = Time.realtimeSinceStartupAsDouble;
         yield return DecorateIncremental(points, resources, totalPoints, interationTime);
+
+        SetRenderersEnabled(renderersEnabled);
     }
 
     private IEnumerator DecorateIncremental(List<ProDecPoint> points, MapResource[] resources,int totalPoints, double interationTime)
@@ -256,7 +267,6 @@ public class TunnelSection : MonoBehaviour
             }
             // trs.transform.RotateAroundLocal(Vector3.up, Random.Range(0, 359f));
             trs.transform.Rotate(Vector3.up, Random.Range(0, 359f), Space.Self);
-
             double timeCheck = (Time.realtimeSinceStartupAsDouble - interationTime) * 1000;
             if (timeCheck > 4)
             {
