@@ -10,6 +10,7 @@ using Random = Unity.Mathematics.Random;
 public partial class SpatialParadoxGenerator
 {
     [Header("Expirmental Debug")]
+    public bool DisableLOD = false;
     public bool DrawVirtualPhysicsWorldColliders = true;
     public bool runPostProcessLast = false;
     public bool breakEditorAfterInitialGen = false;
@@ -75,6 +76,7 @@ public partial class SpatialParadoxGenerator
         MapTreeElement element = new()
         {
             queuedSection = newQueue,
+            dataFromBake = instanceIdToBakedData[prefabSecondary.orignalInstanceId],
             UID = permanentID
         };
         //LinkSections(primaryElement, element, primaryConnector.internalIndex, secondaryConnector.internalIndex);
@@ -132,7 +134,7 @@ public partial class SpatialParadoxGenerator
             item.primaryConnector = matrixJob.primaryConnectors[i];
             postProcessingQueue.Add(processingQueue[matrixJob.connectorPairs[i].id]);
             processingQueue.Remove(item.physicsWorldId);
-            AddSection(item.pickedPrefab, item.secondaryMatrix, item.physicsWorldId);
+            AddSection(item.pickedPrefab.orignalInstanceId, item.secondaryMatrix, item.physicsWorldId);
         }
         matrixJob.connectorPairs.Dispose();
         matrixJob.calculatedMatricies.Dispose();
@@ -188,10 +190,10 @@ public partial class SpatialParadoxGenerator
             UpdateSectionTransform(id, matrix);
         }
         VirtualPhysicsWorld.Add(new TunnelSectionVirtual() { boundSection = id });
-        InitiliseTSV(ref VirtualPhysicsWorld.ElementAt(VirtualPhysicsWorld.Length - 1), sectionInstance, matrix);
+        InitiliseTSV(ref VirtualPhysicsWorld.ElementAt(VirtualPhysicsWorld.Length - 1), sectionInstance.orignalInstanceId, matrix);
     }
 
-    public void AddSection(TunnelSection sectionInstance, float4x4 matrix, int id)
+    public void AddSection(int originalInstanceId, float4x4 matrix, int id)
     {
         int index = VirtualPhysicsWorld.IndexOf(new TunnelSectionVirtual() { boundSection = id });
         if (index >= 0)
@@ -199,18 +201,20 @@ public partial class SpatialParadoxGenerator
             UpdateSectionTransform(id, matrix);
         }
         VirtualPhysicsWorld.Add(new TunnelSectionVirtual() { boundSection = id });
-        InitiliseTSV(ref VirtualPhysicsWorld.ElementAt(VirtualPhysicsWorld.Length - 1), sectionInstance, matrix);
+        InitiliseTSV(ref VirtualPhysicsWorld.ElementAt(VirtualPhysicsWorld.Length - 1), originalInstanceId, matrix);
     }
 
-    private void InitiliseTSV(ref TunnelSectionVirtual newTSV, TunnelSection section, in float4x4 matrix)
+    private void InitiliseTSV(ref TunnelSectionVirtual newTSV, int originalInstanceId, in float4x4 matrix)
     {
         newTSV.Changed = true;
         newTSV.sectionTransform = matrix;
-        newTSV.boxes = new UnsafeList<InstancedBox>(section.BoundingBoxes.Length, Allocator.Persistent);
-        newTSV.boxes.Resize(section.BoundingBoxes.Length);
-        for (int i = 0; i < section.BoundingBoxes.Length; i++)
+
+        BakedTunnelSection bakedData = instanceIdToBakedData[originalInstanceId];
+        newTSV.boxes = new UnsafeList<InstancedBox>(bakedData.boundingBoxes.Length, Allocator.Persistent);
+        newTSV.boxes.Resize(bakedData.boundingBoxes.Length);
+        for (int i = 0; i < bakedData.boundingBoxes.Length; i++)
         {
-            newTSV.boxes[i] = new(section.BoundingBoxes[i]);
+            newTSV.boxes[i] = new(bakedData.boundingBoxes[i]);
         }
     }
 

@@ -74,6 +74,10 @@ public partial class SpatialParadoxGenerator
         {
             mapTree[^1].ForEach(section => section.SetRenderersEnabled(false));
         }
+        if (DisableLOD)
+        {
+            mapTree[^1].ForEach(section => section.SetRenderersEnabled(true));
+        }
     }
 
     private IEnumerator FillElementsMain(List<MapTreeElement> startElements)

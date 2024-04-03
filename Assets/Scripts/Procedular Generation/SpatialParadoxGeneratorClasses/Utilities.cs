@@ -80,7 +80,7 @@ public partial class SpatialParadoxGenerator
         for (int i = 0; i < tunnelSectionsByInstanceID.Count; i++)
         {
             int instanceID = tunnelSectionsByInstanceID[i];
-            textureLoopUp.Add(instanceID, instanceIdToSection[instanceID].MiniMapAsset);
+            textureLoopUp.Add(instanceID, instanceIdToBakedData[instanceID].MiniMapAsset);
         }
         return textureLoopUp;
     }

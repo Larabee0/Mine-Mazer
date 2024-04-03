@@ -20,6 +20,7 @@ public class MapTreeElement
     public int UID;
     public bool cancel = false;
     public TunnelSection sectionInstance;
+    public BakedTunnelSection dataFromBake;
     public SectionQueueItem queuedSection;
     public HashSet<int> inUse = new();
     private Dictionary<int, SectionAndConnector> connectorPairs = new();
@@ -41,20 +42,20 @@ public class MapTreeElement
     public float4x4 LocalToWorld => sectionInstance != null
                 ? (float4x4)sectionInstance.transform.localToWorldMatrix
                 : queuedSection.secondaryMatrix;
-    public Vector3 WaypointPosition => sectionInstance != null ? sectionInstance.WaypointPosition : LocalToWorld.TransformPoint(queuedSection.pickedPrefab.StrongKeepPosition);
+    public Vector3 WaypointPosition => sectionInstance != null ? sectionInstance.WaypointPosition : LocalToWorld.TransformPoint(dataFromBake.StrongKeepPosition);
     
-    public string WaypointName => sectionInstance != null ? sectionInstance.WaypointName: queuedSection.pickedPrefab.WaypointName;
+    public string WaypointName => sectionInstance != null ? sectionInstance.WaypointName: dataFromBake.WaypointName;
     public int ConnectorCount => Connectors.Length;
     public int FreeConnectors => ConnectorCount - inUse.Count;
-    public int OriginalInstanceId => sectionInstance != null ? sectionInstance.orignalInstanceId : queuedSection.pickedPrefab.orignalInstanceId;
+    public int OriginalInstanceId => sectionInstance != null ? sectionInstance.orignalInstanceId : dataFromBake.OriginalInstanceId;
 
-    public Connector[] Connectors => sectionInstance != null ? sectionInstance.dataFromBake.connectors : queuedSection.pickedPrefab.dataFromBake.connectors;
+    public Connector[] Connectors => dataFromBake.connectors;
 
     private bool renderersEnabled = true;
     public bool Explored => sectionInstance != null ? sectionInstance.explored : false;
 
     public bool Instantiated => sectionInstance != null;
-    public bool Keep => sectionInstance != null ?  sectionInstance.Keep: queuedSection.pickedPrefab.StrongKeep;
+    public bool Keep => sectionInstance != null ?  sectionInstance.Keep: dataFromBake.StrongKeep;
 
     public void SetRenderersEnabled(bool enabled)
     {
@@ -79,11 +80,7 @@ public class MapTreeElement
 
     public ConnectorMask GetConnectorMask(Connector connector)
     {
-        if (sectionInstance == null)
-        {
-            return queuedSection.pickedPrefab.GetConnectorMask(connector);
-        }
-        return sectionInstance.GetConnectorMask(connector);
+        return dataFromBake.GetConnectorMask(connector);
     }
 
 }

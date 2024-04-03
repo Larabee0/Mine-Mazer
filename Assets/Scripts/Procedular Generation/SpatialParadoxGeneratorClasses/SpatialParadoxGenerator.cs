@@ -179,7 +179,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         deadEndPlug.dataFromBake.Build(this);
         deadEndPlug.Build(this);
         instanceIdToSection.TryAdd(deadEndPlug.orignalInstanceId, deadEndPlug);
-        instanceIdToBakedData.TryAdd(tunnelSectionsByInstanceID[^1], deadEndPlug.dataFromBake);
+        instanceIdToBakedData.TryAdd(deadEndPlug.orignalInstanceId, deadEndPlug.dataFromBake);
     }
 
     private void Start()
@@ -248,37 +248,38 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         for (int i = 0; i < nextSections.Count; i++)
         {
             int id = nextSections[i];
-            TunnelSection section = instanceIdToSection[id];
-            CreateTransformMatrices(id, section);
-            CreateBurstConnectors(id, section);
+            BakedTunnelSection dataFromBake = instanceIdToBakedData[id];
+            CreateTransformMatrices(id, dataFromBake);
+            CreateBurstConnectors(id, dataFromBake);
         }
     }
 
-    private void CreateTransformMatrices(int id, TunnelSection section)
+    private void CreateTransformMatrices(int id, BakedTunnelSection dataFromBake)
     {
         // convert bounding box data to transform matrix (float4x4) to avoid unnessecary matrix calculations during map updates.
         // Debug.LogFormat("{0} {1}", id, section.gameObject.name);
-        UnsafeList<float4x4> bounds = new(section.dataFromBake.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        UnsafeList<InstancedBox> instancedBoxes = new(section.dataFromBake.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        bounds.Resize(section.dataFromBake.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
-        instancedBoxes.Resize(section.dataFromBake.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
-        for (int j = 0; j < section.dataFromBake.boundingBoxes.Length; j++)
+
+        UnsafeList<float4x4> bounds = new(dataFromBake.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        UnsafeList<InstancedBox> instancedBoxes = new(dataFromBake.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        bounds.Resize(dataFromBake.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
+        instancedBoxes.Resize(dataFromBake.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
+        for (int j = 0; j < dataFromBake.boundingBoxes.Length; j++)
         {
-            bounds[j] = section.dataFromBake.boundingBoxes[j].LocalMatrix;
-            instancedBoxes[j] = new(section.dataFromBake.boundingBoxes[j]);
+            bounds[j] = dataFromBake.boundingBoxes[j].LocalMatrix;
+            instancedBoxes[j] = new(dataFromBake.boundingBoxes[j]);
         }
         incomingBoxBounds.Add(id, instancedBoxes);
         sectionBoxMatrices.Add(id, bounds);
     }
 
-    private void CreateBurstConnectors(int id, TunnelSection section)
+    private void CreateBurstConnectors(int id, BakedTunnelSection dataFromBake)
     {
         // convert Connector data to BurstConnector to avoid unnessecary matrix calculations during map updates.
-        UnsafeList<BurstConnector> connectors = new(section.dataFromBake.connectors.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        connectors.Resize(section.dataFromBake.connectors.Length, NativeArrayOptions.UninitializedMemory);
-        for (int j = 0; j < section.dataFromBake.connectors.Length; j++)
+        UnsafeList<BurstConnector> connectors = new(dataFromBake.connectors.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+        connectors.Resize(dataFromBake.connectors.Length, NativeArrayOptions.UninitializedMemory);
+        for (int j = 0; j < dataFromBake.connectors.Length; j++)
         {
-            connectors[j] = new(section.dataFromBake.connectors[j]);
+            connectors[j] = new(dataFromBake.connectors[j]);
         }
         sectionConnectorContainers.Add(id, connectors);
     }
@@ -290,14 +291,14 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         for (int i = 0; i < sections.Count; i++)
         {
             int id = sections[i];
-            TunnelSection section = instanceIdToSection[id];
+            BakedTunnelSection dataFromBake = instanceIdToBakedData[id];
 
-            UnsafeList<UnsafeList<BoxTransform>> boxTransforms = new(section.dataFromBake.connectors.Length, allocator, NativeArrayOptions.UninitializedMemory);
-            for (int j = 0; j < section.dataFromBake.connectors.Length; j++)
+            UnsafeList<UnsafeList<BoxTransform>> boxTransforms = new(dataFromBake.connectors.Length, allocator, NativeArrayOptions.UninitializedMemory);
+            for (int j = 0; j < dataFromBake.connectors.Length; j++)
             {
                 /// the boxes are left as Uninitialized - don't read from them before running <see cref="BigMatrixJob"/> hehe
-                UnsafeList<BoxTransform> boxes = new(section.dataFromBake.boundingBoxes.Length, allocator, NativeArrayOptions.UninitializedMemory);
-                boxes.Resize(section.dataFromBake.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
+                UnsafeList<BoxTransform> boxes = new(dataFromBake.boundingBoxes.Length, allocator, NativeArrayOptions.UninitializedMemory);
+                boxes.Resize(dataFromBake.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
                 boxTransforms.AddNoResize(boxes);
             }
             sectionBoxTransforms.Add(id, boxTransforms);
@@ -353,8 +354,9 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
 
             curPlayerSection = new()
             {
-                sectionInstance = InstinateSection(spawnIndex)                
+                sectionInstance = InstinateSection(spawnIndex)
             };
+            curPlayerSection.dataFromBake = instanceIdToBakedData[curPlayerSection.OriginalInstanceId];
         }
         else
         {
@@ -362,6 +364,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
             {
                 sectionInstance = InstinateSection(startSection)
             };
+            curPlayerSection.dataFromBake = instanceIdToBakedData[curPlayerSection.OriginalInstanceId];
         }
         curPlayerSection.sectionInstance.transform.position = new Vector3(0, 0, 0);
         curPlayerSection.UID = curPlayerSection.sectionInstance.GetInstanceID();
