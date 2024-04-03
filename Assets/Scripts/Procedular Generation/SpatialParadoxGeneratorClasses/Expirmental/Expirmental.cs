@@ -58,7 +58,7 @@ public partial class SpatialParadoxGenerator
         }
     }
 
-    public MapTreeElement EnqueueSection(MapTreeElement primaryElement, TunnelSection prefabSecondary,Connector primaryConnector,Connector secondaryConnector)
+    public MapTreeElement EnqueueSection(MapTreeElement primaryElement, TunnelSection prefabSecondary, Connector primaryConnector, Connector secondaryConnector)
     {
         int permanentID = primaryElement.GetHashCode();
 
@@ -68,7 +68,7 @@ public partial class SpatialParadoxGenerator
         }
 
         SectionQueueItem newQueue = new(primaryElement, prefabSecondary, primaryConnector, secondaryConnector, permanentID);
-        
+
         virtualPhysicsWorldIds.Add(permanentID);
         HandleNewSectionInstance(prefabSecondary);
 
@@ -86,7 +86,7 @@ public partial class SpatialParadoxGenerator
     {
         NativeArray<BurstConnectorPair> matrixRequirments = new(preProcessingQueue.Count, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
         NativeArray<BurstConnector> primaryConnectors = new(preProcessingQueue.Count, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-        NativeArray<float4x4> matrixResults = new(preProcessingQueue.Count, Allocator.Persistent,NativeArrayOptions.UninitializedMemory);
+        NativeArray<float4x4> matrixResults = new(preProcessingQueue.Count, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
         for (int i = 0; i < preProcessingQueue.Count; i++)
         {
             matrixRequirments[i] = preProcessingQueue[i].queuedSection.GetConnectorPair();
@@ -107,10 +107,8 @@ public partial class SpatialParadoxGenerator
         }
         else
         {
-
-
             int batches = Mathf.Max(2, length / SystemInfo.processorCount);
-             handle= matrixJob.ScheduleParallel(length, batches, new JobHandle());
+            handle = matrixJob.ScheduleParallel(length, batches, new JobHandle());
         }
 
         if (sameFrameComplete)
@@ -134,7 +132,7 @@ public partial class SpatialParadoxGenerator
             item.primaryConnector = matrixJob.primaryConnectors[i];
             postProcessingQueue.Add(processingQueue[matrixJob.connectorPairs[i].id]);
             processingQueue.Remove(item.physicsWorldId);
-            AddSection(item.pickedPrefab,item.secondaryMatrix,item.physicsWorldId);
+            AddSection(item.pickedPrefab, item.secondaryMatrix, item.physicsWorldId);
         }
         matrixJob.connectorPairs.Dispose();
         matrixJob.calculatedMatricies.Dispose();
@@ -178,13 +176,14 @@ public partial class SpatialParadoxGenerator
         sectionInstance.gameObject.SetActive(true);
         InstantiateBreakableWalls(item.queuedSection.pickedPrefab, sectionInstance, item.queuedSection.primaryConnector);
         item.SetInstance(sectionInstance);
+        totalDecorations += sectionInstance.Decorate(decorCoverage, decorations);
     }
 
     public void AddSection(TunnelSection sectionInstance, float4x4 matrix)
     {
         int id = sectionInstance.GetInstanceID();
         int index = VirtualPhysicsWorld.IndexOf(new TunnelSectionVirtual() { boundSection = id });
-        if(index >= 0)
+        if (index >= 0)
         {
             UpdateSectionTransform(id, matrix);
         }
@@ -339,17 +338,17 @@ public partial class SpatialParadoxGenerator
     private void OnDrawGizmos()
     {
         if (!DrawVirtualPhysicsWorldColliders) { return; }
-        if(!VirtualPhysicsWorld.IsCreated) { return; }
-        if(VirtualPhysicsWorld.IsEmpty) { return; }
+        if (!VirtualPhysicsWorld.IsCreated) { return; }
+        if (VirtualPhysicsWorld.IsEmpty) { return; }
         Gizmos.color = Color.red;
         for (int i = 0; i < VirtualPhysicsWorld.Length; i++)
         {
             TunnelSectionVirtual tunnelSectionVirtual = VirtualPhysicsWorld[i];
-            for (int j = 0; j <  tunnelSectionVirtual.boxes.Length; j++)
+            for (int j = 0; j < tunnelSectionVirtual.boxes.Length; j++)
             {
                 InstancedBox box = tunnelSectionVirtual.boxes[j];
 
-                Gizmos.matrix = math.mul(tunnelSectionVirtual.sectionTransform,box.boxBounds.LocalMatrix);
+                Gizmos.matrix = math.mul(tunnelSectionVirtual.sectionTransform, box.boxBounds.LocalMatrix);
                 Gizmos.DrawWireCube(Vector3.zero, box.boxBounds.size);
             }
             Gizmos.matrix = Matrix4x4.identity;
@@ -360,7 +359,7 @@ public partial class SpatialParadoxGenerator
                     float3 pos = tunnelSectionVirtual.boxes[j].corners[ij];
                     Gizmos.DrawSphere(pos, 0.1f);
                 }
-            }    
+            }
         }
         if (showIntersectionTests)
         {
@@ -369,19 +368,19 @@ public partial class SpatialParadoxGenerator
             {
                 InstancedBox box = fromIntersecitonTests[i];
                 Gizmos.matrix = box.matrix;
-                if(i == 1)
+                if (i == 1)
                 {
                     Gizmos.color = Color.green;
                 }
                 Gizmos.DrawWireCube(Vector3.zero, box.boxBounds.size);
-                
+
             }
 
             Gizmos.color = Color.yellow;
             Gizmos.matrix = Matrix4x4.identity;
             for (int i = 0; i < drawCorners.Count; i++)
             {
-                if(i == 8)
+                if (i == 8)
                 {
                     Gizmos.color = Color.green;
                 }

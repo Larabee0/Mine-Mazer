@@ -104,7 +104,7 @@ public class ProceduralDecoratorEditor : Editor
         }
         
         
-        camDir = point.LTWMatrix.inverse.MultiplyVector(camDir);
+        camDir = Unity.Mathematics.math.inverse(point.LTWMatrix).TransformDirection(camDir);
         // Quaternion.LookRotation(camDir)
         if (Handles.Button(Vector3.zero, Quaternion.identity, 0.1f, 0.1f, Handles.RectangleHandleCap))
         {

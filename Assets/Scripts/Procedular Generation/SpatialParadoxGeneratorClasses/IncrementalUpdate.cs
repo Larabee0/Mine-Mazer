@@ -77,6 +77,8 @@ public partial class SpatialParadoxGenerator
             section.sectionInstance.transform.parent = sectionGraveYard;
             ClearConnectors(section);
             mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.LocalToWorld.Translation(), section.LocalToWorld.Translation()), mapTree.Count - 1));
+
+            totalDecorations -= section.sectionInstance.decorationCount;
         }
         else
         {

@@ -104,6 +104,7 @@ Transform:
   m_Children:
   - {fileID: 4680425320970055466}
   - {fileID: 6497328283453903455}
+  - {fileID: 8685040235943543087}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -192,59 +193,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  links: []
   dataFromBake:
     orignalInstanceId: 0
     originalInstance: {fileID: 0}
-    miniMapAsset: {fileID: 0}
-    excludePrefabConnections: []
+    resources: []
+    coverage: 1
+    proceduralPoints: []
     connectors: []
-    boundingBoxes: []
+    excludePrefabConnections: []
     excludeConnectorSections: []
-    strongKeepPosition: {x: 0, y: 0, z: 0}
-    waypointName: 
+    excludePrefabConnectionsIds: 
     spawnRule: {fileID: 0}
+    boundingBoxes: []
     sectionLightLevel: 0
     sectionAmbience: {fileID: 0}
-    excludePrefabConnectionsIds: 
+    miniMapAsset: {fileID: 0}
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
     strongKeep: 0
     hasLadder: 0
     isColony: 0
-  miniMapAsset: {fileID: 2800000, guid: 0b06b6c4fc305934a8ff16c987bd2205, type: 3}
-  excludePrefabConnections: []
-  connectors:
-  - localPosition: {x: 0, y: 1.5, z: 0}
-    localRotation: {x: -0, y: -0, z: -0, w: 1}
-    position: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0, w: 0}
-    parentPos: {x: 0, y: 0, z: 0}
-    internalIndex: 0
-  boundingBoxes:
-  - center:
-      x: 0
-      y: 1.6324005
-      z: -4.3631
-    oreintation:
-      x: -0
-      y: 0
-      z: 0
-    size:
-      x: 3.91916
-      y: 3.39812
-      z: 8.226049
-  excludeConnectorSections:
-  - exclude: []
-  strongKeepPosition: {x: 0, y: 0, z: 0}
-  waypointName: 
-  spawnRule: {fileID: -6912114443855155818}
-  sectionLightLevel: 0.202
-  sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
-  excludePrefabConnectionsIds: 
-  strongKeep: 0
-  hasLadder: 0
-  isColony: 0
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 27436
   sanctumPartsSpawnPoint: {fileID: 0}
+  decorations: {fileID: 8685040235943543087}
+  decorCoverage: 0
+  decorationCount: 0
   explored: 0
 --- !u!114 &-6912114443855155818
 MonoBehaviour:
@@ -328,8 +303,9 @@ MonoBehaviour:
   bakedData:
     orignalInstanceId: 0
     originalInstance: {fileID: 4233013943535160681}
-    miniMapAsset: {fileID: 2800000, guid: 0b06b6c4fc305934a8ff16c987bd2205, type: 3}
-    excludePrefabConnections: []
+    resources: []
+    coverage: 1
+    proceduralPoints: []
     connectors:
     - localPosition: {x: 0, y: 1.5, z: 0}
       localRotation: {x: -0, y: -0, z: -0, w: 1}
@@ -337,6 +313,10 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       parentPos: {x: 0, y: 0, z: 0}
       internalIndex: 0
+    excludePrefabConnections: []
+    excludeConnectorSections: []
+    excludePrefabConnectionsIds: 
+    spawnRule: {fileID: 0}
     boundingBoxes:
     - center:
         x: 0
@@ -350,17 +330,17 @@ MonoBehaviour:
         x: 3.91916
         y: 3.39812
         z: 8.226049
-    excludeConnectorSections: []
-    strongKeepPosition: {x: 0, y: 0, z: 0}
-    waypointName: 
-    spawnRule: {fileID: 0}
     sectionLightLevel: 0.202
     sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
-    excludePrefabConnectionsIds: 
+    miniMapAsset: {fileID: 2800000, guid: 0b06b6c4fc305934a8ff16c987bd2205, type: 3}
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
     strongKeep: 0
     hasLadder: 0
     isColony: 0
   targetOrigin: {fileID: 0}
+  showProceduralPoints: 0
+  orientationRayLength: 0.2
 --- !u!1 &3593191823535046731
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,3 +424,34 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &4353994608190015955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8685040235943543087}
+  m_Layer: 0
+  m_Name: Decorations
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8685040235943543087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4353994608190015955}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6356106201837800670}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -185,6 +185,22 @@ public struct UpdatePhysicsWorldTransforms : IJobFor
 }
 
 [BurstCompile]
+public struct ProDecPointMatrixJob : IJobFor
+{
+    public float4x4 parentMatrix;
+    public NativeArray<ProDecPointBurst> points;
+
+    public void Execute(int index)
+    {
+        ProDecPointBurst point = points[index];
+        point.internalLocalRotation = quaternion.Euler(point.localOrientation);
+        point.internalMatrix = math.mul(parentMatrix, float4x4.TRS(point.localPosition, point.internalLocalRotation, new float3(1)));
+        points[index] = point;
+    }
+}
+
+
+[BurstCompile]
 public struct BoxCheckJob : IJobFor
 {
     public static readonly float3[] normals = new float3[]

@@ -457,19 +457,43 @@ public struct ProDecPoint
     public Item allowedItems;
     public Vector3 localPosition;
     public Vector3 localOrientation;
-    public Vector3 WorldPos => internalMatrix.GetPosition();
-    public Vector3 Forward => internalMatrix.rotation * Vector3.up;
-    public Vector3 Up => internalMatrix.rotation * Vector3.forward;
+    public Vector3 WorldPos => internalMatrix.Translation();
+    public Vector3 Forward => (Quaternion)internalMatrix.Rotation() * Vector3.up;
+    public Vector3 Up => (Quaternion)internalMatrix.Rotation() * Vector3.forward;
 
-    private Matrix4x4 internalMatrix;
-    public Matrix4x4 LTWMatrix=>internalMatrix;
+    private float4x4 internalMatrix;
+    public float4x4 LTWMatrix =>internalMatrix;
     private Quaternion internalLocalRotation;
     public Quaternion LocalRotation => internalLocalRotation;
 
-    public void UpdateMatrix(Matrix4x4 matrix)
+    public void UpdateMatrix(float4x4 matrix)
     {
         internalLocalRotation = Quaternion.Euler(localOrientation);
-        internalMatrix = matrix * Matrix4x4.TRS(localPosition, internalLocalRotation, Vector3.one);
-        
+        internalMatrix = math.mul(matrix, float4x4.TRS(localPosition, internalLocalRotation, new float3(1)));
+
+    }
+
+    public void UpdateMatrix(ProDecPointBurst m)
+    {
+        internalLocalRotation = m.internalLocalRotation;
+        internalMatrix = m.internalMatrix;
+    }
+}
+
+public struct ProDecPointBurst
+{
+    public float3 localOrientation;
+    public float3 localPosition;    
+    public float4x4 internalMatrix;
+    public quaternion internalLocalRotation;
+
+
+    public static implicit operator ProDecPointBurst(ProDecPoint p)
+    {
+        return new ProDecPointBurst()
+        {
+            localOrientation = p.localOrientation,
+            localPosition = p.localPosition
+        };
     }
 }

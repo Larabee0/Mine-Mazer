@@ -145,7 +145,7 @@ public partial class SpatialParadoxGenerator
     private void DestroySection(TunnelSection section)
     {
         ClearConnectors(section.treeElementParent);
-
+        totalDecorations -= section.decorationCount;
         if (instanceIdToBakedData.ContainsKey(section.orignalInstanceId))
         {
             instanceIdToBakedData[section.orignalInstanceId].InstanceCount--;

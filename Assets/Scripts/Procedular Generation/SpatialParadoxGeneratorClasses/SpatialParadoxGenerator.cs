@@ -15,11 +15,15 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     public int DeadEndPlugInstanceId =>deadEndPlug.orignalInstanceId;
     [SerializeField] private BreakableWall breakableWall;
     [SerializeField] private List<TunnelSection> tunnelSections;
+    [SerializeField] private MapResource[] decorations;
+    [SerializeField] private float decorCoverage;
+    [SerializeField] private int totalDecorations;
     [SerializeField] private GameObject stagnationBeacon;
 
     private Dictionary<int, TunnelSection> instanceIdToSection;
     private Dictionary<int, BakedTunnelSection> instanceIdToBakedData;
     private List<int> tunnelSectionsByInstanceID;
+
 
     [Header("Runtime Map")]
     [SerializeField] private MapTreeElement curPlayerSection;
@@ -253,6 +257,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private void CreateTransformMatrices(int id, TunnelSection section)
     {
         // convert bounding box data to transform matrix (float4x4) to avoid unnessecary matrix calculations during map updates.
+        // Debug.LogFormat("{0} {1}", id, section.gameObject.name);
         UnsafeList<float4x4> bounds = new(section.dataFromBake.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
         UnsafeList<InstancedBox> instancedBoxes = new(section.dataFromBake.boundingBoxes.Length, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
         bounds.Resize(section.dataFromBake.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);

@@ -455,6 +455,7 @@ MonoBehaviour:
     type: 0
   Placeable: 0
   Interactable: 0
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -587,6 +588,7 @@ GameObject:
   - component: {fileID: 7113011209303798032}
   - component: {fileID: -8099010526370012669}
   - component: {fileID: 341670462446070769}
+  - component: {fileID: 5180342320473071701}
   m_Layer: 0
   m_Name: FlatDeadEnd Prefab
   m_TagString: Untagged
@@ -697,92 +699,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataFromBake:
-    orignalInstanceId: 0
-    originalInstance: {fileID: 0}
-    miniMapAsset: {fileID: 0}
-    excludePrefabConnections: []
-    connectors: []
-    boundingBoxes: []
-    excludeConnectorSections: []
-    strongKeepPosition: {x: 0, y: 0, z: 0}
-    waypointName: 
-    spawnRule: {fileID: 0}
-    sectionLightLevel: 0
-    sectionAmbience: {fileID: 0}
-    excludePrefabConnectionsIds: 
-    strongKeep: 0
-    hasLadder: 0
-    isColony: 0
-  miniMapAsset: {fileID: 0}
-  excludePrefabConnections: []
-  connectors:
-  - localPosition: {x: 0, y: 1.5, z: -0.5}
-    localRotation: {x: -0, y: -0, z: -0, w: 1}
-    position: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0, w: 0}
-    parentPos: {x: 0, y: 0, z: 0}
-    internalIndex: 0
-  boundingBoxes:
-  - center:
-      x: 0
-      y: 1.6324005
-      z: 0
-    oreintation:
-      x: -0
-      y: 0
-      z: 0
-    size:
-      x: 3.91916
-      y: 3.39812
-      z: 1
-  excludeConnectorSections:
-  - exclude: []
-  strongKeepPosition: {x: 0, y: 0, z: 0}
-  waypointName: 
-  spawnRule: {fileID: -8099010526370012669}
-  sectionLightLevel: 0.202
-  sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
-  excludePrefabConnectionsIds: 
-  strongKeep: 0
-  hasLadder: 0
-  isColony: 0
-  stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 43408
-  sanctumPartsSpawnPoint: {fileID: 0}
-  explored: 0
---- !u!114 &-8099010526370012669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8899820026267700843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnable: 1
-  spawnLimit: -1
-  generator: {fileID: 0}
-  owner: 43408
---- !u!114 &341670462446070769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8899820026267700843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83d94a0d04ee60e4a9a3533fbe11781c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bakedData:
-    orignalInstanceId: 0
+    orignalInstanceId: 53022
     originalInstance: {fileID: 7113011209303798032}
-    miniMapAsset: {fileID: 0}
-    excludePrefabConnections: []
+    resources: []
+    coverage: 1
+    proceduralPoints: []
     connectors:
     - localPosition: {x: 0, y: 1.5, z: -0.5}
       localRotation: {x: -0, y: -0, z: -0, w: 1}
@@ -790,6 +711,11 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       parentPos: {x: 0, y: 0, z: 0}
       internalIndex: 0
+    excludePrefabConnections: []
+    excludeConnectorSections:
+    - exclude: []
+    excludePrefabConnectionsIds: 
+    spawnRule: {fileID: -8099010526370012669}
     boundingBoxes:
     - center:
         x: 0
@@ -803,14 +729,108 @@ MonoBehaviour:
         x: 3.91916
         y: 3.39812
         z: 1
-    excludeConnectorSections: []
-    strongKeepPosition: {x: 0, y: 0, z: 0}
-    waypointName: 
-    spawnRule: {fileID: 0}
     sectionLightLevel: 0.202
     sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
+    miniMapAsset: {fileID: 0}
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
+  stagnationBeacon: {fileID: 0}
+  orignalInstanceId: 53022
+  sanctumPartsSpawnPoint: {fileID: 0}
+  decorations: {fileID: 0}
+  decorCoverage: 0
+  decorationCount: 0
+  explored: 0
+--- !u!114 &-8099010526370012669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8899820026267700843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnable: 0
+  spawnLimit: -1
+  generator: {fileID: 0}
+  owner: 53022
+--- !u!114 &341670462446070769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8899820026267700843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d94a0d04ee60e4a9a3533fbe11781c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bakedData:
+    orignalInstanceId: 53022
+    originalInstance: {fileID: 7113011209303798032}
+    resources: []
+    coverage: 1
+    proceduralPoints: []
+    connectors:
+    - localPosition: {x: 0, y: 1.5, z: -0.5}
+      localRotation: {x: -0, y: -0, z: -0, w: 1}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 0
+    excludePrefabConnections: []
+    excludeConnectorSections:
+    - exclude: []
     excludePrefabConnectionsIds: 
+    spawnRule: {fileID: -8099010526370012669}
+    boundingBoxes:
+    - center:
+        x: 0
+        y: 1.6324005
+        z: 0
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 3.91916
+        y: 3.39812
+        z: 1
+    sectionLightLevel: 0.202
+    sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
+    miniMapAsset: {fileID: 0}
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
     strongKeep: 0
     hasLadder: 0
     isColony: 0
   targetOrigin: {fileID: 0}
+  showProceduralPoints: 0
+  orientationRayLength: 0.2
+--- !u!114 &5180342320473071701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8899820026267700843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -0.5}
+  m_EndPoint: {x: 0, y: 0, z: 2}
+  m_Width: 0
+  m_CostModifier: -1
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 1
+  m_Area: 0
