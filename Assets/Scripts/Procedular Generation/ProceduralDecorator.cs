@@ -374,17 +374,14 @@ public class ProceduralDecorator : MonoBehaviour
 
         if (vertices.Count != meshRayCaster.sharedMesh.vertexCount)
         {
-            vertices.Capacity = meshRayCaster.sharedMesh.vertexCount;
             meshRayCaster.sharedMesh.GetVertices(vertices);
         }
         if (normals.Count != meshRayCaster.sharedMesh.vertexCount)
         {
-            normals.Capacity = meshRayCaster.sharedMesh.vertexCount;
             meshRayCaster.sharedMesh.GetNormals(normals);
         }
         if (indices.Count != subMesh.indexCount)
         {
-            indices.Capacity = subMesh.indexCount;
             meshRayCaster.sharedMesh.GetIndices(indices, 0);
         }
 
