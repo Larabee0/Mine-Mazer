@@ -988,11 +988,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7280747401053184910, guid: 5c6e2853f717f8c428620637ea73048f,
         type: 3}
-      propertyPath: decorations
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7280747401053184910, guid: 5c6e2853f717f8c428620637ea73048f,
-        type: 3}
       propertyPath: links.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1071,7 +1066,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5471741760392193142, guid: 5c6e2853f717f8c428620637ea73048f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3290421428076092254, guid: 5c6e2853f717f8c428620637ea73048f,
