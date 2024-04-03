@@ -262,7 +262,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  links: []
+  links:
+  - {fileID: 1634120969375184165}
+  - {fileID: 4874127957078377699}
+  - {fileID: 3390353114352336056}
+  - {fileID: 3138128641153942847}
   dataFromBake:
     orignalInstanceId: 29548
     originalInstance: {fileID: 4699310440157599471}
@@ -1136,7 +1140,7 @@ MonoBehaviour:
     - exclude: []
     - exclude: []
     - exclude: []
-    excludePrefabConnectionsIds: 6a7300006c7300006e73000070730000727300007473000062730000
+    excludePrefabConnectionsIds: 
     spawnRule: {fileID: -3188724048700739943}
     boundingBoxes:
     - center:
@@ -2104,13 +2108,20 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       parentPos: {x: 0, y: 0, z: 0}
       internalIndex: 3
-    excludePrefabConnections: []
+    excludePrefabConnections:
+    - {fileID: 7541396775899075963, guid: 2e3fb2f25c7499740a8e78cd64cbd320, type: 3}
+    - {fileID: 4699310440157599471}
+    - {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962, type: 3}
+    - {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8, type: 3}
+    - {fileID: 7280747401053184910, guid: 5c6e2853f717f8c428620637ea73048f, type: 3}
+    - {fileID: 7544748717809826148, guid: 17cf9e69ff45f2d4db8a8e84c5559246, type: 3}
+    - {fileID: 1925884630686241207, guid: 47ecaaf294d32d345877b4d8b966f55e, type: 3}
     excludeConnectorSections:
     - exclude: []
     - exclude: []
     - exclude: []
     - exclude: []
-    excludePrefabConnectionsIds: 6a7300006c7300006e73000070730000727300007473000062730000
+    excludePrefabConnectionsIds: 
     spawnRule: {fileID: -3188724048700739943}
     boundingBoxes:
     - center:

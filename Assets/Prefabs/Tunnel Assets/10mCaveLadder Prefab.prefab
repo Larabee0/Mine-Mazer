@@ -366,7 +366,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  links: []
+  links:
+  - {fileID: 2412531710382261249}
+  - {fileID: -5176161170688526490}
   dataFromBake:
     orignalInstanceId: 42618
     originalInstance: {fileID: 1296708680027945885}
@@ -1194,7 +1196,7 @@ MonoBehaviour:
     excludeConnectorSections:
     - exclude: []
     - exclude: []
-    excludePrefabConnectionsIds: 7aa60000
+    excludePrefabConnectionsIds: 
     spawnRule: {fileID: 1173406888214272067}
     boundingBoxes:
     - center:
@@ -2130,11 +2132,12 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       parentPos: {x: 0, y: 0, z: 0}
       internalIndex: 1
-    excludePrefabConnections: []
+    excludePrefabConnections:
+    - {fileID: 1296708680027945885}
     excludeConnectorSections:
     - exclude: []
     - exclude: []
-    excludePrefabConnectionsIds: 7aa60000
+    excludePrefabConnectionsIds: 
     spawnRule: {fileID: 1173406888214272067}
     boundingBoxes:
     - center:
