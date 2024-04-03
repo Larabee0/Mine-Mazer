@@ -789,9 +789,10 @@ MonoBehaviour:
   itemCollider: {fileID: 0}
   itemStats:
     name: Velvet Bud
-    type: 2
+    type: 4
   Placeable: 0
   Interactable: 1
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -805,7 +806,7 @@ MonoBehaviour:
   - {fileID: 5479482100750913442}
   - {fileID: 7419586161733209596}
   chosenVariant: {fileID: 0}
-  turnOnAllChance: 0
+  allChance: 0
 --- !u!1 &5061994081482040618
 GameObject:
   m_ObjectHideFlags: 0
