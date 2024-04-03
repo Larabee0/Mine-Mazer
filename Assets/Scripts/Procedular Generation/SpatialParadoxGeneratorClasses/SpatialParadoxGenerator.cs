@@ -126,14 +126,15 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         List<BakedTunnelSection> bakedData = new(tunnelSections.Count);
         for (int i = 0; i < tunnelSections.Count; i++)
         {
+            tunnelSections[i].GenerateNavMeshLinks();
             originalInstances.Add(Instantiate(tunnelSections[i],this.originalInstances));
             originalInstances[i].gameObject.SetActive(false);
             originalInstances[i].dataFromBake = null;
-            Destroy(originalInstances[i].GetComponent<TunnelSectionData>());
             Destroy(originalInstances[i].GetComponent<SectionSpawnBaseRule>());
 
-            bakedData.Add(tunnelSections[i].GetComponent<TunnelSectionData>().bakedData);
-            bakedData[i].Build(this);
+            bakedData.Add(originalInstances[i].GetComponent<TunnelSectionData>().bakedData);
+            bakedData[i].Build(this, tunnelSections[i].GetInstanceID());
+            Destroy(originalInstances[i].GetComponent<TunnelSectionData>());
 
             tunnelSectionsByInstanceID.Add(originalInstances[i].orignalInstanceId);
             instanceIdToSection.TryAdd(tunnelSectionsByInstanceID[^1], originalInstances[i]);
@@ -148,7 +149,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         Destroy(originalInstances[^1].GetComponent<TunnelSectionData>());
 
         bakedData.Add(deadEndPlug.GetComponent<TunnelSectionData>().bakedData);
-        bakedData[^1].Build(this);
+        bakedData[^1].Build(this, deadEndPlug.GetInstanceID());
         //tunnelSectionsByInstanceID.Add(originalInstances[^1].orignalInstanceId);
 
         instanceIdToSection.TryAdd(originalInstances[^1].orignalInstanceId, originalInstances[^1]);
@@ -166,7 +167,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         {
             prefab.dataFromBake = prefab.GetComponent<TunnelSectionData>().bakedData;
             prefab.dataFromBake.excludeConnectorSections.ForEach(connector => connector.Build());
-            prefab.dataFromBake.Build(this);
+            prefab.dataFromBake.Build(this, prefab.GetInstanceID(), true);
             prefab.Build(this);
             tunnelSectionsByInstanceID.Add(prefab.orignalInstanceId);
             instanceIdToSection.TryAdd(tunnelSectionsByInstanceID[^1], prefab);
@@ -174,12 +175,16 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         });
         tunnelSections.Clear();
         tunnelSections = null;
+        OldBakeDataForSpecificSection(deadEndPlug);
+    }
 
-        deadEndPlug.dataFromBake = deadEndPlug.GetComponent<TunnelSectionData>().bakedData;
-        deadEndPlug.dataFromBake.Build(this);
-        deadEndPlug.Build(this);
-        instanceIdToSection.TryAdd(deadEndPlug.orignalInstanceId, deadEndPlug);
-        instanceIdToBakedData.TryAdd(deadEndPlug.orignalInstanceId, deadEndPlug.dataFromBake);
+    private void OldBakeDataForSpecificSection(TunnelSection section)
+    {
+        section.dataFromBake = section.GetComponent<TunnelSectionData>().bakedData;
+        section.dataFromBake.Build(this, section.GetInstanceID(), true);
+        section.Build(this);
+        instanceIdToSection.TryAdd(section.orignalInstanceId, section);
+        instanceIdToBakedData.TryAdd(section.orignalInstanceId, section.dataFromBake);
     }
 
     private void Start()
@@ -362,7 +367,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         {
             curPlayerSection = new()
             {
-                sectionInstance = InstinateSection(startSection)
+                sectionInstance = InstinateSection(instanceIdToSection[startSection.orignalInstanceId])
             };
             curPlayerSection.dataFromBake = instanceIdToBakedData[curPlayerSection.OriginalInstanceId];
         }

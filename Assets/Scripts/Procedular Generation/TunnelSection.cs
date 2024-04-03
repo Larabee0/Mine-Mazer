@@ -113,7 +113,7 @@ public class TunnelSection : MonoBehaviour
     public List<int> ExcludePrefabConnections => dataFromBake.ExcludePrefabConnectionsIds;
 
 
-    private void GenerateNavMeshLinks()
+    public void GenerateNavMeshLinks()
     {
         links = GetComponents<NavMeshLink>();
         if (links == null || links.Length != dataFromBake.connectors.Length)

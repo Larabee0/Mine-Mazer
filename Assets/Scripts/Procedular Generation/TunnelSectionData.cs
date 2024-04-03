@@ -155,9 +155,9 @@ public class BakedTunnelSection
     }
 
 
-    public void Build(SpatialParadoxGenerator generator)
+    public void Build(SpatialParadoxGenerator generator,int originalInstanceId, bool oldMode = false)
     {
-        this.orignalInstanceId = originalInstance.GetInstanceID();
+        this.orignalInstanceId = originalInstanceId;
         if (spawnRule == null)
         {
             if (!originalInstance.TryGetComponent(out spawnRule))
@@ -183,8 +183,11 @@ public class BakedTunnelSection
         if (excludePrefabConnections == null) return;
         excludePrefabConnectionsIds = new List<int>(excludePrefabConnections.Count);
         excludePrefabConnections.ForEach(section => excludePrefabConnectionsIds.Add(section.GetInstanceID()));
-        excludePrefabConnections.Clear();
-        excludePrefabConnections = null;
+        if (!oldMode)
+        {
+            excludePrefabConnections.Clear();
+            excludePrefabConnections = null;
+        }
     }
 
     public bool UpdateRule()
