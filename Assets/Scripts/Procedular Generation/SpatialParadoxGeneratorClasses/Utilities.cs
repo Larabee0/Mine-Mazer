@@ -7,6 +7,21 @@ using Random = UnityEngine.Random;
 
 public partial class SpatialParadoxGenerator
 {
+
+    private void CleanUpDeadTreeElements()
+    {
+        for (int i = 0; i < mapTree.Count; i++)
+        {
+            for (int j = mapTree[i].Count - 1; j >= 0; j--)
+            {
+                if (!mapTree[i][j].alive)
+                {
+                    mapTree[i].RemoveAt(j);
+                }
+            }
+        }
+    }
+
     private void ResolvePlayerSection()
     {
         GameObject player = FindObjectOfType<Improved_Movement>().gameObject;
@@ -16,10 +31,10 @@ public partial class SpatialParadoxGenerator
             section = section != null ? section : hitInfo.collider.gameObject.GetComponentInChildren<TunnelSection>();
             if (section != null)
             {
-                nextPlayerSection = section.treeElementParent;
+                nextPlayerSection = section.treeElementOwner;
                 if (incrementalUpdateProcess == null)
                 {
-                    incrementalUpdateProcess = StartCoroutine(MakeRootNodeIncremental(section.treeElementParent));
+                    incrementalUpdateProcess = StartCoroutine(MakeRootNodeIncremental(section.treeElementOwner));
                 }
                 else queuedUpdateProcess ??= StartCoroutine(AwaitCurrentIncrementalComplete());
 
@@ -142,21 +157,27 @@ public partial class SpatialParadoxGenerator
         }
     }
 
-    private void DestroySection(TunnelSection section)
+    private void DestroySection(MapTreeElement section)
     {
-        ClearConnectors(section.treeElementParent);
-        totalDecorations -= section.decorationCount;
-        if (instanceIdToBakedData.ContainsKey(section.orignalInstanceId))
+        ClearConnectors(section);
+        totalDecorations -= section.sectionInstance.decorationCount;
+        if (instanceIdToBakedData.ContainsKey(section.OriginalInstanceId))
         {
-            instanceIdToBakedData[section.orignalInstanceId].InstanceCount--;
+            instanceIdToBakedData[section.OriginalInstanceId].InstanceCount--;
         }
         else
         {
-            Debug.LogException(new KeyNotFoundException(string.Format("Key: {0} not present in dictionary instanceIdToSection!", section.orignalInstanceId)), gameObject);
-            Debug.LogErrorFormat(gameObject, "Likely section {0} has incorrect instance id of {1}", section.gameObject.name, section.orignalInstanceId);
+            Debug.LogException(new KeyNotFoundException(string.Format("Key: {0} not present in dictionary instanceIdToSection!", section.OriginalInstanceId)), gameObject);
+            Debug.LogErrorFormat(gameObject, "Likely section {0} has incorrect instance id of {1}", section.sectionInstance.gameObject.name, section.OriginalInstanceId);
+        }
+
+        if(section.OriginalInstanceId == deadEndPlug.orignalInstanceId)
+        {
+            deadEnds.Remove(section);
         }
         
-        Destroy(section.gameObject);
+        Destroy(section.sectionInstance.gameObject);
+        section.alive = false;
     }
 
     public void LinkSections(MapTreeElement primaryTreeElement, MapTreeElement newTreeElement, int priConnInternalIndex,int newConnInternalIndex)
@@ -169,6 +190,8 @@ public partial class SpatialParadoxGenerator
 
     private void TransformSectionAndLink(MapTreeElement primary, MapTreeElement secondary, Connector primaryConnector, Connector secondaryConnector)
     {
+        // primaryConnector.UpdateWorldPos(primary.LocalToWorld);
+        // secondaryConnector.UpdateWorldPos(float4x4.identity);
         TransformSection(secondary.sectionInstance.transform, primaryConnector, secondaryConnector);
 
         LinkSections(primary,secondary,primaryConnector.internalIndex,secondaryConnector.internalIndex);

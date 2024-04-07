@@ -22,19 +22,28 @@ public partial class SpatialParadoxGenerator
 
     private IEnumerator PickInstinateConnectDelayed(MapTreeElement primary, PickIntstinateConnectDelayed pickedResult)
     {
-        TunnelSection pickedSection = null;
+        TunnelSection pickedSection;
         MapTreeElement pickedInstance = null;
         Connector priPref = Connector.Empty, secPref = Connector.Empty;
         if (promoteSectionsList.Count > 0)
         {
-            SectionDelayedOuts pair = new()
+            //SectionDelayedOuts pair = new()
+            //{
+            //    primaryPreference = priPref,
+            //    secondaryPreference = secPref
+            //};
+            yield return PickFromMothballed(primary, pickedResult);
+            //priPref = pair.primaryPreference;
+            //secPref = pair.secondaryPreference;
+            if(pickedResult.treeEleement.Instantiated)
             {
-                primaryPreference = priPref,
-                secondaryPreference = secPref
-            };
-            yield return PickFromMothballed(primary, pickedResult, pickedSection, pickedInstance, pair);
-            priPref = pair.primaryPreference;
-            secPref = pair.secondaryPreference;
+                pickedInstance = pickedResult.treeEleement;
+                pickedSection = instanceIdToSection[pickedInstance.OriginalInstanceId];
+            }
+            else
+            {
+                pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
+            }
         }
         else
         {
@@ -49,39 +58,47 @@ public partial class SpatialParadoxGenerator
         if (pickedInstance != null && primary != null)
         {
             TransformSectionAndLink(primary, pickedResult.treeEleement, priPref, secPref);
-
             InstantiateBreakableWalls(pickedSection, pickedResult.treeEleement.sectionInstance, priPref);
+        }
+
+        if(pickedSection == deadEndPlug)
+        {
+            deadEnds.Add(pickedResult.treeEleement);
+            pickedResult.treeEleement.deadEnd = true;
         }
     }
 
-    private IEnumerator PickFromMothballed(MapTreeElement primary, PickIntstinateConnectDelayed pickedResult, TunnelSection pickedSection,
-        MapTreeElement pickedInstance, SectionDelayedOuts connectors)
+    private IEnumerator PickFromMothballed(MapTreeElement primary, PickIntstinateConnectDelayed pickedResult)
     {
         List<int> internalSections = new(promoteSectionsList.Count);
         promoteSectionsList.ForEach(section => internalSections.Add(section.OriginalInstanceId));
+
+        // pick from mothballed sections
         yield return PickSectionDelayed(primary, internalSections, pickedResult.pickSectionDelayedData);
-        pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
-        if (!internalSections.Contains(pickedSection.GetInstanceID())) // returned dead end.
+
+        var pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
+
+        if (!internalSections.Contains(pickedSection.orignalInstanceId)) // return new section.
         {
             List<int> nextSections = FilterSections(primary.OriginalInstanceId);
+            // pick from all valid sections
             yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
-            connectors.primaryPreference = pickedResult.pickSectionDelayedData.primaryPreference;
-            connectors.secondaryPreference = pickedResult.pickSectionDelayedData.secondaryPreference;
-
-            pickedResult.treeEleement = EnqueueSection(primary, pickedResult.pickSectionDelayedData.pickedSection, connectors.primaryPreference, connectors.secondaryPreference);
+            // schedule new section spawn
+            pickedResult.treeEleement = EnqueueSection(primary, pickedResult.pickSectionDelayedData.pickedSection,
+                pickedResult.pickSectionDelayedData.primaryPreference,
+                pickedResult.pickSectionDelayedData.secondaryPreference);
         }
         else // reload section
         {
-            int index = internalSections.IndexOf(pickedSection.GetInstanceID());
-            pickedInstance = promoteSectionsList[index];
+            // prepare mothballed section for re-enabling.
+            int index = internalSections.IndexOf(pickedSection.orignalInstanceId);
+            var pickedInstance = promoteSectionsList[index];
             pickedInstance.sectionInstance.gameObject.SetActive(true);
             pickedInstance.sectionInstance.CollidersEnabled = true;
             promoteSectionsList.RemoveAt(index);
-            //LinkSections(primary, pickedInstance, pickedResult.pickSectionDelayedData.primaryPreference.internalIndex, pickedResult.pickSectionDelayedData.secondaryPreference.internalIndex);
+            
             pickedResult.treeEleement = pickedInstance;
         }
-        pickedResult.pickSectionDelayedData.primaryPreference = connectors.primaryPreference;
-        pickedResult.pickSectionDelayedData.secondaryPreference = connectors.secondaryPreference;
     }
 
     private void InstantiateBreakableWalls(TunnelSection pickedSection, TunnelSection pickedInstance, Connector priPref)
@@ -96,12 +113,12 @@ public partial class SpatialParadoxGenerator
         }
     }
 
-    private IEnumerator PickSectionDelayed(MapTreeElement primaryElement, List<int> nextSections, SectionDelayedOuts outs)
+    private IEnumerator PickSectionDelayed(MapTreeElement primaryElement, List<int> nextSections, SectionDelayedOuts outs, List<Connector> primaryConnectors = null)
     {
         outs.primaryPreference = Connector.Empty;
         outs.secondaryPreference = Connector.Empty;
 
-        List<Connector> primaryConnectors = FilterConnectorsByInuse(primaryElement);
+        primaryConnectors ??= FilterConnectorsByInuse(primaryElement);
 
         NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.Persistent);
 

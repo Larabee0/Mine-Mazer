@@ -4,20 +4,22 @@ using UnityEngine;
 
 public partial class SpatialParadoxGenerator
 {
-    private IEnumerator IncrementalBuilder(bool initialArea = false)
+    private IEnumerator IncrementalBuilder(bool initialArea = false, bool wholeTreeValidate = false)
     {
         yield return null;
         yield return null;
-        while (mapTree.Count <= maxDst)
+        if (wholeTreeValidate && !initialArea)
         {
-            List<MapTreeElement> startSections = mapTree[^1];
-            mapTree.Add(new());
-            yield return FillSectionConnectorsIncremental(startSections);
-            yield return PreProcessQueue();
-            if (initialArea)
-            {
-                rejectBreakableWallAtConnections = false;
-            }
+            yield return WholeTreeBuild();
+        }
+        else
+        {
+            yield return LiteIncrementalBuilder(initialArea);
+        }
+        
+        if (initialArea)
+        {
+            Debug.Log("Inital Generation complete");
         }
         OnMapUpdate?.Invoke();
         if (runPostProcessLast)
@@ -29,14 +31,44 @@ public partial class SpatialParadoxGenerator
             Debug.Log(randomNG.state);
             yield return BreakEditor();
         }
+
     }
 
-    private IEnumerator FillSectionConnectorsIncremental(List<MapTreeElement> startElements)
+    private IEnumerator LiteIncrementalBuilder(bool initialArea)
     {
-        if (promoteSectionsDict.Count > 0 && promoteSectionsDict.ContainsKey(mapTree.Count - 1))
+        while (mapTree.Count <= maxDst)
+        {
+            List<MapTreeElement> startSections = mapTree[^1];
+            mapTree.Add(new());
+            yield return FillSectionConnectorsIncremental(startSections, mapTree.Count - 1);
+            PreProcessQueue();
+            if (initialArea)
+            {
+                rejectBreakableWallAtConnections = false;
+            }
+        }
+    }
+
+    private IEnumerator WholeTreeBuild()
+    {
+        rejectBreakableWallAtConnections = false;
+
+        CleanUpDeadTreeElements();
+        for (int i = 0; i < mapTree.Count-1; i++)
+        {
+            yield return FillSectionConnectorsIncremental(mapTree[i], i + 1, false);
+            PreProcessQueue();
+        }
+
+        yield return LiteIncrementalBuilder(false);
+    }
+
+    private IEnumerator FillSectionConnectorsIncremental(List<MapTreeElement> startElements, int targetTreeIndex, bool allowRegen = true)
+    {
+        if (promoteSectionsDict.Count > 0 && promoteSectionsDict.ContainsKey(targetTreeIndex))
         {
             int freeConnectors = GetTotalFreeConnectorCount(startElements);
-            if (freeConnectors < promoteSectionsDict[mapTree.Count - 1].Count)
+            if (allowRegen && freeConnectors < promoteSectionsDict[targetTreeIndex].Count)
             {
                 while (SectionsInProcessingQueue)
                 {
@@ -49,17 +81,17 @@ public partial class SpatialParadoxGenerator
             }
             else
             {
-                promoteSectionsList.AddRange(promoteSectionsDict[mapTree.Count - 1]);
-                promoteSectionsDict.Remove(mapTree.Count - 1);
+                promoteSectionsList.AddRange(promoteSectionsDict[targetTreeIndex]);
+                promoteSectionsDict.Remove(targetTreeIndex);
             }
         }
         yield return FillElementsMain(startElements);
 
-        if (GetTotalFreeConnectorCount(mapTree[^1]) == 0)
+        if (allowRegen && GetTotalFreeConnectorCount(mapTree[targetTreeIndex]) == 0)
         {
             while (SectionsInProcessingQueue)
             {
-                yield return null;
+                PreProcessQueue();
             }
             yield return RegenRingIncremental(mapTree.Count - 2);
             yield break;
@@ -97,6 +129,7 @@ public partial class SpatialParadoxGenerator
                 MapTreeElement sectionElement = results.treeEleement;
                 LinkSections(startElement,sectionElement, results.pickSectionDelayedData.primaryPreference.internalIndex, results.pickSectionDelayedData.secondaryPreference.internalIndex);
                 mapTree[^1].Add(sectionElement);
+               PreProcessQueue();
             }
         }
 

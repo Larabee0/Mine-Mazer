@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 public partial class SpatialParadoxGenerator
 {
@@ -48,7 +50,7 @@ public partial class SpatialParadoxGenerator
 
         if (regenTarget < 2)
         {
-            throw new System.InvalidOperationException(string.Format("Regeneration target set to {0} Cannot regenerate root node! Something catastrophic occured!", regenTarget));
+            throw new InvalidOperationException(string.Format("Regeneration target set to {0} Cannot regenerate root node! Something catastrophic occured!", regenTarget));
         }
 
         while (mapTree.Count - 1 != regenTarget)
@@ -84,7 +86,7 @@ public partial class SpatialParadoxGenerator
         {
             section.sectionInstance.CollidersEnabled = false;
             DestroySectionPhysicsWorld(section.UID);
-            DestroySection(section.sectionInstance);
+            DestroySection(section);
         }
     }
 
@@ -108,7 +110,14 @@ public partial class SpatialParadoxGenerator
 
         PruneTree(newRoot, newTree);
 
+        if (checkDeadEnds)
+        {
+            yield return CheckForOpenDeadEnds();
+        }
+
         yield return GrowTree(forceGrow);
+
+
 
         UpdatePlayerSection(newTree);
         
@@ -121,6 +130,44 @@ public partial class SpatialParadoxGenerator
         incrementalUpdateProcess = null;
 
         OnMapUpdate?.Invoke();
+    }
+
+    private IEnumerator CheckForOpenDeadEnds()
+    {
+        if (deadEnds.Count > 0)
+        {
+            int clearedDeadEnds = 0;
+
+            for (int i = deadEnds.Count - 1; i >= 0; i--)
+            {
+                var treeDeadend = deadEnds[i];
+                if (!treeDeadend.Instantiated)
+                {
+                    continue;
+                }
+                int otherInternalIndex = treeDeadend.ConnectorPairs[0].internalIndex;
+                var treePossibleElement = treeDeadend.ConnectorPairs[0].element;
+                SectionDelayedOuts pickSectionDelayedData = new();
+
+                List<Connector> targetConnector = new() { treePossibleElement.Connectors[otherInternalIndex] };
+                List<int> nextSections = FilterSections(treePossibleElement.OriginalInstanceId);
+
+                yield return PickSectionDelayed(treePossibleElement, nextSections, pickSectionDelayedData, targetConnector);
+
+                if (pickSectionDelayedData.pickedSection != deadEndPlug)
+                {
+                    continue;
+                }
+                clearedDeadEnds++;
+                DestroySectionPhysicsWorld(treeDeadend.UID);
+                DestroySection(treeDeadend);
+            }
+            if (clearedDeadEnds > 0)
+            {
+                CleanUpDeadTreeElements();
+                Debug.LogFormat("Cleared {0} dead ends for potential tunnel expansion", clearedDeadEnds);
+            }
+        }
     }
 
     private void LODMap()
@@ -150,13 +197,13 @@ public partial class SpatialParadoxGenerator
         int oldSize = 0;
         if (forceGrow)
         {
-            yield return IncrementalBuilder();
+            yield return IncrementalBuilder(false,true);
         }
         else
         {
             oldSize = mapTree[^1].Count;
-            yield return FillSectionConnectorsIncremental(mapTree[^2]);
-            yield return PreProcessQueue();
+            yield return FillSectionConnectorsIncremental(mapTree[^2], mapTree.Count - 1);
+            PreProcessQueue();
         }
         if (mapProfiling) Debug.LogFormat("Grew {0} leaves", mapTree[^1].Count - oldSize);
     }
@@ -186,7 +233,7 @@ public partial class SpatialParadoxGenerator
                     {
                         leafCounter++;
                         DestroySectionPhysicsWorld(newTree[^1][i].UID);
-                        DestroySection(section.sectionInstance);
+                        DestroySection(section);
                     }
                 }
                 else

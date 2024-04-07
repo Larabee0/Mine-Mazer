@@ -35,7 +35,7 @@ public class TunnelSection : MonoBehaviour
     //[SerializeField] private bool hasLadder = false;
     //[SerializeField] private bool isColony = false;
     [Header("Runtime Data")]
-    public MapTreeElement treeElementParent;
+    public MapTreeElement treeElementOwner;
     public GameObject stagnationBeacon;
     public int orignalInstanceId;
     private bool weakKeep = false;
@@ -208,7 +208,7 @@ public class TunnelSection : MonoBehaviour
     public void SetCollidersEnabled(bool enabled)
     {
         collidersEnabled = enabled;
-        allColliders ??= GetComponentsInChildren<Collider>();
+        allColliders = GetComponentsInChildren<Collider>();
         for (int i = 0; i < allColliders.Length; i++)
         {
             allColliders[i].enabled = enabled;

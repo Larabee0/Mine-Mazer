@@ -17,13 +17,13 @@ public partial class SpatialParadoxGenerator
     public bool disableMultiThreading = false;
     public bool sameFrameComplete = false;
     public float maxTimeInstantiatingPerFrame = 8;
+    [SerializeField] private bool checkDeadEnds;
 
     List<InstancedBox> fromIntersecitonTests = new();
 
     List<Vector3> drawCorners = new();
 
-    private bool showIntersectionTests = false;
-
+    [SerializeField] private bool showIntersectionTests = false;
     public void UpdateVirtualPhysicsWorld()
     {
         UpdatePhyscisWorld(new()).Complete();
@@ -84,7 +84,7 @@ public partial class SpatialParadoxGenerator
         return element;
     }
 
-    private IEnumerator PreProcessQueue()
+    private void PreProcessQueue()
     {
         NativeArray<BurstConnectorPair> matrixRequirments = new(preProcessingQueue.Count, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
         NativeArray<BurstConnector> primaryConnectors = new(preProcessingQueue.Count, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
@@ -96,10 +96,10 @@ public partial class SpatialParadoxGenerator
         }
         preProcessingQueue.Clear();
 
-        yield return ProcessQueue(new FinalConnectorMulJob() { primaryConnectors = primaryConnectors, connectorPairs = matrixRequirments, calculatedMatricies = matrixResults });
+        ProcessQueue(new FinalConnectorMulJob() { primaryConnectors = primaryConnectors, connectorPairs = matrixRequirments, calculatedMatricies = matrixResults });
     }
 
-    private IEnumerator ProcessQueue(FinalConnectorMulJob matrixJob)
+    private void ProcessQueue(FinalConnectorMulJob matrixJob)
     {
         int length = matrixJob.connectorPairs.Length;
         JobHandle handle;
@@ -113,20 +113,9 @@ public partial class SpatialParadoxGenerator
             handle = matrixJob.ScheduleParallel(length, batches, new JobHandle());
         }
 
-        if (sameFrameComplete)
-        {
-            handle.Complete();
-        }
-        else
-        {
-            while (!handle.IsCompleted)
-            {
-                yield return null;
-            }
-            handle.Complete();
-        }
+        handle.Complete();
 
-        yield return null;
+        // yield return null;
         for (int i = 0; i < length; i++)
         {
             var item = processingQueue[matrixJob.connectorPairs[i].id].queuedSection;
@@ -269,6 +258,7 @@ public partial class SpatialParadoxGenerator
             }
             iteratorData.handle.Complete();
         }
+
         List<int2> validSecondaryConnectors = GetValidSecondaryConnectors(tests, results, length);
 
         CheckValidConnectors(primary, primaryConnectors, priIndex, iteratorData, secondaryConnectors, validSecondaryConnectors);

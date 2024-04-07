@@ -32,6 +32,9 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private Dictionary<MapTreeElement, SectionDstData> mothBalledSections = new();
     private Dictionary<int, List<MapTreeElement>> promoteSectionsDict = new();
     private List<MapTreeElement> promoteSectionsList = new();
+
+    private List<MapTreeElement> deadEnds = new();
+
     private int reRingInters = 0;
     private Transform sectionGraveYard; 
     private Transform originalInstances; 
@@ -150,11 +153,12 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         Destroy(originalInstances[^1].GetComponent<TunnelSectionData>());
 
         bakedData.Add(deadEndPlug.GetComponent<TunnelSectionData>().bakedData);
-        bakedData[^1].Build(this, deadEndPlug.GetInstanceID());
+        bakedData[^1].Build(this, deadEndPlug.orignalInstanceId);
         //tunnelSectionsByInstanceID.Add(originalInstances[^1].orignalInstanceId);
 
         instanceIdToSection.TryAdd(originalInstances[^1].orignalInstanceId, originalInstances[^1]);
         instanceIdToBakedData.TryAdd(originalInstances[^1].orignalInstanceId, bakedData[^1]);
+        deadEndPlug = originalInstances[^1];
     }
 
 
@@ -375,7 +379,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         }
         curPlayerSection.sectionInstance.transform.position = new Vector3(0, 0, 0);
         curPlayerSection.UID = curPlayerSection.sectionInstance.GetInstanceID();
-        curPlayerSection.sectionInstance.treeElementParent = curPlayerSection;
+        curPlayerSection.sectionInstance.treeElementOwner = curPlayerSection;
         
         AddSection(curPlayerSection.sectionInstance, float4x4.TRS(curPlayerSection.LocalToWorld.Translation(), curPlayerSection.LocalToWorld.Rotation(), Vector3.one));
         
