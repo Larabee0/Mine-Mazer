@@ -79,7 +79,7 @@ public partial class SpatialParadoxGenerator
             section.sectionInstance.transform.parent = sectionGraveYard;
             ClearConnectors(section);
             mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.LocalToWorld.Translation(), section.LocalToWorld.Translation()), mapTree.Count - 1));
-
+            SetSectionInActivePhysicsWorld(section.UID, true);
             totalDecorations -= section.sectionInstance.decorationCount;
         }
         else
@@ -228,6 +228,7 @@ public partial class SpatialParadoxGenerator
                             ClearConnectors(newTree[^1][i]);
                             mothBalledSections.Add(newTree[^1][i], new(math.distancesq(newRoot.sectionInstance.Position, section.sectionInstance.Position), newTree.Count - 1));
                         }
+                        SetSectionInActivePhysicsWorld(section.UID, true);
                     }
                     else
                     {

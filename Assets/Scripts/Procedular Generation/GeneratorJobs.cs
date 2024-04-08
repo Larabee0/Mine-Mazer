@@ -234,24 +234,31 @@ public struct BoxCheckJob : IJobFor
 
     public void Execute(int index)
     {
-        int id = sectionIds[index].x;
-        UnsafeList<InstancedBox> sectionBoxes = incomingBoxBounds[id];
-        UnsafeList<BoxTransform> sectionBoxTransforms = incomingMatrices[id][sectionIds[index].y];
+        outGoingChecks[index] = true;
+        int2 id = sectionIds[index];
 
-        int length = sectionBoxes.Length;
+        UnsafeList<InstancedBox> sectionBoxesOriginal = incomingBoxBounds[id.x];
+        UnsafeList<BoxTransform> sectionBoxTransforms = incomingMatrices[id.x][id.y];
+
+        int length = sectionBoxesOriginal.Length;
         for (int i = 0; i < length; i++)
         {
-            float4x4 matrix = sectionBoxTransforms[i].Matrix;
-            sectionBoxes.ElementAt(i).GetTransformedCorners(matrix);
-            sectionBoxes.ElementAt(i).TransformNormals(matrix);
-            if (CheckBox(sectionBoxes[i]))
+            InstancedBox copiedBox = DuplicateBox(sectionBoxesOriginal[i],sectionBoxTransforms[i].Matrix);
+            if (CheckBox(copiedBox))
             {
                 outGoingChecks[index] = false;
                 return;
             }
         }
 
-        outGoingChecks[index] = true;
+    }
+
+    private static InstancedBox DuplicateBox(InstancedBox box, float4x4 matrix)
+    {
+        InstancedBox newBox = box.Duplicate(Allocator.Temp);
+        newBox.GetTransformedCorners(matrix);
+        newBox.TransformNormals(matrix);
+        return newBox;
     }
 
     public bool CheckBox(InstancedBox box)
@@ -260,6 +267,7 @@ public struct BoxCheckJob : IJobFor
         for (int i = 0; i < length; i++)
         {
             TunnelSectionVirtual sectionInstance = VirtualPhysicsWorld[i];
+            if (sectionInstance.inActive) { continue; }
             if (CheckBox(sectionInstance, box))
             {
                 return true;
@@ -272,13 +280,129 @@ public struct BoxCheckJob : IJobFor
     {
         UnsafeList<InstancedBox> instancedBoxes = sectionInstance.boxes;
         int length = instancedBoxes.Length;
-        for (int i = 0;i< length; i++)
+        for (int i = 0; i < length; i++)
         {
-            if(CheckBox(instancedBoxes[i].normals, instancedBoxes[i].corners, box.normals, box.corners))
+            if (CheckBox(instancedBoxes[i].normals, instancedBoxes[i].corners, box.normals, box.corners))
             {
                 return true;
             }
         }
+        return false;
+    }
+
+    private bool CheckBox(UnsafeList<float3> aNormals, UnsafeList<float3> aCorners, UnsafeList<float3> bNormals, UnsafeList<float3> bCorners)
+    {
+        int alength = aNormals.Length;
+        for (int i = 0; i < alength; i++)
+        {
+            SATTest(aNormals[i], aCorners, out float shape1Min, out float shape1Max);
+            SATTest(aNormals[i], bCorners, out float shape2Min, out float shape2Max);
+            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
+            {
+                return false;
+            }
+        }
+        int blength = bNormals.Length;
+        for (int i = 0; i < blength; i++)
+        {
+            SATTest(bNormals[i], aCorners, out float shape1Min, out float shape1Max);
+            SATTest(bNormals[i], bCorners, out float shape2Min, out float shape2Max);
+            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void SATTest(float3 axis, UnsafeList<float3> ptSet, out float minAlong, out float maxAlong)
+    {
+        minAlong = float.MaxValue;
+        maxAlong = float.MinValue;
+        int length = ptSet.Length;
+        for (int i = 0; i < length; i++)
+        {
+            float dotVal = math.dot(ptSet[i], axis);
+            minAlong = (dotVal < minAlong) ? dotVal : minAlong;
+            maxAlong = (dotVal > maxAlong) ? dotVal : maxAlong;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool Overlaps(float min1, float max1, float min2, float max2)
+    {
+        return IsBetweenOrdered(min2, min1, max1) || IsBetweenOrdered(min1, min2, max2);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool IsBetweenOrdered(float val, float lowerBound, float upperBound)
+    {
+        return lowerBound <= val && val <= upperBound;
+    }
+}
+
+[BurstCompile]
+public struct InternalBoxCheck : IJobFor
+{
+    public static readonly float3[] normals = new float3[]
+    {
+        math.forward(),
+        math.up(),
+        math.right(),
+        math.back(),
+        math.down(),
+        math.left(),
+    };
+
+    [ReadOnly, NativeDisableUnsafePtrRestriction, NativeDisableContainerSafetyRestriction]
+    public UnsafeList<TunnelSectionVirtual> VirtualPhysicsWorld;
+
+
+    [WriteOnly]
+    public NativeArray<bool> intersectionSection;
+
+    public void Execute(int index)
+    {
+        TunnelSectionVirtual aTsv = VirtualPhysicsWorld[index];
+        if (aTsv.deadEnd || aTsv.inActive)
+        {
+            intersectionSection[index] = false;
+            return;
+        }
+        int length = VirtualPhysicsWorld.Length;
+        intersectionSection[index] = false;
+
+        for (int i = 0; i < length; i++)
+        {
+            if(i == index) { continue; }
+            TunnelSectionVirtual bTsv = VirtualPhysicsWorld[i];
+            if(bTsv.deadEnd || bTsv.inActive) { continue; }
+            if (CheckBox(aTsv, bTsv))
+            {
+                intersectionSection[index] = true;
+            }
+        }
+
+    }
+
+    public bool CheckBox(TunnelSectionVirtual a, TunnelSectionVirtual b)
+    {
+        UnsafeList<InstancedBox> aBoxes = a.boxes;
+        UnsafeList<InstancedBox> bBoxes = b.boxes;
+        for (int i = 0; i < aBoxes.Length; i++)
+        {
+            InstancedBox aBox = aBoxes[i];
+            for (int j = 0; j < bBoxes.Length; j++)
+            {
+                InstancedBox bBox = bBoxes[j];
+                if (CheckBox(aBox.normals, aBox.corners, bBox.normals, bBox.corners))
+                {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 

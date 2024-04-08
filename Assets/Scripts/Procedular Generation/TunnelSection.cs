@@ -218,7 +218,11 @@ public class TunnelSection : MonoBehaviour
     public int Decorate(float coverage, MapResource[] resources)
     {
         decorCoverage = coverage;
-        StartCoroutine(DecorateProcess(resources));
+        if(coverage > 0)
+        {
+            StartCoroutine(DecorateProcess(resources));
+        }
+        
         return decorationCount = (int)(dataFromBake.proceduralPoints.Count * coverage);
     }
 

@@ -45,7 +45,8 @@ public struct TunnelSectionVirtual : INativeDisposable, IComparable<TunnelSectio
     public bool Changed;
     public int boundSection;
     public int updateCount;
-    public bool temporary;
+    public bool inActive;
+    public bool deadEnd;
 
 
     public int CompareTo(TunnelSectionVirtual other)
@@ -92,19 +93,18 @@ public struct TunnelSectionVirtual : INativeDisposable, IComparable<TunnelSectio
 public struct InstancedBox : INativeDisposable
 {
     public BoxBounds boxBounds;
-    public float4x4 matrix;
     public UnsafeList<float3> normals;
     public UnsafeList<float3> corners;
 
-    public InstancedBox (BoxBounds bounds)
+    public InstancedBox (BoxBounds bounds, Allocator allocator = Allocator.Persistent)
     {
         this.boxBounds = bounds;
-        matrix = float4x4.identity;
-        normals = new UnsafeList<float3>(6, Allocator.Persistent);
+        normals = new UnsafeList<float3>(6, allocator);
         normals.Resize(6);
-        corners = new UnsafeList<float3>(8, Allocator.Persistent);
+        corners = new UnsafeList<float3>(8, allocator);
         corners.Resize(8);
     }
+
 
     public JobHandle Dispose(JobHandle inputDeps)
     {

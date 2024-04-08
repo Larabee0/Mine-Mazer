@@ -47,6 +47,15 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     public Pluse OnEnterLadderSection;
     public Pluse OnEnterColonySection;
     public List<List<MapTreeElement>> MapTree => mapTree;
+    public int TotalSections
+    {
+        get
+        {
+            int size = 0;
+            mapTree.ForEach(branch => size += branch.Count);
+            return size;
+        }
+    }
     public MapTreeElement CurPlayerSection => curPlayerSection;
 
     // these are quite unsafe lol
@@ -220,7 +229,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Initilises a lot of data structures used by the burst compiled job <see cref="BigMatrixJob"/>
+    /// Initilises a lot of data structures used by the burst compiled job <see cref="global::BigMatrixJob"/>
     /// </summary>
     /// <param name="nextSections"></param>
     private void SetUpBurstDataStructures(List<int> nextSections)
@@ -233,7 +242,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         incomingBoxBounds = new(nextSections.Count, Allocator.Persistent);
 
         SetupSectionStructures(nextSections);
-        if (disableMultiThreading)
+        if (!SetupConns)
         {
             new SetupConnectorsJob
             {
@@ -307,7 +316,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
             UnsafeList<UnsafeList<BoxTransform>> boxTransforms = new(dataFromBake.connectors.Length, allocator, NativeArrayOptions.UninitializedMemory);
             for (int j = 0; j < dataFromBake.connectors.Length; j++)
             {
-                /// the boxes are left as Uninitialized - don't read from them before running <see cref="BigMatrixJob"/> hehe
+                /// the boxes are left as Uninitialized - don't read from them before running <see cref="BigMatrix"/> hehe
                 UnsafeList<BoxTransform> boxes = new(dataFromBake.boundingBoxes.Length, allocator, NativeArrayOptions.UninitializedMemory);
                 boxes.Resize(dataFromBake.boundingBoxes.Length, NativeArrayOptions.UninitializedMemory);
                 boxTransforms.AddNoResize(boxes);

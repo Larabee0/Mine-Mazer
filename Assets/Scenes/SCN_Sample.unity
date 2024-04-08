@@ -245,7 +245,7 @@ PrefabInstance:
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
       propertyPath: seed
-      value: 200944904
+      value: 2311420689
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -254,12 +254,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
+      propertyPath: BoxCheck
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: BigMatrix
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
       propertyPath: DisableLOD
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
+      propertyPath: SetupConns
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
       propertyPath: randomSeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: FinalConnMul
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
@@ -295,6 +315,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
+      propertyPath: PhyWorldUpdate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
       propertyPath: maxInterations
       value: 1000
       objectReference: {fileID: 0}
@@ -311,12 +336,17 @@ PrefabInstance:
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
       propertyPath: disableMultiThreading
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
       propertyPath: decorations.Array.size
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: multiThreadBoxCheckJob
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -327,6 +357,11 @@ PrefabInstance:
         type: 3}
       propertyPath: sanctumPartSpawnChance
       value: 0.222
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: multiThreadBigMatrixJob
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -377,6 +412,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
+      propertyPath: multiThreadPhyWorldUpdate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
       propertyPath: tunnelSections.Array.size
       value: 18
       objectReference: {fileID: 0}
@@ -384,6 +424,11 @@ PrefabInstance:
         type: 3}
       propertyPath: breakEditorAfterInitialGen
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: multiThreadSetupConnectorsJob
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -407,6 +452,11 @@ PrefabInstance:
         type: 3}
       propertyPath: breakableWallAtConnectionChance
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: multiThreadFinalConnectorMulJob
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}

@@ -24,18 +24,12 @@ public partial class SpatialParadoxGenerator
     {
         TunnelSection pickedSection;
         MapTreeElement pickedInstance = null;
-        Connector priPref = Connector.Empty, secPref = Connector.Empty;
+        Connector priPref;
+        Connector secPref;
         if (promoteSectionsList.Count > 0)
         {
-            //SectionDelayedOuts pair = new()
-            //{
-            //    primaryPreference = priPref,
-            //    secondaryPreference = secPref
-            //};
             yield return PickFromMothballed(primary, pickedResult);
-            //priPref = pair.primaryPreference;
-            //secPref = pair.secondaryPreference;
-            if(pickedResult.treeEleement.Instantiated)
+            if (pickedResult.treeEleement.Instantiated)
             {
                 pickedInstance = pickedResult.treeEleement;
                 pickedSection = instanceIdToSection[pickedInstance.OriginalInstanceId];
@@ -44,6 +38,8 @@ public partial class SpatialParadoxGenerator
             {
                 pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
             }
+            priPref = pickedResult.pickSectionDelayedData.primaryPreference;
+            secPref = pickedResult.pickSectionDelayedData.secondaryPreference;
         }
         else
         {
@@ -96,7 +92,7 @@ public partial class SpatialParadoxGenerator
             pickedInstance.sectionInstance.gameObject.SetActive(true);
             pickedInstance.sectionInstance.CollidersEnabled = true;
             promoteSectionsList.RemoveAt(index);
-            
+            SetSectionInActivePhysicsWorld(pickedInstance.UID, false);
             pickedResult.treeEleement = pickedInstance;
         }
     }
@@ -193,7 +189,7 @@ public partial class SpatialParadoxGenerator
         };
         int length = nextSections.Count;
 
-        if (disableMultiThreading)
+        if (!BigMatrix)
         {
             handle = bmj.Schedule(length, handle);
         }

@@ -129,7 +129,7 @@ public partial class SpatialParadoxGenerator
                 MapTreeElement sectionElement = results.treeEleement;
                 LinkSections(startElement,sectionElement, results.pickSectionDelayedData.primaryPreference.internalIndex, results.pickSectionDelayedData.secondaryPreference.internalIndex);
                 mapTree[^1].Add(sectionElement);
-               PreProcessQueue();
+                PreProcessQueue();
             }
         }
 

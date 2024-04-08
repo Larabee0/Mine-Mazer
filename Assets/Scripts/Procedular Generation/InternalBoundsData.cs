@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Runtime.CompilerServices;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -133,6 +134,13 @@ public static class ConnectoExtensions
         {
             box.normals[i] = matrix.TransformDirection(BoxCheckJob.normals[i]);
         }
+    }
+
+
+    public static InstancedBox Duplicate(this in InstancedBox box, Allocator allocator)
+    {
+        InstancedBox newBox = new(box.boxBounds, allocator);
+        return newBox;
     }
 
     public static void GetTransformedCorners(this ref InstancedBox box, in float4x4 matrix)
