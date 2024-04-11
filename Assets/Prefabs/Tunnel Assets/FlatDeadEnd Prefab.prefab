@@ -588,7 +588,6 @@ GameObject:
   - component: {fileID: 7113011209303798032}
   - component: {fileID: -8099010526370012669}
   - component: {fileID: 341670462446070769}
-  - component: {fileID: 5180342320473071701}
   m_Layer: 0
   m_Name: FlatDeadEnd Prefab
   m_TagString: Untagged
@@ -698,6 +697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  links: []
   dataFromBake:
     orignalInstanceId: 53022
     originalInstance: {fileID: 7113011209303798032}
@@ -814,23 +814,3 @@ MonoBehaviour:
   targetOrigin: {fileID: 0}
   showProceduralPoints: 0
   orientationRayLength: 0.2
---- !u!114 &5180342320473071701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8899820026267700843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -0.5}
-  m_EndPoint: {x: 0, y: 0, z: 2}
-  m_Width: 0
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 1
-  m_Area: 0

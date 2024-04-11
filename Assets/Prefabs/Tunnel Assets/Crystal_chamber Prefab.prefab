@@ -349,10 +349,11 @@ GameObject:
   - component: {fileID: 5690713400658837405}
   - component: {fileID: 2402126789756135080}
   - component: {fileID: 1942237678627609201}
-  - component: {fileID: -6285465019211143201}
-  - component: {fileID: 5714311736863235340}
-  - component: {fileID: 5823908146217554835}
-  - component: {fileID: 2930027284319032155}
+  - component: {fileID: 5514549030199151437}
+  - component: {fileID: -4120046835296735558}
+  - component: {fileID: 3861724434181518797}
+  - component: {fileID: -3142979449292370595}
+  - component: {fileID: -8969461070325868730}
   m_Layer: 0
   m_Name: Crystal_chamber Prefab
   m_TagString: Untagged
@@ -381,7 +382,7 @@ Transform:
   - {fileID: 3743874552557449168}
   - {fileID: 8554007088408598121}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2586454630040533409
 MeshFilter:
@@ -450,10 +451,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   links:
-  - {fileID: -6285465019211143201}
-  - {fileID: 5714311736863235340}
-  - {fileID: 5823908146217554835}
-  - {fileID: 2930027284319032155}
+  - {fileID: -4120046835296735558}
+  - {fileID: 3861724434181518797}
+  - {fileID: -3142979449292370595}
+  - {fileID: -8969461070325868730}
   dataFromBake:
     orignalInstanceId: 52326
     originalInstance: {fileID: 5690713400658837405}
@@ -2191,7 +2192,7 @@ MonoBehaviour:
     hasLadder: 0
     isColony: 0
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 52326
+  orignalInstanceId: 32882
   sanctumPartsSpawnPoint: {fileID: 0}
   decorations: {fileID: 8554007088408598121}
   decorCoverage: 0
@@ -2212,7 +2213,7 @@ MonoBehaviour:
   spawnable: 0
   spawnLimit: 1
   generator: {fileID: 0}
-  owner: 52326
+  owner: 32882
   exploreThreshold: 5
   aggressiveSpawning: 0
   dependsOnVisited: {fileID: 7620240774403884024, guid: 536cf79977b17ae40bc8cc4764deef6d,
@@ -3974,7 +3975,38 @@ MonoBehaviour:
   targetOrigin: {fileID: 0}
   showProceduralPoints: 0
   orientationRayLength: 0.2
---- !u!114 &-6285465019211143201
+--- !u!114 &5514549030199151437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4764938545171276552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_GenerateLinks: 1
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.04
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: d2e8398cf16d99d478bd32cf95075f58, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!114 &-4120046835296735558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3987,14 +4019,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: 0}
+  m_StartPoint: {x: 0, y: 0, z: -0.5}
   m_EndPoint: {x: 0, y: 0, z: 2.5}
   m_Width: 0
   m_CostModifier: -1
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
---- !u!114 &5714311736863235340
+--- !u!114 &3861724434181518797
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4007,14 +4039,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -40}
+  m_StartPoint: {x: 0, y: 0, z: -39.5}
   m_EndPoint: {x: 0, y: 0, z: -42.5}
   m_Width: 0
   m_CostModifier: -1
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
---- !u!114 &5823908146217554835
+--- !u!114 &-3142979449292370595
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4027,14 +4059,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 10, y: 0, z: -20}
+  m_StartPoint: {x: 9.5, y: 0, z: -20}
   m_EndPoint: {x: 12.5, y: 0, z: -20}
   m_Width: 0
   m_CostModifier: -1
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
---- !u!114 &2930027284319032155
+--- !u!114 &-8969461070325868730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4047,7 +4079,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: -30, y: 0, z: -20}
+  m_StartPoint: {x: -29.5, y: 0, z: -20}
   m_EndPoint: {x: -32.5, y: 0, z: -20}
   m_Width: 0
   m_CostModifier: -1

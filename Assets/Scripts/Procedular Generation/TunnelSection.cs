@@ -129,7 +129,7 @@ public class TunnelSection : MonoBehaviour
             {
                 var link = links[i] = gameObject.AddComponent<NavMeshLink>();
                 link.autoUpdate = true;
-                link.startPoint = DataFromBake.connectors[i].localPosition + new Vector3(0, -1.5f, 0);
+                link.startPoint = DataFromBake.connectors[i].localPosition + new Vector3(0, -1.5f, 0) + ((DataFromBake.connectors[i].localRotation * Vector3.forward) * -0.5f);
                 link.endPoint = DataFromBake.connectors[i].localPosition + new Vector3(0, -1.5f, 0) + (DataFromBake.connectors[i].localRotation * Vector3.forward * 2.5f);
             }
         }

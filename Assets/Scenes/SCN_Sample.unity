@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 416201511}
-  m_IndirectSpecularColor: {r: 0.18028386, g: 0.22571427, b: 0.3069231, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -306,7 +306,7 @@ PrefabInstance:
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
       propertyPath: ringRenderDst
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -504,7 +504,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ambientNoiseMaker: {fileID: 0}
   transitoryNoiseMaker: {fileID: 0}
+  torchAmbientBoost: 0
+  torchAmbientBoostIntensity: 0.5
   targetAmbientIntensity: 0
+  ambientFromSection: 0
   fadeSpeed: 1
 --- !u!1 &416201510
 GameObject:

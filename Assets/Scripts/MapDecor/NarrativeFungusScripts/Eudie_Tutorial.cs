@@ -196,6 +196,16 @@ public class Eudie_Tutorial : NPCTrade
         eudieItem.pickUpEudie = true;
         eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Eudie", eudieWaypoint.position, Color.yellow);
         InteractMessage.Instance.SetObjective("Pick up Eudie");
+        var comp = GetComponent<Follow_Player>();
+        comp.OnHitPlayer += OnHitPlayer;
+        comp.ZeroStoppingDistance();
+    }
+
+    private void OnHitPlayer()
+    {
+        var comp = GetComponent<Follow_Player>();
+        comp.OnHitPlayer -= OnHitPlayer;
+        eudieItem.PickUpEudieItem();
     }
 
     public void TransformEudieToItem()

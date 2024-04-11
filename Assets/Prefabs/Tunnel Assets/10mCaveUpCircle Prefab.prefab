@@ -165,8 +165,8 @@ GameObject:
   - component: {fileID: -3081295523247690166}
   - component: {fileID: -5169794777736331562}
   - component: {fileID: 4318800600254654383}
-  - component: {fileID: 4310474385277413567}
-  - component: {fileID: -3028781737653122446}
+  - component: {fileID: -3936860531905171361}
+  - component: {fileID: -4464154119688202421}
   m_Layer: 0
   m_Name: 10mCaveUpCircle Prefab
   m_TagString: Untagged
@@ -278,7 +278,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  links: []
+  links:
+  - {fileID: -3936860531905171361}
+  - {fileID: -4464154119688202421}
   dataFromBake:
     orignalInstanceId: 42676
     originalInstance: {fileID: 6413336854673384978}
@@ -1710,7 +1712,7 @@ MonoBehaviour:
     hasLadder: 0
     isColony: 0
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 42676
+  orignalInstanceId: 36322
   sanctumPartsSpawnPoint: {fileID: 0}
   decorations: {fileID: 3430633504292040145}
   decorCoverage: 0
@@ -1731,7 +1733,7 @@ MonoBehaviour:
   spawnable: 1
   spawnLimit: -1
   generator: {fileID: 0}
-  owner: 42676
+  owner: 36322
 --- !u!114 &-5169794777736331562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1751,7 +1753,7 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_UseGeometry: 0
+  m_UseGeometry: 1
   m_DefaultArea: 0
   m_GenerateLinks: 1
   m_IgnoreNavMeshAgent: 1
@@ -1759,9 +1761,9 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.04
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 6102b27b0ebb915438502190252d1e9e, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 761d2a7c4cd7612499f14fc582dd6310, type: 2}
   m_BuildHeightMesh: 0
 --- !u!114 &4318800600254654383
 MonoBehaviour:
@@ -3208,7 +3210,7 @@ MonoBehaviour:
   targetOrigin: {fileID: 0}
   showProceduralPoints: 0
   orientationRayLength: 0.2
---- !u!114 &4310474385277413567
+--- !u!114 &-3936860531905171361
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3221,14 +3223,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: 0}
+  m_StartPoint: {x: 0, y: 0, z: -0.5}
   m_EndPoint: {x: 0, y: 0, z: 2.5}
   m_Width: 0
   m_CostModifier: -1
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
---- !u!114 &-3028781737653122446
+--- !u!114 &-4464154119688202421
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3241,7 +3243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 10, z: 0}
+  m_StartPoint: {x: 0, y: 10, z: 0.5}
   m_EndPoint: {x: 0, y: 10, z: -2.5}
   m_Width: 0
   m_CostModifier: -1

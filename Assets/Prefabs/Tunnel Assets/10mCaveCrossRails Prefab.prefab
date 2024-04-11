@@ -231,8 +231,8 @@ GameObject:
   - component: {fileID: 8351807840266759401}
   - component: {fileID: 1549195288268159122}
   - component: {fileID: 2718512467631932646}
-  - component: {fileID: -1737030914623096869}
-  - component: {fileID: -9114934895826806054}
+  - component: {fileID: -7981916620554663362}
+  - component: {fileID: 8959130176503110891}
   m_Layer: 0
   m_Name: 10mCaveCrossRails Prefab
   m_TagString: Untagged
@@ -349,8 +349,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   links:
-  - {fileID: -1737030914623096869}
-  - {fileID: -9114934895826806054}
+  - {fileID: -7981916620554663362}
+  - {fileID: 8959130176503110891}
   dataFromBake:
     orignalInstanceId: 41696
     originalInstance: {fileID: 7115210080915405535}
@@ -882,7 +882,7 @@ MonoBehaviour:
     hasLadder: 0
     isColony: 0
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 41696
+  orignalInstanceId: 36316
   sanctumPartsSpawnPoint: {fileID: 9121654820625637654}
   decorations: {fileID: 2839636925923140063}
   decorCoverage: 0
@@ -903,7 +903,7 @@ MonoBehaviour:
   spawnable: 1
   spawnLimit: -1
   generator: {fileID: 0}
-  owner: 41696
+  owner: 36316
 --- !u!114 &1549195288268159122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -923,7 +923,7 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_UseGeometry: 0
+  m_UseGeometry: 1
   m_DefaultArea: 0
   m_GenerateLinks: 1
   m_IgnoreNavMeshAgent: 1
@@ -931,9 +931,9 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.04
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 0093bdd867981e5459f1e51bcd7e2990, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 04187dc58ce74af449d66fdca72fc84e, type: 2}
   m_BuildHeightMesh: 0
 --- !u!114 &2718512467631932646
 MonoBehaviour:
@@ -1487,7 +1487,7 @@ MonoBehaviour:
   targetOrigin: {fileID: 0}
   showProceduralPoints: 0
   orientationRayLength: 0.2
---- !u!114 &-1737030914623096869
+--- !u!114 &-7981916620554663362
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1500,14 +1500,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: 0}
+  m_StartPoint: {x: 0, y: 0, z: -0.5}
   m_EndPoint: {x: 0, y: 0, z: 2.5}
   m_Width: 0
   m_CostModifier: -1
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
---- !u!114 &-9114934895826806054
+--- !u!114 &8959130176503110891
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1520,7 +1520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -10}
+  m_StartPoint: {x: 0, y: 0, z: -9.5}
   m_EndPoint: {x: 0, y: 0, z: -12.5}
   m_Width: 0
   m_CostModifier: -1

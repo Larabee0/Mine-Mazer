@@ -144,10 +144,10 @@ GameObject:
   - component: {fileID: -3188724048700739943}
   - component: {fileID: 8159154132902822256}
   - component: {fileID: 7614369187788784986}
-  - component: {fileID: 1634120969375184165}
-  - component: {fileID: 4874127957078377699}
-  - component: {fileID: 3390353114352336056}
-  - component: {fileID: 3138128641153942847}
+  - component: {fileID: -4722257989685536398}
+  - component: {fileID: 2518867765695561106}
+  - component: {fileID: 359360386963466108}
+  - component: {fileID: -7254510892659860180}
   m_Layer: 0
   m_Name: 10mCaveCrossRoad Prefab
   m_TagString: Untagged
@@ -263,10 +263,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   links:
-  - {fileID: 1634120969375184165}
-  - {fileID: 4874127957078377699}
-  - {fileID: 3390353114352336056}
-  - {fileID: 3138128641153942847}
+  - {fileID: -4722257989685536398}
+  - {fileID: 2518867765695561106}
+  - {fileID: 359360386963466108}
+  - {fileID: -7254510892659860180}
   dataFromBake:
     orignalInstanceId: 29548
     originalInstance: {fileID: 4699310440157599471}
@@ -1176,7 +1176,7 @@ MonoBehaviour:
     hasLadder: 0
     isColony: 0
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 29548
+  orignalInstanceId: 36318
   sanctumPartsSpawnPoint: {fileID: 183841942525351377}
   decorations: {fileID: 6457590214020923818}
   decorCoverage: 0
@@ -1197,7 +1197,7 @@ MonoBehaviour:
   spawnable: 1
   spawnLimit: -1
   generator: {fileID: 0}
-  owner: 29548
+  owner: 36318
 --- !u!114 &8159154132902822256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1217,7 +1217,7 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_UseGeometry: 0
+  m_UseGeometry: 1
   m_DefaultArea: 0
   m_GenerateLinks: 1
   m_IgnoreNavMeshAgent: 1
@@ -1225,9 +1225,9 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.04
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 6bbbf1fa2da2f9c4b877a796ffda46ef, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: bb8fb11ca768b8e4aa7b9ad8d58652ae, type: 2}
   m_BuildHeightMesh: 0
 --- !u!114 &7614369187788784986
 MonoBehaviour:
@@ -2160,7 +2160,7 @@ MonoBehaviour:
   targetOrigin: {fileID: 0}
   showProceduralPoints: 0
   orientationRayLength: 0.2
---- !u!114 &1634120969375184165
+--- !u!114 &-4722257989685536398
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2173,14 +2173,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: 0}
+  m_StartPoint: {x: 0, y: 0, z: -0.5}
   m_EndPoint: {x: 0, y: 0, z: 2.5}
   m_Width: 0
   m_CostModifier: -1
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
---- !u!114 &4874127957078377699
+--- !u!114 &2518867765695561106
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2193,14 +2193,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -10}
+  m_StartPoint: {x: 0, y: 0, z: -9.5}
   m_EndPoint: {x: 0, y: 0, z: -12.5}
   m_Width: 0
   m_CostModifier: -1
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
---- !u!114 &3390353114352336056
+--- !u!114 &359360386963466108
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2213,14 +2213,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 5, y: 0, z: -5}
+  m_StartPoint: {x: 4.5, y: 0, z: -5}
   m_EndPoint: {x: 7.5, y: 0, z: -5.0000005}
   m_Width: 0
   m_CostModifier: -1
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
---- !u!114 &3138128641153942847
+--- !u!114 &-7254510892659860180
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2233,7 +2233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: -5, y: 0, z: -5}
+  m_StartPoint: {x: -4.5, y: 0, z: -5}
   m_EndPoint: {x: -7.5, y: 0, z: -5.0000005}
   m_Width: 0
   m_CostModifier: -1

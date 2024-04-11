@@ -278,8 +278,9 @@ GameObject:
   - component: {fileID: 1925884630686241207}
   - component: {fileID: 4214625514530151077}
   - component: {fileID: 3181881896447424972}
-  - component: {fileID: 2876209925227823404}
-  - component: {fileID: 662563032896849113}
+  - component: {fileID: 2341911085554378839}
+  - component: {fileID: 4402648003820932147}
+  - component: {fileID: 5505414447164342855}
   m_Layer: 0
   m_Name: LargeCaveWater Prefab
   m_TagString: Untagged
@@ -393,8 +394,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   links:
-  - {fileID: 2876209925227823404}
-  - {fileID: 662563032896849113}
+  - {fileID: 4402648003820932147}
+  - {fileID: 5505414447164342855}
   dataFromBake:
     orignalInstanceId: 29538
     originalInstance: {fileID: 1925884630686241207}
@@ -1590,7 +1591,7 @@ MonoBehaviour:
     hasLadder: 0
     isColony: 0
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 29538
+  orignalInstanceId: 36334
   sanctumPartsSpawnPoint: {fileID: 0}
   decorations: {fileID: 5697189501894437379}
   decorCoverage: 0
@@ -1611,7 +1612,7 @@ MonoBehaviour:
   spawnable: 1
   spawnLimit: -1
   generator: {fileID: 0}
-  owner: 29538
+  owner: 36334
 --- !u!114 &3181881896447424972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2829,7 +2830,38 @@ MonoBehaviour:
   targetOrigin: {fileID: 0}
   showProceduralPoints: 0
   orientationRayLength: 0.2
---- !u!114 &2876209925227823404
+--- !u!114 &2341911085554378839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3679796258436271516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.04
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: e5b1d5340a369bf49a580cde938044b9, type: 2}
+  m_BuildHeightMesh: 0
+--- !u!114 &4402648003820932147
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2842,14 +2874,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: 0}
+  m_StartPoint: {x: 0, y: 0, z: -0.5}
   m_EndPoint: {x: 0, y: 0, z: 2.5}
   m_Width: 0
   m_CostModifier: -1
   m_Bidirectional: 1
   m_AutoUpdatePosition: 1
   m_Area: 0
---- !u!114 &662563032896849113
+--- !u!114 &5505414447164342855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2862,7 +2894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -20}
+  m_StartPoint: {x: 0, y: 0, z: -19.5}
   m_EndPoint: {x: 0, y: 0, z: -22.5}
   m_Width: 0
   m_CostModifier: -1

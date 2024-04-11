@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028386, g: 0.22571427, b: 0.3069231, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1681,7 +1681,7 @@ MonoBehaviour:
   EudieWayPoint: {fileID: 0}
   caveAmbience: {fileID: 278139836}
   allowSceneChange: 0
-  skipTutorial: 0
+  skipTutorial: 1
   skipToPickUpEudie: 0
 --- !u!114 &278139882
 MonoBehaviour:
@@ -2646,7 +2646,7 @@ MonoBehaviour:
   settingsMenuPrefab: {fileID: 9197481963319205126, guid: 91ea0259b4733844a8862e4eb470393a,
     type: 3}
   tutorialStarter: {fileID: 278139881}
-  autoLoadOnPlay: 0
+  autoLoadOnPlay: 1
 --- !u!114 &1274388771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2687,6 +2687,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 341670462446070769, guid: fc93cda41d77b1442bb709e6410dc4c2,
+        type: 3}
+      propertyPath: bakedData.spawnRule
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 341670462446070769, guid: fc93cda41d77b1442bb709e6410dc4c2,
+        type: 3}
+      propertyPath: bakedData.originalInstance
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4007436926372904115, guid: fc93cda41d77b1442bb709e6410dc4c2,
         type: 3}
       propertyPath: m_RootOrder
@@ -2740,6 +2750,11 @@ PrefabInstance:
     - target: {fileID: 4007436926372904115, guid: fc93cda41d77b1442bb709e6410dc4c2,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4980315764448918161, guid: fc93cda41d77b1442bb709e6410dc4c2,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8899820026267700843, guid: fc93cda41d77b1442bb709e6410dc4c2,
@@ -3050,6 +3065,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2181468151936997963, guid: 2e3fb2f25c7499740a8e78cd64cbd320,
+        type: 3}
+      propertyPath: bakedData.spawnRule
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181468151936997963, guid: 2e3fb2f25c7499740a8e78cd64cbd320,
+        type: 3}
+      propertyPath: bakedData.originalInstance
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181468151936997963, guid: 2e3fb2f25c7499740a8e78cd64cbd320,
+        type: 3}
+      propertyPath: bakedData.excludePrefabConnections.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8176323169833114417, guid: 2e3fb2f25c7499740a8e78cd64cbd320,
         type: 3}
       propertyPath: m_Name
@@ -3295,6 +3325,89 @@ MonoBehaviour:
   APos: {x: 0.471, y: 1.33, z: -1.377}
   BPos: {x: -0.501, y: 1.28, z: -1.523}
   fadeTime: 10
+--- !u!1001 &1997613006
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235317183959903999, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3644964658933732386, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_Name
+      value: SpawnAeraV2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3644964658933732386, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667214283118464011, guid: c57b5be7a835ffd41a43bda58e2b9260,
+        type: 3}
+      propertyPath: generator
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c57b5be7a835ffd41a43bda58e2b9260, type: 3}
 --- !u!1 &2036723763
 GameObject:
   m_ObjectHideFlags: 0
