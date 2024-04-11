@@ -37,7 +37,7 @@ public class BreakableWall : MonoBehaviour, IInteractable
         for (int i = 0; i < drop; i++)
         {
             MapResource chosenItem = droppableItems[Random.Range(0, droppableItems.Length)];
-            GameObject Instance = Instantiate(chosenItem, droppableSpawnArea.position,Quaternion.identity).gameObject;
+            GameObject Instance = Instantiate(chosenItem, droppableSpawnArea.position,Quaternion.identity,transform.parent).gameObject;
             Instance.AddComponent<Rigidbody>();
             Instance.AddComponent<ItemDrop>();
         }

@@ -187,13 +187,20 @@ public class MapResource : MonoBehaviour, IInteractable
     {
         if(requiresPickaxe)
         {
-            if (InputManager.GamePadPresent)
+            if (Inventory.Instance.CurHeldItem == Item.Pickaxe)
             {
-                return string.Format("RT to  Mine {0}", ToolTipName);
+                if (InputManager.GamePadPresent)
+                {
+                    return string.Format("RT to  Mine {0}", ToolTipName);
+                }
+                else
+                {
+                    return string.Format("Left Click to Mine {0}", ToolTipName);
+                }
             }
             else
             {
-                return string.Format("Left Click to Mine {0}", ToolTipName);
+                return string.Format("Select Pickaxe to Mine {0}", ToolTipName);
             }
         }
         else

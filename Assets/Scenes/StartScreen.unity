@@ -1681,8 +1681,8 @@ MonoBehaviour:
   EudieWayPoint: {fileID: 0}
   caveAmbience: {fileID: 278139836}
   allowSceneChange: 0
-  skipTutorial: 1
-  skipToPickUpEudie: 1
+  skipTutorial: 0
+  skipToPickUpEudie: 0
 --- !u!114 &278139882
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -2646,7 +2646,7 @@ MonoBehaviour:
   settingsMenuPrefab: {fileID: 9197481963319205126, guid: 91ea0259b4733844a8862e4eb470393a,
     type: 3}
   tutorialStarter: {fileID: 278139881}
-  autoLoadOnPlay: 1
+  autoLoadOnPlay: 0
 --- !u!114 &1274388771
 MonoBehaviour:
   m_ObjectHideFlags: 0

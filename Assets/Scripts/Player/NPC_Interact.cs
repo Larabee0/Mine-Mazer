@@ -104,7 +104,7 @@ public class NPC_Interact : MonoBehaviour
 
     private void InteractMine()
     {
-        if (interactable != null && interactable.RequiresPickaxe())
+        if (interactable != null && interactable.RequiresPickaxe() && Inventory.Instance.CurHeldItem == Item.Pickaxe)
         {
             interactable?.Interact();
         }

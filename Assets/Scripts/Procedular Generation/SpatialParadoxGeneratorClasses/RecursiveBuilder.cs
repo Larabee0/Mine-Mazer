@@ -26,12 +26,13 @@ public partial class SpatialParadoxGenerator
         {
             yield return PostProcessQueue();
         }
+#if UNITY_EDITOR
         if (breakEditorAfterInitialGen)
         {
             Debug.Log(randomNG.state);
             yield return BreakEditor();
         }
-
+#endif
     }
 
     private IEnumerator LiteIncrementalBuilder(bool initialArea)

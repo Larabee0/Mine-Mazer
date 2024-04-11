@@ -141,7 +141,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
             tunnelSections[i].GenerateNavMeshLinks();
             originalInstances.Add(Instantiate(tunnelSections[i],this.originalInstances));
             originalInstances[i].gameObject.SetActive(false);
-            originalInstances[i].dataFromBake = null;
+            originalInstances[i].DataFromBake = null;
             Destroy(originalInstances[i].GetComponent<SectionSpawnBaseRule>());
 
             bakedData.Add(originalInstances[i].GetComponent<TunnelSectionData>().bakedData);
@@ -179,14 +179,14 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         tunnelSectionsByInstanceID = new(tunnelSections.Count);
         tunnelSections.ForEach(prefab =>
         {
-            prefab.dataFromBake = prefab.GetComponent<TunnelSectionData>().bakedData;
-            prefab.dataFromBake.excludeConnectorSections.ForEach(connector => connector.Build());
-            prefab.dataFromBake.SetSpawnRule(prefab.GetComponent<SectionSpawnBaseRule>());
-            prefab.dataFromBake.Build(this, prefab.GetInstanceID(), true);
+            prefab.DataFromBake = prefab.GetComponent<TunnelSectionData>().bakedData;
+            prefab.DataFromBake.excludeConnectorSections.ForEach(connector => connector.Build());
+            prefab.DataFromBake.SetSpawnRule(prefab.GetComponent<SectionSpawnBaseRule>());
+            prefab.DataFromBake.Build(this, prefab.GetInstanceID(), true);
             prefab.Build(this);
             tunnelSectionsByInstanceID.Add(prefab.orignalInstanceId);
             instanceIdToSection.TryAdd(tunnelSectionsByInstanceID[^1], prefab);
-            instanceIdToBakedData.TryAdd(tunnelSectionsByInstanceID[^1], prefab.dataFromBake);
+            instanceIdToBakedData.TryAdd(tunnelSectionsByInstanceID[^1], prefab.DataFromBake);
         });
         tunnelSections.Clear();
         tunnelSections = null;
@@ -195,11 +195,11 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
 
     private void OldBakeDataForSpecificSection(TunnelSection section)
     {
-        section.dataFromBake = section.GetComponent<TunnelSectionData>().bakedData;
-        section.dataFromBake.Build(this, section.GetInstanceID(), true);
+        section.DataFromBake = section.GetComponent<TunnelSectionData>().bakedData;
+        section.DataFromBake.Build(this, section.GetInstanceID(), true);
         section.Build(this);
         instanceIdToSection.TryAdd(section.orignalInstanceId, section);
-        instanceIdToBakedData.TryAdd(section.orignalInstanceId, section.dataFromBake);
+        instanceIdToBakedData.TryAdd(section.orignalInstanceId, section.DataFromBake);
     }
 
     private void Start()

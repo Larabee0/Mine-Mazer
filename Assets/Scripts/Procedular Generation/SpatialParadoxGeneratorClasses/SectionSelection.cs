@@ -163,7 +163,7 @@ public partial class SpatialParadoxGenerator
             Connector priPref = outs.primaryPreference, secPref = outs.secondaryPreference;
             ConnectorMultiply(primaryElement.LocalToWorld, ref priPref, ref secPref);
             outs.primaryPreference = priPref; outs.secondaryPreference = secPref;
-            outs.secondaryPreference = deadEndPlug.dataFromBake.connectors[0];
+            outs.secondaryPreference = deadEndPlug.DataFromBake.connectors[0];
             outs.secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
             targetSection = deadEndPlug;
             Debug.LogWarning("Unable to find usable section, ending the tunnel.");

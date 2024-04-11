@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
-
+#if UNITY_EDITOR
 public class ProceduralDecorator : MonoBehaviour
 {
     [Header("Runtime")]
@@ -447,7 +447,7 @@ public class ProceduralDecorator : MonoBehaviour
         SceneView.RepaintAll();
     }
 }
-
+#endif
 
 
 [System.Serializable]

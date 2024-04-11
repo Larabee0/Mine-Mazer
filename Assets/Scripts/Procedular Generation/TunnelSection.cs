@@ -12,7 +12,12 @@ public class TunnelSection : MonoBehaviour
     [Header("Baked data")]
 
     [SerializeField] private NavMeshLink[] links;
-    public BakedTunnelSection dataFromBake;
+    [SerializeField] private BakedTunnelSection dataFromBake;
+    public BakedTunnelSection DataFromBake
+    {
+        get { return dataFromBake; }
+        set { dataFromBake = value; }
+    }
 
 
 
@@ -46,10 +51,10 @@ public class TunnelSection : MonoBehaviour
     // accessors 
     public Transform SanctumPartSpawnPoint=>sanctumPartsSpawnPoint;
     public Vector3 WaypointPosition => stagnationBeacon != null ? stagnationBeacon.transform.position : transform.TransformPoint(StrongKeepPosition);
-    public float AmbientLightLevel => dataFromBake.AmbientLightLevel;
-    public AudioClip AmbientNoise => dataFromBake.AmbientNoise;
-    public string WaypointName => stagnationBeacon != null ? stagnationBeacon.name : dataFromBake.WaypointName;
-    public bool StrongKeep => dataFromBake.StrongKeep;
+    public float AmbientLightLevel => DataFromBake.AmbientLightLevel;
+    public AudioClip AmbientNoise => DataFromBake.AmbientNoise;
+    public string WaypointName => stagnationBeacon != null ? stagnationBeacon.name : DataFromBake.WaypointName;
+    public bool StrongKeep => DataFromBake.StrongKeep;
     public bool Keep
     {
         get
@@ -62,23 +67,23 @@ public class TunnelSection : MonoBehaviour
         }
     }
 
-    public bool HasLadder => dataFromBake.HasLadder;
-    public bool IsColony => dataFromBake.IsColony;
+    public bool HasLadder => DataFromBake.HasLadder;
+    public bool IsColony => DataFromBake.IsColony;
     
     public bool explored = false;
 
     public int InstanceCount
     {
-        get => dataFromBake.InstanceCount;
-        set => dataFromBake.InstanceCount = value;
+        get => DataFromBake.InstanceCount;
+        set => DataFromBake.InstanceCount = value;
     }
 
-    public bool Spawnable => dataFromBake.SpawnRule.Spawnable;
-    public int SpawnDebt => dataFromBake.SpawnRule.SpawnDebt;
+    public bool Spawnable => DataFromBake.SpawnRule.Spawnable;
+    public int SpawnDebt => DataFromBake.SpawnRule.SpawnDebt;
 
-    public Texture2D MiniMapAsset => dataFromBake.MiniMapAsset;
+    public Texture2D MiniMapAsset => DataFromBake.MiniMapAsset;
     public Vector3 Position => transform.position;
-    public Vector3 StrongKeepPosition => dataFromBake.StrongKeepPosition;
+    public Vector3 StrongKeepPosition => DataFromBake.StrongKeepPosition;
     public Quaternion Rotation => transform.rotation;
     private Renderer[] renderers;
     private Light[] lights;
@@ -109,30 +114,30 @@ public class TunnelSection : MonoBehaviour
         }
     }
 
-    public BoxBounds[] BoundingBoxes => dataFromBake.boundingBoxes;
+    public BoxBounds[] BoundingBoxes => DataFromBake.boundingBoxes;
 
-    public List<int> ExcludePrefabConnections => dataFromBake.ExcludePrefabConnectionsIds;
+    public List<int> ExcludePrefabConnections => DataFromBake.ExcludePrefabConnectionsIds;
 
 
     public void GenerateNavMeshLinks()
     {
         links = GetComponents<NavMeshLink>();
-        if (links == null || links.Length != dataFromBake.connectors.Length)
+        if (links == null || links.Length != DataFromBake.connectors.Length)
         {
-            links = new NavMeshLink[dataFromBake.connectors.Length];
+            links = new NavMeshLink[DataFromBake.connectors.Length];
             for (int i = 0; i < links.Length; i++)
             {
                 var link = links[i] = gameObject.AddComponent<NavMeshLink>();
                 link.autoUpdate = true;
-                link.startPoint = dataFromBake.connectors[i].localPosition + new Vector3(0, -1.5f, 0);
-                link.endPoint = dataFromBake.connectors[i].localPosition + new Vector3(0, -1.5f, 0) + (dataFromBake.connectors[i].localRotation * Vector3.forward * 2.5f);
+                link.startPoint = DataFromBake.connectors[i].localPosition + new Vector3(0, -1.5f, 0);
+                link.endPoint = DataFromBake.connectors[i].localPosition + new Vector3(0, -1.5f, 0) + (DataFromBake.connectors[i].localRotation * Vector3.forward * 2.5f);
             }
         }
     }
 
     public ConnectorMask GetConnectorMask(Connector connector)
     {
-        return dataFromBake.GetConnectorMask(connector);
+        return DataFromBake.GetConnectorMask(connector);
     }
 
     public void Build(SpatialParadoxGenerator generator)
@@ -171,12 +176,12 @@ public class TunnelSection : MonoBehaviour
 
     public bool UpdateRule()
     {
-        return dataFromBake.UpdateRule();
+        return DataFromBake.UpdateRule();
     }
 
     public void Spawned()
     {
-        dataFromBake.Spawned();
+        DataFromBake.Spawned();
     }
 
     public static float4x4 GetLTWConnectorMatrix(float4x4 ltw, Connector connector)
@@ -223,15 +228,15 @@ public class TunnelSection : MonoBehaviour
             StartCoroutine(DecorateProcess(resources));
         }
         
-        return decorationCount = (int)(dataFromBake.proceduralPoints.Count * coverage);
+        return decorationCount = (int)(DataFromBake.proceduralPoints.Count * coverage);
     }
 
     private IEnumerator DecorateProcess(MapResource[] resources)
     {
-        List<ProDecPoint> points = new(dataFromBake.proceduralPoints);
+        List<ProDecPoint> points = new(DataFromBake.proceduralPoints);
 
-        int totalPoints = dataFromBake.proceduralPoints.Count;
-        NativeArray<ProDecPointBurst> pointsBurst = new(dataFromBake.proceduralPoints.Count, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        int totalPoints = DataFromBake.proceduralPoints.Count;
+        NativeArray<ProDecPointBurst> pointsBurst = new(DataFromBake.proceduralPoints.Count, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
         JobHandle handle = ScheduleMatrixUpdate(points, pointsBurst);
         while (!handle.IsCompleted)
         {
@@ -300,17 +305,17 @@ public class TunnelSection : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (dataFromBake != null)
+        if (DataFromBake != null)
         {
             if (StrongKeep)
             {
-                Gizmos.DrawCube(transform.TransformPoint(dataFromBake.StrongKeepPosition), Vector3.one);
+                Gizmos.DrawCube(transform.TransformPoint(DataFromBake.StrongKeepPosition), Vector3.one);
             }
-            if (dataFromBake.connectors != null)
+            if (DataFromBake.connectors != null)
             {
-                for (int i = 0; i < dataFromBake.connectors.Length; i++)
+                for (int i = 0; i < DataFromBake.connectors.Length; i++)
                 {
-                    Gizmos.matrix = GetLTWConnectorMatrix(transform.localToWorldMatrix, dataFromBake.connectors[i]);
+                    Gizmos.matrix = GetLTWConnectorMatrix(transform.localToWorldMatrix, DataFromBake.connectors[i]);
 
                     Gizmos.color = Color.cyan;
                     Gizmos.DrawCube(Vector3.zero, 0.5f * Vector3.one);
@@ -320,12 +325,12 @@ public class TunnelSection : MonoBehaviour
             }
 
             Gizmos.color = Color.red;
-            if (dataFromBake.boundingBoxes != null)
+            if (DataFromBake.boundingBoxes != null)
             {
-                for (int i = 0; i < dataFromBake.boundingBoxes.Length; i++)
+                for (int i = 0; i < DataFromBake.boundingBoxes.Length; i++)
                 {
-                    Gizmos.matrix = math.mul(float4x4.TRS(transform.position, transform.rotation, Vector3.one), dataFromBake.boundingBoxes[i].LocalMatrix);
-                    Gizmos.DrawWireCube(Vector3.zero, dataFromBake.boundingBoxes[i].size);
+                    Gizmos.matrix = math.mul(float4x4.TRS(transform.position, transform.rotation, Vector3.one), DataFromBake.boundingBoxes[i].LocalMatrix);
+                    Gizmos.DrawWireCube(Vector3.zero, DataFromBake.boundingBoxes[i].size);
                 }
             }
         }

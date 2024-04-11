@@ -220,7 +220,7 @@ public partial class SpatialParadoxGenerator
             item.queuedSection.secondaryMatrix.Rotation(),
             transform);
         sectionInstance.gameObject.SetActive(true);
-        sectionInstance.dataFromBake = item.dataFromBake;
+        sectionInstance.DataFromBake = item.dataFromBake;
         InstantiateBreakableWalls(item.queuedSection.pickedPrefab, sectionInstance, item.queuedSection.primaryConnector);
         item.SetInstance(sectionInstance);
         totalDecorations += sectionInstance.Decorate(decorCoverage, decorations);
