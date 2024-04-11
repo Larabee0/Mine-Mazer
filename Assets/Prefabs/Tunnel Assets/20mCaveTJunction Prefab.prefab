@@ -1514,7 +1514,7 @@ MonoBehaviour:
     hasLadder: 0
     isColony: 0
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 36328
+  orignalInstanceId: 41976
   sanctumPartsSpawnPoint: {fileID: 9161697088426887930}
   decorations: {fileID: 5606427158257195949}
   decorCoverage: 0
@@ -1535,7 +1535,7 @@ MonoBehaviour:
   spawnable: 1
   spawnLimit: -1
   generator: {fileID: 0}
-  owner: 36328
+  owner: 41976
 --- !u!114 &-3448590330050541790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2892,7 +2892,14 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       parentPos: {x: 0, y: 0, z: 0}
       internalIndex: 2
-    excludePrefabConnections: []
+    excludePrefabConnections:
+    - {fileID: 7226286589360190076}
+    - {fileID: 4699310440157599471, guid: 7a114b4e17d402448bdafb0f125ae068, type: 3}
+    - {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962, type: 3}
+    - {fileID: 3205104275630772647, guid: 7d4d92c11027a1147970002dee1073d8, type: 3}
+    - {fileID: 7620240774403884024, guid: 536cf79977b17ae40bc8cc4764deef6d, type: 3}
+    - {fileID: 5690713400658837405, guid: f3cc95ca6faf29f4bb27eef3dbf3bef2, type: 3}
+    - {fileID: 1925884630686241207, guid: 47ecaaf294d32d345877b4d8b966f55e, type: 3}
     excludeConnectorSections:
     - exclude: []
     - exclude: []
