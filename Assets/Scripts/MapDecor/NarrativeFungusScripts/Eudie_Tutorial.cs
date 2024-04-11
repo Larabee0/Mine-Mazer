@@ -222,7 +222,7 @@ public class Eudie_Tutorial : NPCTrade
         SpatialParadoxGenerator mapGen = FindObjectOfType<SpatialParadoxGenerator>();
         mapGen.OnEnterLadderSection -= LadderBark;
         mapGen.OnEnterColonySection -= EnterColonyBark;
-        GetComponent<NavMeshAgent>().enabled = true;
+        GetComponent<NavMeshAgent>().enabled = false;
 
         eudieItem.putDownEudieToolTip = true;
         if (Inventory.Instance.CurHeldItem != Item.Eudie)
