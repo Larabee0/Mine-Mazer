@@ -34,6 +34,7 @@ public class PlayerUIController : MonoBehaviour
     private VisualElement Root => playerUi.rootVisualElement;
 
     private SettingsMenuController settingsMenu;
+    private InventoryController inventoryMenu;
     private VisualElement pauseButtonContainer;
     private Button resume;
     private Button settings;
@@ -83,6 +84,8 @@ public class PlayerUIController : MonoBehaviour
         settings = Root.Q<Button>("SettingsButton");
         mainMenu = Root.Q<Button>("MainMenuButton");
 
+        inventoryMenu = new(Root.Q("Inventory"));
+
         settings.RegisterCallback<ClickEvent>(ev => OpenSettingsMenu());
         settings.RegisterCallback<NavigationSubmitEvent>(ev => OpenSettingsMenu());
         resume.RegisterCallback<ClickEvent>(ev =>
@@ -115,7 +118,8 @@ public class PlayerUIController : MonoBehaviour
         StartCoroutine(SetHungerBarProgress());
         SetHungerVisible(false);
         SetPauseMenuActive(false);
-        //mainMenu.SetEnabled(false);
+        SetInventoryActive(false);
+        InputManager.Instance.UnlockPointer();
     }
 
     private void OnEnable()
@@ -172,6 +176,18 @@ public class PlayerUIController : MonoBehaviour
     public void SetPauseMenuActive(bool active)
     {
         pauseButtonContainer.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    public void SetInventoryActive(bool active)
+    {
+        if (active)
+        {
+            inventoryMenu.Open();
+        }
+        else
+        {
+            inventoryMenu.Close();
+        }
     }
 
 

@@ -71,15 +71,26 @@ public class Inventory : MonoBehaviour
         if (InputManager.Instance != null)
         {
             InputManager.Instance.scrollDirection += ScrollInventory;
+            InputManager.Instance.inventoryButton.OnButtonReleased += OpenInventory;
         }
     }
+
     private void OnDisable()
     {
         if (InputManager.Instance != null)
         {
             InputManager.Instance.scrollDirection -= ScrollInventory;
+            InputManager.Instance.inventoryButton.OnButtonReleased -= OpenInventory;
         }
     }
+
+
+    private void OpenInventory()
+    {
+        PlayerUIController.Instance.SetInventoryActive(true);
+    }
+
+
 
     public void AddItem(Item itemType, int quantity, MapResource itemInstance)
     {
