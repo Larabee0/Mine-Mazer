@@ -117,14 +117,14 @@ public class PlayerUIController : MonoBehaviour
         screenFade.style.display = DisplayStyle.None;
         StartCoroutine(SetHungerBarProgress());
         SetHungerVisible(false);
-        SetPauseMenuActive(false);
-        SetInventoryActive(false);
-        InputManager.Instance.UnlockPointer();
+        //SetPauseMenuActive(false);
+        //InputManager.Instance.UnlockPointer();
     }
 
     private void OnEnable()
     {
-        if(InputManager.Instance != null)
+        SetInventoryActive(false);
+        if (InputManager.Instance != null)
         {
             InputManager.Instance.pauseButton.OnButtonReleased += TogglePauseMenu;
         }

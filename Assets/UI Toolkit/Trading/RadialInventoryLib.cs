@@ -154,6 +154,7 @@ public class RadialMenuItem : VisualElement
         m_label = new Label();
         m_label.AddToClassList(ussLabelClassName);
         m_label.style.alignContent = Align.Center;
+        m_label.pickingMode = PickingMode.Ignore;
         Add(m_label);
 
         AddToClassList(ussClassName);
@@ -329,6 +330,7 @@ public class RadialMenuItem : VisualElement
             internalLabels[^1].style.paddingLeft = 0;
             internalLabels[^1].style.unityTextAlign = TextAnchor.MiddleCenter;
             internalLabels[^1].style.color = Color.white;
+            internalLabels[^1].pickingMode = PickingMode.Ignore;
             Add(internalLabels[^1]);
         }
 

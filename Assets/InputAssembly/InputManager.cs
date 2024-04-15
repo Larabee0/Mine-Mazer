@@ -174,7 +174,7 @@ namespace MazeGame.Input
             playerControls = new PlayerControls();
             Build();
 
-            LockPointer();
+            // LockPointer();
             // bind internal controls to the action map.
             Bind();
 
