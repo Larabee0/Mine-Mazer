@@ -144,7 +144,6 @@ public class RadialMenuItem : VisualElement
             value = Mathf.Max(value, 1);
             m_segments = value;
             m_label.text = value.ToString();
-            UpdateLabels();
             MarkDirtyRepaint();
         }
     }
@@ -161,10 +160,10 @@ public class RadialMenuItem : VisualElement
 
         RegisterCallback<CustomStyleResolvedEvent>(evt => CustomStyleResolved(evt));
 
-        RegisterCallback<MouseOverEvent>(evt => MouseOver());
-        RegisterCallback<MouseOutEvent>(evt => MouseOut());
+        RegisterCallback<MouseOverEvent>(evt => MouseOver(evt));
+        RegisterCallback<MouseOutEvent>(evt => MouseOut(evt));
         RegisterCallback<MouseMoveEvent>(evt => MouseMove(evt));
-
+        
         RegisterCallback<PointerDownEvent>(evt => OnClickIntercept(evt));
         RegisterCallback<PointerUpEvent>(evt => OnClickRelease(evt));
         RegisterCallback<NavigationSubmitEvent>(evt => OnNavIntercept(evt));
@@ -172,45 +171,49 @@ public class RadialMenuItem : VisualElement
         generateVisualContent += GenerateVisualContent;
     }
 
-    private void OnNavIntercept(NavigationSubmitEvent evt)
+    private static void OnNavIntercept(NavigationSubmitEvent evt)
     {
-        //UpdateSegmentHover(evt.originalMousePosition);
-        active = true;
-        MarkDirtyRepaint();
+        RadialMenuItem element = (RadialMenuItem)evt.currentTarget;
+        element.active = true;
+        element.MarkDirtyRepaint();
     }
 
-    private void OnClickIntercept(PointerDownEvent evt)
+    private static void OnClickIntercept(PointerDownEvent evt)
     {
-        //UpdateSegmentHover(evt.originalMousePosition);
-        active = true;
-        MarkDirtyRepaint();
+        RadialMenuItem element = (RadialMenuItem)evt.currentTarget;
+        element.active = true;
+        element.MarkDirtyRepaint();
     }
 
-    private void OnClickRelease(PointerUpEvent evt)
+    private static void OnClickRelease(PointerUpEvent evt)
     {
-        active = false;
-        MarkDirtyRepaint();
+        RadialMenuItem element = (RadialMenuItem)evt.currentTarget;
+        element.active = false;
+        element.MarkDirtyRepaint();
     }
 
-    private void MouseOut()
+    private static void MouseOut(MouseOutEvent evt)
     {
-        internalLabels.ForEach(label => label.style.color = Color.white);
-        m_segmentHover = -1;
-        mouseCapture = false;
-        MarkDirtyRepaint();
+        RadialMenuItem element = (RadialMenuItem)evt.currentTarget;
+        element.internalLabels.ForEach(label => label.style.color = Color.white);
+        element.m_segmentHover = -1;
+        element.mouseCapture = false;
+        element.MarkDirtyRepaint();
     }
 
-    private void MouseOver()
+    private static void MouseOver(MouseOverEvent evt)
     {
-        mouseCapture = true;
+        RadialMenuItem element = (RadialMenuItem)evt.currentTarget;
+        element.mouseCapture = true;
     }
 
-    private void MouseMove(MouseMoveEvent evt)
+    private static void MouseMove(MouseMoveEvent evt)
     {
-        if (mouseCapture)
+        RadialMenuItem element = (RadialMenuItem)evt.currentTarget;
+        if (element.mouseCapture)
         {
-            UpdateSegmentHover(evt.localMousePosition);
-            MarkDirtyRepaint();
+            element.UpdateSegmentHover(evt.localMousePosition);
+            element.MarkDirtyRepaint();
         }
     }
 
@@ -251,7 +254,7 @@ public class RadialMenuItem : VisualElement
         }
         if (repaint)
         {
-            UpdateLabels();
+            //UpdateLabels();
             MarkDirtyRepaint();
         }
     }
@@ -314,7 +317,6 @@ public class RadialMenuItem : VisualElement
 
     public void UpdateLabels()
     {
-
         for (int i = internalLabels.Count; i < Segments; i++)
         {
             internalLabels.Add(new Label() { text = "Test" });
@@ -365,12 +367,12 @@ public class RadialMenuItem : VisualElement
     {
         inventoryDisplay = inventory;
         Segments = inventory.Count;
+        UpdateLabels();
 
         for (int i = 0; i < inventory.Count; i++)
         {
             internalLabels[i].text = inventory[i];
         }
 
-        //UpdateLabels();
     }
 }

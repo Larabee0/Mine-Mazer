@@ -87,7 +87,10 @@ public class Inventory : MonoBehaviour
 
     private void OpenInventory()
     {
-        PlayerUIController.Instance.SetInventoryActive(true);
+        if(inventory.Count > 0)
+        {
+            PlayerUIController.Instance.SetInventoryActive(true);
+        }
     }
 
 
