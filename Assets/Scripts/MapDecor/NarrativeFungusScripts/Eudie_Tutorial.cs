@@ -205,7 +205,7 @@ public class Eudie_Tutorial : NPCTrade
     {
         var comp = GetComponent<Follow_Player>();
         comp.OnHitPlayer -= OnHitPlayer;
-        eudieItem.PickUpEudieItem();
+        TransformEudieToItem();
     }
 
     public void TransformEudieToItem()
