@@ -1,11 +1,27 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public partial class SpatialParadoxGenerator
 {
+
+    private void CleanUpDeadTreeElements()
+    {
+        for (int i = 0; i < mapTree.Count; i++)
+        {
+            for (int j = mapTree[i].Count - 1; j >= 0; j--)
+            {
+                if (!mapTree[i][j].alive)
+                {
+                    mapTree[i].RemoveAt(j);
+                }
+            }
+        }
+    }
+
     private void ResolvePlayerSection()
     {
         GameObject player = FindObjectOfType<Improved_Movement>().gameObject;
@@ -15,44 +31,43 @@ public partial class SpatialParadoxGenerator
             section = section != null ? section : hitInfo.collider.gameObject.GetComponentInChildren<TunnelSection>();
             if (section != null)
             {
-#if UNITY_EDITOR
-                if (debugging)
+                nextPlayerSection = section.treeElementOwner;
+                if (incrementalUpdateProcess == null)
                 {
-                    StartCoroutine(MakeRootNodeDebug(section));
+                    incrementalUpdateProcess = StartCoroutine(MakeRootNodeIncremental(section.treeElementOwner));
                 }
-                else
-                {
-                    MakeRootNode(section);
-                }
-#else
-                MakeRootNode(section);
-#endif
+                else queuedUpdateProcess ??= StartCoroutine(AwaitCurrentIncrementalComplete());
+
             }
         }
     }
 
-    private static void ClearConnectors(TunnelSection section)
+    private static void ClearConnectors(MapTreeElement section)
     {
-        List<int> pairKeys = new(section.connectorPairs.Keys);
+        List<int> pairKeys = new(section.ConnectorPairs.Keys);
         pairKeys.ForEach(key =>
         {
-            SectionAndConnector sectionTwin = section.connectorPairs[key];
-            if (sectionTwin != null && sectionTwin.sectionInstance != null)
+            SectionAndConnector sectionTwin = section.ConnectorPairs[key];
+            if (sectionTwin != null && sectionTwin.element != null)
             {
-                sectionTwin.sectionInstance.connectorPairs[sectionTwin.internalIndex] = null;
-                sectionTwin.sectionInstance.InUse.Remove(sectionTwin.internalIndex);
-                sectionTwin.sectionInstance.connectorPairs.Remove(sectionTwin.internalIndex);
+                sectionTwin.element.ConnectorPairs[sectionTwin.internalIndex] = null;
+                sectionTwin.element.inUse.Remove(sectionTwin.internalIndex);
+                sectionTwin.element.ConnectorPairs.Remove(sectionTwin.internalIndex);
             }
         });
 
-        section.connectorPairs.Clear();
-        section.InUse.Clear();
+        section.ConnectorPairs.Clear();
+        section.inUse.Clear();
     }
 
     private void TransformSection(Transform secondaryTransform, Connector primaryConnector, Connector secondaryConnector)
     {
         float4x4 transformMatrix = CalculateSectionMatrix(primaryConnector, secondaryConnector);
         secondaryTransform.SetPositionAndRotation(transformMatrix.Translation(), transformMatrix.Rotation());
+        if(secondaryTransform.TryGetComponent(out TunnelSection section))
+        {
+            AddSection(section, transformMatrix);
+        }
     }
 
     private float4x4 CalculateSectionMatrix(Connector primary, Connector secondary)
@@ -80,14 +95,14 @@ public partial class SpatialParadoxGenerator
         for (int i = 0; i < tunnelSectionsByInstanceID.Count; i++)
         {
             int instanceID = tunnelSectionsByInstanceID[i];
-            textureLoopUp.Add(instanceID, instanceIdToSection[instanceID].MiniMapAsset);
+            textureLoopUp.Add(instanceID, instanceIdToBakedData[instanceID].MiniMapAsset);
         }
         return textureLoopUp;
     }
 
-    internal List<TunnelSection> GetMothballedSections()
+    internal List<MapTreeElement> GetMothballedSections()
     {
-        HashSet<TunnelSection> sections = new();
+        HashSet<MapTreeElement> sections = new(new MapTreeElementComparer());
 
         if (mothBalledSections.Count > 0)
         {
@@ -110,12 +125,12 @@ public partial class SpatialParadoxGenerator
 
     private bool Spawnable(int id, bool update = false)
     {
-        return update ? instanceIdToSection[id].UpdateRule() : instanceIdToSection[id].Spawnable;
+        return update ? instanceIdToBakedData[id].UpdateRule() : instanceIdToBakedData[id].Spawnable;
     }
 
     private int GetSpawnDebt(int id)
     {
-        return instanceIdToSection[id].SpawnDebt;
+        return instanceIdToBakedData[id].SpawnDebt;
     }
 
     private TunnelSection InstinateSection(int index)
@@ -123,78 +138,105 @@ public partial class SpatialParadoxGenerator
         return InstinateSection(instanceIdToSection[tunnelSectionsByInstanceID[index]]);
     }
 
-    private TunnelSection InstinateSection(TunnelSection tunnelSection)
+    private TunnelSection InstinateSection(TunnelSection tunnelSection, Vector3? position = null, Quaternion? rotation = null)
     {
-        TunnelSection section = Instantiate(tunnelSection);
-
-        tunnelSection.InstanceCount++;
+        TunnelSection section = position.HasValue && rotation.HasValue
+            ? Instantiate(tunnelSection, position.Value, rotation.Value, transform)
+            : Instantiate(tunnelSection, transform);
         section.gameObject.SetActive(true);
-        section.transform.parent = transform;
-        if (instanceIdToSection.TryGetValue(tunnelSection.orignalInstanceId, out TunnelSection original))
-        {
-            original.Spawned();
-        }
+        HandleNewSectionInstance(tunnelSection);
         return section;
     }
 
-    private void DestroySection(TunnelSection section)
+    private void HandleNewSectionInstance(TunnelSection tunnelSection)
+    {
+        if (instanceIdToBakedData.TryGetValue(tunnelSection.orignalInstanceId, out BakedTunnelSection original))
+        {
+            original.InstanceCount++;
+            original.Spawned();
+        }
+    }
+
+    private void DestroySection(MapTreeElement section)
     {
         ClearConnectors(section);
-
-        if (instanceIdToSection.ContainsKey(section.orignalInstanceId))
+        totalDecorations -= section.sectionInstance.decorationCount;
+        if (instanceIdToBakedData.ContainsKey(section.OriginalInstanceId))
         {
-            instanceIdToSection[section.orignalInstanceId].InstanceCount--;
+            instanceIdToBakedData[section.OriginalInstanceId].InstanceCount--;
         }
         else
         {
-            Debug.LogException(new KeyNotFoundException(string.Format("Key: {0} not present in dictionary instanceIdToSection!", section.orignalInstanceId)), gameObject);
-            Debug.LogErrorFormat(gameObject, "Likely section {0} has incorrect instance id of {1}", section.gameObject.name, section.orignalInstanceId);
+            Debug.LogException(new KeyNotFoundException(string.Format("Key: {0} not present in dictionary instanceIdToSection!", section.OriginalInstanceId)), gameObject);
+            Debug.LogErrorFormat(gameObject, "Likely section {0} has incorrect instance id of {1}", section.sectionInstance.gameObject.name, section.OriginalInstanceId);
         }
 
-        Destroy(section.gameObject);
+        if(section.OriginalInstanceId == deadEndPlug.orignalInstanceId)
+        {
+            deadEnds.Remove(section);
+        }
+        
+        Destroy(section.sectionInstance.gameObject);
+        section.alive = false;
     }
 
-    private void TransformSection(TunnelSection primary, TunnelSection secondary, Connector primaryConnector, Connector secondaryConnector)
+    public void LinkSections(MapTreeElement primaryTreeElement, MapTreeElement newTreeElement, int priConnInternalIndex,int newConnInternalIndex)
     {
-        TransformSection(secondary.transform, primaryConnector, secondaryConnector);
-
-        primary.connectorPairs[primaryConnector.internalIndex] = new(secondary, secondaryConnector.internalIndex);
-        secondary.connectorPairs[secondaryConnector.internalIndex] = new(primary, primaryConnector.internalIndex);
-        primary.InUse.Add(primaryConnector.internalIndex);
-        secondary.InUse.Add(secondaryConnector.internalIndex);
+        primaryTreeElement.ConnectorPairs[priConnInternalIndex] = new(newTreeElement, newConnInternalIndex);
+        newTreeElement.ConnectorPairs[newConnInternalIndex] = new(primaryTreeElement, priConnInternalIndex);
+        primaryTreeElement.inUse.Add(priConnInternalIndex);
+        newTreeElement.inUse.Add(newConnInternalIndex);
     }
 
-    public Connector GetConnectorFromSection(List<Connector> validConnectors, out int index)
+    private void TransformSectionAndLink(MapTreeElement primary, MapTreeElement secondary, Connector primaryConnector, Connector secondaryConnector)
     {
-        index = Random.Range(0, validConnectors.Count);
+        // primaryConnector.UpdateWorldPos(primary.LocalToWorld);
+        // secondaryConnector.UpdateWorldPos(float4x4.identity);
+        TransformSection(secondary.sectionInstance.transform, primaryConnector, secondaryConnector);
+
+        LinkSections(primary,secondary,primaryConnector.internalIndex,secondaryConnector.internalIndex);
+    }
+
+    public Connector GetRandomConnectorFromSection(List<Connector> validConnectors, out int index)
+    {
+        index = randomNG.NextInt(0, validConnectors.Count);
         return validConnectors[index];
     }
 
-    private List<Connector> FilterConnectors(TunnelSection section)
+    private List<Connector> FilterConnectorsByOriginalOnly(int instanceId)
     {
-        List<Connector> connectors = new(section.connectors);
+        List<Connector> connectors = new(instanceIdToBakedData[instanceId].connectors);
 
-        if (section.InUse.Count > 0)
+        return connectors;
+    }
+
+    private List<Connector> FilterConnectorsByInuse(MapTreeElement element)
+    {
+        List<Connector> connectors = new(element.Connectors);
+
+        if (element.inUse.Count <= 0)
         {
-            for (int i = connectors.Count - 1; i >= 0; i--)
+            return connectors;
+        }
+
+        for (int i = connectors.Count - 1; i >= 0; i--)
+        {
+            if (element.inUse.Contains(connectors[i].internalIndex))
             {
-                if (section.InUse.Contains(connectors[i].internalIndex))
-                {
-                    connectors.RemoveAt(i);
-                }
+                connectors.RemoveAt(i);
             }
         }
 
         return connectors;
     }
 
-    private List<int> FilterSections(TunnelSection primary)
+    private List<int> FilterSections(int originalInstanceId)
     {
         List<int> nextSections = new(tunnelSectionsByInstanceID);
-
-        if (primary.ExcludePrefabConnections.Count > 0)
+        BakedTunnelSection data = instanceIdToBakedData[originalInstanceId];
+        if (data.ExcludePrefabConnectionsIds.Count > 0)
         {
-            primary.ExcludePrefabConnections.ForEach(item => nextSections.RemoveAll(element => element == item));
+            data.ExcludePrefabConnectionsIds.ForEach(item => nextSections.RemoveAll(element => element == item));
         }
 
         nextSections.RemoveAll(element => !Spawnable(element, true));
@@ -232,50 +274,53 @@ public partial class SpatialParadoxGenerator
         return nextSections;
     }
 
-    private int GetFreeConnectorCount(List<TunnelSection> sections)
+    private int GetTotalFreeConnectorCount(List<MapTreeElement> sections)
     {
         int freeConnectors = 0;
         for (int i = 0; i < sections.Count; i++)
         {
-            TunnelSection section = sections[i];
-            freeConnectors += section.connectors.Length - section.InUse.Count;
+            freeConnectors += sections[i].FreeConnectors;
         }
         return freeConnectors;
     }
 
-    private void CheckForSectionsPromotions()
+    private void CheckForSectionPromotions()
     {
         Debug.LogFormat(gameObject, "promoteList: {0} promoteDict: {1}", promoteSectionsList.Count, promoteSectionsDict.Count);
         if (mothBalledSections.Count > 0)
         {
-            List<TunnelSection> mothBalledSections = new(this.mothBalledSections.Keys);
+            List<MapTreeElement> mothBalledSections = new(this.mothBalledSections.Keys);
             mothBalledSections.ForEach(section =>
             {
-                int curDst = this.mothBalledSections[section].dst;
-                if (curDst < mapTree.Count)
-                {
-                    if (promoteSectionsDict.ContainsKey(curDst))
-                    {
-                        promoteSectionsDict[curDst].Add(section);
-                    }
-                    else
-                    {
-                        promoteSectionsDict.Add(curDst, new List<TunnelSection>() { section });
-                    }
-                    this.mothBalledSections.Remove(section);
-                }
-                else
-                {
-                    if (promoteSectionsDict.ContainsKey(curDst) && promoteSectionsDict[curDst].Contains(section))
-                    {
-                        HashSet<TunnelSection> promoteSet = new(promoteSectionsDict[curDst]);
-                        promoteSet.Remove(section);
-                        promoteSectionsDict[curDst] = new(promoteSet);
-                    }
-                }
+                CheckForPromotable(section);
             });
         }
         Debug.LogFormat(gameObject, "promoteList: {0} promoteDict: {1}", promoteSectionsList.Count, promoteSectionsDict.Count);
     }
 
+    private void CheckForPromotable(MapTreeElement section)
+    {
+        int curDst = this.mothBalledSections[section].dst;
+        if (curDst < mapTree.Count)
+        {
+            if (promoteSectionsDict.ContainsKey(curDst))
+            {
+                promoteSectionsDict[curDst].Add(section);
+            }
+            else
+            {
+                promoteSectionsDict.Add(curDst, new List<MapTreeElement>() { section });
+            }
+            this.mothBalledSections.Remove(section);
+        }
+        else
+        {
+            if (promoteSectionsDict.ContainsKey(curDst) && promoteSectionsDict[curDst].Contains(section))
+            {
+                HashSet<MapTreeElement> promoteSet = new(promoteSectionsDict[curDst], new MapTreeElementComparer());
+                promoteSet.Remove(section);
+                promoteSectionsDict[curDst] = new(promoteSet);
+            }
+        }
+    }
 }

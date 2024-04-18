@@ -126,6 +126,8 @@ public class Eudie_Tutorial : NPCTrade
         {
             RecieveStarterItems();
             PickUpEudie();
+
+            Inventory.Instance.AddItem(tradeOptions[0].givenItem.ItemStats.type, 1, Instantiate( tradeOptions[0].givenItem));
             PlayerUIController.Instance.SetMiniMapVisible(true);
         }
         else
@@ -170,7 +172,8 @@ public class Eudie_Tutorial : NPCTrade
     private void OnGateBeginOpening()
     {
         gateButton.OnSuccessfulActivation -= OnGateBeginOpening;
-        WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP);
+        if(eudieWWP != null) { WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP); }
+        
         StartCoroutine(OpenGate());
     }
 
@@ -193,6 +196,16 @@ public class Eudie_Tutorial : NPCTrade
         eudieItem.pickUpEudie = true;
         eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Eudie", eudieWaypoint.position, Color.yellow);
         InteractMessage.Instance.SetObjective("Pick up Eudie");
+        var comp = GetComponent<Follow_Player>();
+        comp.OnHitPlayer += OnHitPlayer;
+        comp.ZeroStoppingDistance();
+    }
+
+    private void OnHitPlayer()
+    {
+        var comp = GetComponent<Follow_Player>();
+        comp.OnHitPlayer -= OnHitPlayer;
+        TransformEudieToItem();
     }
 
     public void TransformEudieToItem()
@@ -219,7 +232,7 @@ public class Eudie_Tutorial : NPCTrade
         SpatialParadoxGenerator mapGen = FindObjectOfType<SpatialParadoxGenerator>();
         mapGen.OnEnterLadderSection -= LadderBark;
         mapGen.OnEnterColonySection -= EnterColonyBark;
-        GetComponent<NavMeshAgent>().enabled = true;
+        GetComponent<NavMeshAgent>().enabled = false;
 
         eudieItem.putDownEudieToolTip = true;
         if (Inventory.Instance.CurHeldItem != Item.Eudie)

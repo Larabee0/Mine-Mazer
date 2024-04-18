@@ -26,7 +26,7 @@ public struct SetupConnectorsJob : IJobFor
         for (int i = 0; i < connectors.Length; i++)
         {
             BurstConnector connector = connectors[i];
-            BurstConnector.UpdateWorldPos(ref connector, float4x4.identity);
+            connector.UpdateWorldPos(float4x4.identity);
             connectors[i] = connector;
         }
 
@@ -37,6 +37,8 @@ public struct SetupConnectorsJob : IJobFor
 [BurstCompile]
 public struct BigMatrixJob : IJobFor
 {
+    private static readonly quaternion oneEightyOffset = quaternion.Euler(math.radians(0), math.radians(180), math.radians(0));
+
     [ReadOnly]
     public NativeReference<BurstConnector> connector;
 
@@ -90,12 +92,11 @@ public struct BigMatrixJob : IJobFor
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static float4x4 CalculateSectionMatrix(BurstConnector primary, BurstConnector secondary)
     {
-        quaternion oneEightyOffset = quaternion.Euler(math.radians(0), math.radians(180), math.radians(0));
         quaternion offsetPrimaryRot = math.mul(primary.rotation, oneEightyOffset);
         quaternion inverseSecondaryRot = math.inverse(secondary.rotation);
         quaternion newSecondaryRot = math.mul(inverseSecondaryRot, offsetPrimaryRot);
 
-        BurstConnector.UpdateWorldPos(ref secondary, float4x4.TRS(primary.position, newSecondaryRot, new(1)));
+        secondary.UpdateWorldPos(float4x4.TRS(primary.position, newSecondaryRot, new(1)));
         float priLocalY = primary.localMatrix.Translation().y;
         float secLocalY = secondary.localMatrix.Translation().y;
         float3 position = primary.position + (primary.position - secondary.position);
@@ -114,7 +115,7 @@ public struct BurstConnectorMulJob : IJob
     public void Execute()
     {
         BurstConnector primary = connector.Value;
-        BurstConnector.UpdateWorldPos(ref primary,sectionLTW);
+        primary.UpdateWorldPos(sectionLTW);
         connector.Value = primary;
     }
 }
@@ -131,5 +132,370 @@ public struct ConnectorMulJob : IJob
         Connector primary = connector.Value;
         primary.UpdateWorldPos(sectionLTW);
         connector.Value = primary;
+    }
+}
+
+[BurstCompile]
+public struct ConnectorTransform : IJobFor
+{
+    [ReadOnly, DeallocateOnJobCompletion]
+    public NativeArray<BurstConnector> primaryConnectors;
+    [ReadOnly, DeallocateOnJobCompletion]
+    public NativeArray<BurstConnector> secondaryConnectors;
+    [WriteOnly]
+    public NativeArray<float4x4> secondaryMatricies;
+
+    public void Execute(int index)
+    {
+        BurstConnector primary = primaryConnectors[index];
+        BurstConnector secondary = secondaryConnectors[index];
+
+        quaternion rotation = math.mul(math.inverse(secondary.rotation), math.mul(primary.rotation, quaternion.Euler(math.radians(0), math.radians(180), math.radians(0))));
+        secondary.UpdateWorldPos(float4x4.TRS(primary.position, rotation, new(1)));
+
+        float3 position = primary.position + (primary.position - secondary.position);
+        position.y = primary.parentPos.y + (primary.localMatrix.Translation().y - secondary.localMatrix.Translation().y);
+
+        secondaryMatricies[index] = float4x4.TRS(position, rotation, new(1));
+    }
+}
+
+[BurstCompile]
+public struct UpdatePhysicsWorldTransforms : IJobFor
+{
+    [NativeDisableUnsafePtrRestriction, NativeDisableContainerSafetyRestriction]
+    public UnsafeList<TunnelSectionVirtual> VirtualPhysicsWorld;
+
+    public void Execute(int index)
+    {
+        if (VirtualPhysicsWorld[index].Changed)
+        {
+            TunnelSectionVirtual tsv = VirtualPhysicsWorld[index];
+            
+            for (int i = 0; i < tsv.boxes.Length; i++)
+            {
+                float4x4 matrix = math.mul(tsv.sectionTransform, tsv.boxes[i].boxBounds.LocalMatrix);
+                tsv.boxes.ElementAt(i).GetTransformedCorners(matrix);
+                tsv.boxes.ElementAt(i).TransformNormals(matrix);
+            }
+            VirtualPhysicsWorld.ElementAt(index).Changed = false;
+            VirtualPhysicsWorld.ElementAt(index).updateCount++;
+        }
+    }
+}
+
+[BurstCompile]
+public struct ProDecPointMatrixJob : IJobFor
+{
+    public float4x4 parentMatrix;
+    public NativeArray<ProDecPointBurst> points;
+
+    public void Execute(int index)
+    {
+        ProDecPointBurst point = points[index];
+        point.internalLocalRotation = quaternion.Euler(point.localOrientation);
+        point.internalMatrix = math.mul(parentMatrix, float4x4.TRS(point.localPosition, point.internalLocalRotation, new float3(1)));
+        points[index] = point;
+    }
+}
+
+
+[BurstCompile]
+public struct BoxCheckJob : IJobFor
+{
+    public static readonly float3[] normals = new float3[]
+    {
+        math.forward(),
+        math.up(),
+        math.right(),
+        math.back(),
+        math.down(),
+        math.left(),
+    };
+
+    [ReadOnly, NativeDisableUnsafePtrRestriction, NativeDisableContainerSafetyRestriction]
+    public UnsafeList<TunnelSectionVirtual> VirtualPhysicsWorld;
+
+    [ReadOnly]
+    public NativeArray<int2> sectionIds;
+
+    [ReadOnly]
+    [NativeDisableUnsafePtrRestriction]
+    [NativeDisableContainerSafetyRestriction]
+    public UnsafeParallelHashMap<int, UnsafeList<UnsafeList<BoxTransform>>> incomingMatrices;
+
+
+    [NativeDisableUnsafePtrRestriction]
+    [NativeDisableContainerSafetyRestriction]
+    public NativeParallelHashMap<int, UnsafeList<InstancedBox>> incomingBoxBounds;
+
+    [WriteOnly]
+    public NativeArray<bool> outGoingChecks;
+
+    public void Execute(int index)
+    {
+        outGoingChecks[index] = true;
+        int2 id = sectionIds[index];
+
+        UnsafeList<InstancedBox> sectionBoxesOriginal = incomingBoxBounds[id.x];
+        UnsafeList<BoxTransform> sectionBoxTransforms = incomingMatrices[id.x][id.y];
+
+        int length = sectionBoxesOriginal.Length;
+        for (int i = 0; i < length; i++)
+        {
+            InstancedBox copiedBox = DuplicateBox(sectionBoxesOriginal[i],sectionBoxTransforms[i].Matrix);
+            if (CheckBox(copiedBox))
+            {
+                outGoingChecks[index] = false;
+                return;
+            }
+        }
+
+    }
+
+    private static InstancedBox DuplicateBox(InstancedBox box, float4x4 matrix)
+    {
+        InstancedBox newBox = box.Duplicate(Allocator.Temp);
+        newBox.GetTransformedCorners(matrix);
+        newBox.TransformNormals(matrix);
+        return newBox;
+    }
+
+    public bool CheckBox(InstancedBox box)
+    {
+        int length = VirtualPhysicsWorld.Length;
+        for (int i = 0; i < length; i++)
+        {
+            TunnelSectionVirtual sectionInstance = VirtualPhysicsWorld[i];
+            if (sectionInstance.inActive) { continue; }
+            if (CheckBox(sectionInstance, box))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool CheckBox(TunnelSectionVirtual sectionInstance, InstancedBox box)
+    {
+        UnsafeList<InstancedBox> instancedBoxes = sectionInstance.boxes;
+        int length = instancedBoxes.Length;
+        for (int i = 0; i < length; i++)
+        {
+            if (CheckBox(instancedBoxes[i].normals, instancedBoxes[i].corners, box.normals, box.corners))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool CheckBox(UnsafeList<float3> aNormals, UnsafeList<float3> aCorners, UnsafeList<float3> bNormals, UnsafeList<float3> bCorners)
+    {
+        int alength = aNormals.Length;
+        for (int i = 0; i < alength; i++)
+        {
+            SATTest(aNormals[i], aCorners, out float shape1Min, out float shape1Max);
+            SATTest(aNormals[i], bCorners, out float shape2Min, out float shape2Max);
+            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
+            {
+                return false;
+            }
+        }
+        int blength = bNormals.Length;
+        for (int i = 0; i < blength; i++)
+        {
+            SATTest(bNormals[i], aCorners, out float shape1Min, out float shape1Max);
+            SATTest(bNormals[i], bCorners, out float shape2Min, out float shape2Max);
+            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void SATTest(float3 axis, UnsafeList<float3> ptSet, out float minAlong, out float maxAlong)
+    {
+        minAlong = float.MaxValue;
+        maxAlong = float.MinValue;
+        int length = ptSet.Length;
+        for (int i = 0; i < length; i++)
+        {
+            float dotVal = math.dot(ptSet[i], axis);
+            minAlong = (dotVal < minAlong) ? dotVal : minAlong;
+            maxAlong = (dotVal > maxAlong) ? dotVal : maxAlong;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool Overlaps(float min1, float max1, float min2, float max2)
+    {
+        return IsBetweenOrdered(min2, min1, max1) || IsBetweenOrdered(min1, min2, max2);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool IsBetweenOrdered(float val, float lowerBound, float upperBound)
+    {
+        return lowerBound <= val && val <= upperBound;
+    }
+}
+
+[BurstCompile]
+public struct InternalBoxCheck : IJobFor
+{
+    public static readonly float3[] normals = new float3[]
+    {
+        math.forward(),
+        math.up(),
+        math.right(),
+        math.back(),
+        math.down(),
+        math.left(),
+    };
+
+    [ReadOnly, NativeDisableUnsafePtrRestriction, NativeDisableContainerSafetyRestriction]
+    public UnsafeList<TunnelSectionVirtual> VirtualPhysicsWorld;
+
+
+    [WriteOnly]
+    public NativeArray<bool> intersectionSection;
+
+    public void Execute(int index)
+    {
+        TunnelSectionVirtual aTsv = VirtualPhysicsWorld[index];
+        if (aTsv.deadEnd || aTsv.inActive)
+        {
+            intersectionSection[index] = false;
+            return;
+        }
+        int length = VirtualPhysicsWorld.Length;
+        intersectionSection[index] = false;
+
+        for (int i = 0; i < length; i++)
+        {
+            if(i == index) { continue; }
+            TunnelSectionVirtual bTsv = VirtualPhysicsWorld[i];
+            if(bTsv.deadEnd || bTsv.inActive) { continue; }
+            if (CheckBox(aTsv, bTsv))
+            {
+                intersectionSection[index] = true;
+            }
+        }
+
+    }
+
+    public bool CheckBox(TunnelSectionVirtual a, TunnelSectionVirtual b)
+    {
+        UnsafeList<InstancedBox> aBoxes = a.boxes;
+        UnsafeList<InstancedBox> bBoxes = b.boxes;
+        for (int i = 0; i < aBoxes.Length; i++)
+        {
+            InstancedBox aBox = aBoxes[i];
+            for (int j = 0; j < bBoxes.Length; j++)
+            {
+                InstancedBox bBox = bBoxes[j];
+                if (CheckBox(aBox.normals, aBox.corners, bBox.normals, bBox.corners))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool CheckBox(UnsafeList<float3> aNormals, UnsafeList<float3> aCorners, UnsafeList<float3> bNormals, UnsafeList<float3> bCorners)
+    {
+        int alength = aNormals.Length;
+        for (int i = 0; i < alength; i++)
+        {
+            SATTest(aNormals[i], aCorners, out float shape1Min, out float shape1Max);
+            SATTest(aNormals[i], bCorners, out float shape2Min, out float shape2Max);
+            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
+            {
+                return false;
+            }
+        }
+        int blength = bNormals.Length;
+        for (int i = 0; i < blength; i++)
+        {
+            SATTest(bNormals[i], aCorners, out float shape1Min, out float shape1Max);
+            SATTest(bNormals[i], bCorners, out float shape2Min, out float shape2Max);
+            if (!Overlaps(shape1Min, shape1Max, shape2Min, shape2Max))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void SATTest(float3 axis, UnsafeList<float3> ptSet, out float minAlong, out float maxAlong)
+    {
+        minAlong = float.MaxValue;
+        maxAlong = float.MinValue;
+        int length = ptSet.Length;
+        for (int i = 0; i < length; i++)
+        {
+            float dotVal = math.dot(ptSet[i], axis);
+            minAlong = (dotVal < minAlong) ? dotVal : minAlong;
+            maxAlong = (dotVal > maxAlong) ? dotVal : maxAlong;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool Overlaps(float min1, float max1, float min2, float max2)
+    {
+        return IsBetweenOrdered(min2, min1, max1) || IsBetweenOrdered(min1, min2, max2);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool IsBetweenOrdered(float val, float lowerBound, float upperBound)
+    {
+        return lowerBound <= val && val <= upperBound;
+    }
+}
+
+[BurstCompile]
+public struct FinalConnectorMulJob : IJobFor
+{
+    private static readonly quaternion oneEightyOffset = quaternion.Euler(math.radians(0), math.radians(180), math.radians(0));
+
+    [ReadOnly]
+    public NativeArray<BurstConnectorPair> connectorPairs;
+
+    [WriteOnly]
+    public NativeArray<float4x4> calculatedMatricies;
+
+    [WriteOnly]
+    public NativeArray<BurstConnector> primaryConnectors;
+
+    public void Execute(int index)
+    {
+        BurstConnectorPair pair = connectorPairs[index];
+        BurstConnector primary = pair.primary;
+        BurstConnector secondary = pair.secondary;
+        primary.UpdateWorldPos(pair.primaryMatrix);
+        secondary.UpdateWorldPos(float4x4.identity);
+        calculatedMatricies[index] = CalculateSectionMatrix(primary, secondary);
+        primaryConnectors[index] = primary;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static float4x4 CalculateSectionMatrix(BurstConnector primary, BurstConnector secondary)
+    {
+        quaternion offsetPrimaryRot = math.mul(primary.rotation, oneEightyOffset);
+        quaternion inverseSecondaryRot = math.inverse(secondary.rotation);
+        quaternion newSecondaryRot = math.mul(inverseSecondaryRot, offsetPrimaryRot);
+
+        secondary.UpdateWorldPos(float4x4.TRS(primary.position, newSecondaryRot, new(1)));
+        float priLocalY = primary.localMatrix.Translation().y;
+        float secLocalY = secondary.localMatrix.Translation().y;
+        float3 position = primary.position + (primary.position - secondary.position);
+        position.y = primary.parentPos.y + (priLocalY - secLocalY);
+
+        return float4x4.TRS(position, newSecondaryRot, new(1));
     }
 }

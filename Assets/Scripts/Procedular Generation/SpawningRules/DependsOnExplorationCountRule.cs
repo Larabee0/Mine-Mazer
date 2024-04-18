@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class DependsOnExplorationCountRule : SectionSpawnBaseRule
 {
     [SerializeField] protected int exploreThreshold = 3;

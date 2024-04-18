@@ -324,9 +324,10 @@ MonoBehaviour:
   itemCollider: {fileID: 0}
   itemStats:
     name: Versicolor
-    type: 3
+    type: 8
   Placeable: 0
   Interactable: 1
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -337,7 +338,7 @@ MonoBehaviour:
   - {fileID: 7981600482841664596}
   - {fileID: 3067982201840586469}
   chosenVariant: {fileID: 0}
-  turnOnAllChance: 0
+  allChance: 0
 --- !u!1 &7688758371323163826
 GameObject:
   m_ObjectHideFlags: 0

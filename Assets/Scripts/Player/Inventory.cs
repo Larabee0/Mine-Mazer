@@ -71,18 +71,34 @@ public class Inventory : MonoBehaviour
         if (InputManager.Instance != null)
         {
             InputManager.Instance.scrollDirection += ScrollInventory;
+            InputManager.Instance.inventoryButton.OnButtonReleased += OpenInventory;
         }
     }
+
     private void OnDisable()
     {
         if (InputManager.Instance != null)
         {
             InputManager.Instance.scrollDirection -= ScrollInventory;
+            InputManager.Instance.inventoryButton.OnButtonReleased -= OpenInventory;
         }
     }
 
+
+    private void OpenInventory()
+    {
+        if(inventory.Count > 0)
+        {
+            PlayerUIController.Instance.SetInventoryActive(true);
+        }
+    }
+
+
+
     public void AddItem(Item itemType, int quantity, MapResource itemInstance)
     {
+        itemInstance.SetColliderActive(false);
+        itemInstance.SetMapResourceActive(false);
         if (inventory.ContainsKey(itemType))
         {
             inventory[itemType] += quantity;
@@ -94,8 +110,6 @@ public class Inventory : MonoBehaviour
             assets.Add(itemType, new() { itemInstance });
             UpdateInventory();
         }
-        itemInstance.SetColliderActive(false);
-        itemInstance.SetMapResourceActive(false);
         itemInstance.transform.parent = virtualhands;
         itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
         itemInstance.transform.localScale = itemInstance.heldScaleOffset;
@@ -263,6 +277,7 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogError("Target item was not contained in the assets dictionary!");
         }
+        heldItem.SetMapResourceActive(true);
     }
 
     public void TryMoveItemToHand(Item target)

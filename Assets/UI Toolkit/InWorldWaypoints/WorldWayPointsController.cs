@@ -132,14 +132,14 @@ namespace MazeGame.Navigation
 
         private void MapUpdateEvent()
         {
-            List<List<TunnelSection>> mapTree = mapGenerator.MapTree;
-            HashSet<TunnelSection> waypointable = new();
+            List<List<MapTreeElement>> mapTree = mapGenerator.MapTree;
+            HashSet<MapTreeElement> waypointable = new(new MapTreeElementComparer());
             for (int i = 0; i < mapTree.Count; i++)
             {
-                List<TunnelSection> ring = mapTree[i];
+                List<MapTreeElement> ring = mapTree[i];
                 for (int j = 0; j < ring.Count; j++)
                 {
-                    if (ring[j].Keep)
+                    if (ring[j].Instantiated && ring[j].Keep)
                     {
                         waypointable.Add(ring[j]);
                     }
@@ -148,7 +148,7 @@ namespace MazeGame.Navigation
 
             waypointable.UnionWith(mapGenerator.GetMothballedSections());
 
-            HashSet<TunnelSection> existingPoints = new(waypoints.Count);
+            HashSet<MapTreeElement> existingPoints = new(waypoints.Count, new MapTreeElementComparer());
 
             for (int i = waypoints.Count - 1; i >= 0; i--)
             {
@@ -187,7 +187,7 @@ namespace MazeGame.Navigation
             root.Clear();
         }
 
-        private void AddwayPoint(TunnelSection section, Color tint)
+        private void AddwayPoint(MapTreeElement section, Color tint)
         {
             waypoints.Add(new TunnelWayPoint(section, waypointTemplate.Instantiate()));
             AddWayPoint(section.WaypointName,0, tint);
@@ -254,11 +254,11 @@ namespace MazeGame.Navigation
 
     internal class TunnelWayPoint : WorldWayPoint
     {
-        public TunnelSection target;
+        public MapTreeElement target;
 
         public override Vector3 CurPositon => target.WaypointPosition;
 
-        public TunnelWayPoint(TunnelSection target, VisualElement wayPointRoot)
+        public TunnelWayPoint(MapTreeElement target, VisualElement wayPointRoot)
         {
             this.target = target;
             this.wayPointRoot = wayPointRoot;

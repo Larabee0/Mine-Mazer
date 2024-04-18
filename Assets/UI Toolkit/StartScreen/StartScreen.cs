@@ -12,6 +12,7 @@ public class StartScreen : MonoBehaviour
     [SerializeField] private UIDocument startScreenUI;
     [SerializeField] private VisualTreeAsset settingsMenuPrefab;
     [SerializeField] private TutorialStarter tutorialStarter;
+    [SerializeField] private bool autoLoadOnPlay;
     private VisualElement RootVisualElement => startScreenUI.rootVisualElement;
 
     StartMenuController startScreenController;
@@ -29,6 +30,10 @@ public class StartScreen : MonoBehaviour
         PlayerUIController.Instance.SetMiniMapVisible(false);
         startScreenController.SetActive(true);
         tutorialStarter.FadeIn();
+        if (autoLoadOnPlay)
+        {
+            LoadMainScene();
+        }
     }
 
     public void LoadMainScene()

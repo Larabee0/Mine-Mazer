@@ -5,25 +5,27 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum Item
+[Flags]
+public enum Item : int
 {
-    LumenCrystal,
-    GoldenTrumpetMycelium,
-    VelvetBud,
-    Versicolor,
-    Antarticite,
-    Cinnabite,
-    Torch,
-    Pickaxe,
-    Eudie,
-    StagnationBeacon,
-    BrokenHeart,
-    Soup,
-    FicusWood,
-    ClockworkMechanism,
-    GlanceiteResonator,
-    HeartNode,
-    SanctumMachine
+    None = 0,
+    LumenCrystal = 1,
+    GoldenTrumpetMycelium =2,
+    VelvetBud = 4,
+    Versicolor = 8,
+    Antarticite = 16,
+    Cinnabite = 32,
+    Torch = 64,
+    Pickaxe = 128,
+    Eudie = 256,
+    StagnationBeacon = 512,
+    BrokenHeart = 1024,
+    Soup = 2048,
+    FicusWood = 4096,
+    ClockworkMechanism = 8192,
+    GlanceiteResonator = 16384,
+    HeartNode = 32768,
+    SanctumMachine = 65536
 }
 
 public enum ItemCategory
@@ -185,13 +187,20 @@ public class MapResource : MonoBehaviour, IInteractable
     {
         if(requiresPickaxe)
         {
-            if (InputManager.GamePadPresent)
+            if (Inventory.Instance.CurHeldItem == Item.Pickaxe)
             {
-                return string.Format("RT to  Mine {0}", ToolTipName);
+                if (InputManager.GamePadPresent)
+                {
+                    return string.Format("RT to  Mine {0}", ToolTipName);
+                }
+                else
+                {
+                    return string.Format("Left Click to Mine {0}", ToolTipName);
+                }
             }
             else
             {
-                return string.Format("Left Click to Mine {0}", ToolTipName);
+                return string.Format("Select Pickaxe to Mine {0}", ToolTipName);
             }
         }
         else
@@ -251,7 +260,7 @@ public class MapResource : MonoBehaviour, IInteractable
                     Vector3 playerPos = Inventory.Instance.transform.position;
                     Vector3 toPlayer = (playerPos- hitInfo.point).normalized;
                     toPlayer = Vector3.ProjectOnPlane(toPlayer, Vector3.up);
-                    item.gameObject.transform.parent = FindObjectOfType<SpatialParadoxGenerator>().CurPlayerSection.transform;
+                    item.gameObject.transform.parent = FindObjectOfType<SpatialParadoxGenerator>().CurPlayerSection.sectionInstance.transform;
                     item.gameObject.transform.position = hitInfo.point+ placementPositionOffset;
                     item.gameObject.transform.forward = toPlayer;
                     item.gameObject.transform.localScale = originalScale;

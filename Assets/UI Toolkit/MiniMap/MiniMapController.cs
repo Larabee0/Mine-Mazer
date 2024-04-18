@@ -197,10 +197,10 @@ namespace MazeGame.Navigation
                 pos = float3.zero,
                 rot = quaternion.identity
             };
-            AddElement(stagnationBeacon, 0, "Debug waypoint", Color.white, trans);
+            AddElement(stagnationBeacon, 0, Color.white, trans);
             miniMap.root.Add(miniMap.mapAssembly[^1].asset);
             miniMap.waypoints.Add(miniMap.mapAssembly[^1]);
-            miniMap.mapAssembly[^1].asset.style.translate = new Translate((trans.pos.x * pixelsPerUnit) + (textureResolution / 2), (-(trans.pos.z * pixelsPerUnit)) + (textureResolution / 2));
+            miniMap.mapAssembly[^1].asset.style.translate = new Translate((trans.pos.x * pixelsPerUnit) + (textureResolution / 2), (-(trans.pos.z * pixelsPerUnit)) + (textureResolution * 0.5f));
             miniMap.mapAssembly[^1].asset.transform.rotation = Quaternion.Euler(0, 0, ((Quaternion)trans.rot).eulerAngles.y);
             OnMove(Vector2.zero);
         }
@@ -213,49 +213,50 @@ namespace MazeGame.Navigation
             }
             miniMap.root.Clear();
             miniMap.mapAssembly.Clear();
-            List<List<TunnelSection>> mapTree = mapGenerator.MapTree;
-            float curHeight = mapGenerator.CurPlayerSection.Position.y;
+            miniMap.waypoints.Clear();
+            List<List<MapTreeElement>> mapTree = mapGenerator.MapTree;
+            float curHeight = mapGenerator.CurPlayerSection.sectionInstance.Position.y;
             for (int i = 0; i < mapTree.Count; i++)
             {
-                List<TunnelSection> ring = mapTree[i];
+                List<MapTreeElement> ring = mapTree[i];
                 for (int j = 0; j < ring.Count; j++)
                 {
-                    int instanceid = ring[j].orignalInstanceId;
+                    MapTreeElement section = ring[j];
+                    int instanceid = section.OriginalInstanceId;
                     if (miniMapAssets.ContainsKey(instanceid))
                     {
-                        float sectioHieght = ring[j].Position.y;
-                        
-                        Color above = ring[j].explored ? aboveExplored : aboveUnExplored;
-                        Color below = ring[j].explored ? belowExplored : belowUnexplored;
-                        Color same = ring[j].explored ? explored : unexplored;
+                        Vector3 position = section.LocalToWorld.Translation();
+                        float sectioHieght = position.y;
+
+                        Color above = section.Explored ? aboveExplored : aboveUnExplored;
+                        Color below = section.Explored ? belowExplored : belowUnexplored;
+                        Color same = section.Explored ? explored : unexplored;
 
                         Color tint = sectioHieght > curHeight ? above : same;
                         tint = sectioHieght < curHeight ? below : tint;
 
-                        tint = ring[j] == mapGenerator.CurPlayerSection ? playerCurrent : tint;
+                        tint = section == mapGenerator.CurPlayerSection ? playerCurrent : tint;
                         var trans = new BoxTransform
                         {
-                            pos = ring[j].Position,
-                            rot = ring[j].Rotation
+                            pos = position,
+                            rot = section.LocalToWorld.Rotation()
                         };
-                        AddElement(instanceid, ring[j].name, tint, trans);
-                        if (ring[j].Keep)
+                        AddElement(instanceid, tint, trans);
+                        if (section.Keep)
                         {
-                            trans = ring[j].StrongKeep
-                                ? new BoxTransform
-                                {
-                                    pos = ring[j].WaypointPosition,
-                                    rot = ring[j].Rotation
-                                }
-                                : new BoxTransform
-                                {
-                                    pos = ring[j].stagnationBeacon.transform.position,
-                                    rot = ring[j].stagnationBeacon.transform.rotation
-                                };
-                            AddElement(stagnationBeacon, instanceid, ring[j].name, Color.white, trans);
+                            trans = new BoxTransform
+                            {
+                                pos = section.WaypointPosition,
+                                rot = section.LocalToWorld.Rotation()
+                            };
+                            AddElement(stagnationBeacon, instanceid, Color.white, trans);
                             miniMap.waypoints.Add(miniMap.mapAssembly[^1]);
-                            AddText(miniMap.mapAssembly[^1], ring[j].WaypointName);
+                            AddText(miniMap.mapAssembly[^1], section.WaypointName);
                         }
+                    }
+                    else if(instanceid != mapGenerator.DeadEndPlugInstanceId)
+                    {
+                        Debug.LogErrorFormat("Missing minimap asset for original instance id {0} {1}", instanceid,section.GameObjectName);
                     }
                 }
             }
@@ -267,29 +268,23 @@ namespace MazeGame.Navigation
             {
                 MiniMapElement element = miniMap.mapAssembly[i];
                 BoxTransform transform = element.transform;
-                element.asset.style.translate = new Translate((transform.pos.x * pixelsPerUnit) + (textureResolution / 2), (-(transform.pos.z * pixelsPerUnit)) + (textureResolution / 2));
+                element.asset.style.translate = new Translate((transform.pos.x * pixelsPerUnit) + (textureResolution * 0.5f), (-(transform.pos.z * pixelsPerUnit)) + (textureResolution / 2));
                 element.asset.transform.rotation = Quaternion.Euler(0, 0, ((Quaternion)transform.rot).eulerAngles.y);
             }
             int startIndex = miniMap.mapAssembly.Count;
-            List<TunnelSection> mothballedSections = mapGenerator.GetMothballedSections();
+            List<MapTreeElement> mothballedSections = mapGenerator.GetMothballedSections();
             for (int i = 0; i < mothballedSections.Count; i++)
             {
-                TunnelSection section = mothballedSections[i];
+                MapTreeElement section = mothballedSections[i];
 
                 if (section.Keep)
                 {
-                    BoxTransform trans = section.StrongKeep
-                        ? new BoxTransform
-                        {
-                            pos = section.WaypointPosition,
-                            rot = section.Rotation
-                        }
-                        : new BoxTransform
-                        {
-                            pos = section.stagnationBeacon.transform.position,
-                            rot = section.stagnationBeacon.transform.rotation
-                        };
-                    AddElement(stagnationBeacon, section.orignalInstanceId, section.name, Color.white, trans);
+                    BoxTransform trans = new BoxTransform
+                    {
+                        pos = section.WaypointPosition,
+                        rot = section.LocalToWorld.Rotation()
+                    };
+                    AddElement(stagnationBeacon, section.OriginalInstanceId, Color.white, trans);
                     MiniMapElement element = miniMap.mapAssembly[^1];
                     miniMap.waypoints.Add(element);
                     miniMap.root.Add(element.asset);
@@ -305,10 +300,10 @@ namespace MazeGame.Navigation
         {
             BoxTransform trans = element.transform;
             Vector2 pixelPos = new(
-                (trans.pos.x * pixelsPerUnit) + (textureResolution / 2),
-                (-(trans.pos.z * pixelsPerUnit)) + (textureResolution / 2));
+                (trans.pos.x * pixelsPerUnit) + (textureResolution *0.5f),
+                (-(trans.pos.z * pixelsPerUnit)) + (textureResolution * 0.5f));
             Vector3 pos = player.position;
-            Vector2 playerPos = new((pos.x * pixelsPerUnit) + (textureResolution / 2), ((-pos.z * pixelsPerUnit)) + (textureResolution / 2));
+            Vector2 playerPos = new((pos.x * pixelsPerUnit) + (textureResolution * 0.5f), ((-pos.z * pixelsPerUnit)) + (textureResolution * 0.5f));
             Vector2 unnormalizedDir = playerPos - pixelPos;
             if (unnormalizedDir.magnitude >= offscreenThreshold)
             {
@@ -333,9 +328,9 @@ namespace MazeGame.Navigation
             element.asset.style.rotate = new Rotate(angle);
         }
 
-        private void AddElement(Texture2D texture, int id, string name, Color tint, BoxTransform transform)
+        private void AddElement(Texture2D texture, int id, Color tint, BoxTransform transform)
         {
-            var element = new MiniMapElement { asset = new VisualElement() { name = name, usageHints = UsageHints.DynamicTransform }, originalInstanceId = id, transform = transform };
+            var element = new MiniMapElement { asset = new VisualElement() { name = texture.name, usageHints = UsageHints.DynamicTransform }, originalInstanceId = id, transform = transform };
             element.asset.style.backgroundImage = texture;
             element.asset.style.height = textureResolution;
             element.asset.style.width = textureResolution;
@@ -361,9 +356,9 @@ namespace MazeGame.Navigation
             element.asset.pickingMode = PickingMode.Ignore;
         }
 
-        private void AddElement(int id,string name,Color tint, BoxTransform transform)
+        private void AddElement(int id,Color tint, BoxTransform transform)
         {
-            AddElement(miniMapAssets[id], id, name, tint, transform);
+            AddElement(miniMapAssets[id], id, tint, transform);
         }
     }
 

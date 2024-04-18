@@ -326,9 +326,10 @@ MonoBehaviour:
   itemCollider: {fileID: 0}
   itemStats:
     name: Golden Trumpet Mycelium
-    type: 1
+    type: 2
   Placeable: 0
   Interactable: 1
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -341,7 +342,7 @@ MonoBehaviour:
   - {fileID: 6121007815378959183}
   - {fileID: 3188320763059746017}
   chosenVariant: {fileID: 0}
-  turnOnAllChance: 0
+  allChance: 0
 --- !u!1 &6121007815378959183
 GameObject:
   m_ObjectHideFlags: 0

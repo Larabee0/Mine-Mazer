@@ -7,77 +7,116 @@ using UnityEngine;
 
 public partial class SpatialParadoxGenerator
 {
-
-    /// <summary>
-    /// Based off the givne primary section, this picks a new section prefab, Instinates it and connects (transforms) it to the primay section
-    /// </summary>
-    /// <param name="primary">Given root node of this connection</param>
-    /// <returns>New Section Instance</returns>
-    private TunnelSection PickInstinateConnect(TunnelSection primary)
+    public class PickIntstinateConnectDelayed
     {
-        TunnelSection pickedSection = null;
-        TunnelSection pickedInstance = null;
-        Connector priPref = Connector.Empty, secPref = Connector.Empty;
+        public MapTreeElement treeEleement;
+        public SectionDelayedOuts pickSectionDelayedData;
+    }
+
+    public class SectionDelayedOuts
+    {
+        public Connector primaryPreference;
+        public Connector secondaryPreference;
+        public TunnelSection pickedSection;
+    }
+
+    private IEnumerator PickInstinateConnectDelayed(MapTreeElement primary, PickIntstinateConnectDelayed pickedResult)
+    {
+        TunnelSection pickedSection;
+        MapTreeElement pickedInstance = null;
+        Connector priPref;
+        Connector secPref;
         if (promoteSectionsList.Count > 0)
         {
-            List<int> internalSections = new(promoteSectionsList.Count);
-            promoteSectionsList.ForEach(section => internalSections.Add(section.orignalInstanceId));
-            pickedSection = PickSection(primary, internalSections, out priPref, out secPref);
-            if (!internalSections.Contains(pickedSection.GetInstanceID())) // returned dead end.
+            yield return PickFromMothballed(primary, pickedResult);
+            if (pickedResult.treeEleement.Instantiated)
             {
-                List<int> nextSections = FilterSections(primary);
-                pickedSection = PickSection(primary, nextSections, out priPref, out secPref);
-                pickedInstance = InstinateSection(pickedSection);
+                pickedInstance = pickedResult.treeEleement;
+                pickedSection = instanceIdToSection[pickedInstance.OriginalInstanceId];
             }
-            else // reinstance section
+            else
             {
-                int index = internalSections.IndexOf(pickedSection.GetInstanceID());
-                pickedInstance = promoteSectionsList[index];
-                pickedInstance.gameObject.SetActive(true);
-                pickedInstance.CollidersEnabled = true;
-                promoteSectionsList.RemoveAt(index);
+                pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
             }
+            priPref = pickedResult.pickSectionDelayedData.primaryPreference;
+            secPref = pickedResult.pickSectionDelayedData.secondaryPreference;
         }
         else
         {
-            List<int> nextSections = FilterSections(primary);
-            pickedSection = PickSection(primary, nextSections, out priPref, out secPref);
-            pickedInstance = InstinateSection(pickedSection);
+            List<int> nextSections = FilterSections(primary.OriginalInstanceId);
+            yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
+            pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
+            priPref = pickedResult.pickSectionDelayedData.primaryPreference;
+            secPref = pickedResult.pickSectionDelayedData.secondaryPreference;
+            pickedResult.treeEleement = EnqueueSection(primary, pickedResult.pickSectionDelayedData.pickedSection, priPref, secPref);
         }
 
-        TransformSection(primary, pickedInstance, priPref, secPref); // transform the new section
-
-        if (pickedSection != deadEndPlug && !rejectBreakableWallAtConnections)
+        if (pickedInstance != null && primary != null)
         {
-            if (forceBreakableWallAtConnections || Random.value < breakableWallAtConnectionChance)
-            {
-                BreakableWall breakableInstance = Instantiate(breakableWall, pickedInstance.transform);
-                Connector conn = breakableInstance.connector;
-                conn.UpdateWorldPos(breakableWall.transform.localToWorldMatrix);
-                TransformSection(breakableInstance.transform, priPref, conn);
-            }
+            TransformSectionAndLink(primary, pickedResult.treeEleement, priPref, secPref);
+            InstantiateBreakableWalls(pickedSection, pickedResult.treeEleement.sectionInstance, priPref);
         }
 
-        Physics.SyncTransforms(); /// push changes to physics world now instead of next fixed update, required for <see cref="RunIntersectionTests(TunnelSection, TunnelSection, out Connector, out Connector)"/>
-        return pickedInstance;
+        if(pickedSection == deadEndPlug)
+        {
+            deadEnds.Add(pickedResult.treeEleement);
+            pickedResult.treeEleement.deadEnd = true;
+        }
     }
 
-    /// <summary>
-    /// Based on a given root, this method figures out what prefabs can connect to it and then chooses, semi-randomly, a prefab from that list that fits in the world.
-    /// In the event no section will fit in the world, a dead end is placed instead.
-    /// </summary>
-    /// <param name="primary">Root Section</param>
-    /// <param name="primaryPreference">Root section connector target</param>
-    /// <param name="secondaryPreference">New section connector target</param>
-    /// <returns>Chosen Prefab</returns>
-    private TunnelSection PickSection(TunnelSection primary, List<int> nextSections, out Connector primaryPreference, out Connector secondaryPreference)
+    private IEnumerator PickFromMothballed(MapTreeElement primary, PickIntstinateConnectDelayed pickedResult)
     {
-        primaryPreference = Connector.Empty;
-        secondaryPreference = Connector.Empty;
+        List<int> internalSections = new(promoteSectionsList.Count);
+        promoteSectionsList.ForEach(section => internalSections.Add(section.OriginalInstanceId));
 
-        List<Connector> primaryConnectors = FilterConnectors(primary);
+        // pick from mothballed sections
+        yield return PickSectionDelayed(primary, internalSections, pickedResult.pickSectionDelayedData);
 
-        NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.TempJob);
+        var pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
+
+        if (!internalSections.Contains(pickedSection.orignalInstanceId)) // return new section.
+        {
+            List<int> nextSections = FilterSections(primary.OriginalInstanceId);
+            // pick from all valid sections
+            yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
+            // schedule new section spawn
+            pickedResult.treeEleement = EnqueueSection(primary, pickedResult.pickSectionDelayedData.pickedSection,
+                pickedResult.pickSectionDelayedData.primaryPreference,
+                pickedResult.pickSectionDelayedData.secondaryPreference);
+        }
+        else // reload section
+        {
+            // prepare mothballed section for re-enabling.
+            int index = internalSections.IndexOf(pickedSection.orignalInstanceId);
+            var pickedInstance = promoteSectionsList[index];
+            pickedInstance.sectionInstance.gameObject.SetActive(true);
+            pickedInstance.sectionInstance.CollidersEnabled = true;
+            promoteSectionsList.RemoveAt(index);
+            SetSectionInActivePhysicsWorld(pickedInstance.UID, false);
+            pickedResult.treeEleement = pickedInstance;
+        }
+    }
+
+    private void InstantiateBreakableWalls(TunnelSection pickedSection, TunnelSection pickedInstance, Connector priPref)
+    {
+        if (pickedSection != deadEndPlug && !rejectBreakableWallAtConnections && (forceBreakableWallAtConnections || randomNG.NextFloat() < breakableWallAtConnectionChance))
+        {
+            BreakableWall breakableInstance = Instantiate(breakableWall, pickedInstance.transform);
+            Connector conn = breakableInstance.connector;
+           //  priPref.UpdateWorldPos(Unity.Mathematics.float4x4.identity);
+            conn.UpdateWorldPos(breakableWall.transform.localToWorldMatrix);
+            TransformSection(breakableInstance.transform, priPref, conn);
+        }
+    }
+
+    private IEnumerator PickSectionDelayed(MapTreeElement primaryElement, List<int> nextSections, SectionDelayedOuts outs, List<Connector> primaryConnectors = null)
+    {
+        outs.primaryPreference = Connector.Empty;
+        outs.secondaryPreference = Connector.Empty;
+
+        primaryConnectors ??= FilterConnectorsByInuse(primaryElement);
+
+        NativeArray<int> nativeNexSections = new(nextSections.ToArray(), Allocator.Persistent);
 
         int iterations = maxInterations;
         TunnelSection targetSection = null;
@@ -85,70 +124,82 @@ public partial class SpatialParadoxGenerator
         Physics.SyncTransforms();
         while (targetSection == null && primaryConnectors.Count > 0)
         {
-            primaryPreference = GetConnectorFromSection(primaryConnectors, out int priIndex);
+            outs.primaryPreference = GetRandomConnectorFromSection(primaryConnectors, out int priIndex);
 
-            NativeReference<BurstConnector> priConn = new(new(primaryPreference), Allocator.TempJob);
+            NativeReference<BurstConnector> priConn = new(new(outs.primaryPreference), Allocator.Persistent);
             if (!priConn.IsCreated)
             {
                 Debug.LogError("Failed to create priConnector native reference!", gameObject);
                 continue;
             }
-            JobHandle handle = new BurstConnectorMulJob
-            {
-                connector = priConn,
-                sectionLTW = primary.transform.localToWorldMatrix
-            }.Schedule(new JobHandle());
+            JobHandle handle = ScheduleMatrixCalculations(primaryElement, nextSections, nativeNexSections, priConn);
 
-            var bmj = new BigMatrixJob
+            List<int> internalNextSections = FilterSectionsByConnector(primaryElement.GetConnectorMask(outs.primaryPreference), nextSections);
+
+            ParallelRandInter iteratorData = new()
             {
-                connector = priConn,
-                sectionIds = nativeNexSections,
-                sectionConnectors = sectionConnectorContainers,
-                boxBounds = sectionBoxMatrices,
-                matrices = sectionBoxTransforms
+                handle = handle,
+                iterations = iterations,
+                primaryPreference = outs.primaryPreference,
+                secondaryPreference = outs.secondaryPreference,
+                targetSection = targetSection,
             };
+            yield return ParallelRandomiseIntersection(primaryElement, primaryConnectors, priIndex, internalNextSections, iteratorData);
 
-            handle = parallelMatrixCalculations
-                ? bmj.ScheduleParallel(nextSections.Count, 8, handle)
-                : bmj.Schedule(nextSections.Count, handle);
-
-            priConn.Dispose(handle).Complete();
-
-
-            List<int> internalNextSections = FilterSectionsByConnector(primary.GetConnectorMask(primaryPreference), nextSections);
-            while (internalNextSections.Count > 0)
-            {
-                int curInstanceID = internalNextSections.ElementAt(Random.Range(0, internalNextSections.Count));
-                targetSection = instanceIdToSection[curInstanceID];
-                if (RunIntersectionTests(primary, targetSection, ref primaryPreference, out secondaryPreference))
-                {
-                    break;
-                }
-                internalNextSections.Remove(curInstanceID);
-                targetSection = null;
-                iterations--;
-                if (iterations <= 0)
-                {
-                    Debug.LogException(new System.StackOverflowException("Intersection test exceeded max iterations"), this);
-                }
-            }
-            if (targetSection != null)
+            targetSection = iteratorData.targetSection;
+            outs.primaryPreference = iteratorData.primaryPreference;
+            outs.secondaryPreference = iteratorData.secondaryPreference;
+            iterations = iteratorData.iterations;
+            if (iteratorData.success)
             {
                 break;
             }
-            primaryConnectors.RemoveAt(priIndex);
         }
 
         nativeNexSections.Dispose();
 
         if (targetSection == null)
         {
-            secondaryPreference = deadEndPlug.connectors[0];
-            secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
+            Connector priPref = outs.primaryPreference, secPref = outs.secondaryPreference;
+            ConnectorMultiply(primaryElement.LocalToWorld, ref priPref, ref secPref);
+            outs.primaryPreference = priPref; outs.secondaryPreference = secPref;
+            outs.secondaryPreference = deadEndPlug.DataFromBake.connectors[0];
+            outs.secondaryPreference.UpdateWorldPos(deadEndPlug.transform.localToWorldMatrix);
             targetSection = deadEndPlug;
-            Debug.LogWarning("Unable to find usable section, ending the tunnel.", primary);
+            Debug.LogWarning("Unable to find usable section, ending the tunnel.");
         }
-        return targetSection;
+        outs.pickedSection = targetSection;
     }
 
+    private JobHandle ScheduleMatrixCalculations(MapTreeElement primaryElement, List<int> nextSections, NativeArray<int> nativeNexSections, NativeReference<BurstConnector> priConn)
+    {
+        JobHandle handle = new BurstConnectorMulJob
+        {
+            connector = priConn,
+            sectionLTW = primaryElement.LocalToWorld
+        }.Schedule(new JobHandle());
+
+        var bmj = new BigMatrixJob
+        {
+            connector = priConn,
+            sectionIds = nativeNexSections,
+            sectionConnectors = sectionConnectorContainers,
+            boxBounds = sectionBoxMatrices,
+            matrices = sectionBoxTransforms
+        };
+        int length = nextSections.Count;
+
+        if (!BigMatrix)
+        {
+            handle = bmj.Schedule(length, handle);
+        }
+        else
+        {
+            int batches = Mathf.Max(4, length / SystemInfo.processorCount);
+            handle = bmj.ScheduleParallel(length, batches, handle);
+        }
+
+        handle = priConn.Dispose(handle);
+        return handle;
+    }
 }

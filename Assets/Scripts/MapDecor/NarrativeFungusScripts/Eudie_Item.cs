@@ -2,6 +2,7 @@ using MazeGame.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Eudie_Item : MapResource
 {
@@ -58,6 +59,7 @@ public class Eudie_Item : MapResource
 
     public void PickUpEudieItem()
     {
+        GetComponent<NavMeshAgent>().enabled = false;
         InteractMessage.Instance.SetObjective("Find the Lumenite Colony & Take Eudie to it.");
         base.Interact();
         Inventory.Instance.TryMoveItemToHand(Item.Eudie);

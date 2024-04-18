@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5450264917495169315}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.607, y: -15.97, z: -35.861}
+  m_LocalPosition: {x: 0, y: 0.24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -47,14 +47,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemCollider: {fileID: 0}
   itemStats:
-    name: PROXY Ficus Wood
-    type: 12
+    name: Ficus Wood
+    type: 4096
   Placeable: 0
   Interactable: 1
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
-  placementPositionOffset: {x: 0, y: 0, z: 0}
+  placementPositionOffset: {x: 0, y: 0.25, z: 0}
   toolTipNameOverride: 
   variants:
   - {fileID: 5634295471773344379}
@@ -86,14 +87,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5634295471773344379}
-  m_LocalRotation: {x: -0.053022146, y: -0.19642846, z: -0.010638187, w: 0.9790257}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6366112769487087511}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: -6.2, y: -22.69, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &653258344071561582
 MeshFilter:
   m_ObjectHideFlags: 0

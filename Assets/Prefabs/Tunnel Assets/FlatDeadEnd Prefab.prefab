@@ -250,59 +250,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &3790504554293355826
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4313153813569904308}
-  - component: {fileID: 425598948057226354}
-  m_Layer: 6
-  m_Name: BoundingBox
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4313153813569904308
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3790504554293355826}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.6324005, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4007436926372904115}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &425598948057226354
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3790504554293355826}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3.91916, y: 3.39812, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3855556231845677731
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +455,7 @@ MonoBehaviour:
     type: 0
   Placeable: 0
   Interactable: 0
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -639,6 +587,7 @@ GameObject:
   - component: {fileID: 5327533826246165008}
   - component: {fileID: 7113011209303798032}
   - component: {fileID: -8099010526370012669}
+  - component: {fileID: 341670462446070769}
   m_Layer: 0
   m_Name: FlatDeadEnd Prefab
   m_TagString: Untagged
@@ -658,7 +607,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4313153813569904308}
   - {fileID: 1429163021784031105}
   - {fileID: 5110775661163893039}
   m_Father: {fileID: 0}
@@ -749,32 +697,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d798404931e8c4d92a95098372e085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  miniMapAsset: {fileID: 0}
-  excludePrefabConnections: []
-  connectors:
-  - localPosition: {x: 0, y: 1.5, z: -0.5}
-    localRotation: {x: -0, y: -0, z: -0, w: 1}
-    position: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0, w: 0}
-    parentPos: {x: 0, y: 0, z: 0}
-    internalIndex: 0
-  boundingBoxes:
-  - center: {x: 0, y: 1.6324005, z: 0}
-    oreintation: {x: -0, y: 0, z: 0}
-    size: {x: 3.91916, y: 3.39812, z: 1}
-  excludeConnectorSections:
-  - exclude: []
-  strongKeepPosition: {x: 0, y: 0, z: 0}
-  waypointName: 
-  spawnRule: {fileID: -8099010526370012669}
-  sectionLightLevel: 0.202
-  sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
-  excludePrefabConnectionsIds: 
+  links: []
+  dataFromBake:
+    orignalInstanceId: 53022
+    originalInstance: {fileID: 7113011209303798032}
+    resources: []
+    coverage: 1
+    proceduralPoints: []
+    connectors:
+    - localPosition: {x: 0, y: 1.5, z: -0.5}
+      localRotation: {x: -0, y: -0, z: -0, w: 1}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 0
+    excludePrefabConnections: []
+    excludeConnectorSections:
+    - exclude: []
+    excludePrefabConnectionsIds: 
+    spawnRule: {fileID: -8099010526370012669}
+    boundingBoxes:
+    - center:
+        x: 0
+        y: 1.6324005
+        z: 0
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 3.91916
+        y: 3.39812
+        z: 1
+    sectionLightLevel: 0.202
+    sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
+    miniMapAsset: {fileID: 0}
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
   stagnationBeacon: {fileID: 0}
-  orignalInstanceId: 43408
-  strongKeep: 0
-  hasLadder: 0
-  isColony: 0
+  orignalInstanceId: 53022
+  sanctumPartsSpawnPoint: {fileID: 0}
+  decorations: {fileID: 0}
+  decorCoverage: 0
+  decorationCount: 0
   explored: 0
 --- !u!114 &-8099010526370012669
 MonoBehaviour:
@@ -788,7 +756,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512faa78928851749af35e54771d23f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnable: 1
+  spawnable: 0
   spawnLimit: -1
   generator: {fileID: 0}
-  owner: 43408
+  owner: 53022
+--- !u!114 &341670462446070769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8899820026267700843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d94a0d04ee60e4a9a3533fbe11781c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bakedData:
+    orignalInstanceId: 53022
+    originalInstance: {fileID: 7113011209303798032}
+    resources: []
+    coverage: 1
+    proceduralPoints: []
+    connectors:
+    - localPosition: {x: 0, y: 1.5, z: -0.5}
+      localRotation: {x: -0, y: -0, z: -0, w: 1}
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 0}
+      parentPos: {x: 0, y: 0, z: 0}
+      internalIndex: 0
+    excludePrefabConnections: []
+    excludeConnectorSections:
+    - exclude: []
+    excludePrefabConnectionsIds: 
+    spawnRule: {fileID: -8099010526370012669}
+    boundingBoxes:
+    - center:
+        x: 0
+        y: 1.6324005
+        z: 0
+      oreintation:
+        x: -0
+        y: 0
+        z: 0
+      size:
+        x: 3.91916
+        y: 3.39812
+        z: 1
+    sectionLightLevel: 0.202
+    sectionAmbience: {fileID: 8300000, guid: 11bc6b4b83be6d645a22dcc4ba50d3a0, type: 3}
+    miniMapAsset: {fileID: 0}
+    strongKeepPosition: {x: 0, y: 0, z: 0}
+    waypointName: 
+    strongKeep: 0
+    hasLadder: 0
+    isColony: 0
+  targetOrigin: {fileID: 0}
+  showProceduralPoints: 0
+  orientationRayLength: 0.2

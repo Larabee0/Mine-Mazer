@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8206201609347191114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.684, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,15 +46,12 @@ GameObject:
   - component: {fileID: 9200158650966772129}
   - component: {fileID: 8623586042625634240}
   - component: {fileID: 1803809995575529196}
-  - component: {fileID: 3273564531727617997}
   - component: {fileID: 8885021736284625548}
   - component: {fileID: 2545555047430267859}
-  - component: {fileID: 264619801066617756}
   - component: {fileID: 7086193770796506131}
   - component: {fileID: 6255624764367588421}
   - component: {fileID: 6506946065469862690}
   - component: {fileID: 3547482718160179921}
-  - component: {fileID: 652744699817290847}
   - component: {fileID: 7304876361382030026}
   - component: {fileID: 344178293599804206}
   - component: {fileID: 8956020512849352091}
@@ -67,23 +64,17 @@ GameObject:
   - component: {fileID: 3601209725568101677}
   - component: {fileID: 5457118127251148089}
   - component: {fileID: 7136659800472778658}
-  - component: {fileID: 2211034218927316424}
   - component: {fileID: 5699939897989324812}
-  - component: {fileID: 4274662164153979252}
   - component: {fileID: 7324266072640500136}
   - component: {fileID: 7544175279872209524}
   - component: {fileID: 131342407708866336}
   - component: {fileID: 7805440164829600194}
-  - component: {fileID: 4376748041381083351}
-  - component: {fileID: 7879909935086933898}
   - component: {fileID: 7464378253860071882}
   - component: {fileID: 6721647561536441191}
   - component: {fileID: 2418300172891597882}
   - component: {fileID: 2493281649030156358}
   - component: {fileID: 665817145026340660}
   - component: {fileID: 8949170162887998781}
-  - component: {fileID: 4529930631274584229}
-  - component: {fileID: 4757996469177492607}
   - component: {fileID: 6441347882912027016}
   - component: {fileID: 7067578157746993187}
   - component: {fileID: 250202541016563297}
@@ -140,6 +131,20 @@ GameObject:
   - component: {fileID: 9184566123405808830}
   - component: {fileID: 4883246242783586760}
   - component: {fileID: 4176496948721180622}
+  - component: {fileID: 8767947542328472654}
+  - component: {fileID: 7818313993840904377}
+  - component: {fileID: 8138935736886385082}
+  - component: {fileID: 3128888232110489873}
+  - component: {fileID: 7689399223118707391}
+  - component: {fileID: 2727670771404926910}
+  - component: {fileID: 4250800697363945236}
+  - component: {fileID: 1866419235992368501}
+  - component: {fileID: 6803352421629514965}
+  - component: {fileID: 8800017760349802476}
+  - component: {fileID: 4811620438605695034}
+  - component: {fileID: 4038679756852483349}
+  - component: {fileID: 4362993882065724322}
+  - component: {fileID: 847282284932375215}
   m_Layer: 0
   m_Name: EudieTutorial
   m_TagString: Untagged
@@ -175,11 +180,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 299.476, y: 567.5741}
+  scrollPos: {x: 1088.9324, y: 845.60736}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 400
-  zoom: 0.63999987
+  zoom: 0.8499997
   scrollViewRect:
     serializedVersion: 2
     x: -343
@@ -187,7 +192,7 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 7324266072640500136}
+  - {fileID: 2493281649030156358}
   selectedCommands: []
   variables: []
   description: 
@@ -216,7 +221,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -604.5055
     y: -334.9011
-    width: 109.375015
+    width: 111.17649
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -228,7 +233,8 @@ MonoBehaviour:
   - {fileID: 8623586042625634240}
   - {fileID: 2928773682839014335}
   - {fileID: 9200158650966772129}
-  - {fileID: 3273564531727617997}
+  - {fileID: 7818313993840904377}
+  - {fileID: 8138935736886385082}
   suppressAllAutoSelections: 0
 --- !u!114 &2928773682839014335
 MonoBehaviour:
@@ -320,31 +326,6 @@ MonoBehaviour:
   portraitsFace: 0
   setSayDialog: {fileID: 0}
   description: 
---- !u!114 &3273564531727617997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056977784242709450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841589fc622bc494aa5405f416fa1301, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 35
-  indentLevel: 0
-  text: Who are you?
-  description: 
-  targetBlock: {fileID: 8885021736284625548}
-  hideIfVisited: 0
-  interactable:
-    booleanRef: {fileID: 0}
-    booleanVal: 1
-  setMenuDialog: {fileID: 0}
-  hideThisOption:
-    booleanRef: {fileID: 0}
-    booleanVal: 0
 --- !u!114 &8885021736284625548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +342,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -425.6935
     y: -327.74634
-    width: 110.937515
+    width: 115.88238
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -371,7 +352,8 @@ MonoBehaviour:
   eventHandler: {fileID: 0}
   commandList:
   - {fileID: 2545555047430267859}
-  - {fileID: 264619801066617756}
+  - {fileID: 3128888232110489873}
+  - {fileID: 7689399223118707391}
   suppressAllAutoSelections: 0
 --- !u!114 &2545555047430267859
 MonoBehaviour:
@@ -400,31 +382,6 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
---- !u!114 &264619801066617756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056977784242709450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841589fc622bc494aa5405f416fa1301, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 38
-  indentLevel: 0
-  text: Where are the others?
-  description: 
-  targetBlock: {fileID: 7086193770796506131}
-  hideIfVisited: 0
-  interactable:
-    booleanRef: {fileID: 0}
-    booleanVal: 1
-  setMenuDialog: {fileID: 0}
-  hideThisOption:
-    booleanRef: {fileID: 0}
-    booleanVal: 0
 --- !u!114 &7086193770796506131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,7 +398,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -252.69348
     y: -320.74634
-    width: 87.50001
+    width: 86.4706
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -454,7 +411,8 @@ MonoBehaviour:
   - {fileID: 6506946065469862690}
   - {fileID: 7136659800472778658}
   - {fileID: 3547482718160179921}
-  - {fileID: 652744699817290847}
+  - {fileID: 2727670771404926910}
+  - {fileID: 4250800697363945236}
   suppressAllAutoSelections: 0
 --- !u!114 &6255624764367588421
 MonoBehaviour:
@@ -537,31 +495,6 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
---- !u!114 &652744699817290847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056977784242709450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841589fc622bc494aa5405f416fa1301, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 43
-  indentLevel: 0
-  text: Why are you here?
-  description: 
-  targetBlock: {fileID: 7304876361382030026}
-  hideIfVisited: 0
-  interactable:
-    booleanRef: {fileID: 0}
-    booleanVal: 1
-  setMenuDialog: {fileID: 0}
-  hideThisOption:
-    booleanRef: {fileID: 0}
-    booleanVal: 0
 --- !u!114 &7304876361382030026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -576,9 +509,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: -111.69348
-    y: -315.74634
-    width: 110.937515
+    x: -112.959305
+    y: -317.01215
+    width: 115.88238
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -588,6 +521,10 @@ MonoBehaviour:
   eventHandler: {fileID: 0}
   commandList:
   - {fileID: 344178293599804206}
+  - {fileID: 6803352421629514965}
+  - {fileID: 1866419235992368501}
+  - {fileID: 8800017760349802476}
+  - {fileID: 4811620438605695034}
   - {fileID: 8956020512849352091}
   - {fileID: 3175824495621068761}
   - {fileID: 3385433430935627208}
@@ -606,7 +543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 45
   indentLevel: 0
-  storyText: Lumen! It's right here.
+  storyText: You see the gate hi-over there? It's lumen-powered.
   description: 
   character: {fileID: 1803809995575529196}
   portrait: {fileID: 0}
@@ -685,7 +622,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 37.30652
     y: -363.74634
-    width: 118.750015
+    width: 124.11767
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -696,9 +633,9 @@ MonoBehaviour:
   commandList:
   - {fileID: 4176496948721180622}
   - {fileID: 2599555545540540353}
-  - {fileID: 2211034218927316424}
   - {fileID: 5699939897989324812}
-  - {fileID: 4274662164153979252}
+  - {fileID: 4038679756852483349}
+  - {fileID: 4362993882065724322}
   suppressAllAutoSelections: 0
 --- !u!114 &2599555545540540353
 MonoBehaviour:
@@ -714,7 +651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 50
   indentLevel: 0
-  storyText: Oh, thank you miner!
+  storyText: This is a great hi-help to me. You should hold onto this torch!
   description: 
   character: {fileID: 1803809995575529196}
   portrait: {fileID: 0}
@@ -743,7 +680,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 43.30652
     y: -278.74634
-    width: 103.125015
+    width: 107.64708
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -833,33 +770,6 @@ MonoBehaviour:
   targetObject: {fileID: 7005427032116257206}
   methodName: RecieveStarterItems
   delay: 0
---- !u!114 &2211034218927316424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056977784242709450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 56
-  indentLevel: 0
-  storyText: This is a great hi-help to me.
-  description: 
-  character: {fileID: 1803809995575529196}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  setSayDialog: {fileID: 0}
 --- !u!114 &5699939897989324812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -887,31 +797,6 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
---- !u!114 &4274662164153979252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056977784242709450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841589fc622bc494aa5405f416fa1301, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 58
-  indentLevel: 0
-  text: Do you know what happened down here?
-  description: 
-  targetBlock: {fileID: 7324266072640500136}
-  hideIfVisited: 0
-  interactable:
-    booleanRef: {fileID: 0}
-    booleanVal: 1
-  setMenuDialog: {fileID: 0}
-  hideThisOption:
-    booleanRef: {fileID: 0}
-    booleanVal: 0
 --- !u!114 &7324266072640500136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,9 +811,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 273.30652
+    x: 274.57233
     y: -390.74634
-    width: 131.25002
+    width: 137.05885
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -940,8 +825,8 @@ MonoBehaviour:
   - {fileID: 7544175279872209524}
   - {fileID: 131342407708866336}
   - {fileID: 7805440164829600194}
-  - {fileID: 4376748041381083351}
-  - {fileID: 7879909935086933898}
+  - {fileID: 847282284932375215}
+  - {fileID: 8767947542328472654}
   - {fileID: 7464378253860071882}
   - {fileID: 2418300172891597882}
   - {fileID: 6721647561536441191}
@@ -1027,60 +912,6 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
---- !u!114 &4376748041381083351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056977784242709450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 63
-  indentLevel: 0
-  storyText: If you could get us out of this hi-hole, I can take you to them!
-  description: 
-  character: {fileID: 1803809995575529196}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 1
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  setSayDialog: {fileID: 0}
---- !u!114 &7879909935086933898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056977784242709450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 64
-  indentLevel: 0
-  storyText: Some of the walls look weak- maybe if you mine it, it'll break!
-  description: 
-  character: {fileID: 1803809995575529196}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  setSayDialog: {fileID: 0}
 --- !u!114 &7464378253860071882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1147,7 +978,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 481.30652
     y: -387.74634
-    width: 151.56253
+    width: 157.05887
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1158,8 +989,6 @@ MonoBehaviour:
   commandList:
   - {fileID: 665817145026340660}
   - {fileID: 8949170162887998781}
-  - {fileID: 4529930631274584229}
-  - {fileID: 4757996469177492607}
   - {fileID: 6441347882912027016}
   - {fileID: 7067578157746993187}
   - {fileID: 4513725241419579284}
@@ -1207,61 +1036,6 @@ MonoBehaviour:
   extendPrevious: 0
   fadeWhenDone: 1
   waitForClick: 0
-  stopVoiceover: 1
-  waitForVO: 0
-  setSayDialog: {fileID: 0}
---- !u!114 &4529930631274584229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056977784242709450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 71
-  indentLevel: 0
-  storyText: 'And look- you can pick up all these bits now! Hi-bet Io would give
-    you something nice for them. '
-  description: 
-  character: {fileID: 1803809995575529196}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
-  stopVoiceover: 1
-  waitForVO: 0
-  setSayDialog: {fileID: 0}
---- !u!114 &4757996469177492607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056977784242709450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 72
-  indentLevel: 0
-  storyText: 'She should be at the colony with the others. '
-  description: 
-  character: {fileID: 1803809995575529196}
-  portrait: {fileID: 0}
-  voiceOverClip: {fileID: 0}
-  showAlways: 1
-  showCount: 1
-  extendPrevious: 0
-  fadeWhenDone: 1
-  waitForClick: 1
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
@@ -1386,7 +1160,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -589.6935
     y: -95.74634
-    width: 114.062515
+    width: 118.23531
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1493,7 +1267,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -589.6935
     y: -139.74634
-    width: 139.06252
+    width: 142.94121
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1600,7 +1374,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -590.6935
     y: -49.746338
-    width: 109.375015
+    width: 112.35297
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1707,7 +1481,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -586.6935
     y: -5.746338
-    width: 137.50002
+    width: 141.76474
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1814,7 +1588,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -577.6935
     y: 33.253662
-    width: 128.12502
+    width: 134.7059
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -1923,7 +1697,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -255.69348
     y: 43.253662
-    width: 145.31253
+    width: 154.70592
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2042,7 +1816,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -76.69348
     y: 51.253662
-    width: 142.18753
+    width: 147.6471
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2150,7 +1924,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 124.30652
     y: 44.253662
-    width: 110.937515
+    width: 117.058846
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2304,7 +2078,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -593.6935
     y: -181.74634
-    width: 139.06252
+    width: 146.47061
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2473,6 +2247,362 @@ MonoBehaviour:
   targetObject: {fileID: 7005427032116257206}
   methodName: ClearObjectiveFungus
   delay: 0
+--- !u!114 &8767947542328472654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 146
+  indentLevel: 0
+  storyText: Use LT/RT or Scroll Wheel to Cycle Inventory
+  description: 
+  character: {fileID: 0}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &7818313993840904377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 147
+  indentLevel: 0
+  storyText: Who are you?
+  description: 
+  character: {fileID: 7349502459724333951}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &8138935736886385082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050fb9e6e72f442b3b883da8a965bdeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 148
+  indentLevel: 0
+  targetFlowchart: {fileID: 0}
+  targetBlock: {fileID: 8885021736284625548}
+  startLabel:
+    stringRef: {fileID: 0}
+    stringVal: 
+  startIndex: 0
+  callMode: 0
+--- !u!114 &3128888232110489873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 149
+  indentLevel: 0
+  storyText: Where are the others?
+  description: 
+  character: {fileID: 7349502459724333951}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &7689399223118707391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050fb9e6e72f442b3b883da8a965bdeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 150
+  indentLevel: 0
+  targetFlowchart: {fileID: 0}
+  targetBlock: {fileID: 7086193770796506131}
+  startLabel:
+    stringRef: {fileID: 0}
+    stringVal: 
+  startIndex: 0
+  callMode: 0
+--- !u!114 &2727670771404926910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 151
+  indentLevel: 0
+  storyText: Why are you here?
+  description: 
+  character: {fileID: 7349502459724333951}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &4250800697363945236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050fb9e6e72f442b3b883da8a965bdeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 152
+  indentLevel: 0
+  targetFlowchart: {fileID: 0}
+  targetBlock: {fileID: 7304876361382030026}
+  startLabel:
+    stringRef: {fileID: 0}
+    stringVal: 
+  startIndex: 0
+  callMode: 0
+--- !u!114 &1866419235992368501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 153
+  indentLevel: 0
+  storyText: 'Say, miner: do you think you could help me? '
+  description: 
+  character: {fileID: 1803809995575529196}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &6803352421629514965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 154
+  indentLevel: 0
+  storyText: Mister Schist took his Lumen Torch when he left, but I was too slow
+    to leave...
+  description: 
+  character: {fileID: 1803809995575529196}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &8800017760349802476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 155
+  indentLevel: 0
+  storyText: I need one piece of Lumen to make a new Lumen Torch to unlock the gate,
+    but I can't swing that pickaxe.
+  description: 
+  character: {fileID: 1803809995575529196}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &4811620438605695034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 156
+  indentLevel: 0
+  storyText: Could you mine some for me?
+  description: 
+  character: {fileID: 1803809995575529196}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &4038679756852483349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 157
+  indentLevel: 0
+  storyText: Do you know what happened down here?
+  description: 
+  character: {fileID: 7349502459724333951}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &4362993882065724322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050fb9e6e72f442b3b883da8a965bdeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 158
+  indentLevel: 0
+  targetFlowchart: {fileID: 0}
+  targetBlock: {fileID: 7324266072640500136}
+  startLabel:
+    stringRef: {fileID: 0}
+    stringVal: 
+  startIndex: 0
+  callMode: 0
+--- !u!114 &847282284932375215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9056977784242709450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 159
+  indentLevel: 0
+  storyText: Use the key I made to open the gate.
+  description: 
+  character: {fileID: 1803809995575529196}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
 --- !u!1001 &1783885369326974398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2509,12 +2639,12 @@ PrefabInstance:
     - target: {fileID: 7922335778751766424, guid: 8dae75205a939fc4cbe6c074a6babfe3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.775
       objectReference: {fileID: 0}
     - target: {fileID: 7922335778751766424, guid: 8dae75205a939fc4cbe6c074a6babfe3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -5.75
       objectReference: {fileID: 0}
     - target: {fileID: 7922335778751766424, guid: 8dae75205a939fc4cbe6c074a6babfe3,
         type: 3}
@@ -2616,19 +2746,24 @@ MonoBehaviour:
   tradeOptions:
   - tradeUIText: Give the Lumen to Eudie
     tradeCloseSuccessBlock: Trade Lumen
-    specific: 1
-    specificItem: 0
     category: 0
+    specific: 1
+    specificItem: 1
     takeQuantity: 1
-    givenItem: {fileID: 0}
-    giveQuantity: 0
+    specificItems: 
+    takeQuantities: 
+    givenItem: {fileID: 8048640736220625442, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2,
+      type: 3}
+    giveQuantity: 1
   eudieWaypoint: {fileID: 4151477205938020254}
   eudieItem: {fileID: 6876458769479377363}
   starterItems:
   - {fileID: 2427611828371672613, guid: 7e2e54d9c459107468e3889920e81a3d, type: 3}
-  - {fileID: 2186324674680031705, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2, type: 3}
-  tutorialAreaWalls: []
   lumen: {fileID: 0}
+  gate: {fileID: 0}
+  gateButton: {fileID: 0}
+  raisedPosition: {x: 1.835, y: -4.53, z: -0.29}
+  raiseSpeed: 0.6
   eudieState: 0
 --- !u!114 &7349502459724333951
 MonoBehaviour:
@@ -2664,9 +2799,10 @@ MonoBehaviour:
   itemCollider: {fileID: 6832543622599297263}
   itemStats:
     name: Eudie
-    type: 8
+    type: 256
   Placeable: 0
   Interactable: 1
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 213.47002, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}

@@ -2646,6 +2646,7 @@ MonoBehaviour:
   settingsMenuPrefab: {fileID: 9197481963319205126, guid: 91ea0259b4733844a8862e4eb470393a,
     type: 3}
   tutorialStarter: {fileID: 278139881}
+  autoLoadOnPlay: 0
 --- !u!114 &1274388771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2686,6 +2687,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 341670462446070769, guid: fc93cda41d77b1442bb709e6410dc4c2,
+        type: 3}
+      propertyPath: bakedData.spawnRule
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 341670462446070769, guid: fc93cda41d77b1442bb709e6410dc4c2,
+        type: 3}
+      propertyPath: bakedData.originalInstance
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4007436926372904115, guid: fc93cda41d77b1442bb709e6410dc4c2,
         type: 3}
       propertyPath: m_RootOrder
@@ -2739,6 +2750,11 @@ PrefabInstance:
     - target: {fileID: 4007436926372904115, guid: fc93cda41d77b1442bb709e6410dc4c2,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4980315764448918161, guid: fc93cda41d77b1442bb709e6410dc4c2,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8899820026267700843, guid: fc93cda41d77b1442bb709e6410dc4c2,
@@ -2846,12 +2862,12 @@ PrefabInstance:
     - target: {fileID: 3845093926135913635, guid: b397e3102ab06d14299ccf9b0a3a7391,
         type: 3}
       propertyPath: neverSave
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3845093926135913635, guid: b397e3102ab06d14299ccf9b0a3a7391,
         type: 3}
       propertyPath: alwaysReset
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
         type: 3}
@@ -2906,6 +2922,11 @@ PrefabInstance:
     - target: {fileID: 5848320062477662814, guid: b397e3102ab06d14299ccf9b0a3a7391,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8496017841624271458, guid: b397e3102ab06d14299ccf9b0a3a7391,
+        type: 3}
+      propertyPath: m_DeselectOnBackgroundClick
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3048,6 +3069,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181468151936997963, guid: 2e3fb2f25c7499740a8e78cd64cbd320,
+        type: 3}
+      propertyPath: bakedData.spawnRule
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181468151936997963, guid: 2e3fb2f25c7499740a8e78cd64cbd320,
+        type: 3}
+      propertyPath: bakedData.originalInstance
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181468151936997963, guid: 2e3fb2f25c7499740a8e78cd64cbd320,
+        type: 3}
+      propertyPath: bakedData.excludePrefabConnections.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8176323169833114417, guid: 2e3fb2f25c7499740a8e78cd64cbd320,
         type: 3}

@@ -52,13 +52,17 @@ MonoBehaviour:
   itemCollider: {fileID: 4851515905360349021}
   itemStats:
     name: Stagnation Beacon
-    type: 9
+    type: 512
   Placeable: 1
+  Interactable: 1
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 0.25, y: 0.25, z: 0.25}
   placementPositionOffset: {x: 0, y: 0.6, z: 0}
   toolTipNameOverride: 
+  dialogue: {fileID: 0}
+  Animated: 1
   sphere: {fileID: 1232324495243864719}
   cylinder: {fileID: 8069733206780427147}
   cubeA: {fileID: 2504045546146787993}

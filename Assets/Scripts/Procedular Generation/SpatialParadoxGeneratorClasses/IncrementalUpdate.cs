@@ -1,11 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 public partial class SpatialParadoxGenerator
 {
-
     private void UpdateMap()
     {
         if (lastExit == curPlayerSection && lastEnter != curPlayerSection && mapUpdateProcess == null)
@@ -16,131 +17,161 @@ public partial class SpatialParadoxGenerator
         lastExit = null;
     }
 
-
-    private IEnumerator DelayedMapGen(TunnelSection newSection)
+    private IEnumerator DelayedMapGen(MapTreeElement newSection)
     {
         yield return null;
-#if UNITY_EDITOR
-        if (debugging)
+
+        nextPlayerSection = newSection;
+        if (incrementalUpdateProcess == null)
         {
-            StartCoroutine(MakeRootNodeDebug(newSection));
+            incrementalUpdateProcess = StartCoroutine(MakeRootNodeIncremental(newSection));
         }
-        else
-        {
-            double startTime = Time.realtimeSinceStartupAsDouble;
-            MakeRootNode(newSection);
-            if (mapProfiling) Debug.LogFormat("Map Update Time {0}ms", (Time.realtimeSinceStartupAsDouble - startTime) * 1000f);
-        }
-#else
-            MakeRootNode(newSection);
-#endif
+        else queuedUpdateProcess ??= StartCoroutine(AwaitCurrentIncrementalComplete());
+
         mapUpdateProcess = null;
-        AmbientController.Instance.FadeAmbientLight(newSection.AmbientLightLevel);
-        AmbientController.Instance.ChangeTune(newSection.AmbientNoise);
+        AmbientController.Instance.FadeAmbientLight(newSection.sectionInstance.AmbientLightLevel);
+        AmbientController.Instance.ChangeTune(newSection.sectionInstance.AmbientNoise);
         OnMapUpdate?.Invoke();
-        //yield return null;
-        //Debug.Break();
     }
 
-    private void RegenRing(int regenTarget)
+    private IEnumerator AwaitCurrentIncrementalComplete()
+    {
+        while (incrementalUpdateProcess != null)
+        {
+            yield return null;
+        }
+        incrementalUpdateProcess = StartCoroutine(MakeRootNodeIncremental(nextPlayerSection));
+        queuedUpdateProcess = null;
+    }
+
+    private IEnumerator RegenRingIncremental(int regenTarget)
     {
         regenTarget -= reRingInters;
 
         if (regenTarget < 2)
         {
-            throw new System.InvalidOperationException(string.Format("Regeneration target set to {0} Cannot regenerate root node! Something catastrophic occured!", regenTarget));
+            throw new InvalidOperationException(string.Format("Regeneration target set to {0} Cannot regenerate root node! Something catastrophic occured!", regenTarget));
         }
 
         while (mapTree.Count - 1 != regenTarget)
         {
             for (int i = 0; i < mapTree[^1].Count; i++)
             {
-                TunnelSection section = mapTree[^1][i];
-                if (section.Keep)
+                if (mapTree[^1][i].Instantiated)
                 {
-                    section.gameObject.SetActive(false);
-                    section.transform.parent = sectionGraveYard;
-                    ClearConnectors(section);
-                    mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.Position, section.Position), mapTree.Count - 1));
-                }
-                else
-                {
-                    section.CollidersEnabled = false;
-                    DestroySection(section);
+                    MapTreeElement section = mapTree[^1][i];
+                    MothballInRing(section);
                 }
             }
             mapTree.RemoveAt(mapTree.Count - 1);
         }
-        Physics.SyncTransforms();
-        CheckForSectionsPromotions();
+        CheckForSectionPromotions();
         reRingInters = 1;
-        RecursiveBuilder();
+        yield return IncrementalBuilder();
         reRingInters = 0;
     }
 
-    private void MakeRootNode(TunnelSection newRoot)
+    private void MothballInRing(MapTreeElement section)
     {
+        if (section.Keep)
+        {
+            section.sectionInstance.gameObject.SetActive(false);
+            section.sectionInstance.transform.parent = sectionGraveYard;
+            ClearConnectors(section);
+            mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.LocalToWorld.Translation(), section.LocalToWorld.Translation()), mapTree.Count - 1));
+            SetSectionInActivePhysicsWorld(section.UID, true);
+            totalDecorations -= section.sectionInstance.decorationCount;
+        }
+        else
+        {
+            section.sectionInstance.CollidersEnabled = false;
+            DestroySectionPhysicsWorld(section.UID);
+            DestroySection(section);
+        }
+    }
+
+    private IEnumerator MakeRootNodeIncremental(MapTreeElement newRoot)
+    {
+        if (curPlayerSection == newRoot)
+        {
+            nextPlayerSection = null;
+            incrementalUpdateProcess = null;
+            yield break;
+        }
+
         UpdateMothBalledSections(newRoot);
 
-        List<List<TunnelSection>> newTree = new() { new() { newRoot } };
-        HashSet<TunnelSection> exceptWith = new(newTree[^1]);
+        List<List<MapTreeElement>> newTree = RebuildTreeNew(newRoot);
 
-        RecursiveTreeBuilder(newTree, exceptWith);
         if (mapProfiling) Debug.LogFormat("New Tree Size {0}", newTree.Count);
         if (mapProfiling) Debug.LogFormat("Original Tree Size {0}", mapTree.Count);
 
         bool forceGrow = newTree.Count < mapTree.Count;
 
-        if (mapProfiling) Debug.Log("Pruning Tree..");
-        int leafCounter = 0;
-        while (newTree.Count > maxDst + 1)
+        PruneTree(newRoot, newTree);
+
+        if (checkDeadEnds)
         {
-            for (int i = 0; i < newTree[^1].Count; i++)
+            yield return CheckForOpenDeadEnds();
+        }
+
+        yield return GrowTree(forceGrow);
+
+
+
+        UpdatePlayerSection(newTree);
+        
+        LODMap();
+
+        if (newRoot == nextPlayerSection)
+        {
+            nextPlayerSection = null;
+        }
+        incrementalUpdateProcess = null;
+
+        OnMapUpdate?.Invoke();
+    }
+
+    private IEnumerator CheckForOpenDeadEnds()
+    {
+        if (deadEnds.Count > 0)
+        {
+            int clearedDeadEnds = 0;
+
+            for (int i = deadEnds.Count - 1; i >= 0; i--)
             {
-                TunnelSection section = newTree[^1][i];
-                if (section.Keep)
+                var treeDeadend = deadEnds[i];
+                if (!treeDeadend.Instantiated)
                 {
-                    section.gameObject.SetActive(false);
-                    section.transform.parent = sectionGraveYard;
-                    if (!mothBalledSections.ContainsKey(section))
-                    {
-                        ClearConnectors(section);
-                        mothBalledSections.Add(section, new(math.distancesq(newRoot.Position, section.Position), newTree.Count - 1));
-                    }
+                    continue;
                 }
-                else
+                int otherInternalIndex = treeDeadend.ConnectorPairs[0].internalIndex;
+                var treePossibleElement = treeDeadend.ConnectorPairs[0].element;
+                SectionDelayedOuts pickSectionDelayedData = new();
+
+                List<Connector> targetConnector = new() { treePossibleElement.Connectors[otherInternalIndex] };
+                List<int> nextSections = FilterSections(treePossibleElement.OriginalInstanceId);
+
+                yield return PickSectionDelayed(treePossibleElement, nextSections, pickSectionDelayedData, targetConnector);
+
+                if (pickSectionDelayedData.pickedSection != deadEndPlug)
                 {
-                    leafCounter++;
-                    DestroySection(section);
+                    continue;
                 }
+                clearedDeadEnds++;
+                DestroySectionPhysicsWorld(treeDeadend.UID);
+                DestroySection(treeDeadend);
             }
-            newTree[^1].Clear();
-            newTree.RemoveAt(newTree.Count - 1);
+            if (clearedDeadEnds > 0)
+            {
+                CleanUpDeadTreeElements();
+                Debug.LogFormat("Cleared {0} dead ends for potential tunnel expansion", clearedDeadEnds);
+            }
         }
-        Physics.SyncTransforms();
+    }
 
-        mapTree.Clear();
-        mapTree.AddRange(newTree);
-
-        if (mapProfiling) Debug.Log("Growing Tree..");
-        int oldSize = 0;
-        if (forceGrow)
-        {
-            RecursiveBuilder();
-        }
-        else
-        {
-            oldSize = mapTree[^1].Count;
-            FillSectionConnectors(mapTree[^2]);
-        }
-        if (mapProfiling) Debug.LogFormat("Grew {0} leaves", mapTree[^1].Count - oldSize);
-        curPlayerSection = newTree[0][0];
-        if (curPlayerSection == null)
-        {
-            Debug.LogWarning("cur player section null, attempting to resolve..");
-            ResolvePlayerSection();
-        }
-
+    private void LODMap()
+    {
         if (ringRenderDst < maxDst)
         {
             for (int i = 0; i < ringRenderDst; i++)
@@ -150,22 +181,99 @@ public partial class SpatialParadoxGenerator
         }
     }
 
-    private void UpdateMothBalledSections(TunnelSection newRoot)
+    private void UpdatePlayerSection(List<List<MapTreeElement>> newTree)
+    {
+        curPlayerSection = newTree[0][0];
+        if (curPlayerSection == null)
+        {
+            Debug.LogWarning("cur player section null, attempting to resolve..");
+            ResolvePlayerSection();
+        }
+    }
+
+    private IEnumerator GrowTree(bool forceGrow)
+    {
+        if (mapProfiling) Debug.Log("Growing Tree..");
+        int oldSize = 0;
+        if (forceGrow)
+        {
+            yield return IncrementalBuilder(false,true);
+        }
+        else
+        {
+            oldSize = mapTree[^1].Count;
+            yield return FillSectionConnectorsIncremental(mapTree[^2], mapTree.Count - 1);
+            PreProcessQueue();
+        }
+        if (mapProfiling) Debug.LogFormat("Grew {0} leaves", mapTree[^1].Count - oldSize);
+    }
+
+    private void PruneTree(MapTreeElement newRoot, List<List<MapTreeElement>> newTree)
+    {
+        if (mapProfiling) Debug.Log("Pruning Tree..");
+        int leafCounter = 0;
+        while (newTree.Count > maxDst + 1)
+        {
+            for (int i = 0; i < newTree[^1].Count; i++)
+            {
+                if (newTree[^1][i].Instantiated)
+                {
+                    MapTreeElement section = newTree[^1][i];
+                    if (section.Keep)
+                    {
+                        section.sectionInstance.gameObject.SetActive(false);
+                        section.sectionInstance.transform.parent = sectionGraveYard;
+                        if (!mothBalledSections.ContainsKey(section))
+                        {
+                            ClearConnectors(newTree[^1][i]);
+                            mothBalledSections.Add(newTree[^1][i], new(math.distancesq(newRoot.sectionInstance.Position, section.sectionInstance.Position), newTree.Count - 1));
+                        }
+                        SetSectionInActivePhysicsWorld(section.UID, true);
+                    }
+                    else
+                    {
+                        leafCounter++;
+                        DestroySectionPhysicsWorld(newTree[^1][i].UID);
+                        DestroySection(section);
+                    }
+                }
+                else
+                {
+                    newTree[^1][i].cancel = true;
+                }
+            }
+            newTree[^1].Clear();
+            newTree.RemoveAt(newTree.Count - 1);
+        }
+        mapTree.Clear();
+        mapTree.AddRange(newTree);
+    }
+
+    private List<List<MapTreeElement>> RebuildTreeNew(MapTreeElement newRoot)
+    {
+        List<List<MapTreeElement>> newTree = new() { new() { newRoot } };
+        HashSet<MapTreeElement> exceptWith = new(newTree[^1], new MapTreeElementComparer());
+
+        RecursiveTreeBuilder(newTree, exceptWith);
+        return newTree;
+    }
+
+    private void UpdateMothBalledSections(MapTreeElement newRoot)
     {
         if (mothBalledSections.Count > 0)
         {
-            List<TunnelSection> mothBalledSections = new(this.mothBalledSections.Keys);
+            List<MapTreeElement> mothBalledSections = new(this.mothBalledSections.Keys);
             mothBalledSections.ForEach(section =>
             {
                 SectionDstData cur = this.mothBalledSections[section];
-                SectionDstData newRootDstData = new(math.distancesq(newRoot.Position, section.Position), cur.dst);
+                SectionDstData newRootDstData = new(math.distancesq(newRoot.LocalToWorld.Translation(), section.LocalToWorld.Translation()), cur.dst);
 
                 newRootDstData.dst += cur.sqrDst < newRootDstData.sqrDst ? 1 : -1;
-                Debug.LogFormat("Updated mothballed section distance: {1} DST: {0}", newRootDstData.dst, section.name);
+                Debug.LogFormat("Updated mothballed section distance: {1} DST: {0}", newRootDstData.dst, section.sectionInstance.name);
                 this.mothBalledSections[section] = newRootDstData;
             });
 
-            CheckForSectionsPromotions();
+            CheckForSectionPromotions();
         }
     }
 }

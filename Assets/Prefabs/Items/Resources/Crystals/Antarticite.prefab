@@ -365,7 +365,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1864700406263334995}
   m_LocalRotation: {x: -0.6828286, y: 0.1836984, z: -0.1836984, w: -0.6828286}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -419,7 +419,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6404354841930581470}
   m_LocalRotation: {x: -0.3476922, y: -0.56830055, z: 0.28708342, w: 0.688279}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -473,7 +473,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6631917952508211876}
   m_LocalRotation: {x: -0.6828286, y: -0.1836984, z: -0.1836984, w: 0.6828286}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -705,7 +705,7 @@ Transform:
   - {fileID: 4030260339317245827}
   - {fileID: 620408514009567355}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2734561250547876230
 MonoBehaviour:
@@ -722,9 +722,10 @@ MonoBehaviour:
   itemCollider: {fileID: 0}
   itemStats:
     name: Antarticite
-    type: 4
+    type: 16
   Placeable: 0
   Interactable: 1
+  requiresPickaxe: 0
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -735,4 +736,4 @@ MonoBehaviour:
   - {fileID: 1864700406263334995}
   - {fileID: 6404354841930581470}
   chosenVariant: {fileID: 0}
-  turnOnAllChance: 0
+  allChance: 0

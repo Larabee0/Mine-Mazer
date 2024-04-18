@@ -155,6 +155,8 @@ namespace MazeGame.Input
 
         public ButtonEventContainer pauseButton;
 
+        public ButtonEventContainer inventoryButton;
+
         private void Awake()
         {
             // if no static instance, set it to this, otherwise destroy ourselves.
@@ -172,7 +174,7 @@ namespace MazeGame.Input
             playerControls = new PlayerControls();
             Build();
 
-            LockPointer();
+            // LockPointer();
             // bind internal controls to the action map.
             Bind();
 
@@ -207,6 +209,8 @@ namespace MazeGame.Input
 
             pauseButton = new(this, PlayerActions.Pause);
 
+            inventoryButton = new(this, PlayerActions.Inventory);
+
            // navigationSubmitButton = new(this, eventSystemInput.submit.action);
         }
 
@@ -229,6 +233,7 @@ namespace MazeGame.Input
                 placeItemButton.Bind();
                 advanceDialogueButton.Bind();
                 pauseButton.Bind();
+                inventoryButton.Bind();
 
                 PlayerActions.Reload.canceled += ReloadScene;
                 //northButton.OnButtonReleased += Quit;
@@ -254,6 +259,7 @@ namespace MazeGame.Input
                 placeItemButton.Unbind();
                 advanceDialogueButton.Unbind();
                 pauseButton.Unbind();
+                inventoryButton.Unbind();
 
                 PlayerActions.Reload.canceled -= ReloadScene;
                 //northButton.OnButtonReleased -= Quit;
@@ -270,6 +276,7 @@ namespace MazeGame.Input
             Cursor.lockState = CursorLockMode.Confined;
             PlayerActions.Disable();
             DialogueActions.Enable();
+            Debug.Log("Unlock Pointer");
         }
 
         public void LockPointer()
@@ -277,6 +284,7 @@ namespace MazeGame.Input
             Cursor.lockState = CursorLockMode.Locked;
             PlayerActions.Enable();
             DialogueActions.Disable();
+            Debug.Log("Lock Pointer");
         }
 
         public void SetPointerLocked(bool locked)

@@ -11,6 +11,15 @@ public class Torch : MapResource
     [SerializeField] private LayerMask layerMask;
     RaycastHit hitInfo;
     float t;
+
+    private void OnEnable()
+    {
+        if(Inventory.Instance.CurHeldItem == Item.Torch)
+        {
+            AmbientController.Instance.AmbientTorchLightBoost(true);
+        }
+    }
+
     private void Update()
     {
         Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
@@ -21,6 +30,14 @@ public class Torch : MapResource
         for (int i = 0; i < lights.Length; i++)
         {
             lights[i].SetBrightness(t,Time.deltaTime* transitionSpeed);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (Inventory.Instance.CurHeldItem != Item.Torch)
+        {
+            AmbientController.Instance.AmbientTorchLightBoost(false);
         }
     }
 

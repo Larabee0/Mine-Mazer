@@ -29,7 +29,10 @@ public class AmbientController : MonoBehaviour
     private AudioClip nextClip;
     private Coroutine audioProcess = null;
 
+    [SerializeField] private bool torchAmbientBoost;
+    [SerializeField] private float torchAmbientBoostIntensity = 0.5f;
     [SerializeField] private float targetAmbientIntensity;
+    [SerializeField] private float ambientFromSection;
     [SerializeField] private float fadeSpeed = 1f;
     private Coroutine allProcess = null;
     private void Awake()
@@ -84,10 +87,18 @@ public class AmbientController : MonoBehaviour
         allProcess = StartCoroutine(FadeAmbientLightUnsafe(targetInensity, fadeDuration));
     }
 
-    public void FadeAmbientLight(float targetInensity)
+    public void AmbientTorchLightBoost(bool boost)
     {
-        if (targetAmbientIntensity == targetInensity) { return; }
-        if (targetInensity < 0 || targetInensity > 1.0f) { return; }
+        if(torchAmbientBoost == boost) { return; }
+        torchAmbientBoost = boost;
+        FadeAmbientLight(targetAmbientIntensity, true);
+    }
+
+    public void FadeAmbientLight(float targetInensity, bool force = false)
+    {
+        if (!force && targetAmbientIntensity == targetInensity) { return; }
+        if (!force && (targetInensity < 0 || targetInensity > 1.0f)) { return; }
+        if (!force) { ambientFromSection = targetInensity; }
         if (allProcess != null)
         {
             StopCoroutine(allProcess);
@@ -113,6 +124,14 @@ public class AmbientController : MonoBehaviour
     private IEnumerator FadeAmbientLightUnsafe(float target)
     {
         targetAmbientIntensity = target;
+        if (torchAmbientBoost && targetAmbientIntensity == ambientFromSection)
+        {
+            targetAmbientIntensity = ambientFromSection + torchAmbientBoostIntensity;
+        }
+        else if (!torchAmbientBoost && targetAmbientIntensity != ambientFromSection)
+        {
+            targetAmbientIntensity = ambientFromSection;
+        }
         float initialAmbientIntensity = RenderSettings.ambientIntensity;
 
         for (float t = 0; t < 1; t += Time.deltaTime * fadeSpeed)
