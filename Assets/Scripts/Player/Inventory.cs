@@ -40,6 +40,8 @@ public class Inventory : MonoBehaviour
     [SerializeField] private MapResource[] sanctumparts;
     [SerializeField] private float itemNameTime = 1f;
 
+    public Action<Item> OnHeldItemChanged;
+
     private void Awake()
     {
         curIndex = -1;
@@ -52,11 +54,6 @@ public class Inventory : MonoBehaviour
             Destroy(this);
             return;
         }
-        if (InputManager.Instance == null)
-        {
-            return;
-        }
-
     }
 
     private void Start()
@@ -278,6 +275,7 @@ public class Inventory : MonoBehaviour
             Debug.LogError("Target item was not contained in the assets dictionary!");
         }
         heldItem.SetMapResourceActive(true);
+        OnHeldItemChanged?.Invoke(CurHeldItem.Value);
     }
 
     public void TryMoveItemToHand(Item target)

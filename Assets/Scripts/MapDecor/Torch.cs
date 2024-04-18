@@ -41,6 +41,17 @@ public class Torch : MapResource
         }
     }
 
+    public override bool PlaceItem()
+    {
+        
+        bool result =  base.PlaceItem();
+        if (result)
+        {
+            PlayerAnimationController.Instance.TorchDeply();
+        }
+        return result; 
+    }
+
     [Serializable]
     private struct LampRange
     {

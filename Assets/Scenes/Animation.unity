@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028386, g: 0.22571427, b: 0.3069231, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -196,10 +196,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: TorchDeployall
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 2d5f085feda34be44ad8db03424d23cc,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: c09e70fe86edee140b8464878ed4eea7, type: 2}
     - target: {fileID: 7733127684732868869, guid: 2d5f085feda34be44ad8db03424d23cc,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -799,10 +804,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7361705592908798041, guid: 614b3e95fa6e43d48bddeb95458c37d7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 614b3e95fa6e43d48bddeb95458c37d7,
         type: 3}
       propertyPath: m_Name
       value: handsRigFile
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 614b3e95fa6e43d48bddeb95458c37d7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 614b3e95fa6e43d48bddeb95458c37d7,
         type: 3}
@@ -818,6 +833,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ApplyRootMotion
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8579839605475805587, guid: 614b3e95fa6e43d48bddeb95458c37d7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
