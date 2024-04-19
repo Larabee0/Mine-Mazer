@@ -40,6 +40,8 @@ public class Inventory : MonoBehaviour
     [SerializeField] private MapResource[] sanctumparts;
     [SerializeField] private float itemNameTime = 1f;
 
+    public Action<Item, int> OnItemPickUp;
+
     private void Awake()
     {
         curIndex = -1;
@@ -110,9 +112,11 @@ public class Inventory : MonoBehaviour
             assets.Add(itemType, new() { itemInstance });
             UpdateInventory();
         }
+        
         itemInstance.transform.parent = virtualhands;
         itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
         itemInstance.transform.localScale = itemInstance.heldScaleOffset;
+        OnItemPickUp?.Invoke(itemType, inventory[itemType]);
     }
 
     public bool TryRemoveItem(Item item, int quantity)
