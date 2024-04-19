@@ -30,8 +30,10 @@ public class PlayerUIController : MonoBehaviour
     }
 
     [SerializeField] private UIDocument playerUi;
+    [SerializeField] private CompendiumUI compendiumUI;
 
     private VisualElement Root => playerUi.rootVisualElement;
+    public CompendiumUI CompendiumUI => compendiumUI;
 
     private SettingsMenuController settingsMenu;
     private InventoryController inventoryMenu;
@@ -182,11 +184,11 @@ public class PlayerUIController : MonoBehaviour
     {
         if (active)
         {
-            inventoryMenu.Open();
+            inventoryMenu.OpenIventory();
         }
         else
         {
-            inventoryMenu.Close();
+            inventoryMenu.CloseInventory();
         }
     }
 

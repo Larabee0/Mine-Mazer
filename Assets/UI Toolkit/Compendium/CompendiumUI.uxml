@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/Compendium/CompendiumUSS.uss?fileID=7433441132597879392&amp;guid=4ff5dea211603a548895515df44c0437&amp;type=3#CompendiumUSS" />
-    <ui:VisualElement name="Background" style="background-color: rgba(156, 156, 156, 0.55); width: 100%; height: 100%; flex-direction: row;">
+    <ui:VisualElement name="Compendium" style="background-color: rgba(156, 156, 156, 0.55); width: 100%; height: 100%; flex-direction: row;">
         <ui:VisualElement name="Outliner" style="background-color: rgb(44, 44, 44); width: 30%;">
             <ui:ScrollView name="Outline" />
         </ui:VisualElement>

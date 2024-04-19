@@ -4,12 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class RadialInventoryLib
-{
-    
-}
-
-
 public class RadialMenuItem : VisualElement
 {
     public new class UxmlTraits : VisualElement.UxmlTraits
@@ -66,6 +60,7 @@ public class RadialMenuItem : VisualElement
 
     List<Label> internalLabels = new();
     List<string> inventoryDisplay = new();
+    public List<Action> inventoryActions = new();
 
     int m_segmentHover = -1;
     bool mouseCapture = false;
@@ -174,22 +169,29 @@ public class RadialMenuItem : VisualElement
     private static void OnNavIntercept(NavigationSubmitEvent evt)
     {
         RadialMenuItem element = (RadialMenuItem)evt.currentTarget;
-        element.active = true;
-        element.MarkDirtyRepaint();
+        OnSetActive(element,false);
     }
 
     private static void OnClickIntercept(PointerDownEvent evt)
     {
         RadialMenuItem element = (RadialMenuItem)evt.currentTarget;
-        element.active = true;
+        OnSetActive(element,true);
+    }
+
+    private static void OnSetActive(RadialMenuItem element, bool active)
+    {
+        element.active = active;
         element.MarkDirtyRepaint();
+        if (!active)
+        {
+            element.InvokeEvent();
+        }
     }
 
     private static void OnClickRelease(PointerUpEvent evt)
     {
         RadialMenuItem element = (RadialMenuItem)evt.currentTarget;
-        element.active = false;
-        element.MarkDirtyRepaint();
+        OnSetActive(element,false);
     }
 
     private static void MouseOut(MouseOutEvent evt)
@@ -228,10 +230,6 @@ public class RadialMenuItem : VisualElement
 
         m_segmentHover = (int)(deg / DegreesPerSegment);
         internalLabels.ForEach(label => label.style.color = Color.white);
-        //if (m_segmentHover >= 0)
-        //{
-        //    internalLabels[m_segmentHover].style.color = Color.red;
-        //}
 
     }
 
@@ -373,6 +371,19 @@ public class RadialMenuItem : VisualElement
         {
             internalLabels[i].text = inventory[i];
         }
+    }
 
+    public void PushInventory(List<string> inventory,List<Action> actions)
+    {
+        PushInventory(inventory);
+        inventoryActions = actions;
+    }
+
+    public void InvokeEvent()
+    {
+        if(m_segmentHover >= 0 && m_segmentHover < inventoryActions.Count)
+        {
+            inventoryActions[m_segmentHover].Invoke();
+        }
     }
 }
