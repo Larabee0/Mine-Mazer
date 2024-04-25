@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class Motes : UIToolkitBase
 {
     private const float MoteDisplayTime = 1.5f;
-    private const int MoteOffScreenPixels = 900;
+    private const int MoteOffScreenSpeed = 400;
 
     private PlayerUIController coroutineSource;
     private Coroutine moteRunCoroutine;
@@ -44,13 +44,15 @@ public class Motes : UIToolkitBase
 
     private void OnItemPickUp(Item item, int arg2)
     {
-        if(ItemUtility.IsGoalable(item))
+        var element = coroutineSource.CompendiumUI.CompendiumItems.Find(element => element.targetItem == item && !element.shownMote);
+        ItemUtility.UpdateQuantityGoal(item);
+        if (ItemUtility.IsGoalable(item) && element  != null)
         {
-            ItemUtility.UpdateQuantityGoal(item);
-            items.Enqueue(new() { item = item, itemCount = arg2, target = ItemUtility.GetItemQuantityGoal(item) });
+            element.shownMote = true;
+            items.Enqueue(new() { item = item, itemCount = arg2, target = ItemUtility.GetItemQuantityGoal(item), newItem = true });
             RunMoteCoroutine();
         }
-    }
+    }           
 
 
     private void OnHitGoal(Item item, int arg2, int arg3)
@@ -77,24 +79,35 @@ public class Motes : UIToolkitBase
     private IEnumerator MoteCoroutine()
     {
         yield return null;
-
+        bool first = true;
         while (displayingMotes.Count > 0 || items.Count > 0)
         {
             BulkAddMotes();
 
             for (int i = 0; i < displayingMotes.Count; i++)
             {
-                displayingMotes[i].style.top = -(i*3);
+                displayingMotes[i].style.top = (i*6);
                 yield return null;
             }
 
-            yield return new WaitForSeconds(MoteDisplayTime);
-            var disposal = displayingMotes.Dequeue();
-            disposal.style.top = 1*3;
-            for (int i = 0; i < MoteOffScreenPixels; i++)
+            if (first)
             {
-                disposal.style.left = -i;
+                first = false;
+                yield return new WaitForSeconds(MoteDisplayTime);
+            }
+            else
+            {
+                yield return new WaitForSeconds(MoteDisplayTime*0.25f);
+            }
+            
+            var disposal = displayingMotes.Pop();
+            disposal.style.top = (int)disposal.style.top.value.value + (1 *6);
+            float offset = -1;
+            while (IsElementOnScreen(RootVisualElement.parent,disposal))
+            {
+                disposal.style.left = offset;
                 yield return null;
+                offset-=Time.deltaTime * MoteOffScreenSpeed;
             }
             RootVisualElement.Remove(disposal);
         }
@@ -104,22 +117,27 @@ public class Motes : UIToolkitBase
 
     private void BulkAddMotes()
     {
-        List<ItemGetMote> goals = new();
+        Stack<ItemGetMote> goals = new();
         ItemGetMote moteForDisplay;
         while (items.Count > 10)
         {
             moteForDisplay = items.Dequeue();
             if (moteForDisplay.hitGoal)
             {
-                goals.Add(moteForDisplay);
+                goals.Push(moteForDisplay);
             }
         }
         while(items.Count > 0)
         {
-            goals.Add(items.Dequeue());
+            goals.Push(items.Dequeue());
         }
         
-        goals.ForEach(ele => displayingMotes.Add(AddMote(ele)));
+        while(goals.Count > 0) {
+            ItemGetMote element = goals.Pop();
+            displayingMotes.Add(AddMote(element));
+        }
+
+        //goals.ForEach(ele => displayingMotes.Add(AddMote(ele)));
 
     }
 
@@ -147,6 +165,16 @@ public class Motes : UIToolkitBase
 
 
         return container;
+    }
+
+    public static bool IsElementOnScreen(VisualElement pScreenRoot, VisualElement pElement)
+    {
+        //Detect if any portion of it IS on screen
+        var overlaps = pScreenRoot.worldBound.Overlaps(pElement.worldBound);
+        return overlaps;
+        //See if any portion of it is NOT on screen
+        //return pElement.worldBound.x <= 0 || pElement.worldBound.xMax >= pScreenRoot.worldBound.width ||
+        //    pElement.worldBound.yMin <= 0 || pElement.worldBound.yMax >= pScreenRoot.worldBound.height;
     }
 }
 

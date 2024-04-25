@@ -22,7 +22,7 @@
             <ui:Label tabindex="-1" text="Current Objectives" display-tooltip-when-elided="true" name="ObjectiveText" picking-mode="Ignore" class="waypointname" style="-unity-text-align: middle-center; position: absolute; top: -43px; left: 7px; background-color: rgba(61, 75, 152, 0.13); height: 90px; width: 636px; flex-wrap: wrap; white-space: normal;" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="Mote" picking-mode="Ignore" style="background-color: rgba(0, 0, 0, 0); width: 400px; height: 96px; top: 5%; position: absolute; left: 2%; align-items: flex-start; display: flex;" />
+    <ui:VisualElement name="Mote" picking-mode="Ignore" style="background-color: rgba(0, 0, 0, 0); width: 400px; height: 96px; top: 5%; position: absolute; left: 2%; align-items: flex-start; display: flex; max-width: 400px;" />
     <ui:VisualElement picking-mode="Ignore" name="Overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; display: flex;">
         <ui:VisualElement name="Inventory" picking-mode="Ignore" style="background-color: rgba(0, 0, 0, 0); justify-content: center; align-items: center; display: none;">
             <RadialMenuItem name="RadialInventory" radius="1" background="#FFFFFFFF" divisions="#FFFFFFFF" lineThickness="200" menuBackgroundColor="#434243FF" menuDivisionColor="#FFFFFFFF" focusable="true" style="width: 600px; height: 600px;" />

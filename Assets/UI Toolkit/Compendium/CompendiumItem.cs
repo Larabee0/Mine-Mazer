@@ -17,6 +17,8 @@ public class CompendiumItem : IComparable<CompendiumItem>
     private int curCount;
     private Label boundLabel;
 
+    public bool shownMote= false;
+
     public int CompareTo(CompendiumItem other)
     {
         return order.CompareTo(other.order);
