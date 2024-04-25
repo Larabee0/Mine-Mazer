@@ -60,7 +60,7 @@ public class Inventory : MonoBehaviour
         {
             return;
         }
-
+        PlayerUIController.Instance.CompendiumUI.enabled = true;
     }
 
     private void Start()

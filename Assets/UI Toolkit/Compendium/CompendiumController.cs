@@ -1,3 +1,4 @@
+using MazeGame.Input;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ public class CompendiumController : UIToolkitBase
     {
         compendiumRef = compendium;
         Query();
+        Bind();
     }
 
     public override void Query()
@@ -32,8 +34,30 @@ public class CompendiumController : UIToolkitBase
 
     public override void Bind()
     {
-        
+        InputManager.Instance.advanceDialogueButton.OnButtonReleased += OnAdvancedDialogue;
     }
+
+    private void OnAdvancedDialogue()
+    {
+        if (Open)
+        {
+            SetActive(false);
+        }
+    }
+
+    public void SetActive(bool active)
+    {
+        RootVisualElement.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
+        if (active)
+        {
+            InputManager.Instance.UnlockPointer();
+        }
+        else
+        {
+            InputManager.Instance.LockPointer();
+        }
+    }
+
 
     public void UpdateParts()
     {

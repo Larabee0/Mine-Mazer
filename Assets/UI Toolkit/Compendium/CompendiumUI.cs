@@ -16,7 +16,7 @@ public class CompendiumUI : MonoBehaviour
 
     private void Start()
     {
-        compendiumController = new CompendiumController(document.rootVisualElement,this);
+        compendiumController = new CompendiumController(document.rootVisualElement.Q("Compendium"),this);
         compendiumController.UpdateParts();
         InputManager.Instance.SetUIToolkitFocus();
         if (Inventory.Instance && !forceShowAll)
@@ -30,7 +30,10 @@ public class CompendiumUI : MonoBehaviour
                 compItem.OnTargetItemValueChanged(1);
             });
         }
+
+        compendiumController.SetActive(false);
     }
+
 
     private void OnItemPickUp(Item item, int quantity)
     {
@@ -41,5 +44,10 @@ public class CompendiumUI : MonoBehaviour
                 compItem.OnTargetItemValueChanged(quantity);
             }
         });
+    }
+
+    public void SetCompendiumUIActive(bool active)
+    {
+        compendiumController.SetActive(active);
     }
 }
