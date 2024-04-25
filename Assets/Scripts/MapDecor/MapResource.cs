@@ -1,8 +1,6 @@
 using MazeGame.Input;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Flags]
@@ -36,109 +34,6 @@ public enum ItemCategory
     Lumenite,
     Wood,
     Quest
-}
-
-public static class ItemUtility
-{
-    private static readonly Dictionary<ItemCategory, HashSet<Item>> categoryToItems = new()
-    {
-        {
-            ItemCategory.Crystal, new ()
-            {
-                Item.LumenCrystal,
-                Item.Antarticite,
-                Item.Cinnabite
-            }
-        },
-
-        {
-            ItemCategory.Mushroom, new ()
-            {
-                Item.GoldenTrumpetMycelium,
-                Item.Versicolor,
-                Item.VelvetBud
-            }
-        },
-
-        {
-            ItemCategory.Equippment, new ()
-            {
-                Item.Torch,
-                Item.Pickaxe,
-                Item.StagnationBeacon,
-                Item.Soup
-            }
-        },
-
-        {
-            ItemCategory.Lumenite, new ()
-            {
-                Item.Eudie
-            }
-        },
-
-        {
-            ItemCategory.Wood, new ()
-            {
-                Item.FicusWood
-            }
-        },
-        {
-            ItemCategory.Quest, new()
-            {
-                Item.BrokenHeart,
-                Item.ClockworkMechanism,
-                Item.GlanceiteResonator,
-                Item.HeartNode,
-                Item.SanctumMachine
-            }
-        }
-    };
-
-    private static Dictionary<Item, ItemCategory> itemToCategory = null;
-
-    public static Dictionary<ItemCategory, HashSet<Item>> CategoryToItems => categoryToItems;
-
-    public static Dictionary<Item, ItemCategory> ItemToCategory
-    {
-        get
-        {
-            if (itemToCategory == null)
-                InitItemToCategory();
-
-            return itemToCategory;
-        }
-    }
-
-    public static ItemCategory GetItemCategory(Item item)
-    {
-        if (itemToCategory == null)
-            InitItemToCategory();
-
-        return itemToCategory[item];
-    }
-
-    public static HashSet<Item> GetItemsInCategory(ItemCategory category)
-    {
-        return new HashSet<Item>(CategoryToItems[category]);
-    }
-
-    private static void InitItemToCategory()
-    {
-        ItemCategory max = Enum.GetValues(typeof(ItemCategory)).Cast<ItemCategory>().Max();
-        itemToCategory = new();
-        for (ItemCategory i = 0; i <= max; i++)
-        {
-            if(CategoryToItems.TryGetValue(i, out var category))
-            {
-                foreach(var item in category)
-                {
-                    itemToCategory.TryAdd(item, i);
-                }
-            }
-        }
-
-    }
 }
 
 [Serializable]

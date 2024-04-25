@@ -41,6 +41,8 @@ public class Inventory : MonoBehaviour
     [SerializeField] private float itemNameTime = 1f;
 
     public Action<Item, int> OnItemPickUp;
+    public Action OnItemPickUpSfx;
+    public Action OnItemRemoveSfx;
 
     private void Awake()
     {
@@ -68,6 +70,7 @@ public class Inventory : MonoBehaviour
             AddItem(defaultItems[i].ItemStats.type, 1, Instantiate(defaultItems[i]));
         }
     }
+
     private void OnEnable()
     {
         if (InputManager.Instance != null)
@@ -86,7 +89,6 @@ public class Inventory : MonoBehaviour
         }
     }
 
-
     private void OpenInventory()
     {
         if(inventory.Count > 0)
@@ -95,9 +97,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-
-
-    public void AddItem(Item itemType, int quantity, MapResource itemInstance)
+    public void AddItem(Item itemType, int quantity, MapResource itemInstance, bool sfx = true)
     {
         itemInstance.SetColliderActive(false);
         itemInstance.SetMapResourceActive(false);
@@ -117,6 +117,10 @@ public class Inventory : MonoBehaviour
         itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
         itemInstance.transform.localScale = itemInstance.heldScaleOffset;
         OnItemPickUp?.Invoke(itemType, inventory[itemType]);
+        if (sfx)
+        {
+            OnItemPickUpSfx?.Invoke();
+        }
     }
 
     public bool TryRemoveItem(Item item, int quantity)
@@ -138,7 +142,7 @@ public class Inventory : MonoBehaviour
 
         return false;
     }
-    public bool TryRemoveItem(Item item, int quantity, out MapResource itemInstance)
+    public bool TryRemoveItem(Item item, int quantity, out MapResource itemInstance, bool sfx = true)
     {
         itemInstance = null;
         if (inventory.ContainsKey(item))
@@ -159,6 +163,11 @@ public class Inventory : MonoBehaviour
                 assets.Remove(item);
             }
             UpdateInventory();
+            if (sfx)
+            {
+                OnItemRemoveSfx?.Invoke();
+            }
+            
             return true;
         }
 

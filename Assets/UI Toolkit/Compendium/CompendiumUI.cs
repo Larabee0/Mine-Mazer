@@ -13,6 +13,7 @@ public class CompendiumUI : MonoBehaviour
     public List<CompendiumItem> CompendiumItems =>compendiumItems;
     private CompendiumController compendiumController;
 
+
     private void Start()
     {
         compendiumController = new CompendiumController(document.rootVisualElement,this);

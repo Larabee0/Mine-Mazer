@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Mote" picking-mode="Ignore" usage-hints="DynamicTransform, GroupTransform" style="background-color: rgb(67, 66, 67); flex-direction: row; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;">
+        <ui:VisualElement name="Icon" picking-mode="Ignore" style="background-color: rgba(0, 0, 0, 0); width: 64px; height: 64px;" />
+        <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <ui:Label tabindex="-1" text="Picked up {0} ({1} / {2})" display-tooltip-when-elided="true" name="MoteTitle" picking-mode="Ignore" style="-unity-font-style: bold; -unity-font-definition: url(&apos;project://database/Assets/Fungus/Fonts/Amaranth/Amaranth-Regular%20SDF.asset?fileID=11400000&amp;guid=cb56843408cfcf54a894f7f7d707020f&amp;type=2#Amaranth-Regular SDF&apos;); color: rgb(255, 255, 255);" />
+            <ui:Label tabindex="-1" text="New compendium page unlocked!" display-tooltip-when-elided="true" name="MoteDescription" picking-mode="Ignore" style="-unity-font-definition: url(&apos;project://database/Assets/Fungus/Fonts/Amaranth/Amaranth-Regular%20SDF.asset?fileID=11400000&amp;guid=cb56843408cfcf54a894f7f7d707020f&amp;type=2#Amaranth-Regular SDF&apos;); color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

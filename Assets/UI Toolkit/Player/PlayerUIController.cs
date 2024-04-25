@@ -30,11 +30,13 @@ public class PlayerUIController : MonoBehaviour
     }
 
     [SerializeField] private UIDocument playerUi;
+    public VisualTreeAsset ItemMote;
 
     private VisualElement Root => playerUi.rootVisualElement;
 
     private SettingsMenuController settingsMenu;
     private InventoryController inventoryMenu;
+    private Motes motes;
     private VisualElement pauseButtonContainer;
     private Button resume;
     private Button settings;
@@ -85,6 +87,7 @@ public class PlayerUIController : MonoBehaviour
         mainMenu = Root.Q<Button>("MainMenuButton");
 
         inventoryMenu = new(Root.Q("Inventory"));
+        motes = new(Root.Q("Mote"), this);
 
         settings.RegisterCallback<ClickEvent>(ev => OpenSettingsMenu());
         settings.RegisterCallback<NavigationSubmitEvent>(ev => OpenSettingsMenu());
@@ -135,6 +138,24 @@ public class PlayerUIController : MonoBehaviour
         if (InputManager.Instance != null)
         {
             InputManager.Instance.pauseButton.OnButtonReleased -= TogglePauseMenu;
+        }
+    }
+
+    public void BindUnBindMotes(bool bind)
+    {
+        if (bind)
+        {
+            if (Inventory.Instance)
+            {
+                motes.BindInventory();
+            }
+        }
+        else
+        {
+            if (Inventory.Instance)
+            {
+                motes.UnbindInventory();
+            }
         }
     }
 

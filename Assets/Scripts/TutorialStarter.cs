@@ -117,6 +117,7 @@ public class TutorialStarter : MonoBehaviour
         InteractMessage.Instance.AllowAutoInteract(true);
         FindObjectOfType<Eudie_Tutorial>().ShowEudieWaypoint(skipToPickUpEudie);
         Hunger.Instance.OnStarvedToDeath += StarvedToDeath;
+        PlayerUIController.Instance.BindUnBindMotes(true);
     }
 
     private IEnumerator DelayedFlowChartExecute(string command, float delayTime)
