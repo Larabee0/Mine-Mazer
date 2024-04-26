@@ -1,4 +1,5 @@
 using MazeGame.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,7 +44,10 @@ public class TradingUI : MonoBehaviour
     private int takeQuantity;
     private int giveQuantity;
 
+    private Dictionary<Item, int> specificMultiTradeTargets;
+
     public BoolPluse OnTradeClose;
+
 
     private void Awake()
     {
@@ -80,6 +84,22 @@ public class TradingUI : MonoBehaviour
         InternalOpen();
     }
 
+    public void OpenTradingMulti(Item[] targets, MapResource give, int[] takeQuantities, int giveQuantity, string tradingText)
+    {
+        specific = true;
+        targetText = tradingText;
+        this.giveQuantity = giveQuantity;
+        givenItem = give;
+
+        specificMultiTradeTargets = new(targets.Length);
+        for (int i = 0; i < targets.Length; i++)
+        {
+            specificMultiTradeTargets.TryAdd(targets[i], takeQuantities[i]);
+        }
+
+        InternalOpen();
+    }
+
     private void InternalOpen()
     {
         InputManager.Instance.SetUIToolkitFocus();
@@ -112,6 +132,16 @@ public class TradingUI : MonoBehaviour
         if (!specific)
         {
             tradablePlayerItems = Inventory.Instance.GetAllItemsMatchingCategory(targetCategory);
+        }
+        else if(specific && specificMultiTradeTargets !=null&& specificMultiTradeTargets.Count > 0)
+        {
+            foreach (var item in specificMultiTradeTargets)
+            {
+                if(Inventory.Instance.TryGetItem(item.Key,out KeyValuePair<Item, int> pair))
+                {
+                    tradablePlayerItems.Add(pair.Key, pair.Value);
+                }
+            }
         }
         else if (Inventory.Instance.TryGetItem(targetItem, out KeyValuePair<Item, int> pair))
         {
@@ -147,6 +177,7 @@ public class TradingUI : MonoBehaviour
             cur.RegisterCallback<NavigationSubmitEvent>(ev => TradeButtonPress(item));
         });
         AddCancel();
+        buttonContainer[0].Focus();
     }
 
     private void AddCancel()
@@ -170,17 +201,27 @@ public class TradingUI : MonoBehaviour
 
     private void TradeButtonPress(Item item)
     {
-        bool withdrawn = (Inventory.Instance.CanTrade(item, takeQuantity)
-            && Inventory.Instance.TryRemoveItem(item, takeQuantity));
+        if(specificMultiTradeTargets != null && specificMultiTradeTargets.Count > 1)
+        {
+            takeQuantity = specificMultiTradeTargets[item];
+        }
+        bool withdrawn = Inventory.Instance.CanTrade(item, takeQuantity)
+            && Inventory.Instance.TryRemoveItem(item, takeQuantity);
 
-        if (withdrawn && givenItem != null)
+        
+        if(withdrawn && specificMultiTradeTargets != null && specificMultiTradeTargets.Count > 1)
+        {
+            specificMultiTradeTargets.Remove(item);
+            buttonContainer.Clear();
+            Repaint();
+            return;
+        }
+        else if (withdrawn && givenItem != null)
         {
             Inventory.Instance.AddItem(givenItem.ItemStats.type, giveQuantity, Instantiate(givenItem));
 
             Inventory.Instance.TryMoveItemToHand(givenItem.ItemStats.type);
         }
-
-        CloseTrading(withdrawn);
     }
 
     private void CancelTrade()

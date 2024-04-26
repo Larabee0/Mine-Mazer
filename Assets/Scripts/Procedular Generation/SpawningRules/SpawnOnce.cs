@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class SpawnOnce : SectionSpawnBaseRule
 {
     [SerializeField]private bool hasBeenSpawned = false;
@@ -14,5 +15,10 @@ public class SpawnOnce : SectionSpawnBaseRule
     public override void OnSpawned()
     {
         hasBeenSpawned=true;
+    }
+    public override void ResetRule()
+    {
+        base.ResetRule();
+        hasBeenSpawned = false;
     }
 }

@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2057813242251501966
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1579032248006573439}
+  - component: {fileID: 6330203279450020895}
+  - component: {fileID: 966454496292213871}
+  m_Layer: 0
+  m_Name: Compendium
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1579032248006573439
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057813242251501966}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -52.271935, y: 49.838593, z: 42.94792}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 36
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6330203279450020895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057813242251501966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 3689ea8d69b6a6c449ea0bad9cf3162f, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: c04a4b87632df1b468fa16908f9e2f68,
+    type: 3}
+  m_SortingOrder: 0
+--- !u!114 &966454496292213871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057813242251501966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91acdbfd43c6aaa4694a2055aa2aedad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  document: {fileID: 6330203279450020895}
+  forceShowAll: 1
+  compendiumItems:
+  - title: Anti-Lumen
+    category: Mine Features
+    summary: "A dark crystal that sucks in light and warps magical energy. On its
+      own it can\u2019t do much, but combining it with other crystals can lead to
+      powerful effects"
+    body: 'Anti-Lumen is the natural antithesis to Lumen, and tends to form in areas
+      nearer the outskirts of the mines. While research has been conducted into its
+      nature, much of it is unsubstantial and inconclusive. While Anti-Lumen is used
+      in some mine technology, it is generally advised that miners avoid Anti-Lumen
+      where possible, as prolonged exposure has been known to have long-term effects
+      on both human and Lumenite health. Anti-Lumen has a similar hardness to Lumen,
+      but an inverted molecular structure. '
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 0
+  - title: Lumen
+    category: Mine Features
+    summary: 'A pale, glowing crystal species that absorbs magic and can store an
+      amount equivalent to its size. The light of these crystals is believed to reveal
+      hidden secrets.  '
+    body: "Lumen is, according to documents recovered from the first miners, a \u2018condensed
+      essence of light and creation itself\u2019. From research conducted into the
+      nature of Lumen, it has been revealed to be a form of condensed energy that
+      is able to coalesce and gather in a crystalline formation. The crystal has
+      a Mohs hardness of approximately 8.5, however certain areas have been tested
+      up to a Mohs hardness of 10. There is much we do not know about Lumen still,
+      as it is a protected resource native to the mines, however its primary use
+      in modern times is as an energy source, with secondary uses in hidden communication
+      due to its fluorescent properties, and as a natural light source. "
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 0
+  - title: Antarcticite
+    category: Rocks, minerals and crystals
+    summary: A rare crystal only found in the coldest parts of the mines, said to
+      freeze anyone who touches it directly. Its uses are limited, but very powerful.
+    body: "Antarcticite is a rare deliquescent mineral that runs in the mine\u2019s
+      veins throughout sections affected by Frostbane- a supernatural affliction
+      caused by mineral deficiencies in cold, dry areas. It is typically found in
+      its crystallised form, however at sufficient temperatures it is able to become
+      an aqueous solution. It is extremely fragile, at a Mohs hardness of only 2.5.
+      Antarcticite has a variety of uses, but must be handled carefully due to risk
+      of becoming Frostbaned. Current uses include but are not limited to: food preservation,
+      cooking, luxury skincare, medical uses, sanitation, mixology and technological
+      use (when combined with Anti-Lumen). "
+    alwaysDisplay: 0
+    targetItem: 16
+    order: 1

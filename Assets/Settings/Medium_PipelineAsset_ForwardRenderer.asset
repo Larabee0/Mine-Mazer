@@ -68,12 +68,11 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: -4296918213116926193}
   - {fileID: -8061587081197298472}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_RendererFeatureMap: 0f6742b6a6475ec4d85c5b03437d1f9000000000000000000000000000000000
+  - {fileID: 6186814471396175902}
+  - {fileID: 465425807945876502}
+  m_RendererFeatureMap: 0f6742b6a6475ec4d85c5b03437d1f904556613af28fc55a1eb0d08afbfadb5516c4e96f4e867506
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
-  xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
     copyDepthPS: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
@@ -124,7 +123,6 @@ MonoBehaviour:
   m_Name: DepthNormalsFeature
   m_EditorClassIdentifier: 
   m_Active: 1
-  depthNormalsMaterial: {fileID: 0}
 --- !u!114 &6186814471396175902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,15 +138,13 @@ MonoBehaviour:
   m_Active: 0
   renderPassEvent: 300
   outlinesLayerMask:
+    serializedVersion: 2
     m_Bits: 2305
   outlinesOccluderLayerMask:
+    serializedVersion: 2
     m_Bits: 0
   screenSpaceOutlineSettings:
-    outlineColour:
-      r: 0
-      g: 0
-      b: 0
-      a: 1
+    outlineColour: {r: 0, g: 0, b: 0, a: 1}
     outlineScale: 1
     depthThreshold: 10
     robertsCrossMultiplier: 220
@@ -159,11 +155,7 @@ MonoBehaviour:
     colourFormat: 4
     depthBufferBits: 16
     filterMode: 2
-    backgroundColour:
-      r: 0
-      g: 0
-      b: 0
-      a: 1
+    backgroundColour: {r: 0, g: 0, b: 0, a: 1}
     perObjectData: 0
     enableDynamicBatching: 1
     enableInstancing: 1

@@ -57,6 +57,8 @@ GameObject:
   - component: {fileID: 5970146657793803476}
   - component: {fileID: 7622953529888497556}
   - component: {fileID: 7732520511089031286}
+  - component: {fileID: 5742931850889015204}
+  - component: {fileID: 6736478991911780736}
   m_Layer: 0
   m_Name: Angel
   m_TagString: Untagged
@@ -92,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 859.5, y: 608.5}
+  scrollPos: {x: 528, y: 612.5}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 404
@@ -104,7 +106,7 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 9100800188814863586}
+  - {fileID: 4851527555704932999}
   selectedCommands: []
   variables:
   - {fileID: 282212345067375591}
@@ -164,7 +166,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: 'Hi-ho, dear! My name''s Angel. '
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -191,7 +193,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Do you have any mushrooms? I can make them into soup for you!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -216,8 +218,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 116.5
-    y: -123
+    x: 115.5
+    y: -125
     width: 143
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -229,6 +231,8 @@ MonoBehaviour:
   commandList:
   - {fileID: 7212493351740248664}
   - {fileID: 3069938879109460689}
+  - {fileID: 6736478991911780736}
+  - {fileID: 5742931850889015204}
   - {fileID: 6440600393494728190}
   suppressAllAutoSelections: 0
 --- !u!114 &7212493351740248664
@@ -272,9 +276,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 6
   indentLevel: 0
-  storyText: Hi-hope you enjoy!
+  storyText: Here you go!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -331,7 +335,7 @@ MonoBehaviour:
   storyText: Of course! I make the best soup in the mine! I can make soup out of
     anything!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -358,7 +362,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Mushrooms... crystals... even Lumen!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -414,7 +418,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: I saw plenty! But not today. It's been quiet today.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -442,7 +446,7 @@ MonoBehaviour:
   storyText: The last miners I saw were very rude though... I'm glad you're not like
     them!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -525,7 +529,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Hi-ho yes!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -553,7 +557,7 @@ MonoBehaviour:
   storyText: They had a map to the Core Chamber... I hi-hope the dears didn't go
     there...
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -581,7 +585,7 @@ MonoBehaviour:
   storyText: One of them wanted to scrape it out of our heads. Another wanted to
     burst the veins.
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -609,7 +613,7 @@ MonoBehaviour:
   storyText: 'They wanted more Lumen. I heard them talking outside about getting
     it.  '
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -902,7 +906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: Angel
-  nameColor: {r: 1, g: 1, b: 1, a: 1}
+  nameColor: {r: 0.764151, g: 0.49381453, b: 0.49381453, a: 1}
   soundEffect: {fileID: 0}
   portraits: []
   portraitsFace: 0
@@ -1496,7 +1500,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: Hi-hope you enjoy!
   description: 
-  character: {fileID: 0}
+  character: {fileID: 7925488784993569473}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -1528,6 +1532,61 @@ MonoBehaviour:
     stringVal: 
   startIndex: 0
   callMode: 0
+--- !u!114 &5742931850889015204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4646611884927106549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 54
+  indentLevel: 0
+  storyText: Anyway, hi-hope you enjoy!
+  description: 
+  character: {fileID: 7925488784993569473}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &6736478991911780736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4646611884927106549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 55
+  indentLevel: 0
+  storyText: Make sure to eat it soon! If your hunger meter gets too low, you could
+    die!
+  description: 
+  character: {fileID: 7925488784993569473}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
 --- !u!1001 &382977725744651637
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1645,19 +1704,23 @@ MonoBehaviour:
   tradeOptions:
   - tradeUIText: Trade 1 Mushroom for 1 Mushroom Soup
     tradeCloseSuccessBlock: Give Crystal
+    category: 1
     specific: 0
     specificItem: 0
-    category: 1
     takeQuantity: 1
-    givenItem: {fileID: 5061587268487968223, guid: 27d472563310f3f429b08d25582fd113,
+    specificItems: 
+    takeQuantities: 
+    givenItem: {fileID: 1606485108606532387, guid: 27d472563310f3f429b08d25582fd113,
       type: 3}
     giveQuantity: 1
   - tradeUIText: Trade 1 Crystal for 1 Velvet Bud
     tradeCloseSuccessBlock: Give mushrooms
+    category: 0
     specific: 0
     specificItem: 0
-    category: 0
     takeQuantity: 1
+    specificItems: 
+    takeQuantities: 
     givenItem: {fileID: 7997864154563303630, guid: 0a09be007c6dd7c4b869b76bf64edde5,
       type: 3}
     giveQuantity: 1

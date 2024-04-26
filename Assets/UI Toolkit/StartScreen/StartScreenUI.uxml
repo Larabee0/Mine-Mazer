@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/InWorldWaypoints/IWWSS.uss?fileID=7433441132597879392&amp;guid=0eeddcfd0d863f14d941cff7a007fb69&amp;type=3#IWWSS" />
+    <Style src="project://database/Assets/UI%20Toolkit/Trading/TradingSS.uss?fileID=7433441132597879392&amp;guid=3ccd29607d44ac44991d679e9d9659f8&amp;type=3#TradingSS" />
+    <ui:VisualElement name="Overlay" picking-mode="Ignore" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center;">
+        <ui:VisualElement name="StartScreenButtonContainer" style="align-self: flex-start; margin-top: 25%; margin-left: 4%; background-color: rgba(255, 255, 255, 0.55); padding-top: 30px; padding-right: 30px; padding-left: 30px; border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px;">
+            <ui:Button text="Start" display-tooltip-when-elided="true" name="StartButton" class="TradeMainbutton" style="min-width: 350px;" />
+            <ui:Button text="Settings" display-tooltip-when-elided="true" name="SettingsButton" class="TradeMainbutton" style="min-width: 350px;" />
+            <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitButton" class="TradeMainbutton" style="min-width: 350px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

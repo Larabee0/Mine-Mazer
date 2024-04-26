@@ -147,7 +147,15 @@ namespace MazeGame.Input
 
         public ButtonEventContainer interactButton;
 
+        public ButtonEventContainer placeItemButton;
+
+        public ButtonEventContainer mineButton;
+
         public ButtonEventContainer advanceDialogueButton;
+
+        public ButtonEventContainer pauseButton;
+
+        public ButtonEventContainer inventoryButton;
 
         private void Awake()
         {
@@ -166,7 +174,7 @@ namespace MazeGame.Input
             playerControls = new PlayerControls();
             Build();
 
-            LockPointer();
+            // LockPointer();
             // bind internal controls to the action map.
             Bind();
 
@@ -193,7 +201,15 @@ namespace MazeGame.Input
 
             interactButton = new(this, PlayerActions.Interact);
 
+            placeItemButton = new(this, PlayerActions.PlaceItem);
+
+            mineButton = new(this, PlayerActions.Mine);
+
             advanceDialogueButton = new(this, DialogueActions.AdvanceDialogue);
+
+            pauseButton = new(this, PlayerActions.Pause);
+
+            inventoryButton = new(this, PlayerActions.Inventory);
 
            // navigationSubmitButton = new(this, eventSystemInput.submit.action);
         }
@@ -213,10 +229,14 @@ namespace MazeGame.Input
                 northButton.Bind();
                 southButton.Bind();
                 interactButton.Bind();
+                mineButton.Bind();
+                placeItemButton.Bind();
                 advanceDialogueButton.Bind();
+                pauseButton.Bind();
+                inventoryButton.Bind();
 
                 PlayerActions.Reload.canceled += ReloadScene;
-                northButton.OnButtonReleased += Quit;
+                //northButton.OnButtonReleased += Quit;
             }
         }
 
@@ -235,10 +255,14 @@ namespace MazeGame.Input
                 northButton.Unbind();
                 southButton.Unbind();
                 interactButton.Unbind();
+                mineButton.Unbind();
+                placeItemButton.Unbind();
                 advanceDialogueButton.Unbind();
+                pauseButton.Unbind();
+                inventoryButton.Unbind();
 
                 PlayerActions.Reload.canceled -= ReloadScene;
-                northButton.OnButtonReleased -= Quit;
+                //northButton.OnButtonReleased -= Quit;
             }
         }
 
@@ -247,16 +271,12 @@ namespace MazeGame.Input
             SceneManager.LoadScene(0);
         }
 
-        private void Quit()
-        {
-            Application.Quit();
-        }
-
         public void UnlockPointer()
         {
             Cursor.lockState = CursorLockMode.Confined;
             PlayerActions.Disable();
             DialogueActions.Enable();
+            Debug.Log("Unlock Pointer");
         }
 
         public void LockPointer()
@@ -264,6 +284,19 @@ namespace MazeGame.Input
             Cursor.lockState = CursorLockMode.Locked;
             PlayerActions.Enable();
             DialogueActions.Disable();
+            Debug.Log("Lock Pointer");
+        }
+
+        public void SetPointerLocked(bool locked)
+        {
+            if(locked)
+            {
+                LockPointer();
+            }
+            else
+            {
+                UnlockPointer();
+            }
         }
 
         public void SetUIToolkitFocus()

@@ -11,6 +11,35 @@ using UnityEngine;
 public static class ExtraUtilities
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static float3 TransformDirection(in this float4x4 m, in float3 d) => math.rotate(m, d);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static float3 TransformPoint(in this float4x4 m, in float3 p) => math.mul(m, new float4(p, 1)).xyz;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static float3 InverseTransformPoint(in this float4x4 m, in float3 p) => math.mul(math.inverse(m), new float4(p, 1)).xyz;
+    public static T Pop<T>(this List<T> list)
+    {
+        T result = list[^1];
+        list.RemoveAt(list.Count - 1);
+        return result;
+    }
+
+    public static T Dequeue<T>(this List<T> list)
+    {
+        T result = list[0];
+        list.RemoveAt(0);
+        return result;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Color InverseLerp(Color a, Color b, Color value)
+    {
+        return (Vector4)math.unlerp((Vector4)a, (Vector4)b, (Vector4)value);
+        //return (Color)(Vector4)(((float4)(Vector4)value - (float4)(Vector4)a) / ((float4)(Vector4)b - (float4)(Vector4)a));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float3 Translation(this in float4x4 m) => new(m.c3.x, m.c3.y, m.c3.z);
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static quaternion Rotation(this in float4x4 m) => new(math.orthonormalize(new float3x3(m)));

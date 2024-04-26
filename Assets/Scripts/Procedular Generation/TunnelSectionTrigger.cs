@@ -34,7 +34,7 @@ public class TunnelSectionTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            generator.PlayerEnterSection(sectionOwner);
+            generator.PlayerEnterSection(sectionOwner.treeElementOwner);
         }
     }
 
@@ -43,7 +43,7 @@ public class TunnelSectionTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             sectionOwner.explored = true;
-            generator.PlayerExitSection(sectionOwner);
+            generator.PlayerExitSection(sectionOwner.treeElementOwner);
         }
     }
 }

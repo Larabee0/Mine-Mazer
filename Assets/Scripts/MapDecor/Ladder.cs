@@ -23,18 +23,28 @@ public class LadderScript : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         FPSInput = GetComponent<Improved_Movement>();
         inside = false;
-        newInputSystem = InputManager.Instance != null;
+        
         Ground = gameObject.GetComponent<Improved_Movement>().groundCheck;
 
+    }
+
+    private void OnEnable()
+    {
+        newInputSystem = InputManager.Instance != null;
         if (newInputSystem)
         {
             InputManager.Instance.southButton.OnButtonHeld += OnJumpHeld;
         }
     }
+
     private void OnDisable()
     {
-        InputManager.Instance.southButton.OnButtonHeld -= OnJumpHeld;
+        if (newInputSystem)
+        {
+            InputManager.Instance.southButton.OnButtonHeld -= OnJumpHeld;
+        }
     }
+
     private void OnJumpHeld()
     {
         if (inside)
