@@ -4,9 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonInteractable : MonoBehaviour, IInteractable
+public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
 {
+    [SerializeField] private Transform doorPivot;
+    [SerializeField] private Vector2 doorEndOfTravelPoints;
+    [SerializeField] private float doorSpeed;
+
+    private float doorTarget;
+
     public Action OnSuccessfulActivation;
+    private void Awake()
+    {
+        doorTarget = doorEndOfTravelPoints.x;
+        doorPivot.localEulerAngles = new Vector3(0, doorTarget, 0);
+        StartCoroutine(DoorPivot());
+    }
 
     public string GetToolTipText()
     {
@@ -39,4 +51,35 @@ public class ButtonInteractable : MonoBehaviour, IInteractable
     {
         return false;
     }
+
+    public void HoverOn()
+    {
+        if(doorTarget == doorEndOfTravelPoints.x)
+        {
+            doorTarget = doorEndOfTravelPoints.y;
+        }
+    }
+
+    public void HoverOff()
+    {
+        if (doorTarget == doorEndOfTravelPoints.y)
+        {
+            doorTarget = doorEndOfTravelPoints.x;
+        }
+    }
+
+    private IEnumerator DoorPivot()
+    {
+        while (true)
+        {
+            while(doorPivot.localEulerAngles.y != doorTarget)
+            {
+                float move = Mathf.MoveTowards(doorPivot.localEulerAngles.y, doorTarget, doorSpeed* Time.deltaTime);
+                doorPivot.localEulerAngles = new Vector3(0, move, 0);
+                yield return null;
+            }
+            yield return null;
+        }
+    }
+
 }

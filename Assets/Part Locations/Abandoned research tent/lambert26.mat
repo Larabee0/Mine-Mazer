@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: lambert28
+  m_Name: lambert26
   m_Shader: {fileID: -6465566751694194690, guid: cff4ea1aae77540419307116831bac22,
     type: 3}
   m_Parent: {fileID: 0}
@@ -26,7 +26,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 46ac8759a46992f44b91c2bc93defb45, type: 3}
+        m_Texture: {fileID: 2800000, guid: 584b3ea1e3295bb4986eaec4a9a08c08, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -46,11 +46,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 72eec8b1c3e364d44b0ad19157337824, type: 3}
+        m_Texture: {fileID: 2800000, guid: b7876d27604108b45b647662a0bd5961, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: cf169b89d69586149b2ddcf07d7d1acc, type: 3}
+        m_Texture: {fileID: 2800000, guid: 18cf8c8d9712d944db05079c664f74cf, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -58,7 +58,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: c4e58841916779946bbd0f7fd9b16108, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2f8ef4ffd925d1e4fbbe334298979d68, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -97,7 +97,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _Depth_Sensitivity: 0.25
+    - _Depth_Sensitivity: 0.2
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -131,11 +131,11 @@ Material:
     - _BaseColour: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissionColour: {r: 1.8602223, g: 1.911947, b: 0.66490316, a: 1}
+    - _EmissionColour: {r: 2.8044086, g: 2.8335042, b: 1.1155773, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &3210751451021862328
+--- !u!114 &37690090731926382
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
