@@ -68,7 +68,9 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: -4296918213116926193}
   - {fileID: -8061587081197298472}
-  m_RendererFeatureMap: 0f6742b6a6475ec4d85c5b03437d1f90
+  - {fileID: 0}
+  - {fileID: 0}
+  m_RendererFeatureMap: 0f6742b6a6475ec4d85c5b03437d1f9000000000000000000000000000000000
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -105,7 +107,63 @@ MonoBehaviour:
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 2
-  m_DepthPrimingMode: 0
-  m_CopyDepthMode: 1
+  m_DepthPrimingMode: 1
+  m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &465425807945876502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25644bdb3601c4242bfad0c2230433b0, type: 3}
+  m_Name: DepthNormalsFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  depthNormalsMaterial: {fileID: 0}
+--- !u!114 &6186814471396175902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de8e02b5d5d8f14abf01f57ba423f8b, type: 3}
+  m_Name: ScreenSpaceOutlines
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  renderPassEvent: 300
+  outlinesLayerMask:
+    m_Bits: 2305
+  outlinesOccluderLayerMask:
+    m_Bits: 0
+  screenSpaceOutlineSettings:
+    outlineColour:
+      r: 0
+      g: 0
+      b: 0
+      a: 1
+    outlineScale: 1
+    depthThreshold: 10
+    robertsCrossMultiplier: 220
+    normalThreshold: 0.9
+    SteepAngleThreshold: 0.61
+    SteepAngleMultiplier: 200
+  viewSpaceNormalsTextureSettings:
+    colourFormat: 4
+    depthBufferBits: 16
+    filterMode: 2
+    backgroundColour:
+      r: 0
+      g: 0
+      b: 0
+      a: 1
+    perObjectData: 0
+    enableDynamicBatching: 1
+    enableInstancing: 1
