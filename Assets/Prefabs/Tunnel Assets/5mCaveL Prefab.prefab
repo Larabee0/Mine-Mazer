@@ -123,7 +123,6 @@ Transform:
   - {fileID: 8875732596309216907}
   - {fileID: 3642214236643538396}
   - {fileID: 4044642671252397881}
-  - {fileID: 6740803857328916955}
   - {fileID: 8154442802120674116}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -823,9 +822,10 @@ MonoBehaviour:
     strongKeep: 0
     hasLadder: 0
     isColony: 0
+    forceNotJunction: 0
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 36310
-  sanctumPartsSpawnPoint: {fileID: 6740803857328916955}
+  weakKeep: 0
   decorations: {fileID: 8154442802120674116}
   decorCoverage: 0
   decorationCount: 0
@@ -1496,6 +1496,7 @@ MonoBehaviour:
     strongKeep: 0
     hasLadder: 0
     isColony: 0
+    forceNotJunction: 0
   targetOrigin: {fileID: 0}
   showProceduralPoints: 0
   orientationRayLength: 0.2
@@ -1696,37 +1697,6 @@ Transform:
   m_GameObject: {fileID: 6688353426040330290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 9121428091712112800}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8443153242710104414
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6740803857328916955}
-  m_Layer: 0
-  m_Name: Sphere
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6740803857328916955
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8443153242710104414}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.897, y: 0.034, z: -4.754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

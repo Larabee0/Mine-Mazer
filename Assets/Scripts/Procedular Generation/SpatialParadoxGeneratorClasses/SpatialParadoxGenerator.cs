@@ -82,8 +82,8 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     [Header("Generation Settings")]
     [SerializeField] private int ringRenderDst = 3; 
     [SerializeField, Min(1)] private int maxDst = 3;
+    [SerializeField] private int dstBetweenJunctions = 5;
     [SerializeField, Range(0, 1)] private float breakableWallAtConnectionChance = 0.5f;
-    [SerializeField, Range(0, 1)] private float sanctumPartSpawnChance = 0.5f;
     private int sanctumPartCooldown;
     [Space]
     [SerializeField] private LayerMask tunnelSectionLayerMask;
@@ -98,6 +98,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private MapTreeElement lastExit;
     private bool forceBreakableWallAtConnections = false;
     private bool rejectBreakableWallAtConnections = false;
+    private bool initalAreaGeneration = false;
 
 
     private void Awake()
@@ -397,9 +398,8 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         rejectBreakableWallAtConnections = true;
 
         mapTree.Add(new() { curPlayerSection });
-
+        initalAreaGeneration = true;
         StartCoroutine(IncrementalBuilder(true));
-
         if (!runPostProcessLast)
         {
             StartCoroutine(PostProcessQueueInfinite());

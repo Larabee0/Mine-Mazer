@@ -7,9 +7,20 @@ using UnityEngine;
 public class SanctumPart : MapResource
 {
     [SerializeField] private Flowchart dialogue;
+    [SerializeField] private TunnelSection sectionParent;
+
+    protected override void Start()
+    {
+        sectionParent = GetComponentInParent<TunnelSection>();
+    }
 
     public override void Interact()
     {
+        if (sectionParent != null)
+        {
+            sectionParent.Keep = false;
+        }
+
         base.Interact();
         Inventory.Instance.TryMoveItemToHand(ItemStats.type);
         if (dialogue != null)

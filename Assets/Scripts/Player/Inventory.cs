@@ -37,7 +37,6 @@ public class Inventory : MonoBehaviour
     [SerializeField] private MapResource heldItem;
     [SerializeField] private Transform virtualhands;
     [SerializeField] private MapResource[] defaultItems;
-    [SerializeField] private MapResource[] sanctumparts;
     [SerializeField] private float itemNameTime = 1f;
 
     public Action<Item, int> OnItemPickUp;
@@ -308,18 +307,5 @@ public class Inventory : MonoBehaviour
         InteractMessage.Instance.ShowInteraction(text, null, Color.white);
         yield return new WaitForSeconds(itemNameTime);
         InteractMessage.Instance.HideInteraction();
-    }
-
-    public List<MapResource> GetMissingSanctumParts()
-    {
-        List<MapResource> missingParts = new();
-        for (int i = 0; i < sanctumparts.Length; i++)
-        {
-            if (!CanTrade(sanctumparts[i].ItemStats.type))
-            {
-                missingParts.Add(sanctumparts[i]);
-            }
-        }
-        return missingParts;
     }
 }

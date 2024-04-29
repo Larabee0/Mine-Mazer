@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 
 public partial class SpatialParadoxGenerator
@@ -43,7 +44,7 @@ public partial class SpatialParadoxGenerator
         }
         else
         {
-            List<int> nextSections = FilterSections(primary.OriginalInstanceId);
+            List<int> nextSections = FilterSections(primary.OriginalInstanceId, out bool junction);
             yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
             pickedSection = pickedResult.pickSectionDelayedData.pickedSection;
             priPref = pickedResult.pickSectionDelayedData.primaryPreference;
@@ -76,7 +77,7 @@ public partial class SpatialParadoxGenerator
 
         if (!internalSections.Contains(pickedSection.orignalInstanceId)) // return new section.
         {
-            List<int> nextSections = FilterSections(primary.OriginalInstanceId);
+            List<int> nextSections = FilterSections(primary.OriginalInstanceId, out bool junction);
             // pick from all valid sections
             yield return PickSectionDelayed(primary, nextSections, pickedResult.pickSectionDelayedData);
             // schedule new section spawn
@@ -121,7 +122,6 @@ public partial class SpatialParadoxGenerator
         int iterations = maxInterations;
         TunnelSection targetSection = null;
 
-        Physics.SyncTransforms();
         while (targetSection == null && primaryConnectors.Count > 0)
         {
             outs.primaryPreference = GetRandomConnectorFromSection(primaryConnectors, out int priIndex);
@@ -147,6 +147,7 @@ public partial class SpatialParadoxGenerator
             yield return ParallelRandomiseIntersection(primaryElement, primaryConnectors, priIndex, internalNextSections, iteratorData);
 
             targetSection = iteratorData.targetSection;
+
             outs.primaryPreference = iteratorData.primaryPreference;
             outs.secondaryPreference = iteratorData.secondaryPreference;
             iterations = iteratorData.iterations;

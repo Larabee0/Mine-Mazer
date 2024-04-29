@@ -6,6 +6,9 @@ using UnityEngine;
 public class PlayerExplorationStatistics : MonoBehaviour
 {
     private HashSet<int> uniqueIdVistedSections = new();
+    private List<(int,bool)> justVistedCache = new(10);
+    public List<(int, bool)> JustVistedCache => justVistedCache;
+
     [SerializeField] private int uniqueSpawnSectionsCount = 0;
 
     [SerializeField] private bool allowSanctumPartSpawn = false;
@@ -34,6 +37,19 @@ public class PlayerExplorationStatistics : MonoBehaviour
     {
         uniqueIdVistedSections.Add(originalInstanceId);
         uniqueSpawnSectionsCount++;
+    }
+
+    public void JustVisitedCacher(int originalInstanceId, bool explored)
+    {
+        if (justVistedCache.Count > 0 && justVistedCache[0].Item1 == originalInstanceId)
+        {
+            return;
+        }
+        justVistedCache.Insert(0, (originalInstanceId, explored));
+        if (justVistedCache.Count > 10)
+        {
+            justVistedCache.RemoveRange(9, justVistedCache.Count - 10);
+        }
     }
 
     public void SetAllowSanctumPartSpawn(bool allowed, bool permant = false)

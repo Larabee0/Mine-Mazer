@@ -78,6 +78,11 @@ public class MapResource : MonoBehaviour, IInteractable
         SetColliderActive(Interactable);
     }
 
+    protected virtual void Start()
+    {
+
+    }
+
     public virtual string GetToolTipText()
     {
         if(requiresPickaxe)
