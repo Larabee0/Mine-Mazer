@@ -22,6 +22,7 @@ public class SanctumPart : MapResource
         }
 
         base.Interact();
+        SetRainbowOpacity(0);
         Inventory.Instance.TryMoveItemToHand(ItemStats.type);
         if (dialogue != null)
         {

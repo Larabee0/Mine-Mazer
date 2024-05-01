@@ -90,6 +90,11 @@ public class NPC_Interact : MonoBehaviour
             interactable = null;
             hitInteractable = false;
             RemoveInteractableToolTip();
+            if(hoverable != null)
+            {
+                hoverable.HoverOff();
+                hoverable = null;
+            }
         }
     }
 

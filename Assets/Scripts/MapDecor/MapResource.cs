@@ -1,6 +1,7 @@
 using MazeGame.Input;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Flags]
@@ -43,13 +44,15 @@ public class ItemStats
     public Item type;
 }
 
-public class MapResource : MonoBehaviour, IInteractable
+public class MapResource : MonoBehaviour, IInteractable, IHover
 {
     [SerializeField] protected Collider itemCollider;
     [SerializeField] protected ItemStats itemStats;
     [SerializeField] protected bool Placeable;
     [SerializeField] protected bool Interactable = true;
     [SerializeField] protected bool requiresPickaxe = false;
+    [SerializeField] protected MeshRenderer[] meshRenderers;
+    [SerializeField] protected Color onSelectColour = Color.yellow;
     public Vector3 heldOrenintationOffset;
     public Vector3 heldpositonOffset;
     public Vector3 heldScaleOffset = Vector3.one;
@@ -76,11 +79,35 @@ public class MapResource : MonoBehaviour, IInteractable
     {
         originalScale = transform.localScale;
         SetColliderActive(Interactable);
+        meshRenderers = GetComponentsInChildren<MeshRenderer>(true);
     }
+
 
     protected virtual void Start()
     {
 
+    }
+
+    public void SetRainbowOpacity(float opacity)
+    {
+        for (int i = 0; i < meshRenderers.Length; i++)
+        {
+            MeshRenderer renderer = meshRenderers[i];
+            List<Material> materials = new();
+            renderer.GetMaterials(materials);
+            materials.ForEach(mat => mat.SetFloat("_Overlay_Opacity", opacity));
+        }
+    }
+
+    public void SetOutlineColour(Color colour)
+    {
+        for (int i = 0; i < meshRenderers.Length; i++)
+        {
+            MeshRenderer renderer = meshRenderers[i];
+            List<Material> materials = new();
+            renderer.GetMaterials(materials);
+            materials.ForEach(mat => mat.SetColor("_OutlineColour", colour));
+        }
     }
 
     public virtual string GetToolTipText()
@@ -178,5 +205,15 @@ public class MapResource : MonoBehaviour, IInteractable
     public virtual bool RequiresPickaxe()
     {
         return requiresPickaxe;
+    }
+
+    public virtual void HoverOn()
+    {
+        SetOutlineColour(onSelectColour);
+    }
+
+    public virtual void HoverOff()
+    {
+        SetOutlineColour(Color.black);
     }
 }

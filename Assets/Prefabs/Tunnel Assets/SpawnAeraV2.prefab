@@ -446,6 +446,8 @@ MonoBehaviour:
   Placeable: 0
   Interactable: 0
   requiresPickaxe: 0
+  meshRenderers: []
+  onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -1026,8 +1028,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4902109363811639478}
-  - component: {fileID: 2434181021380373507}
-  - component: {fileID: 31979348034634724}
   - component: {fileID: 3570385539292349309}
   - component: {fileID: 7144089559948923483}
   m_Layer: 8
@@ -1053,56 +1053,6 @@ Transform:
   m_Father: {fileID: 7088927512691349619}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &2434181021380373507
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6575635447661044191}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &31979348034634724
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6575635447661044191}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: e043c6b4af312324593d6a7e010b36bf, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &3570385539292349309
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1139,6 +1089,7 @@ MonoBehaviour:
   doorPivot: {fileID: 196131923902482156}
   doorEndOfTravelPoints: {x: 0, y: 184.55}
   doorSpeed: 250
+  selectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &6585727215691544756
 GameObject:
   m_ObjectHideFlags: 0
