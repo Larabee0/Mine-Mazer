@@ -167,6 +167,8 @@ public class Eudie_Tutorial : NPCTrade
         InteractMessage.Instance.SetObjective("Open the Gate with the Gate Activator and Lumen Torch");
         eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Gate Activator",gateButton.transform.position,Color.green);
         eudieState = EudieContext.MineWall;
+        gateButton.GetComponent<ButtonInteractable>().SetRainbowOpacity(0.6f);
+        gateButton.GetComponent<ButtonInteractable>().interactable=true;
     }
 
     private void OnGateBeginOpening()

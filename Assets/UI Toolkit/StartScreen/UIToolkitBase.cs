@@ -5,6 +5,8 @@ public abstract class UIToolkitBase
 {
     public VisualElement RootVisualElement;
 
+    public bool Open => RootVisualElement.style.display == DisplayStyle.Flex;
+
     public UIToolkitBase(VisualElement rootVisualElement)
     {
         RootVisualElement = rootVisualElement;

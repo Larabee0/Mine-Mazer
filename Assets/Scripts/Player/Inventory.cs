@@ -37,10 +37,13 @@ public class Inventory : MonoBehaviour
     [SerializeField] private MapResource heldItem;
     [SerializeField] private Transform virtualhands;
     [SerializeField] private MapResource[] defaultItems;
-    [SerializeField] private MapResource[] sanctumparts;
     [SerializeField] private float itemNameTime = 1f;
 
     public Action<Item> OnHeldItemChanged;
+
+    public Action<Item, int> OnItemPickUp;
+    public Action OnItemPickUpSfx;
+    public Action OnItemRemoveSfx;
 
     private void Awake()
     {
@@ -54,6 +57,11 @@ public class Inventory : MonoBehaviour
             Destroy(this);
             return;
         }
+        if (InputManager.Instance == null)
+        {
+            return;
+        }
+        PlayerUIController.Instance.CompendiumUI.enabled = true;
     }
 
     private void Start()
@@ -63,6 +71,7 @@ public class Inventory : MonoBehaviour
             AddItem(defaultItems[i].ItemStats.type, 1, Instantiate(defaultItems[i]));
         }
     }
+
     private void OnEnable()
     {
         if (InputManager.Instance != null)
@@ -81,7 +90,6 @@ public class Inventory : MonoBehaviour
         }
     }
 
-
     private void OpenInventory()
     {
         if(inventory.Count > 0)
@@ -90,9 +98,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-
-
-    public void AddItem(Item itemType, int quantity, MapResource itemInstance)
+    public void AddItem(Item itemType, int quantity, MapResource itemInstance, bool sfx = true)
     {
         itemInstance.SetColliderActive(false);
         itemInstance.SetMapResourceActive(false);
@@ -107,9 +113,15 @@ public class Inventory : MonoBehaviour
             assets.Add(itemType, new() { itemInstance });
             UpdateInventory();
         }
+        
         itemInstance.transform.parent = virtualhands;
         itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
         itemInstance.transform.localScale = itemInstance.heldScaleOffset;
+        OnItemPickUp?.Invoke(itemType, inventory[itemType]);
+        if (sfx)
+        {
+            OnItemPickUpSfx?.Invoke();
+        }
     }
 
     public bool TryRemoveItem(Item item, int quantity)
@@ -131,7 +143,7 @@ public class Inventory : MonoBehaviour
 
         return false;
     }
-    public bool TryRemoveItem(Item item, int quantity, out MapResource itemInstance)
+    public bool TryRemoveItem(Item item, int quantity, out MapResource itemInstance, bool sfx = true)
     {
         itemInstance = null;
         if (inventory.ContainsKey(item))
@@ -152,6 +164,11 @@ public class Inventory : MonoBehaviour
                 assets.Remove(item);
             }
             UpdateInventory();
+            if (sfx)
+            {
+                OnItemRemoveSfx?.Invoke();
+            }
+            
             return true;
         }
 
@@ -293,18 +310,5 @@ public class Inventory : MonoBehaviour
         InteractMessage.Instance.ShowInteraction(text, null, Color.white);
         yield return new WaitForSeconds(itemNameTime);
         InteractMessage.Instance.HideInteraction();
-    }
-
-    public List<MapResource> GetMissingSanctumParts()
-    {
-        List<MapResource> missingParts = new();
-        for (int i = 0; i < sanctumparts.Length; i++)
-        {
-            if (!CanTrade(sanctumparts[i].ItemStats.type))
-            {
-                missingParts.Add(sanctumparts[i]);
-            }
-        }
-        return missingParts;
     }
 }

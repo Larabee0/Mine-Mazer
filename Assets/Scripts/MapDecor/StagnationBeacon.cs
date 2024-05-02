@@ -22,6 +22,9 @@ public class StagnationBeacon : SanctumPart
         get => gameObject.name;
         set => gameObject.name = value;
     }
+    protected override void Start()
+    {
+    }
 
     private void OnEnable()
     {

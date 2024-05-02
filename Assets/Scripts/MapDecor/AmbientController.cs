@@ -34,7 +34,9 @@ public class AmbientController : MonoBehaviour
     [SerializeField] private float targetAmbientIntensity;
     [SerializeField] private float ambientFromSection;
     [SerializeField] private float fadeSpeed = 1f;
+
     private Coroutine allProcess = null;
+
     private void Awake()
     {
         Instance = this;

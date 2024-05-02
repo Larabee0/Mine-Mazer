@@ -49,11 +49,8 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         if (!section.sectionInstance.explored)
         {
             explorationStatistics.Increment(section.OriginalInstanceId);
-            if (section.sectionInstance.SanctumPartSpawnPoint != null)
-            {
-                SpawnSanctumPartRandom(section.sectionInstance.SanctumPartSpawnPoint);
-            }
         }
+        explorationStatistics.JustVisitedCacher(section.OriginalInstanceId, section.sectionInstance.explored);
         if (lastExit != null)
         {
             UpdateMap();
@@ -68,19 +65,4 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         }
     }
 
-    public void SpawnSanctumPartRandom(Transform parent)
-    {
-        List<MapResource> resources = Inventory.Instance.GetMissingSanctumParts();
-        if (resources.Count == 0||!ExplorationStatistics.AllowSanctumPartSpawn || sanctumPartCooldown < 0)
-        {
-            sanctumPartCooldown++;
-            return;
-        }
-        if(randomNG.NextFloat() <= sanctumPartSpawnChance)
-        {
-            MapResource item = Instantiate(resources[randomNG.NextInt(0, resources.Count)], parent);
-                item.transform.localPosition = item.placementPositionOffset;
-            item.OnItemPickedUp += delegate () { sanctumPartCooldown = -sanctumPartCooldown; };
-        }
-    }
 }

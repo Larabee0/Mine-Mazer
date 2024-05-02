@@ -4,6 +4,7 @@ using UnityEngine;
 using MazeGame.Input;
 using MazeGame.Navigation;
 using System;
+using System.Runtime.InteropServices;
 
 //RYTECH. 2023. How to Make a Flexible Interaction System in 2 Minutes [C#] [Unity3D]. Available at: https://www.youtube.com/watch?v=K06lVKiY-sY [accessed 28 November 2023].
 interface IInteractable
@@ -11,6 +12,13 @@ interface IInteractable
     public void Interact();
     public bool RequiresPickaxe();
     public string GetToolTipText();
+
+}
+
+interface IHover
+{
+    public void HoverOn();
+    public void HoverOff();
 }
 
 public class NPC_Interact : MonoBehaviour
@@ -46,6 +54,7 @@ public class NPC_Interact : MonoBehaviour
     public bool HitInteractable => hitInteractable;
     private bool closedToolTip = true;
     private IInteractable interactable;
+    private IHover hoverable;
 
     private RaycastHit hitInfo;
     public RaycastHit InteractInfo => hitInfo;
@@ -81,6 +90,11 @@ public class NPC_Interact : MonoBehaviour
             interactable = null;
             hitInteractable = false;
             RemoveInteractableToolTip();
+            if(hoverable != null)
+            {
+                hoverable.HoverOff();
+                hoverable = null;
+            }
         }
     }
 
@@ -151,29 +165,54 @@ public class NPC_Interact : MonoBehaviour
 
     private bool InteractCast(RaycastHit hitInfo)
     {
+        if (hitInfo.collider.gameObject.TryGetComponent(out IHover hoverable))
+        {
+            hoverable.HoverOn();
+        }
+        else if (hitInfo.collider.gameObject.GetComponentInParent<IHover>() != null)
+        {
+            hoverable = hitInfo.collider.gameObject.GetComponentInParent<IHover>();
+            hoverable.HoverOn();
+        }
+
+        if(hoverable != null && this.hoverable != null && hoverable != this.hoverable)
+        {
+            this.hoverable.HoverOff();
+            this.hoverable = hoverable;
+        }
+        else if( hoverable != null &&  this.hoverable == null)
+        {
+            this.hoverable = hoverable;
+        }
+
+        if(hoverable == null && this.hoverable != null)
+        {
+            this.hoverable.HoverOff();
+            this.hoverable = null;
+        }
+
         if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactable))
         {
-            if (interactable != this.interactable)
-            {
-                this.interactable = interactable;
-            }
-            InteractableToolTip();
-            closedToolTip = false;
-            hitInteractable = true;
+            AttemptInteraction(interactable);
             return true;
         }
         else if (hitInfo.collider.gameObject.GetComponentInParent<IInteractable>() != null)
         {
             interactable = hitInfo.collider.gameObject.GetComponentInParent<IInteractable>();
-            if (interactable != this.interactable)
-            {
-                this.interactable = interactable;
-            }
-            InteractableToolTip();
-            closedToolTip = false;
-            hitInteractable = true;
+            AttemptInteraction(interactable);
             return true;
         }
         return false;
+    }
+
+    private void AttemptInteraction(IInteractable interactable)
+    {
+        if (interactable != this.interactable)
+        {
+            this.interactable = interactable;
+        }
+        InteractableToolTip();
+        closedToolTip = false;
+        hitInteractable = true;
     }
 }

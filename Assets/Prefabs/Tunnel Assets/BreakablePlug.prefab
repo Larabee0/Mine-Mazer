@@ -3444,12 +3444,52 @@ MonoBehaviour:
   - {fileID: 5847513270147661857}
   - {fileID: 5140819100530929926}
   - {fileID: 193527554358099604}
+  meshRenderers:
+  - {fileID: 7062719465921192724}
+  - {fileID: 6932962492459118439}
+  - {fileID: 7068075825477919303}
+  - {fileID: 1266820351668227850}
+  - {fileID: 4368185200133153293}
+  - {fileID: 8812936439134251288}
+  - {fileID: 7348122407010842635}
+  - {fileID: 8885224488212592528}
+  - {fileID: 1325131252146944121}
+  - {fileID: 825173562313235157}
+  - {fileID: 9109475067445914168}
+  - {fileID: 2644513153552868641}
+  - {fileID: 8379529528830709384}
+  - {fileID: 6217888283823400331}
+  - {fileID: 7400099719259501284}
+  - {fileID: 9132406081726880736}
+  - {fileID: 6882904095320017451}
+  - {fileID: 3835639295465445240}
+  - {fileID: 1358782474058014084}
+  - {fileID: 1584170702833206653}
+  - {fileID: 2776903464319541883}
+  - {fileID: 6007878909812295317}
+  - {fileID: 7660204704682790846}
+  - {fileID: 6730846963759586637}
+  - {fileID: 7941800356342720446}
+  - {fileID: 6417450939837100549}
+  - {fileID: 891519758064035691}
+  - {fileID: 6831975896726234159}
+  - {fileID: 195578135755018498}
+  - {fileID: 3028569981766439030}
+  - {fileID: 2820662914455504013}
+  - {fileID: 5030113046603296882}
+  - {fileID: 6335649982334034424}
+  - {fileID: 1978318357530572541}
+  - {fileID: 4277680912876854561}
+  - {fileID: 7753312839868592647}
+  - {fileID: 7106783736593274564}
+  - {fileID: 4270554479363126711}
   droppableItems:
   - {fileID: 6506559788001277901, guid: 8f71a7f6279df344a8bc612a68214abe, type: 3}
   - {fileID: 2540538277186201747, guid: 8e335f83c614acd44abc222d72fb057a, type: 3}
   droppableSpawnArea: {fileID: 6299140256719059265}
   minMaxDrop: {x: 0, y: 5}
   rockLingerTimeRange: {x: 5, y: 7}
+  onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   connector:
     localPosition: {x: 0, y: 1.5, z: 0}
     localRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
@@ -3467,7 +3507,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0

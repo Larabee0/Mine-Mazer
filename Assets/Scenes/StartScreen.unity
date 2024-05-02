@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028386, g: 0.22571427, b: 0.3069231, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1682,7 +1682,7 @@ MonoBehaviour:
   caveAmbience: {fileID: 278139836}
   allowSceneChange: 0
   skipTutorial: 1
-  skipToPickUpEudie: 1
+  skipToPickUpEudie: 0
 --- !u!114 &278139882
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -1963,6 +1963,7 @@ GameObject:
   - component: {fileID: 290947038}
   - component: {fileID: 290947037}
   - component: {fileID: 290947036}
+  - component: {fileID: 290947043}
   m_Layer: 5
   m_Name: PlayerUI
   m_TagString: Untagged
@@ -1983,6 +1984,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUi: {fileID: 290947041}
+  ItemMote: {fileID: 9197481963319205126, guid: 0516f25dd481db74198d83462635e243,
+    type: 3}
+  compendiumUI: {fileID: 290947043}
   settingsMenuPrefab: {fileID: 9197481963319205126, guid: 91ea0259b4733844a8862e4eb470393a,
     type: 3}
   hungerProgressAnimationSpeed: 1
@@ -2093,6 +2097,351 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &290947043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290947035}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91acdbfd43c6aaa4694a2055aa2aedad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  document: {fileID: 290947041}
+  forceShowAll: 0
+  compendiumItems:
+  - title: Anti-Lumen
+    category: Mine Features
+    summary: "A dark crystal that sucks in light and warps magical energy. On its
+      own it can\u2019t do much, but combining it with other crystals can lead to
+      powerful effects"
+    body: 'Anti-Lumen is the natural antithesis to Lumen, and tends to form in areas
+      nearer the outskirts of the mines. While research has been conducted into its
+      nature, much of it is unsubstantial and inconclusive. While Anti-Lumen is used
+      in some mine technology, it is generally advised that miners avoid Anti-Lumen
+      where possible, as prolonged exposure has been known to have long-term effects
+      on both human and Lumenite health. Anti-Lumen has a similar hardness to Lumen,
+      but an inverted molecular structure. '
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 101
+    shownMote: 0
+  - title: Lumen
+    category: Mine Features
+    summary: 'A pale, glowing crystal species that absorbs magic and can store an
+      amount equivalent to its size. The light of these crystals is believed to reveal
+      hidden secrets.  '
+    body: "Lumen is, according to documents recovered from the first miners, a \u2018condensed
+      essence of light and creation itself\u2019. From research conducted into the
+      nature of Lumen, it has been revealed to be a form of condensed energy that
+      is able to coalesce and gather in a crystalline formation. The crystal has
+      a Mohs hardness of approximately 8.5, however certain areas have been tested
+      up to a Mohs hardness of 10. There is much we do not know about Lumen still,
+      as it is a protected resource native to the mines, however its primary use
+      in modern times is as an energy source, with secondary uses in hidden communication
+      due to its fluorescent properties, and as a natural light source. "
+    alwaysDisplay: 0
+    targetItem: 1
+    order: 100
+    shownMote: 0
+  - title: Antarcticite
+    category: Rocks, minerals and crystals
+    summary: A rare crystal only found in the coldest parts of the mines, said to
+      freeze anyone who touches it directly. Its uses are limited, but very powerful.
+    body: "Antarcticite is a rare deliquescent mineral that runs in the mine\u2019s
+      veins throughout sections affected by Frostbane- a supernatural affliction
+      caused by mineral deficiencies in cold, dry areas. It is typically found in
+      its crystallised form, however at sufficient temperatures it is able to become
+      an aqueous solution. It is extremely fragile, at a Mohs hardness of only 2.5.
+      Antarcticite has a variety of uses, but must be handled carefully due to risk
+      of becoming Frostbaned. Current uses include but are not limited to: food preservation,
+      cooking, luxury skincare, medical uses, sanitation, mixology and technological
+      use (when combined with Anti-Lumen). "
+    alwaysDisplay: 0
+    targetItem: 16
+    order: 102
+    shownMote: 0
+  - title: Cinnabarite
+    category: Rocks, minerals and crystals
+    summary: A reddish-brown rock found in the upper layers of the mine. The silvery
+      toxin secreted from it is highly useful, and highly poisonous.
+    body: 'Cinnabarite is a relatively common mineral found throughout most areas
+      of the mines. It appears as a dark red rock, but when ground or pressurized
+      in any way, it will release a thick, runny silvery sap known as Mercurion.
+      While both Cinnabarite and Mercurion are extremely useful, the latter must
+      be handled with caution due to the risk of Mercurion poisoning (Silverbane).
+      As well, this mineral is fragile, as it can only reach up to 2.5 on the Mohs
+      hardness scale. Cinnabarite, after appropriate treatment, can be used for its
+      reddish colour in makeup, fabric, paint, lacquerware and stoneware, while Mercurion
+      has several medical and scientific uses as a core part of certain pieces of
+      lab equipment. '
+    alwaysDisplay: 0
+    targetItem: 32
+    order: 103
+    shownMote: 0
+  - title: Elbaite
+    category: Rocks, minerals and crystals
+    summary: "A colourful crystal commonly used in circuitry and jewellery. It\u2019s
+      surprisingly tough and tastes nothing like watermelon. "
+    body: "Elbaite is a rare mineral found throughout the mines in small clusters,
+      known colloquially as \u2018Fruitstone\u2019 due to its colourful appearance
+      bearing resemblance to a Watermelon. It is mostly used for decorative purposes,
+      however recently has started to be used in technology thanks to developments
+      in its piezoelectric (ability to create an electrical charge through friction) "
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 104
+    shownMote: 0
+  - title: Glanceite
+    category: Rocks, minerals and crystals
+    summary: "A common metal mostly discarded as scrap due to its toxic properties.
+      Some heretic researchers insist that this material could pave the way to huge
+      technological breakthroughs, but there\u2019s yet to be any proof of this. "
+    body: 'Glanceite is a scrap metal commonly found near other minerals. It has
+      no particularly interesting features, and looks similar to many other commonly
+      found metals (see: Iron and Hematite). Glanceite should always be handled carefully
+      with proper protective equipment, and not left unattended once mined, as it
+      is toxic when inhaled or ingested. Current research indicates that it may have
+      natural semiconductive properties, and could potentially be used in mine technology
+      in the future as a cheap alternative to current wiring solutions, however this
+      research has yet to be reviewed or tested appropriately. '
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 105
+    shownMote: 0
+  - title: Goshenite
+    category: Rocks, minerals and crystals
+    summary: "A transparent crystal that appears more commonly than people think.
+      Unfortunately, it\u2019s so transparent that most people don\u2019t even know
+      it's there. "
+    body: "Goshenite is a clear mineral that\u2019s found throughout the mines, but
+      is very difficult to spot without light due to its transparency. It stands
+      at a Mohs hardness of between 7 and 8, making it harder than the majority of
+      other stones found within the mines. Because of its clarity, its most common
+      use is lenses and small window panes. Goshenite has no known toxic properties,
+      but should always be stored properly so as to not cause injuries. "
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 106
+    shownMote: 0
+  - title: Hematite
+    category: Rocks, minerals and crystals
+    summary: 'A tough metal able to withstand toxic and corrosive substances. '
+    body: 'Hematite is a rare metal found in clusters throughout the mines. It is
+      often mistaken for a crystal due to its splendent lustre, but is actually a
+      metal. The key way to tell if an unidentified scrap is Hematite or a dull crystal
+      is to check for magnetism, as hematite is antiferromagnetic (displays magnetic
+      properties in an external magnetic field). As Hematite only generally reaches
+      a 6 on the Mohs scale, it is best to be careful when transporting it, although
+      it is unlikely to break unless you really wanted to. '
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 107
+    shownMote: 0
+  - title: Iron
+    category: Rocks, minerals and crystals
+    summary: The most common metal found running within the mines, commonly used
+      for making tools and weapons.
+    body: "Iron is a common metal ore found throughout the mines. It is approximately
+      4 on the Mohs hardness scale, however this measurement is believed to be a
+      relatively inaccurate measure of iron\u2019s strength and durability. It is
+      magnetic, and is commonly used in compass needles for this reason. It is the
+      most commonly used metal, being used for various fixtures, pipes, scaffolding,
+      vehicles, rails, furniture, and so on and so forth."
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 108
+    shownMote: 0
+  - title: Mercurion
+    category: Rocks, minerals and crystals
+    summary: "A toxic silver sap secreted by Cinnabarite. It\u2019s quite runny"
+    body: "Mercurion is produced by Cinnabarite (see: Cinnabarite), and is extremely
+      toxic to inhale, touch and ingest. Mercurion poisoning, also colloquially known
+      as Silverbane, causes slow degeneration of the body over the course of Mercurion\u2019s
+      half life (approximately 27 years) that can eventually lead to a terminal diagnosis
+      if left untreated. In its early stages, Silverbane is not particularly harmful,
+      and can be treated easily. For more information on Silverbane, please contact
+      mine leaders, or if you believe you may be at risk of Silverbane, contact Mine
+      Medical Support (MMS). "
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 109
+    shownMote: 0
+  - title: Pleochrystite
+    category: Rocks, minerals and crystals
+    summary: 'A crystal that changes colour when exposed to lumen. When exposed to
+      extremely high concentrations of lumen, it may even start to glow and crack. '
+    body: ' Pleochrystitie is a unique crystal that is capable of Lumen detection
+      due to containing impurities in its crystal structure that have given it pseudo-pleochroic
+      properties that cause it to change colour according to the localised concentration
+      of Lumen, rather than just light. In its dormant state, Pleochrystite is a
+      deep greenish-blue colour, but changes to red when exposed to sufficient amounts
+      of Lumen. If overexposure occurs, the Pleochrystite may begin to fracture,
+      and eventually will break.  '
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 110
+    shownMote: 0
+  - title: Shale
+    category: Rocks, minerals and crystals
+    summary: "A thin tile of rock that flakes easily off of the walls of the upper
+      layer, often near water. The miners use them as plates to serve food on, but
+      above ground they\u2019re mostly used as roof tiles."
+    body: 'Shale is a weak, flaky stone found throughout the mines, but often in
+      higher concentrations nearer water. It is one of the weakest forms of rock
+      found within the mines, with some sections being soft enough to snap off with
+      bare hands. It is commonly used in construction as a source material for brick,
+      tiles, pottery, etc. In the mines, it is also used as a fire source due to
+      its ability to produce an exothermic reaction in the right conditions. '
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 111
+    shownMote: 0
+  - title: Bobble Head
+    category: 'Mushrooms and plantlife '
+    summary: A round white fungus, usually found floating on water. While it may
+      be large, it's also incredibly light.
+    body: "Bobblehead mushrooms, also colloquially called \u2018fungal orbs\u2019
+      or \u2018fungorbs\u2019, are a type of a mushroom that are edible when immature,
+      but can cause digestive upset in their matured state. The bobblehead typically
+      is found in a moist climate, and develops more easily on aquatic plants. These
+      fungi tend to be very light, with even the largest specimens only weighing
+      a few kilograms, however they are very absorbent, and if soaked in liquid,
+      they can become up to ten times their initial weight and size. This mushroom
+      is commonly eaten sliced, breaded and fried. "
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 200
+    shownMote: 0
+  - title: Fungal Steak
+    category: 'Mushrooms and plantlife '
+    summary: " A fungus with a deceptively meaty appearance and acrid taste. It\u2019s
+      been nicknamed \u2018the disappointment fungus\u2019 by several disgruntled
+      miners. "
+    body: 'Fungal Steak is a somewhat edible fungus with a tough texture and typically
+      sticky exterior. It is a relatively common sight within the mines, however
+      is rarely eaten except by less experienced miners who have yet to face its
+      sour, acidic taste. In fact, the occurrence of new miners eating a Fungal Steak
+      and being disappointed by it has become so common that it has become an unspoken
+      tradition, with many mine leaders not-so-secretly betting on how many days
+      it will be before a newbie tries it. '
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 300
+    shownMote: 0
+  - title: Golden Trumpet Mycelium
+    category: 'Mushrooms and plantlife '
+    summary: Sweet-smelling fungi with a rich, smoky flavour. Their bioluminescent
+      properties are believed to come from soaking up the energy of the lumen quartz
+      they grow near.
+    body: "A type of mycelium that is rumoured to appear more commonly near strong
+      Lumen veins. Their bioluminescent properties have become well known throughout
+      the mines as a sign of where to dig and where not to, as they soak up the Lumen
+      from the walls they grow in, helping guide miners to Lumen-rich hotspots. However,
+      if the Golden Trumpets don\u2019t glow at all, it\u2019s said to be a sign
+      of overmining, and that miners should avoid those areas until their glow is
+      strong again. Other than this, Golden Trumpets are also commonly eaten in soups
+      and stews, as well as grilled to be eaten on their own due to their wonderfully
+      rich and decadent taste. "
+    alwaysDisplay: 0
+    targetItem: 2
+    order: 301
+    shownMote: 0
+  - title: "Lion\u2019s Mane "
+    category: 'Mushrooms and plantlife '
+    summary: 'Stringy, meaty fungi found growing on Ficus roots. Occasionally used
+      as food, mostly used as toothfloss. '
+    body: "Lion\u2019s Mane, also called Greywacke\u2019s Beard by some insolent
+      miners, is a stringy, parasitic fungus, usually found on or near Ficus roots.
+      It feeds on the tree\u2019s nutrients, and leaves a rot pocket when removed,
+      which will kill the root if not treated properly. Its body is completely edible,
+      and highly nutritious, and is best cooked roasted or sauteed in oil. However,
+      in a pinch, its baisidia (the hanging spore-spines on the body) can be used
+      as a string replacement for tooth-flossing or hair-tying. "
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 302
+    shownMote: 0
+  - title: Morchelle
+    category: 'Mushrooms and plantlife '
+    summary: "A rich, meaty fungus often served as a rare delicacy during celebrations.
+      Apparently a Mine Leader brought them down from the surface and cultivated
+      them to grow in the dark, but who\u2019s to say?"
+    body: "Morchelle\u2019s as we see them below the surface are quite different
+      from those above. It\u2019s believed that they were first brought down by horticultural
+      expert Dr Tillie Cataclasite, who then cultivated their enzymes to feed upon
+      certain mineral substrates, thus altering their taste and appearance, but allowing
+      them to thrive in the mines. These mushrooms are still edible, but like their
+      surface relatives, must be cooked first. They are generally best served with
+      meat or poultry, but will also make a fine addition to soups and stews. "
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 303
+    shownMote: 0
+  - title: Tinderconk
+    category: 'Mushrooms and plantlife '
+    summary: An inedible, highly flammable fungus that smells vaguely like rotting
+      meat. Good for starting fires.
+    body: "Tinderconk is a decomposer fungus, commonly found near dead Ficus roots
+      or accident sites where miners have died. It has a hard, fibrous crust, but
+      its flesh is much more spongy. However, this does not mean that its flesh is
+      edible. While it does not seem to have any major adverse effects, it has been
+      known to cause digestive issues. Instead, tinderconk\u2019s main use is as
+      a firestarter, and is an essential ingredient in making explosives, alongside
+      saltpeter and charcoal."
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 304
+    shownMote: 0
+  - title: Truffle
+    category: 'Mushrooms and plantlife '
+    summary: Flavourful fungi that grow best nearest the surface. A tasty topping
+      for soups, stews and noodle dishes.
+    body: 'Truffles are a subterranean fungus that are highly valued for their culinary
+      uses, and are most commonly found in damp areas near tree roots. There are
+      many different kinds of truffle, however they are all highly delicate and perishable,
+      and thus are either eaten on the day in the mines, or quickly transported to
+      the surface to be used in local restaurants. Unlike most fungi found within
+      the mines, truffles are best only lightly cooked, and should be finely sliced
+      to maximise their potential. They should not be eaten whole, or be given to
+      any heathens who will attempt to do so. '
+    alwaysDisplay: 0
+    targetItem: 0
+    order: 305
+    shownMote: 0
+  - title: Velvet Bud
+    category: 'Mushrooms and plantlife '
+    summary: " A sweet, mealy fungus that\u2019s served best in stews. Its bright
+      orange caps contain traces of Lumen, making them glow slightly in the dark."
+    body: 'Velvet buds, similarly to Golden Trumpets, feed on Lumen. However, where
+      Golden Trumpets are a delicious addition to any meal, Velvet Buds, when eaten
+      uncooked, are known to be a mild hallucinogenic and muscle relaxant. It is
+      believed this is due to the differences in how it processes Lumen, however
+      research into this has been safeguarded in recent years due to concerns about
+      self-testing methodologies. When cooked, these mushrooms lose their hallucinogenic
+      properties, and have a taste similar to Golden Trumpets, only slightly blander
+      and sweeter. '
+    alwaysDisplay: 0
+    targetItem: 4
+    order: 306
+    shownMote: 0
+  - title: Versicolor
+    category: 'Mushrooms and plantlife '
+    summary: "A tough, earthy fungus that can be eaten, but doesn\u2019t taste great.
+      Still, when down in the mines, you learn to make do."
+    body: Versicolor is a tough, leathery mushroom that is known to be utterly inedible,
+      despite having minimal adverse effects. It has very little flesh and can be
+      as hard as the rocks it grows on, in some cases. However, despite its inedibility,
+      this mushroom has become invaluable within this mines due to its ability to
+      be turned into paper. In the past decades, it has become far more common below
+      the surface to write notes on versicolor paper than the wood paper typically
+      found above.
+    alwaysDisplay: 0
+    targetItem: 8
+    order: 307
+    shownMote: 0
 --- !u!1 &393901633
 GameObject:
   m_ObjectHideFlags: 1
@@ -2846,6 +3195,79 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e338c52179e137c448c54e5e87c21f5b, type: 3}
+--- !u!1001 &1424364415
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5215346865084537689, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
+        type: 3}
+      propertyPath: m_Name
+      value: BreakablePlug
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 321fc9e3bfa4a2c489bf9677aec674b3, type: 3}
 --- !u!1001 &1492129679
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3127,7 +3549,7 @@ PrefabInstance:
     - target: {fileID: 9041358991876466093, guid: 8f71a7f6279df344a8bc612a68214abe,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.48905367
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 9041358991876466093, guid: 8f71a7f6279df344a8bc612a68214abe,
         type: 3}
@@ -3261,7 +3683,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725372453}
   m_LocalRotation: {x: 0.0036933832, y: 0.99496883, z: -0.04004903, w: 0.09175755}
-  m_LocalPosition: {x: -0.501, y: 1.28, z: -1.523}
+  m_LocalPosition: {x: -0.501, y: 0.28, z: -1.523}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3327,8 +3749,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AEuler: {x: 4.61, y: 199.67, z: 0}
   BEuler: {x: -4.61, y: 169.462, z: 0}
-  APos: {x: 0.471, y: 1.33, z: -1.377}
-  BPos: {x: -0.501, y: 1.28, z: -1.523}
+  APos: {x: 0.471, y: 0.33, z: -1.377}
+  BPos: {x: -0.501, y: 0.28, z: -1.523}
   fadeTime: 10
 --- !u!1 &2036723763
 GameObject:

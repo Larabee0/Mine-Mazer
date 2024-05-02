@@ -40,10 +40,9 @@ Transform:
   - {fileID: 4268398040884340811}
   - {fileID: 8028229612592790208}
   - {fileID: 5909014835096033022}
-  - {fileID: 2043633194648955501}
   - {fileID: 6304621485877614397}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6021174809027145644
 MeshFilter:
@@ -707,9 +706,10 @@ MonoBehaviour:
     strongKeep: 0
     hasLadder: 0
     isColony: 0
+    forceNotJunction: 0
   stagnationBeacon: {fileID: 0}
   orignalInstanceId: 36314
-  sanctumPartsSpawnPoint: {fileID: 2043633194648955501}
+  weakKeep: 0
   decorations: {fileID: 6304621485877614397}
   decorCoverage: 0
   decorationCount: 0
@@ -1354,6 +1354,7 @@ MonoBehaviour:
     strongKeep: 0
     hasLadder: 0
     isColony: 0
+    forceNotJunction: 0
   targetOrigin: {fileID: 0}
   showProceduralPoints: 0
   orientationRayLength: 0.2
@@ -1505,37 +1506,6 @@ Transform:
   m_GameObject: {fileID: 5537590687189310681}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3290421428076092254}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7121818475424190664
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2043633194648955501}
-  m_Layer: 0
-  m_Name: Sphere
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2043633194648955501
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7121818475424190664}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.152, y: 0.032, z: -5.277}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
