@@ -1731,7 +1731,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5019637023144497263}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -3116,13 +3116,13 @@ Transform:
   m_GameObject: {fileID: 7608118824321851303}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.107, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 19.795305, y: 19.795305, z: 19.795305}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4104502945850915362}
   - {fileID: 5585167114468586151}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2207745640655648685
 Animator:
@@ -3805,7 +3805,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7827404518245746171, guid: 2d5f085feda34be44ad8db03424d23cc, type: 3}
+  - {fileID: 2100000, guid: e5ce3d7d8a7d9f448a363e1fef1463cd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

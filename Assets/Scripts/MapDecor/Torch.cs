@@ -47,7 +47,7 @@ public class Torch : MapResource
         bool result =  base.PlaceItem();
         if (result)
         {
-            PlayerAnimationController.Instance.TorchDeply();
+            PlayerAnimationController.Instance.TorchDeploy();
         }
         return result; 
     }
