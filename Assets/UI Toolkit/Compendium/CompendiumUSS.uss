@@ -1,0 +1,27 @@
+.unity-scroll-view {
+    margin-left: 10px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.category {
+    -unity-font-style: bold;
+    font-size: 24px;
+    background-color: rgb(67, 66, 67);
+    color: rgb(255, 255, 255);
+}
+
+.title {
+    -unity-font-style: bold;
+    background-color: rgb(67, 66, 67);
+    color: rgb(255, 255, 255);
+}
+
+.title:hover {
+    background-color: rgb(35, 168, 197);
+}
+
+.title:focus {
+    background-color: rgb(35, 168, 197);
+}

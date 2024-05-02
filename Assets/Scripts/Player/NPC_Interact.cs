@@ -3,20 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using MazeGame.Input;
 using MazeGame.Navigation;
+using System;
 
 //RYTECH. 2023. How to Make a Flexible Interaction System in 2 Minutes [C#] [Unity3D]. Available at: https://www.youtube.com/watch?v=K06lVKiY-sY [accessed 28 November 2023].
 interface IInteractable
 {
     public void Interact();
+    public bool RequiresPickaxe();
     public string GetToolTipText();
 }
 
 public class NPC_Interact : MonoBehaviour
 {
+    private static NPC_Interact instance;
+    public static NPC_Interact Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                Debug.LogWarning("Expected NPC_Interact instance not found. Order of operations issue? Or NPC_Interact is disabled/missing.");
+            }
+            return instance;
+        }
+        private set
+        {
+            if (value != null && instance == null)
+            {
+                instance = value;
+            }
+        }
+    }
+
     [SerializeField] private Transform InteractorSource;
-    [SerializeField] private float InteractRange;
+    public float InteractRange;
     [SerializeField] private LayerMask npcLayer;
     [SerializeField] private Texture2D interactionIcon;
+    [SerializeField] private float boxCastSize = 0.5f;
     private WorldWayPoint tooltip;
 
     private bool hitInteractable = false;
@@ -24,16 +47,79 @@ public class NPC_Interact : MonoBehaviour
     private bool closedToolTip = true;
     private IInteractable interactable;
 
-    private void Start()
+    private RaycastHit hitInfo;
+    public RaycastHit InteractInfo => hitInfo;
+
+    private void Awake()
     {
-        InputManager.Instance.interactButton.OnButtonReleased += Interact;
+        if (instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.interactButton.OnButtonReleased += Interact;
+            InputManager.Instance.mineButton.OnButtonReleased += InteractMine;
+            InputManager.Instance.placeItemButton.OnButtonReleased += InteractPlace;
+        }
+    }
+
+    private void Update()
+    {
+        if (!Physics.BoxCast(InteractorSource.position, transform.localScale * boxCastSize, InteractorSource.forward, out hitInfo, InteractorSource.rotation, InteractRange, npcLayer)
+            || !InteractCast(hitInfo))
+        {
+            interactable = null;
+            hitInteractable = false;
+            RemoveInteractableToolTip();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.interactButton.OnButtonReleased -= Interact;
+            InputManager.Instance.mineButton.OnButtonReleased -= InteractMine;
+            InputManager.Instance.placeItemButton.OnButtonReleased -= InteractPlace;
+        }
+    }
+
+    private void InteractPlace()
+    {
+        if (interactable == null && Inventory.Instance.CurHeldAsset != null)
+        {
+            Inventory.Instance.CurHeldAsset.PlaceItem();
+        }
+    }
+
+    private void InteractMine()
+    {
+        if (interactable != null && interactable.RequiresPickaxe() && Inventory.Instance.CurHeldItem == Item.Pickaxe)
+        {
+            interactable?.Interact();
+        }
     }
 
     private void Interact()
     {
-        if(interactable== null)
+        if (interactable != null && interactable.RequiresPickaxe())
         {
-            Inventory.Instance.CurHeldAsset.PlaceItem();
+            return;
+        }
+        else if(interactable == null && Inventory.Instance.CurHeldAsset != null)
+        {
+            return;
+            
         }
         else
         {
@@ -41,7 +127,7 @@ public class NPC_Interact : MonoBehaviour
         }
     }
 
-    private void InteractableToolTip(Vector3 hitPosition)
+    private void InteractableToolTip()
     {
         if (interactable != null && InteractMessage.Instance != null)
         {
@@ -63,38 +149,31 @@ public class NPC_Interact : MonoBehaviour
         InteractMessage.Instance.HideInteraction();
     }
 
-    private void Update()
+    private bool InteractCast(RaycastHit hitInfo)
     {
-        Ray r = new(InteractorSource.position, InteractorSource.forward);
-        if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange, npcLayer))
+        if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactable))
         {
-            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactable))
+            if (interactable != this.interactable)
             {
-                if(interactable != this.interactable)
-                {
-                    this.interactable = interactable;
-                }
-                InteractableToolTip(hitInfo.point);
-                closedToolTip = false;
-                hitInteractable = true;
-                return;
+                this.interactable = interactable;
             }
-            else if(hitInfo.collider.gameObject.GetComponentInParent<IInteractable>() != null)
-            {
-                interactable= hitInfo.collider.gameObject.GetComponentInParent<IInteractable>();
-                if (interactable != this.interactable)
-                {
-                    this.interactable = interactable;
-                }
-                InteractableToolTip(hitInfo.point);
-                closedToolTip = false;
-                hitInteractable = true;
-                return;
-            }
+            InteractableToolTip();
+            closedToolTip = false;
+            hitInteractable = true;
+            return true;
         }
-
-        interactable = null;
-        hitInteractable = false;
-        RemoveInteractableToolTip();
+        else if (hitInfo.collider.gameObject.GetComponentInParent<IInteractable>() != null)
+        {
+            interactable = hitInfo.collider.gameObject.GetComponentInParent<IInteractable>();
+            if (interactable != this.interactable)
+            {
+                this.interactable = interactable;
+            }
+            InteractableToolTip();
+            closedToolTip = false;
+            hitInteractable = true;
+            return true;
+        }
+        return false;
     }
 }

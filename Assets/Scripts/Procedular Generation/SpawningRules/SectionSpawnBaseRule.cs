@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class SectionSpawnBaseRule : MonoBehaviour
 {
     [SerializeField] protected bool spawnable;
     [SerializeField] protected int spawnLimit = -1;
-
     protected int instances = 0;
+    public virtual int SpawnDebt => 1;
 
     public int InstancesCount
     {
@@ -37,5 +38,11 @@ public class SectionSpawnBaseRule : MonoBehaviour
     public virtual void OnSpawned()
     {
 
+    }
+
+    public virtual void ResetRule()
+    {
+        spawnable = false;
+        instances = 0;
     }
 }

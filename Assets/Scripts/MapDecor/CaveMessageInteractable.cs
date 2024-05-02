@@ -34,7 +34,7 @@ public class CaveMessageInteractable : MonoBehaviour, IInteractable
         }
         else
         {
-            return "E to Read";
+            return "Click to Read";
         }
     }
 
@@ -56,5 +56,10 @@ public class CaveMessageInteractable : MonoBehaviour, IInteractable
                 CaveMessageController.Instance.TryShowMessageByName(messageAssetName);
             }
         }
+    }
+
+    public bool RequiresPickaxe()
+    {
+        return false;
     }
 }

@@ -37,7 +37,7 @@ public class BreakableWall : MonoBehaviour, IInteractable
         for (int i = 0; i < drop; i++)
         {
             MapResource chosenItem = droppableItems[Random.Range(0, droppableItems.Length)];
-            GameObject Instance = Instantiate(chosenItem, droppableSpawnArea.position,Quaternion.identity).gameObject;
+            GameObject Instance = Instantiate(chosenItem, droppableSpawnArea.position,Quaternion.identity,transform.parent).gameObject;
             Instance.AddComponent<Rigidbody>();
             Instance.AddComponent<ItemDrop>();
         }
@@ -47,6 +47,7 @@ public class BreakableWall : MonoBehaviour, IInteractable
     {
         if (PlayerCanBreak())
         {
+            Inventory.Instance.CurHeldAsset.InventoryInteract();
             BreakWall();
         }
     }
@@ -82,8 +83,8 @@ public class BreakableWall : MonoBehaviour, IInteractable
         {
             string control = InputManager.GamePadPresent switch
             {
-                true => "B",
-                false => "E"
+                true => "RT",
+                false => "Left Click"
             };
             return string.Format("{0} to Unblock", control);
         }
@@ -93,5 +94,10 @@ public class BreakableWall : MonoBehaviour, IInteractable
         }
 
         
+    }
+
+    public bool RequiresPickaxe()
+    {
+        return true;
     }
 }
