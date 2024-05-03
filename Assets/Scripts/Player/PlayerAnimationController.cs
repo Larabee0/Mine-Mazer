@@ -1,8 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Animations;
 using UnityEngine;
+
+public enum HandsState
+{
+    HandsIdleEmpty,
+    HandsItemIdle,
+    HandsItemPutAway,
+    HandsItemPullOut
+}
+
 
 public class PlayerAnimationController : MonoBehaviour
 {
@@ -33,6 +43,8 @@ public class PlayerAnimationController : MonoBehaviour
     private Dictionary<string, int> animationTriggers = new();
 
     [SerializeField] private AnimationEventCreator[] animationEvents;
+    private HandsState handsState = HandsState.HandsIdleEmpty;
+    private MapResource tempResource;
 
     private void Awake()
     {
@@ -63,7 +75,7 @@ public class PlayerAnimationController : MonoBehaviour
         {
             animationEvents[i].ToAnimationEvent(this);
         }
-
+        handsState = HandsState.HandsIdleEmpty;
         //for (int i = 0; i < animators.Length; i++)
         //{
         //    animators[i].gameObject.SetActive(false);
@@ -75,16 +87,46 @@ public class PlayerAnimationController : MonoBehaviour
     private void OnEnable()
     {
         Inventory.Instance.OnHeldItemChanged += OnItemChanged;
+        Inventory.Instance.OnHeldItemAboutToChange += OnHeldItemAboutToChange;
     }
 
     private void OnDisable()
     {
         Inventory.Instance.OnHeldItemChanged -= OnItemChanged;
+        Inventory.Instance.OnHeldItemAboutToChange -= OnHeldItemAboutToChange;
+    }
+
+    private void OnHeldItemAboutToChange()
+    {
+        animators[0].SetTrigger("Equip");
+        tempResource = Inventory.Instance.CurHeldAsset;
+        switch (handsState)
+        {
+            case HandsState.HandsIdleEmpty:
+                handsState = HandsState.HandsItemPullOut;
+                break;
+            case HandsState.HandsItemIdle:
+                handsState = HandsState.HandsItemPutAway;
+                break;
+        }
     }
 
     private void OnItemChanged(Item item)
     {
-        animators[0].SetTrigger("Equip");
+
+        switch (handsState)
+        {
+            case HandsState.HandsIdleEmpty:
+                //Inventory.Instance.CurHeldAsset.SetMapResourceActive(false);
+                break;
+            case HandsState.HandsItemIdle:
+                break;
+            case HandsState.HandsItemPutAway:
+                break;
+            case HandsState.HandsItemPullOut:
+                break;
+        }
+
         switch (item)
         {
             case Item.Torch:
@@ -118,6 +160,43 @@ public class PlayerAnimationController : MonoBehaviour
         Debug.Log("Torch deply fininshed");
     }
 
+    public void EquipMid()
+    {
+
+        Debug.Log("EquipMid");
+        switch (handsState)
+        {
+            case HandsState.HandsItemPutAway:
+                if(tempResource != null)
+                {
+                    tempResource.SetMapResourceActive(false);
+                }
+                
+                Inventory.Instance.CurHeldAsset.SetMapResourceActive(true);
+                handsState = HandsState.HandsItemPullOut;
+                break;
+            case HandsState.HandsItemPullOut:
+                Inventory.Instance.CurHeldAsset.SetMapResourceActive(true);
+                break;
+        }
+
+    }
+
+    public void EquipEnd()
+    {
+
+        switch (handsState)
+        {
+            case HandsState.HandsItemPutAway:
+                handsState = HandsState.HandsItemPullOut;
+                break;
+            case HandsState.HandsItemPullOut:
+                handsState = HandsState.HandsItemIdle;
+                break;
+        }
+        tempResource = null;
+        Debug.Log("EquipEnd");
+    }
     #endregion
 
     [Serializable]
@@ -139,20 +218,27 @@ public class PlayerAnimationController : MonoBehaviour
     {
         public string eventInvoke;
         public int ctrlIndex;
-        public int clipInCtrlIndex;
+        public string clipName;
         public float timeInClip;
 
         public void ToAnimationEvent(PlayerAnimationController pac)
         {
             if (string.IsNullOrWhiteSpace(eventInvoke) || string.IsNullOrEmpty(eventInvoke)) return;            
             if (pac.animators.Length <= ctrlIndex) return;
-            if (pac.animators[ctrlIndex].runtimeAnimatorController.animationClips.Length <= clipInCtrlIndex) return;
-            AnimationEvent animationEvent = new()
+            
+            string tempName = clipName;
+
+
+            var clip = pac.animators[ctrlIndex].runtimeAnimatorController.animationClips.First(clip => clip.name == tempName);
+            if(clip != null)
             {
-                functionName = eventInvoke,
-                time = timeInClip
-            };
-            pac.animators[ctrlIndex].runtimeAnimatorController.animationClips[clipInCtrlIndex].AddEvent(animationEvent);
+                AnimationEvent animationEvent = new()
+                {
+                    functionName = eventInvoke,
+                    time = timeInClip
+                };
+                clip.AddEvent(animationEvent);
+            }
         }
     }
 }

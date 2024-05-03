@@ -2478,7 +2478,6 @@ GameObject:
   - component: {fileID: 7509228367637486725}
   - component: {fileID: 8322381442699795188}
   - component: {fileID: 7873265323809388630}
-  - component: {fileID: 1945762185157113561}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -2711,23 +2710,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hungerLevel: 0.25
   hungerSpeed: 0.005
---- !u!114 &1945762185157113561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5356439156297477815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 463f17d781827a64e89cd32d36231a4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultAnimator: 0
-  animators:
-  - {fileID: 5260045136980884398}
-  triggers: []
-  animationEvents: []
 --- !u!1 &5547516765382162234
 GameObject:
   m_ObjectHideFlags: 0
@@ -3220,6 +3202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2123594369918251804}
   - component: {fileID: 5260045136980884398}
+  - component: {fileID: 7111205949886261313}
   m_Layer: 0
   m_Name: handsidle
   m_TagString: Untagged
@@ -3265,6 +3248,31 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7111205949886261313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7162224893776753221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463f17d781827a64e89cd32d36231a4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultAnimator: 0
+  animators:
+  - {fileID: 5260045136980884398}
+  triggers: []
+  animationEvents:
+  - eventInvoke: EquipMid
+    ctrlIndex: 0
+    clipName: HandsTorchEquip
+    timeInClip: 0.333
+  - eventInvoke: EquipEnd
+    ctrlIndex: 0
+    clipName: HandsTorchEquip
+    timeInClip: 0.83
 --- !u!1 &7305900629078381442
 GameObject:
   m_ObjectHideFlags: 0

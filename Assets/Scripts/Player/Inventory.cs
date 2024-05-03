@@ -40,6 +40,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private float itemNameTime = 1f;
 
     public Action<Item> OnHeldItemChanged;
+    public Action OnHeldItemAboutToChange;
 
     public Action<Item, int> OnItemPickUp;
     public Action OnItemPickUpSfx;
@@ -151,6 +152,8 @@ public class Inventory : MonoBehaviour
             inventory[item] -= quantity;
 
             itemInstance = assets[item][^1];
+
+            OnHeldItemAboutToChange?.Invoke();
             assets[item].RemoveAt(assets[item].Count - 1);
             if (inventory[item] <= 0)
             {
@@ -225,6 +228,7 @@ public class Inventory : MonoBehaviour
     {
         if (inventory.Count > 1)
         {
+            OnHeldItemAboutToChange?.Invoke();
             curIndex = WrapInventoryIndex(axis);
             MoveItemToHand();
         }
@@ -272,6 +276,7 @@ public class Inventory : MonoBehaviour
 
     private void MoveItemToHand()
     {
+        //OnHeldItemAboutToChange?.Invoke();
         if (assets.TryGetValue(inventoryOrder[curIndex], out List<MapResource> switchTo))
         {
             if (heldItem == switchTo[0])
@@ -280,9 +285,9 @@ public class Inventory : MonoBehaviour
             }
             if (heldItem != null)
             {
-                heldItem.SetMapResourceActive(false);
+                //heldItem.SetMapResourceActive(false);
             }
-            switchTo[0].SetMapResourceActive(true);
+            //switchTo[0].SetMapResourceActive(true);
             heldItem = switchTo[0];
             StopAllCoroutines();
             StartCoroutine(ShowItemNameTooltip(string.Format("{0} (x{1})",heldItem.ItemStats.name, inventory[inventoryOrder[curIndex]])));
@@ -291,7 +296,7 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogError("Target item was not contained in the assets dictionary!");
         }
-        heldItem.SetMapResourceActive(true);
+        //heldItem.SetMapResourceActive(true);
         OnHeldItemChanged?.Invoke(CurHeldItem.Value);
     }
 
@@ -300,6 +305,7 @@ public class Inventory : MonoBehaviour
         int index = inventoryOrder.IndexOf(target);
         if(index >= 0)
         {
+            OnHeldItemAboutToChange?.Invoke();
             curIndex = index;
             MoveItemToHand();
         }
