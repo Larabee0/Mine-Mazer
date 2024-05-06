@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -15,6 +16,9 @@ public class SectionImager : MonoBehaviour
         {
             fileName = transform.parent.name;
         }
+
+        RenderTexture.active = targetCamera.targetTexture;
+
         RenderTexture.active = targetCamera.activeTexture;
 
         Texture2D tex = new(targetCamera.activeTexture.width, targetCamera.activeTexture.height, TextureFormat.RGBA32, false, true);
@@ -32,5 +36,6 @@ public class SectionImager : MonoBehaviour
 
         AssetDatabase.Refresh();
     }
+
 }
 #endif

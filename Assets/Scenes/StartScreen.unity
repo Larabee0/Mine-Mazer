@@ -2269,52 +2269,6 @@ MonoBehaviour:
     targetItem: 0
     order: 109
     shownMote: 0
-  - title: Pleochrystite
-    category: Rocks, minerals and crystals
-    summary: 'A crystal that changes colour when exposed to lumen. When exposed to
-      extremely high concentrations of lumen, it may even start to glow and crack. '
-    body: ' Pleochrystitie is a unique crystal that is capable of Lumen detection
-      due to containing impurities in its crystal structure that have given it pseudo-pleochroic
-      properties that cause it to change colour according to the localised concentration
-      of Lumen, rather than just light. In its dormant state, Pleochrystite is a
-      deep greenish-blue colour, but changes to red when exposed to sufficient amounts
-      of Lumen. If overexposure occurs, the Pleochrystite may begin to fracture,
-      and eventually will break.  '
-    alwaysDisplay: 0
-    targetItem: 0
-    order: 110
-    shownMote: 0
-  - title: Shale
-    category: Rocks, minerals and crystals
-    summary: "A thin tile of rock that flakes easily off of the walls of the upper
-      layer, often near water. The miners use them as plates to serve food on, but
-      above ground they\u2019re mostly used as roof tiles."
-    body: 'Shale is a weak, flaky stone found throughout the mines, but often in
-      higher concentrations nearer water. It is one of the weakest forms of rock
-      found within the mines, with some sections being soft enough to snap off with
-      bare hands. It is commonly used in construction as a source material for brick,
-      tiles, pottery, etc. In the mines, it is also used as a fire source due to
-      its ability to produce an exothermic reaction in the right conditions. '
-    alwaysDisplay: 0
-    targetItem: 0
-    order: 111
-    shownMote: 0
-  - title: Bobble Head
-    category: 'Mushrooms and plantlife '
-    summary: A round white fungus, usually found floating on water. While it may
-      be large, it's also incredibly light.
-    body: "Bobblehead mushrooms, also colloquially called \u2018fungal orbs\u2019
-      or \u2018fungorbs\u2019, are a type of a mushroom that are edible when immature,
-      but can cause digestive upset in their matured state. The bobblehead typically
-      is found in a moist climate, and develops more easily on aquatic plants. These
-      fungi tend to be very light, with even the largest specimens only weighing
-      a few kilograms, however they are very absorbent, and if soaked in liquid,
-      they can become up to ten times their initial weight and size. This mushroom
-      is commonly eaten sliced, breaded and fried. "
-    alwaysDisplay: 0
-    targetItem: 0
-    order: 200
-    shownMote: 0
   - title: Fungal Steak
     category: 'Mushrooms and plantlife '
     summary: " A fungus with a deceptively meaty appearance and acrid taste. It\u2019s
@@ -2349,21 +2303,6 @@ MonoBehaviour:
     targetItem: 2
     order: 301
     shownMote: 0
-  - title: "Lion\u2019s Mane "
-    category: 'Mushrooms and plantlife '
-    summary: 'Stringy, meaty fungi found growing on Ficus roots. Occasionally used
-      as food, mostly used as toothfloss. '
-    body: "Lion\u2019s Mane, also called Greywacke\u2019s Beard by some insolent
-      miners, is a stringy, parasitic fungus, usually found on or near Ficus roots.
-      It feeds on the tree\u2019s nutrients, and leaves a rot pocket when removed,
-      which will kill the root if not treated properly. Its body is completely edible,
-      and highly nutritious, and is best cooked roasted or sauteed in oil. However,
-      in a pinch, its baisidia (the hanging spore-spines on the body) can be used
-      as a string replacement for tooth-flossing or hair-tying. "
-    alwaysDisplay: 0
-    targetItem: 0
-    order: 302
-    shownMote: 0
   - title: Morchelle
     category: 'Mushrooms and plantlife '
     summary: "A rich, meaty fungus often served as a rare delicacy during celebrations.
@@ -2379,37 +2318,6 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 303
-    shownMote: 0
-  - title: Tinderconk
-    category: 'Mushrooms and plantlife '
-    summary: An inedible, highly flammable fungus that smells vaguely like rotting
-      meat. Good for starting fires.
-    body: "Tinderconk is a decomposer fungus, commonly found near dead Ficus roots
-      or accident sites where miners have died. It has a hard, fibrous crust, but
-      its flesh is much more spongy. However, this does not mean that its flesh is
-      edible. While it does not seem to have any major adverse effects, it has been
-      known to cause digestive issues. Instead, tinderconk\u2019s main use is as
-      a firestarter, and is an essential ingredient in making explosives, alongside
-      saltpeter and charcoal."
-    alwaysDisplay: 0
-    targetItem: 0
-    order: 304
-    shownMote: 0
-  - title: Truffle
-    category: 'Mushrooms and plantlife '
-    summary: Flavourful fungi that grow best nearest the surface. A tasty topping
-      for soups, stews and noodle dishes.
-    body: 'Truffles are a subterranean fungus that are highly valued for their culinary
-      uses, and are most commonly found in damp areas near tree roots. There are
-      many different kinds of truffle, however they are all highly delicate and perishable,
-      and thus are either eaten on the day in the mines, or quickly transported to
-      the surface to be used in local restaurants. Unlike most fungi found within
-      the mines, truffles are best only lightly cooked, and should be finely sliced
-      to maximise their potential. They should not be eaten whole, or be given to
-      any heathens who will attempt to do so. '
-    alwaysDisplay: 0
-    targetItem: 0
-    order: 305
     shownMote: 0
   - title: Velvet Bud
     category: 'Mushrooms and plantlife '
@@ -3195,79 +3103,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e338c52179e137c448c54e5e87c21f5b, type: 3}
---- !u!1001 &1424364415
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.47
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.16
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.48
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 313730576770523094, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5215346865084537689, guid: 321fc9e3bfa4a2c489bf9677aec674b3,
-        type: 3}
-      propertyPath: m_Name
-      value: BreakablePlug
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 321fc9e3bfa4a2c489bf9677aec674b3, type: 3}
 --- !u!1001 &1492129679
 PrefabInstance:
   m_ObjectHideFlags: 0

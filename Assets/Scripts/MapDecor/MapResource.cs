@@ -75,6 +75,13 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
     }
 
     public ItemStats ItemStats => itemStats;
+
+    public void ForceInit()
+    {
+        Awake();
+        Start();
+    }
+
     protected virtual void Awake()
     {
         originalScale = transform.localScale;
