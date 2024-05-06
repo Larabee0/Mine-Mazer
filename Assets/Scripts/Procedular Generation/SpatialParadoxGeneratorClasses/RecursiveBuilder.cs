@@ -19,6 +19,7 @@ public partial class SpatialParadoxGenerator
         
         if (initialArea)
         {
+            initalAreaGeneration = false;
             Debug.Log("Inital Generation complete");
         }
         OnMapUpdate?.Invoke();

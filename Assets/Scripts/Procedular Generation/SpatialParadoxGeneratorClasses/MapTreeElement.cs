@@ -25,6 +25,7 @@ public class MapTreeElement
     public BakedTunnelSection dataFromBake;
     public SectionQueueItem queuedSection;
     public HashSet<int> inUse = new();
+    public List<MapTreeElement> internalDeadEnds = new();
 
     private Dictionary<int, SectionAndConnector> connectorPairs = new();
     public Dictionary<int, SectionAndConnector> ConnectorPairs

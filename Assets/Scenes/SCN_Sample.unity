@@ -306,7 +306,7 @@ PrefabInstance:
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
       propertyPath: ringRenderDst
-      value: 4
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -418,7 +418,7 @@ PrefabInstance:
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
       propertyPath: tunnelSections.Array.size
-      value: 18
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -447,6 +447,24 @@ PrefabInstance:
       propertyPath: tunnelSections.Array.data[17]
       value: 
       objectReference: {fileID: 5690713400658837405, guid: f3cc95ca6faf29f4bb27eef3dbf3bef2,
+        type: 3}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: tunnelSections.Array.data[18]
+      value: 
+      objectReference: {fileID: 81207645320716588, guid: d9c2585a374b96141b4f08f0baa5a1e6,
+        type: 3}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: tunnelSections.Array.data[19]
+      value: 
+      objectReference: {fileID: 2952858900364761350, guid: 39c0a94edde8e4d43a5ba5005c03e034,
+        type: 3}
+    - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
+        type: 3}
+      propertyPath: tunnelSections.Array.data[20]
+      value: 
+      objectReference: {fileID: 4425253731281067152, guid: 4595721669d3d7d4fa68b537b41e52ff,
         type: 3}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -2907,7 +2925,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemPickUp: {fileID: 2010643140}
-  itemGive: {fileID: 2010643139}
+  itemPutDown: {fileID: 0}
 --- !u!1 &2129518431
 GameObject:
   m_ObjectHideFlags: 0
@@ -3045,6 +3063,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUi: {fileID: 2129518432}
+  ItemMote: {fileID: 0}
+  compendiumUI: {fileID: 0}
   settingsMenuPrefab: {fileID: 0}
   hungerProgressAnimationSpeed: 0
   hungerFlashFadeTime: 0

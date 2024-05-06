@@ -2381,7 +2381,9 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 0}
       parentPos: {x: 0, y: 0, z: 0}
       internalIndex: 1
-    excludePrefabConnections: []
+    excludePrefabConnections:
+    - {fileID: 2742071741484992111}
+    - {fileID: 6413336854673384978, guid: f8877bc59c277884aa6ddeb4403a8d4b, type: 3}
     excludeConnectorSections:
     - exclude: []
     - exclude: []

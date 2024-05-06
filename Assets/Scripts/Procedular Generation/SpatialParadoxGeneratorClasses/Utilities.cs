@@ -230,13 +230,60 @@ public partial class SpatialParadoxGenerator
         return connectors;
     }
 
-    private List<int> FilterSections(int originalInstanceId)
+    private bool DoJunction()
+    {
+        if (initalAreaGeneration)
+        {
+            if(MapTree.Count > 0 && MapTree.Count % dstBetweenJunctions == 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        List<(int,bool)> cache = explorationStatistics.JustVistedCache;
+        if (cache.Count >=dstBetweenJunctions)
+        {
+            return cache.GetRange(0, dstBetweenJunctions).TrueForAll(item => !instanceIdToBakedData[item.Item1].Junction && !item.Item2);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private List<int> FilterSections(int originalInstanceId, out bool doJunction)
     {
         List<int> nextSections = new(tunnelSectionsByInstanceID);
         BakedTunnelSection data = instanceIdToBakedData[originalInstanceId];
+        doJunction = DoJunction();
+        
+        if(doJunction)
+        {
+            explorationStatistics.JustVistedCache.Clear();
+            Debug.Log("Placing junction!");
+            nextSections.RemoveAll(item => !instanceIdToBakedData[item].Junction);
+        }
+        else
+        {
+            nextSections.RemoveAll(item => instanceIdToBakedData[item].Junction);
+        }
+
         if (data.ExcludePrefabConnectionsIds.Count > 0)
         {
             data.ExcludePrefabConnectionsIds.ForEach(item => nextSections.RemoveAll(element => element == item));
+        }
+
+        if(nextSections.Count == 0)
+        {
+            nextSections.AddRange(tunnelSectionsByInstanceID);
+            if (doJunction)
+            {
+                nextSections.RemoveAll(item => !instanceIdToBakedData[item].Junction && !instanceIdToBakedData[item].ForcedNotJunction);
+            }
+            else
+            {
+                nextSections.RemoveAll(item => instanceIdToBakedData[item].Junction);
+            }
         }
 
         nextSections.RemoveAll(element => !Spawnable(element, true));
@@ -248,6 +295,10 @@ public partial class SpatialParadoxGenerator
             {
                 nextSections.Add(nextSections[i]);
             }
+        }
+        if (nextSections.Count == 0)
+        {
+            throw new System.InvalidOperationException("Cannot return 0 from Filter Sections");
         }
         return nextSections;
     }

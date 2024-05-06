@@ -70,7 +70,7 @@ public partial class SpatialParadoxGenerator
 
     public MapTreeElement EnqueueSection(MapTreeElement primaryElement, TunnelSection prefabSecondary, Connector primaryConnector, Connector secondaryConnector)
     {
-        int permanentID = primaryElement.GetHashCode();
+        int permanentID = randomNG.NextInt(0, math.abs(primaryElement.GetHashCode()));
 
         while (virtualPhysicsWorldIds.Contains(permanentID))
         {

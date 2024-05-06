@@ -106,6 +106,7 @@ public class BakedTunnelSection
     [SerializeField] private bool strongKeep = false;
     [SerializeField] private bool hasLadder = false;
     [SerializeField] private bool isColony = false;
+    [SerializeField] private bool forceNotJunction = false;
     public float AmbientLightLevel => sectionLightLevel;
     public AudioClip AmbientNoise => sectionAmbience;
 
@@ -113,6 +114,8 @@ public class BakedTunnelSection
     public Vector3 StrongKeepPosition => strongKeepPosition;
     public string WaypointName => waypointName;
     public bool StrongKeep => strongKeep;
+    public bool Junction => connectors.Length > 2 && !forceNotJunction;
+    public bool ForcedNotJunction => forceNotJunction;
     public bool HasLadder => hasLadder;
     public bool IsColony => isColony;
     public bool Spawnable => SpawnRule.Spawnable;

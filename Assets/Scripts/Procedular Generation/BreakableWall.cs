@@ -4,19 +4,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BreakableWall : MonoBehaviour, IInteractable
+public class BreakableWall : MonoBehaviour, IInteractable, IHover
 {
     [SerializeField] private Rigidbody[] bodies;
+    [SerializeField] private MeshRenderer[] meshRenderers;
     [SerializeField] protected MapResource[] droppableItems;
     [SerializeField] private Transform droppableSpawnArea;
     [SerializeField] private Vector2Int minMaxDrop;
     [SerializeField] private Vector2 rockLingerTimeRange;
+    [SerializeField] protected Color onSelectColour = Color.yellow;
     public Connector connector;
 
     public Pluse OnWallBreak;
 
     private void BreakWall()
     {
+        HoverOff();
         OnWallBreak?.Invoke();
         transform.DetachChildren();
         for (int i = 0; i < bodies.Length; i++)
@@ -99,5 +102,43 @@ public class BreakableWall : MonoBehaviour, IInteractable
     public bool RequiresPickaxe()
     {
         return true;
+    }
+
+    public void HoverOn()
+    {
+        SetOutlineColour(onSelectColour);
+    }
+
+    public void HoverOff()
+    {
+        SetOutlineColour(Color.black);
+    }
+
+
+    public void SetRainbowOpacity(float opacity)
+    {
+        for (int i = 0; i < meshRenderers.Length; i++)
+        {
+            MeshRenderer renderer = meshRenderers[i];
+            List<Material> materials = new();
+            renderer.GetMaterials(materials);
+            materials.ForEach(mat => mat.SetFloat("_Overlay_Opacity", opacity));
+        }
+    }
+
+    public void SetOutlineColour(Color colour)
+    {
+        if(meshRenderers != null && meshRenderers.Length > 0)
+        {
+            for (int i = 0; i < meshRenderers.Length; i++)
+            {
+                MeshRenderer renderer = meshRenderers[i];
+                if (renderer == null) continue;
+                List<Material> materials = new();
+                renderer.GetMaterials(materials);
+                materials.ForEach(mat => mat.SetColor("_OutlineColour", colour));
+            }
+
+        }
     }
 }

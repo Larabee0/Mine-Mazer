@@ -222,6 +222,8 @@ public class TradingUI : MonoBehaviour
 
             Inventory.Instance.TryMoveItemToHand(givenItem.ItemStats.type);
         }
+
+        CloseTrading(withdrawn);
     }
 
     private void CancelTrade()

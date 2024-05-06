@@ -19,37 +19,15 @@ public class TunnelSection : MonoBehaviour
         set { dataFromBake = value; }
     }
 
-
-
-    //[SerializeField] private Texture2D miniMapAsset;
-    //[SerializeField] private List<TunnelSection> excludePrefabConnections = new();
-    //public  List<TunnelSection> ExcludePrefabConnectionsTS => excludePrefabConnections;
-    //public Connector[] connectors;
-
-    //public BoxBounds[] boundingBoxes;
-    //public List<ConnectorMask> excludeConnectorSections = new();
-    //[SerializeField] private Vector3 strongKeepPosition;
-    //[SerializeField] private string waypointName;
-
-    //[SerializeField] private SectionSpawnBaseRule spawnRule;
-    //[SerializeField] private float sectionLightLevel = 0.202f;
-    //[SerializeField] private AudioClip sectionAmbience;
-
-    //[SerializeField] private List<int> excludePrefabConnectionsIds;
-    //[SerializeField] private bool strongKeep = false;
-    //[SerializeField] private bool hasLadder = false;
-    //[SerializeField] private bool isColony = false;
     [Header("Runtime Data")]
     public MapTreeElement treeElementOwner;
     public GameObject stagnationBeacon;
     public int orignalInstanceId;
-    private bool weakKeep = false;
-    [SerializeField] private Transform sanctumPartsSpawnPoint;
+    [SerializeField] private bool weakKeep = false;
     [SerializeField] private Transform decorations;
     [SerializeField] private float decorCoverage;
     public int decorationCount;
     // accessors 
-    public Transform SanctumPartSpawnPoint=>sanctumPartsSpawnPoint;
     public Vector3 WaypointPosition => stagnationBeacon != null ? stagnationBeacon.transform.position : transform.TransformPoint(StrongKeepPosition);
     public float AmbientLightLevel => DataFromBake.AmbientLightLevel;
     public AudioClip AmbientNoise => DataFromBake.AmbientNoise;

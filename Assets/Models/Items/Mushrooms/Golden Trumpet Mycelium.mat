@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Golden Trumpet Mycelium
-  m_Shader: {fileID: -6465566751694194690, guid: cff4ea1aae77540419307116831bac22,
+  m_Shader: {fileID: -6465566751694194690, guid: dd4dd779c4b169f48abc230b687daa2e,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -121,6 +121,8 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _Effect_Emission: 0
+    - _Emission_Intensity: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0
@@ -131,6 +133,7 @@ Material:
     - _Normals_Sensitivity: 1
     - _OcclusionStrength: 1
     - _Outline_Thickness: 2
+    - _Overlay_Opacity: 0
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -153,5 +156,6 @@ Material:
     - _EmissionColor: {r: 0.16981137, g: 0.16981137, b: 0.16981137, a: 1}
     - _EmissionColour: {r: 0.17677669, g: 0.17677669, b: 0.17677669, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _OutlineColour: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []

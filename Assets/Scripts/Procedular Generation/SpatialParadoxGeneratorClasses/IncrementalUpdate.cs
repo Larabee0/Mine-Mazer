@@ -150,7 +150,7 @@ public partial class SpatialParadoxGenerator
                 SectionDelayedOuts pickSectionDelayedData = new();
 
                 List<Connector> targetConnector = new() { treePossibleElement.Connectors[otherInternalIndex] };
-                List<int> nextSections = FilterSections(treePossibleElement.OriginalInstanceId);
+                List<int> nextSections = FilterSections(treePossibleElement.OriginalInstanceId, out _);
 
                 yield return PickSectionDelayed(treePossibleElement, nextSections, pickSectionDelayedData, targetConnector);
 

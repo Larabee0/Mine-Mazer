@@ -6,6 +6,7 @@ using UnityEngine;
 public class CoreChamber : DependsOnExplorationCountRule
 {
     [SerializeField] protected TunnelSection dependsOnVisited;
+    [SerializeField] protected bool disableAfterSpawn = false;
 
     protected bool visited = false;
     protected int startIndex = -1;
@@ -28,5 +29,13 @@ public class CoreChamber : DependsOnExplorationCountRule
         base.ResetRule();
         startIndex = -1;
         visited = false;
+    }
+    public override void OnSpawned()
+    {
+        base.OnSpawned();
+        if(disableAfterSpawn)
+        {
+            spawnLimit = 0;
+        }
     }
 }
