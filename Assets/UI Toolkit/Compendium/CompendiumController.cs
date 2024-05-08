@@ -8,7 +8,6 @@ using UnityEngine.UIElements;
 public class CompendiumController : UIToolkitBase
 {
     private CompendiumUI compendiumRef;
-
     private ScrollView outline;
     private List<ListViewHeadingPairs> subHeadings;
     private List<string> categories ;
@@ -50,6 +49,11 @@ public class CompendiumController : UIToolkitBase
         RootVisualElement.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
         if (active)
         {
+
+            if (PlayerUIController.Instance.InventoryMenuUI.Open)
+            {
+                PlayerUIController.Instance.InventoryMenuUI.CloseInventory();
+            }
             InputManager.Instance.UnlockPointer();
         }
         else

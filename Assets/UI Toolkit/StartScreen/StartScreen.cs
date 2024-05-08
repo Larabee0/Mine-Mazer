@@ -26,6 +26,7 @@ public class StartScreen : MonoBehaviour
         startScreenController = new(RootVisualElement,this);
         InputManager.Instance.UnlockPointer();
         InputManager.Instance.SetUIToolkitFocus();
+        startScreenController.Focus();
         PlayerUIController.Instance.ShowCrosshair = false;
         PlayerUIController.Instance.SetMiniMapVisible(false);
         startScreenController.SetActive(true);

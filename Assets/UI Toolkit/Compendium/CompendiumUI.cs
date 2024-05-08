@@ -12,6 +12,8 @@ public class CompendiumUI : MonoBehaviour
     [SerializeField] private List<CompendiumItem> compendiumItems;
     public List<CompendiumItem> CompendiumItems =>compendiumItems;
     private CompendiumController compendiumController;
+    public CompendiumController CompendiumController=> compendiumController;
+
 
 
     private void Start()

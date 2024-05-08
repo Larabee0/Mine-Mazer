@@ -10,11 +10,23 @@
     margin-bottom: 5px;
     flex-direction: row;
     justify-content: center;
-width: 100px;
-height: 100px;
+    width: 100px;
+    height: 100px;
 }
 
 .radial-item__label {
     -unity-text-align: middle-left;
-color: var(--percentage-color);
+    color: var(--percentage-color);
+}
+
+.radial__button-left {
+    height: 60px;
+    width: 60px;
+    background-image: url('project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-2236324273849735119&guid=89204f8cb1b15c340972391a92f1becb&type=3#arrow-left@2x');
+}
+
+.radial__button-right {
+    width: 60px;
+    height: 60px;
+    background-image: url('project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-1087164816274819069&guid=89204f8cb1b15c340972391a92f1becb&type=3#arrow-right@2x');
 }

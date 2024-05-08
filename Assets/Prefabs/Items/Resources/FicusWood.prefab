@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1513783017535819914}
   - component: {fileID: 7387679282795426229}
   - component: {fileID: 18849751349251773}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wooden_beam
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,6 +105,7 @@ MonoBehaviour:
   requiresPickaxe: 0
   meshRenderers: []
   onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  icon: {fileID: 0}
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -120,9 +121,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7286340641549548362}
   - component: {fileID: 4476556896506307516}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameObject
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -219,6 +220,7 @@ MonoBehaviour:
   requiresPickaxe: 0
   meshRenderers: []
   onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  icon: {fileID: 2800000, guid: b7bbd528e4a10624a8e49cfc0720c294, type: 3}
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}

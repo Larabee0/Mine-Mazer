@@ -31,9 +31,12 @@ public class PlayerUIController : MonoBehaviour
     [SerializeField] private UIDocument playerUi;
     public VisualTreeAsset ItemMote;
     [SerializeField] private CompendiumUI compendiumUI;
+    [SerializeField] private Texture2D compendiumIcon;
+    public Texture2D CompendiumIcon=> compendiumIcon;
 
     private VisualElement Root => playerUi.rootVisualElement;
     public CompendiumUI CompendiumUI => compendiumUI;
+    public InventoryController InventoryMenuUI => inventoryMenu;
 
     private SettingsMenuController settingsMenu;
     private InventoryController inventoryMenu;
@@ -121,8 +124,7 @@ public class PlayerUIController : MonoBehaviour
         screenFade.style.display = DisplayStyle.None;
         StartCoroutine(SetHungerBarProgress());
         SetHungerVisible(false);
-        //SetPauseMenuActive(false);
-        //InputManager.Instance.UnlockPointer();
+        SetInventoryActive(true);
     }
 
     private void OnEnable()
@@ -163,7 +165,12 @@ public class PlayerUIController : MonoBehaviour
     private void TogglePauseMenu()
     {
         InputManager.Instance.SetPointerLocked(PauseMenuOpen);
+        if (inventoryMenu.Open)
+        {
+            inventoryMenu.CloseInventory();
+        }
         SetPauseMenuActive(!PauseMenuOpen);
+        
     }
 
     public void SetMiniMapVisible(bool visible)
@@ -192,11 +199,26 @@ public class PlayerUIController : MonoBehaviour
 
     private void OpenPauseMenu()
     {
+        if (inventoryMenu.Open)
+        {
+            inventoryMenu.CloseInventory();
+        }
         SetPauseMenuActive(true);
     }
 
     public void SetPauseMenuActive(bool active)
     {
+        if (active)
+        {
+            if (compendiumUI.CompendiumController.Open)
+            {
+                compendiumUI.CompendiumController.SetActive(false);
+            }
+            if (inventoryMenu.Open)
+            {
+                inventoryMenu.CloseInventory();
+            }
+        }
         pauseButtonContainer.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
@@ -229,7 +251,7 @@ public class PlayerUIController : MonoBehaviour
         {
             StopCoroutine(fadeScreenProcess);
         }
-        fadeScreenProcess =StartCoroutine(FadeScreenOperation(startAlpha, endAlpha, duration));
+        fadeScreenProcess = StartCoroutine(FadeScreenOperation(startAlpha, endAlpha, duration));
     }
 
     private IEnumerator FadeScreenOperation(float startAlpha, float endAlpha, float duration)

@@ -25,7 +25,7 @@
     <ui:VisualElement name="Mote" picking-mode="Ignore" style="background-color: rgba(0, 0, 0, 0); width: 400px; height: 96px; top: 5%; position: absolute; left: 2%; align-items: flex-start; display: flex; max-width: 400px;" />
     <ui:VisualElement picking-mode="Ignore" name="Overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; display: flex;">
         <ui:VisualElement name="Inventory" picking-mode="Ignore" style="background-color: rgba(0, 0, 0, 0); justify-content: center; align-items: center; display: none;">
-            <RadialMenuItem name="RadialInventory" radius="1" background="#FFFFFFFF" divisions="#FFFFFFFF" lineThickness="200" menuBackgroundColor="#434243FF" menuDivisionColor="#FFFFFFFF" focusable="true" style="width: 600px; height: 600px;" />
+            <RadialMenuItem name="RadialInventory" radius="0.72" background="#FFFFFFFF" divisions="#FFFFFFFF" lineThickness="200" menuBackgroundColor="#434243FF" menuDivisionColor="#FFFFFFFF" focusable="true" segmentsPerPage="8" style="width: 700px; height: 700px; align-items: center; display: none;" />
         </ui:VisualElement>
         <ui:VisualElement name="PauseButtonContainer" style="background-color: rgba(255, 255, 255, 0.55); padding-top: 30px; padding-right: 30px; padding-left: 30px; border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; display: none;">
             <ui:Button text="Resume" display-tooltip-when-elided="true" name="ResumeButton" class="TradeMainbutton" style="min-width: 350px;" />

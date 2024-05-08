@@ -112,12 +112,16 @@ MonoBehaviour:
   Placeable: 0
   Interactable: 1
   requiresPickaxe: 0
+  meshRenderers: []
+  onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  icon: {fileID: 2800000, guid: 39aa490d303f292409ddb291146dd5b1, type: 3}
   heldOrenintationOffset: {x: -56.15, y: 2.02, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 0.58, y: 0.58, z: 0.58}
   placementPositionOffset: {x: 0, y: 0.334, z: 0}
   toolTipNameOverride: 
   dialogue: {fileID: 485581494826235871}
+  sectionParent: {fileID: 0}
 --- !u!65 &6798386109841195211
 BoxCollider:
   m_ObjectHideFlags: 0
