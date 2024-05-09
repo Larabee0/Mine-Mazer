@@ -16,10 +16,15 @@ public class BreakableWall : MonoBehaviour, IInteractable, IHover
     public Connector connector;
 
     public Pluse OnWallBreak;
+    private void Awake()
+    {
+        SetOutlineFader(true);
+    }
 
     private void BreakWall()
     {
         HoverOff();
+        SetOutlineFader(false);
         OnWallBreak?.Invoke();
         transform.DetachChildren();
         for (int i = 0; i < bodies.Length; i++)
@@ -107,11 +112,13 @@ public class BreakableWall : MonoBehaviour, IInteractable, IHover
     public void HoverOn()
     {
         SetOutlineColour(onSelectColour);
+        SetOutlineFader(false);
     }
 
     public void HoverOff()
     {
         SetOutlineColour(Color.black);
+        SetOutlineFader(true);
     }
 
 
@@ -139,6 +146,23 @@ public class BreakableWall : MonoBehaviour, IInteractable, IHover
                 materials.ForEach(mat => mat.SetColor("_OutlineColour", colour));
             }
 
+        }
+    }
+
+
+    public void SetOutlineFader(bool fading)
+    {
+
+        if (meshRenderers != null && meshRenderers.Length > 0)
+        {
+            for (int i = 0; i < meshRenderers.Length; i++)
+            {
+                MeshRenderer renderer = meshRenderers[i];
+                if (renderer == null) continue;
+                List<Material> materials = new();
+                renderer.GetMaterials(materials);
+                materials.ForEach(mat => mat.SetInt("_OutlineFading", fading ? 1 : 0));
+            }
         }
     }
 }

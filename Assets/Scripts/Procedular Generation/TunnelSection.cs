@@ -244,16 +244,10 @@ public class TunnelSection : MonoBehaviour
         {
             int index = Random.Range(0, points.Count);
             ProDecPoint point = points[index];
-            points.RemoveAt(index);
             point.UpdateMatrix(transform.localToWorldMatrix);
             MapResource trs = Instantiate(resources[Random.Range(0, resources.Length)], point.WorldPos, Quaternion.identity, decorations);
-            trs.transform.up = point.Up;
-            if (trs.ItemStats.type == Item.Versicolor)
-            {
-                continue;
-            }
-            // trs.transform.RotateAroundLocal(Vector3.up, Random.Range(0, 359f));
-            trs.transform.Rotate(Vector3.up, Random.Range(0, 359f), Space.Self);
+            if (TransformDecoration(point, trs)) continue;
+            points.RemoveAt(index);
             double timeCheck = (Time.realtimeSinceStartupAsDouble - interationTime) * 1000;
             if (timeCheck > 4)
             {
@@ -263,6 +257,32 @@ public class TunnelSection : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    private static bool TransformDecoration(ProDecPoint point, MapResource trs)
+    {
+        if (trs.ItemStats.type == Item.Versicolor)
+        {
+            trs.transform.localRotation = Quaternion.LookRotation(point.Up, Vector3.up);
+        }
+        else if (trs.ItemStats.type == Item.None)
+        {
+            if (trs.ItemStats.name == "ceiling_lantern")
+            {
+                trs.transform.localRotation = Quaternion.LookRotation(point.Forward, Vector3.up);
+            }
+            else
+            {
+                trs.transform.up = point.Up;
+                trs.transform.Rotate(Vector3.up, Random.Range(0, 359f), Space.Self);
+            }
+        }
+        else
+        {
+            trs.transform.up = point.Up;
+            trs.transform.Rotate(Vector3.up, Random.Range(0, 359f), Space.Self);
+        }
+        return false;
     }
 
     private JobHandle ScheduleMatrixUpdate(List<ProDecPoint> points, NativeArray<ProDecPointBurst> pointsBurst)

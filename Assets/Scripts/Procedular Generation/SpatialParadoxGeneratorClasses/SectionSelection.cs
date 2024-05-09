@@ -91,6 +91,7 @@ public partial class SpatialParadoxGenerator
             int index = internalSections.IndexOf(pickedSection.orignalInstanceId);
             var pickedInstance = promoteSectionsList[index];
             pickedInstance.sectionInstance.gameObject.SetActive(true);
+            pickedInstance.sectionInstance.SetCollidersEnabled(true);
             pickedInstance.sectionInstance.CollidersEnabled = true;
             promoteSectionsList.RemoveAt(index);
             SetSectionInActivePhysicsWorld(pickedInstance.UID, false);
@@ -107,6 +108,10 @@ public partial class SpatialParadoxGenerator
            //  priPref.UpdateWorldPos(Unity.Mathematics.float4x4.identity);
             conn.UpdateWorldPos(breakableWall.transform.localToWorldMatrix);
             TransformSection(breakableInstance.transform, priPref, conn);
+        }
+        else
+        {
+            rejectBreakableWallAtConnections = false;
         }
     }
 

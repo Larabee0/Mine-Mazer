@@ -147,9 +147,19 @@ public class Motes : UIToolkitBase
         container.style.position = Position.Absolute;
         RootVisualElement.Add(container);
 
-        container.Q<Label>("MoteTitle").text = string.Format("Picked up {0} ({1}/{2})", mote.item, mote.itemCount, mote.target);
+        string itemText = Inventory.Instance.assets.ContainsKey(mote.item)
+            ? Inventory.Instance.assets[mote.item][0].ItemStats.name
+            : mote.item.ToString();
+
+        container.Q<Label>("MoteTitle").text = string.Format("Picked up {0} ({1}/{2})", itemText, mote.itemCount, mote.target);
         Label desc = container.Q<Label>("MoteDescription");
-        
+
+        if (Inventory.Instance.icons.ContainsKey(mote.item))
+        {
+            VisualElement element = container.Q("Icon");
+            element.style.backgroundImage = Inventory.Instance.icons[mote.item];
+        }
+
         if (mote.newItem) {
 
             desc.text = string.Format("New compendium page unlocked: {0}!",mote.item); 

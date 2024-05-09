@@ -101,6 +101,7 @@ public class Inventory : MonoBehaviour
     {
         itemInstance.SetColliderActive(false);
         itemInstance.SetMapResourceActive(false);
+        itemInstance.SetOutlineFader(false);
         if (inventory.ContainsKey(itemType))
         {
             inventory[itemType] += quantity;

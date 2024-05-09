@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MushroomSoup
-  m_Shader: {fileID: -6465566751694194690, guid: cff4ea1aae77540419307116831bac22,
+  m_Shader: {fileID: -6465566751694194690, guid: dd4dd779c4b169f48abc230b687daa2e,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -108,7 +108,10 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _Effect_Emission: 0
+    - _Emission_Intensity: 0
     - _EnvironmentReflections: 1
+    - _FadeMultiplier: 0.25
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
@@ -117,7 +120,9 @@ Material:
     - _NormalWeight: 1
     - _Normals_Sensitivity: 1
     - _OcclusionStrength: 1
+    - _OutlineFading: 0
     - _Outline_Thickness: 2
+    - _Overlay_Opacity: 0
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -140,6 +145,8 @@ Material:
     - _EmissionColor: {r: 0.8113208, g: 0.7309541, b: 0.7309541, a: 1}
     - _EmissionColour: {r: 1, g: 1, b: 1, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _OutlineColour: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineFade: {r: 0.3, g: 0.3, b: 0.3, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &7819613438236269558

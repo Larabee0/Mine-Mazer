@@ -1987,6 +1987,7 @@ MonoBehaviour:
   ItemMote: {fileID: 9197481963319205126, guid: 0516f25dd481db74198d83462635e243,
     type: 3}
   compendiumUI: {fileID: 290947043}
+  compendiumIcon: {fileID: 0}
   settingsMenuPrefab: {fileID: 9197481963319205126, guid: 91ea0259b4733844a8862e4eb470393a,
     type: 3}
   hungerProgressAnimationSpeed: 1
@@ -2024,6 +2025,8 @@ MonoBehaviour:
   uiController: {fileID: 290947041}
   backgroundTextures:
   - {fileID: 2800000, guid: 40265a896a0f341bb956e90c59025a29, type: 3}
+  - {fileID: 2800000, guid: 4573bac8db3edf6419b521b6b290500c, type: 3}
+  - {fileID: 2800000, guid: 6bbe006955113e341a9886898967342a, type: 3}
 --- !u!114 &290947039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2064,6 +2067,10 @@ MonoBehaviour:
   waypointAssets:
   - {fileID: 2800000, guid: ec464d8581ef7734ca35cf5f0ceae6bf, type: 3}
   - {fileID: 2800000, guid: bff2ba39f5f4448589e80522ebfcd0a0, type: 3}
+  - {fileID: 2800000, guid: 6bbe006955113e341a9886898967342a, type: 3}
+  - {fileID: 2800000, guid: 25d02afe05819cf46852fbaebfae620b, type: 3}
+  - {fileID: 2800000, guid: db4abc0e7c23e8b4c95172a4270e314d, type: 3}
+  - {fileID: 2800000, guid: 4573bac8db3edf6419b521b6b290500c, type: 3}
   wayPointRes: 96
 --- !u!114 &290947041
 MonoBehaviour:
@@ -2526,6 +2533,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mushroom Soup
       objectReference: {fileID: 0}
+    - target: {fileID: 1606485108606532387, guid: 27d472563310f3f429b08d25582fd113,
+        type: 3}
+      propertyPath: Interactable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5875369637668637239, guid: 27d472563310f3f429b08d25582fd113,
         type: 3}
       propertyPath: m_RootOrder
@@ -2820,6 +2832,11 @@ PrefabInstance:
     - target: {fileID: 8048640736220625442, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2,
         type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8048640736220625442, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2,
+        type: 3}
+      propertyPath: Interactable
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8610934922549146800, guid: 4a4fdf9dc641b564ab53d8f118eeb3d2,
@@ -3276,6 +3293,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 33.899
       objectReference: {fileID: 0}
+    - target: {fileID: 2427611828371672613, guid: 7e2e54d9c459107468e3889920e81a3d,
+        type: 3}
+      propertyPath: Interactable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7640222774191447351, guid: 7e2e54d9c459107468e3889920e81a3d,
         type: 3}
       propertyPath: m_Name
@@ -3392,6 +3414,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lumen
+      objectReference: {fileID: 0}
+    - target: {fileID: 6506559788001277901, guid: 8f71a7f6279df344a8bc612a68214abe,
+        type: 3}
+      propertyPath: Interactable
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9041358991876466093, guid: 8f71a7f6279df344a8bc612a68214abe,
         type: 3}

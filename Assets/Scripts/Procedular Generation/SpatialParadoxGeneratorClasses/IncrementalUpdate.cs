@@ -9,18 +9,17 @@ public partial class SpatialParadoxGenerator
 {
     private void UpdateMap()
     {
-        if (lastExit == curPlayerSection && lastEnter != curPlayerSection && mapUpdateProcess == null)
+        if (lastExit == curPlayerSection && lastEnter != curPlayerSection )
         {
-            mapUpdateProcess = StartCoroutine(DelayedMapGen(lastEnter));
+            DelayedMapGen(lastEnter);
         }
         lastEnter = null;
         lastExit = null;
     }
 
-    private IEnumerator DelayedMapGen(MapTreeElement newSection)
-    {
-        yield return null;
 
+    private void DelayedMapGen(MapTreeElement newSection)
+    {
         nextPlayerSection = newSection;
         if (incrementalUpdateProcess == null)
         {
@@ -28,7 +27,6 @@ public partial class SpatialParadoxGenerator
         }
         else queuedUpdateProcess ??= StartCoroutine(AwaitCurrentIncrementalComplete());
 
-        mapUpdateProcess = null;
         AmbientController.Instance.FadeAmbientLight(newSection.sectionInstance.AmbientLightLevel);
         AmbientController.Instance.ChangeTune(newSection.sectionInstance.AmbientNoise);
         OnMapUpdate?.Invoke();
@@ -36,11 +34,12 @@ public partial class SpatialParadoxGenerator
 
     private IEnumerator AwaitCurrentIncrementalComplete()
     {
+        MapTreeElement awaitableNextSection = nextPlayerSection;
         while (incrementalUpdateProcess != null)
         {
             yield return null;
         }
-        incrementalUpdateProcess = StartCoroutine(MakeRootNodeIncremental(nextPlayerSection));
+        incrementalUpdateProcess = StartCoroutine(MakeRootNodeIncremental(awaitableNextSection));
         queuedUpdateProcess = null;
     }
 
@@ -76,6 +75,7 @@ public partial class SpatialParadoxGenerator
         if (section.Keep)
         {
             section.sectionInstance.gameObject.SetActive(false);
+            section.sectionInstance.SetCollidersEnabled(false);
             section.sectionInstance.transform.parent = sectionGraveYard;
             ClearConnectors(section);
             mothBalledSections.Add(section, new(math.distancesq(curPlayerSection.LocalToWorld.Translation(), section.LocalToWorld.Translation()), mapTree.Count - 1));
@@ -102,6 +102,7 @@ public partial class SpatialParadoxGenerator
         UpdateMothBalledSections(newRoot);
 
         List<List<MapTreeElement>> newTree = RebuildTreeNew(newRoot);
+        UpdatePlayerSection(newTree);
 
         if (mapProfiling) Debug.LogFormat("New Tree Size {0}", newTree.Count);
         if (mapProfiling) Debug.LogFormat("Original Tree Size {0}", mapTree.Count);
@@ -119,7 +120,6 @@ public partial class SpatialParadoxGenerator
 
 
 
-        UpdatePlayerSection(newTree);
         
         LODMap();
 

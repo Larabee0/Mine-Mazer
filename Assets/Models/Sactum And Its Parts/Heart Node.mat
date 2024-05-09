@@ -108,9 +108,10 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _Effect_Emission: 0
-    - _Emission_Intensity: 0
+    - _Effect_Emission: 1
+    - _Emission_Intensity: 1
     - _EnvironmentReflections: 1
+    - _FadeMultiplier: 0.25
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
@@ -118,8 +119,9 @@ Material:
     - _Mode: 3
     - _Normals_Sensitivity: 1
     - _OcclusionStrength: 1
+    - _OutlineFading: 0
     - _Outline_Thickness: 2
-    - _Overlay_Opacity: 0
+    - _Overlay_Opacity: 0.25
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -143,6 +145,7 @@ Material:
     - _EmissionColour: {r: 0.17677668, g: 0.17677668, b: 0.17677668, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _OutlineColour: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineFade: {r: 0.3, g: 0.3, b: 0.3, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &1878214593974689047

@@ -84,7 +84,7 @@ public class TutorialStarter : MonoBehaviour
     private void TutCamExecute()
     {
         string cameraTutorialText = InputManager.GamePadPresent ? "Use Right Stick to look around" : "Use mouse to look around";
-        InteractMessage.Instance.ShowInteraction(cameraTutorialText, 0, Color.white);
+        InteractMessage.Instance.ShowInteraction(cameraTutorialText, 2, Color.white);
         InteractMessage.Instance.AllowAutoInteract(false);
         Invoke(nameof(HideInteract), tutorialDelayTime);
         Tutorial_Movement();
@@ -101,7 +101,7 @@ public class TutorialStarter : MonoBehaviour
         string movementTutorialText = InputManager.GamePadPresent ? "Use Left Stick to move" : "Use WASD to move";
 
         InteractMessage.Instance.AllowAutoInteract(true);
-        InteractMessage.Instance.ShowInteraction(movementTutorialText, 0, Color.white);
+        InteractMessage.Instance.ShowInteraction(movementTutorialText, 2, Color.white);
         InteractMessage.Instance.AllowAutoInteract(false);
         Invoke(nameof(HideInteract), tutorialDelayTime);
         Invoke(nameof(EudieHandOff), tutorialDelayTime);

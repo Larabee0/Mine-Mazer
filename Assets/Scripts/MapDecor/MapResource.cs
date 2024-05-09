@@ -88,12 +88,15 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
         originalScale = transform.localScale;
         SetColliderActive(Interactable);
         meshRenderers = GetComponentsInChildren<MeshRenderer>(true);
+        if (Interactable)
+        {
+            SetOutlineFader(true);
+        }
     }
 
 
     protected virtual void Start()
     {
-
     }
 
     public void SetRainbowOpacity(float opacity)
@@ -115,6 +118,17 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
             List<Material> materials = new();
             renderer.GetMaterials(materials);
             materials.ForEach(mat => mat.SetColor("_OutlineColour", colour));
+        }
+    }
+
+    public void SetOutlineFader(bool fading)
+    {
+        for (int i = 0; i < meshRenderers.Length; i++)
+        {
+            MeshRenderer renderer = meshRenderers[i];
+            List<Material> materials = new();
+            renderer.GetMaterials(materials);
+            materials.ForEach(mat => mat.SetInt("_OutlineFading", fading ? 1 : 0));
         }
     }
 
@@ -218,10 +232,12 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
     public virtual void HoverOn()
     {
         SetOutlineColour(onSelectColour);
+        SetOutlineFader(false);
     }
 
     public virtual void HoverOff()
     {
         SetOutlineColour(Color.black);
+        SetOutlineFader(true);
     }
 }

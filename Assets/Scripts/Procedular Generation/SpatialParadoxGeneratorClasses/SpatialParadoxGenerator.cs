@@ -37,8 +37,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
 
     private int reRingInters = 0;
     private Transform sectionGraveYard; 
-    private Transform originalInstances; 
-    private Coroutine mapUpdateProcess;
+    private Transform originalInstances;
     
     private PlayerExplorationStatistics explorationStatistics;
     public PlayerExplorationStatistics ExplorationStatistics => explorationStatistics;
