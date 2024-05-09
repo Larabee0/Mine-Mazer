@@ -124,7 +124,6 @@ public class PlayerUIController : MonoBehaviour
         screenFade.style.display = DisplayStyle.None;
         StartCoroutine(SetHungerBarProgress());
         SetHungerVisible(false);
-        SetInventoryActive(true);
     }
 
     private void OnEnable()
@@ -226,6 +225,10 @@ public class PlayerUIController : MonoBehaviour
     {
         if (active)
         {
+            if (compendiumUI.CompendiumController.Open)
+            {
+                compendiumUI.CompendiumController.SetActive(false);
+            }
             inventoryMenu.OpenIventory();
         }
         else

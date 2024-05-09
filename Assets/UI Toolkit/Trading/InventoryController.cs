@@ -45,7 +45,7 @@ public class InventoryController : UIToolkitBase
         List<Texture2D> icons = new() { PlayerUIController.Instance.CompendiumIcon };
 
         List<string> inventoryForDisplay = new() { "Compendium" };
-        List<Action> inventoryActions = new() { delegate () { OpenCompendium(); CloseInventory(); } };
+        List<Action> inventoryActions = new() { delegate () { CloseInventory(); OpenCompendium();  } };
         for (int i = 0; i < items.Count; i++)
         {
             inventoryForDisplay.Add(string.Format("{0} (x{1})", assets[items[i]][0].ItemStats.name, inv[items[i]]));
