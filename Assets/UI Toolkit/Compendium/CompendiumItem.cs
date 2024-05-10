@@ -14,8 +14,9 @@ public class CompendiumItem : IComparable<CompendiumItem>
     public bool alwaysDisplay;
     public Item targetItem;
     public int order;
+    public Texture2D icon;
     private int curCount;
-    private Label boundLabel;
+    private ItemMote boundLabel;
 
     public bool shownMote= false;
 
@@ -24,13 +25,13 @@ public class CompendiumItem : IComparable<CompendiumItem>
         return order.CompareTo(other.order);
     }
 
-    public void Bind(Label label)
+    public void Bind(ItemMote label)
     {
         if (targetItem == Item.None) return;
         boundLabel = label;
         if(curCount == 0 && !alwaysDisplay)
         {
-            label.style.display = DisplayStyle.None;
+            label.RootVisualElement.style.display = DisplayStyle.None;
         }
     }
 
@@ -40,8 +41,8 @@ public class CompendiumItem : IComparable<CompendiumItem>
         if(curCount == 0 && newValue >0)
         {
 
-            boundLabel.style.display = DisplayStyle.Flex;
+            boundLabel.RootVisualElement.style.display = DisplayStyle.Flex;
         }
-        boundLabel.text = string.Format("{0} (x{1})", title, newValue);
+        boundLabel.Description = string.Format("{0} / {1}", newValue, ItemUtility.GetItemQuantityGoal(targetItem));
     }
 }

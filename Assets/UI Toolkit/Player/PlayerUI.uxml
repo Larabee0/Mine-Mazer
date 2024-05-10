@@ -37,9 +37,10 @@
                 <ui:ScrollView name="Outline" />
             </ui:VisualElement>
             <ui:VisualElement name="Body" style="background-color: rgba(0, 0, 0, 0); width: 70%; -unity-text-align: upper-center; padding-left: 40px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px;">
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="TitleText" style="font-size: 24px; -unity-font-style: bold;" />
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="SummaryText" style="-unity-font-style: italic; font-size: 12px; white-space: normal;" />
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="BodyText" style="white-space: normal; -unity-text-align: upper-left;" />
+                <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="TitleText" style="font-size: 48px; -unity-font-style: bold;" />
+                <ui:VisualElement name="BigIcon" style="background-color: rgba(0, 0, 0, 0); width: 384px; height: 384px; background-image: url(&apos;project://database/Assets/MapItemImages/compendium_book.png?fileID=2800000&amp;guid=67a4744decbdc9c4b8e3c2a019ab2e58&amp;type=3#compendium_book&apos;); align-self: center; display: flex;" />
+                <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="SummaryText" style="-unity-font-style: italic; font-size: 24px; white-space: normal;" />
+                <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="BodyText" style="white-space: normal; -unity-text-align: upper-left; font-size: 24px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -147,6 +147,8 @@ public class Motes : UIToolkitBase
         container.style.position = Position.Absolute;
         RootVisualElement.Add(container);
 
+        RootVisualElement[0][0].style.backgroundColor = new Color(0.2627451f, 0.2588235f, 0.2627451f);
+
         string itemText = Inventory.Instance.assets.ContainsKey(mote.item)
             ? Inventory.Instance.assets[mote.item][0].ItemStats.name
             : mote.item.ToString();

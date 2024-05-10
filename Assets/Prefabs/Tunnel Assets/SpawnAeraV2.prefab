@@ -282,6 +282,7 @@ MonoBehaviour:
   requiresPickaxe: 0
   meshRenderers: []
   onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  icon: {fileID: 0}
   heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
@@ -723,6 +724,7 @@ MonoBehaviour:
   doorSpeed: 250
   selectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   interactable: 0
+  fader: 0
 --- !u!1 &6585727215691544756
 GameObject:
   m_ObjectHideFlags: 0
@@ -1411,6 +1413,16 @@ PrefabInstance:
       propertyPath: gateButton
       value: 
       objectReference: {fileID: 7144089559948923483}
+    - target: {fileID: 7204789686680481940, guid: 2764cc5b28e49df43a8623c9fde1c290,
+        type: 3}
+      propertyPath: interacted
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7204789686680481940, guid: 2764cc5b28e49df43a8623c9fde1c290,
+        type: 3}
+      propertyPath: showInteractionBubble
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8444363788590639654, guid: 2764cc5b28e49df43a8623c9fde1c290,
         type: 3}
       propertyPath: m_RootOrder

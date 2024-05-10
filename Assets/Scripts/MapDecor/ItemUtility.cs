@@ -4,6 +4,74 @@ using System.Linq;
 
 public static class ItemUtility
 {
+    private static Dictionary<Item, string> itemDisplayNames = new()
+    {
+        {
+            Item.Pickaxe,
+            "Sturdy Miner's Pickaxe"
+        },
+        {
+            Item.Antarticite,
+            "Antarticite"
+        },
+        {
+            Item.Versicolor,
+            "Versicolor"
+        },
+        {
+            Item.FicusWood,
+            "Ficus Wood"
+        },
+        {
+            Item.GoldenTrumpetMycelium,
+            "Golden Trumpet Mycelium"
+        },
+        {
+            Item.HeartNode,
+            "Heart Node"
+        },
+        {
+            Item.SanctumMachine,
+            "Sanctum Machine"
+        },
+        {
+            Item.Soup,
+            "Mushroom Soup"
+        },
+        {
+            Item.Eudie,
+            "Eudie"
+        },
+        {
+            Item.BrokenHeart,
+            "Broken Heart"
+        },
+        {
+            Item.VelvetBud,
+            "Velvet Bud"
+        },
+        {
+            Item.ClockworkMechanism,
+            "Clockwork Mechanism"
+        },
+        {
+            Item.Cinnabite,
+            "Cinnabite"
+        },
+        {
+            Item.GlanceiteResonator,
+            "Glanceite Resonator"
+        },
+        {
+            Item.StagnationBeacon,
+            "Stagnation Beacon"
+        },
+        {
+            Item.Torch,
+            "Lumen Torch"
+        }
+    };
+
     private static readonly Dictionary<ItemCategory, HashSet<Item>> categoryToItems = new()
     {
         {
@@ -120,6 +188,11 @@ public static class ItemUtility
 
     public static Action<Item, int, int> OnItemGoalHit;
 
+    public static string GetItemDisplayName(Item item)
+    {
+        if(itemDisplayNames.ContainsKey(item)) return itemDisplayNames[item]; return null;
+    }
+
     public static int GetItemQuantityGoal(Item item)
     {
         if (pickUpGoals.ContainsKey(item))
@@ -153,6 +226,11 @@ public static class ItemUtility
     public static bool IsGoalable(Item item)
     {
         return initialItemGoals.ContainsKey(item);
+    }
+
+    public static List<Item> GetGoalableItems()
+    {
+        return new(initialItemGoals.Keys);
     }
 
     public static int GetInitialGoal(Item item)

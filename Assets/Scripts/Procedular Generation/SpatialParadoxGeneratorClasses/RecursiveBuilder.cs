@@ -88,6 +88,10 @@ public partial class SpatialParadoxGenerator
             while (SectionsInProcessingQueue)
             {
                 PreProcessQueue();
+                if (SectionsInProcessingQueue)
+                {
+                    yield return null;
+                }
             }
             yield return RegenRingIncremental(mapTree.Count - 2);
             yield break;

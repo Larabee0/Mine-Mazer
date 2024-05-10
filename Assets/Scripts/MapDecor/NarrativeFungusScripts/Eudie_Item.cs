@@ -49,6 +49,17 @@ public class Eudie_Item : MapResource
         {
             if (base.PlaceItem())
             {
+                Interact_Example[] npcs = transform.parent.GetComponentsInChildren<Interact_Example>();
+
+                for (int i = 0;i < npcs.Length; i++)
+                {
+                    if (npcs[i].gameObject.name == gameObject.name)
+                    {
+                        continue;
+                    }
+                    npcs[i].TryShowInteractBubble();
+                }
+
                 OnEudiePlaced?.Invoke();
                 InteractMessage.Instance.SetObjective("Talk to Eudies friends in the colony.");
                 return true;

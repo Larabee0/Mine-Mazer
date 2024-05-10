@@ -1,4 +1,5 @@
 using MazeGame.Input;
+using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;

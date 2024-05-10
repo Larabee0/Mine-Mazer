@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Larmiar_Interaction : NPCTrade
@@ -68,5 +70,15 @@ public class Larmiar_Interaction : NPCTrade
         }
         explorationStatistics.SetAllowSanctumPartSpawn(true);
         InteractMessage.Instance.SetObjective("Look out for strange items.");
+        Inventory.Instance.OnItemPickUp += OnItemPickUpLarimar;
+    }
+
+    private void OnItemPickUpLarimar(Item item, int arg2)
+    {
+        if (itemsOfInterestKeys.Any(key => key.type == item))
+        {
+            interacted = false;
+            TryShowInteractBubble();
+        }
     }
 }

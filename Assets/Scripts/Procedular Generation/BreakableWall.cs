@@ -14,6 +14,7 @@ public class BreakableWall : MonoBehaviour, IInteractable, IHover
     [SerializeField] private Vector2 rockLingerTimeRange;
     [SerializeField] protected Color onSelectColour = Color.yellow;
     public Connector connector;
+    private bool broken = false;
 
     public Pluse OnWallBreak;
     private void Awake()
@@ -24,6 +25,7 @@ public class BreakableWall : MonoBehaviour, IInteractable, IHover
     private void BreakWall()
     {
         HoverOff();
+        broken = true;
         SetOutlineFader(false);
         OnWallBreak?.Invoke();
         transform.DetachChildren();
@@ -111,12 +113,20 @@ public class BreakableWall : MonoBehaviour, IInteractable, IHover
 
     public void HoverOn()
     {
+        if (broken)
+        {
+            return;
+        }
         SetOutlineColour(onSelectColour);
         SetOutlineFader(false);
     }
 
     public void HoverOff()
     {
+        if (broken)
+        {
+            return;
+        }
         SetOutlineColour(Color.black);
         SetOutlineFader(true);
     }

@@ -2071,6 +2071,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 25d02afe05819cf46852fbaebfae620b, type: 3}
   - {fileID: 2800000, guid: db4abc0e7c23e8b4c95172a4270e314d, type: 3}
   - {fileID: 2800000, guid: 4573bac8db3edf6419b521b6b290500c, type: 3}
+  - {fileID: 2800000, guid: d12d959b47eaa5c44bb779c10783a2c0, type: 3}
   wayPointRes: 96
 --- !u!114 &290947041
 MonoBehaviour:
@@ -2118,6 +2119,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   document: {fileID: 290947041}
   forceShowAll: 0
+  itemMote: {fileID: 9197481963319205126, guid: 0516f25dd481db74198d83462635e243,
+    type: 3}
   compendiumItems:
   - title: Anti-Lumen
     category: Mine Features
@@ -2134,6 +2137,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 101
+    icon: {fileID: 2800000, guid: dfa91b9c8792458449da248790728f5e, type: 3}
     shownMote: 0
   - title: Lumen
     category: Mine Features
@@ -2152,6 +2156,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 1
     order: 100
+    icon: {fileID: 2800000, guid: 0aa4fb9a4659cc648bca2919078a15aa, type: 3}
     shownMote: 0
   - title: Antarcticite
     category: Rocks, minerals and crystals
@@ -2169,6 +2174,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 16
     order: 102
+    icon: {fileID: 2800000, guid: bc8a251a6ec56d64db40c2fee2603670, type: 3}
     shownMote: 0
   - title: Cinnabarite
     category: Rocks, minerals and crystals
@@ -2187,6 +2193,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 32
     order: 103
+    icon: {fileID: 2800000, guid: 444c6ed707c6be346ac6c2f279b19fd8, type: 3}
     shownMote: 0
   - title: Elbaite
     category: Rocks, minerals and crystals
@@ -2200,6 +2207,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 104
+    icon: {fileID: 2800000, guid: b405e084e5f93494fba9cc25a62ac141, type: 3}
     shownMote: 0
   - title: Glanceite
     category: Rocks, minerals and crystals
@@ -2217,6 +2225,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 105
+    icon: {fileID: 0}
     shownMote: 0
   - title: Goshenite
     category: Rocks, minerals and crystals
@@ -2232,6 +2241,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 106
+    icon: {fileID: 2800000, guid: 3f1b2355794b615479689decf0ce18e5, type: 3}
     shownMote: 0
   - title: Hematite
     category: Rocks, minerals and crystals
@@ -2246,6 +2256,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 107
+    icon: {fileID: 2800000, guid: 6b25242cde910b0428c97eb01d78d21b, type: 3}
     shownMote: 0
   - title: Iron
     category: Rocks, minerals and crystals
@@ -2260,6 +2271,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 108
+    icon: {fileID: 2800000, guid: c85077e9a2d52bd4c8ad2e1629ae14df, type: 3}
     shownMote: 0
   - title: Mercurion
     category: Rocks, minerals and crystals
@@ -2275,6 +2287,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 109
+    icon: {fileID: 0}
     shownMote: 0
   - title: Fungal Steak
     category: 'Mushrooms and plantlife '
@@ -2291,6 +2304,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 300
+    icon: {fileID: 2800000, guid: 215700a8ba3847f489f378bcfc9ddffd, type: 3}
     shownMote: 0
   - title: Golden Trumpet Mycelium
     category: 'Mushrooms and plantlife '
@@ -2309,6 +2323,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 2
     order: 301
+    icon: {fileID: 2800000, guid: 9dd7f894b8e220a4da5ce24daf453499, type: 3}
     shownMote: 0
   - title: Morchelle
     category: 'Mushrooms and plantlife '
@@ -2325,6 +2340,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 0
     order: 303
+    icon: {fileID: 2800000, guid: c50cf180ac8dab249b7f16829e5e518b, type: 3}
     shownMote: 0
   - title: Velvet Bud
     category: 'Mushrooms and plantlife '
@@ -2341,6 +2357,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 4
     order: 306
+    icon: {fileID: 2800000, guid: f7fbbc8d0999b7a4eb038a82dd00b40d, type: 3}
     shownMote: 0
   - title: Versicolor
     category: 'Mushrooms and plantlife '
@@ -2356,6 +2373,7 @@ MonoBehaviour:
     alwaysDisplay: 0
     targetItem: 8
     order: 307
+    icon: {fileID: 2800000, guid: e20c682685a669b44b6ca1c9eff5f6f6, type: 3}
     shownMote: 0
 --- !u!1 &393901633
 GameObject:
@@ -2386,7 +2404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedFlowchart: {fileID: 278139883}
+  selectedFlowchart: {fileID: 0}
 --- !u!4 &393901635
 Transform:
   m_ObjectHideFlags: 1

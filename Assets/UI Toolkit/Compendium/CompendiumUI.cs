@@ -9,7 +9,9 @@ public class CompendiumUI : MonoBehaviour
 {
     [SerializeField] private UIDocument document;
     [SerializeField] private bool forceShowAll;
+    [SerializeField] private VisualTreeAsset itemMote;
     [SerializeField] private List<CompendiumItem> compendiumItems;
+    public VisualTreeAsset ItemMotePrefab=>itemMote;
     public List<CompendiumItem> CompendiumItems =>compendiumItems;
     private CompendiumController compendiumController;
     public CompendiumController CompendiumController=> compendiumController;
@@ -19,7 +21,7 @@ public class CompendiumUI : MonoBehaviour
     private void Start()
     {
         compendiumController = new CompendiumController(document.rootVisualElement.Q("Compendium"),this);
-        compendiumController.UpdateParts();
+        compendiumController.CreateParts();
         InputManager.Instance.SetUIToolkitFocus();
         if (Inventory.Instance && !forceShowAll)
         {

@@ -874,7 +874,7 @@ MonoBehaviour:
   itemId: 35
   indentLevel: 0
   targetObject: {fileID: 8982843664108669309}
-  methodName: LockPointer
+  methodName: TryHideInteractBubble
   delay: 0
 --- !u!114 &1447551691547726880
 MonoBehaviour:
@@ -1699,6 +1699,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Dialogue: {fileID: 8170578190277582956}
+  interacted: 0
+  showInteractionBubble: 0
+  interactionIconIndex: 4
   tradeCloseReturnBlock: CancelTrade
   tradeIndexVariableName: TradeIndex
   tradeOptions:
