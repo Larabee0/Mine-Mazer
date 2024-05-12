@@ -10,7 +10,8 @@ public enum HandsState
     HandsIdleEmpty,
     HandsItemIdle,
     HandsItemPutAway,
-    HandsItemPullOut
+    HandsItemPullOut,
+    ToEmpty
 }
 
 
@@ -94,6 +95,27 @@ public class PlayerAnimationController : MonoBehaviour
     {
         Inventory.Instance.OnHeldItemChanged -= OnItemChanged;
         Inventory.Instance.OnHeldItemAboutToChange -= OnHeldItemAboutToChange;
+    }
+
+
+    public void FakeEmptyHand()
+    {
+        OnHeldItemAboutToChange();
+        handsState = HandsState.ToEmpty;
+        animators[0].SetBool("Empty", true);
+    }
+
+    public void LadderClimb(float dir)
+    {
+        animators[0].SetFloat("LadderDir", dir);
+        animators[0].SetTrigger("Ladder");
+    }
+
+    public void LadderEnd()
+    {
+        animators[0].SetBool("Empty", false);
+        animators[0].SetTrigger("LadderEnd");
+        Inventory.Instance.TryMoveItemToHand(Inventory.Instance.CurHeldItem.GetValueOrDefault());
     }
 
     private void OnHeldItemAboutToChange()
@@ -187,6 +209,13 @@ public class PlayerAnimationController : MonoBehaviour
             case HandsState.HandsItemPullOut:
                 Inventory.Instance.CurHeldAsset.SetMapResourceActive(true);
                 break;
+            case HandsState.ToEmpty:
+                if (tempResource != null)
+                {
+                    tempResource.SetMapResourceActive(false);
+                }
+                break;
+
         }
 
     }
@@ -200,6 +229,10 @@ public class PlayerAnimationController : MonoBehaviour
                 handsState = HandsState.HandsItemPullOut;
                 break;
             case HandsState.HandsItemPullOut:
+                handsState = HandsState.HandsItemIdle;
+                break;
+            case HandsState.ToEmpty:
+
                 handsState = HandsState.HandsItemIdle;
                 break;
         }

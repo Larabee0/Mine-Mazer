@@ -10,7 +10,6 @@ public class LadderScript : MonoBehaviour
     bool inside = false;
     public float speedUpDown = 3.2f;
     public Improved_Movement FPSInput;
-    private Rigidbody rb;
     private Transform ladder;
     private Transform Ground;
 
@@ -20,7 +19,6 @@ public class LadderScript : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
         FPSInput = GetComponent<Improved_Movement>();
         inside = false;
         
