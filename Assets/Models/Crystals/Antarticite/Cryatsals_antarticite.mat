@@ -105,6 +105,7 @@ Material:
     - _Effect_Emission: 0
     - _Emission_Intensity: 0
     - _EnvironmentReflections: 1
+    - _FadeMultiplier: 0.25
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
@@ -112,6 +113,7 @@ Material:
     - _Mode: 3
     - _Normals_Sensitivity: 1
     - _OcclusionStrength: 1
+    - _OutlineFading: 0
     - _Outline_Thickness: 1
     - _Overlay_Opacity: 0
     - _Parallax: 0.02
@@ -137,6 +139,7 @@ Material:
     - _EmissionColour: {r: 1, g: 1, b: 1, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _OutlineColour: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineFade: {r: 0.3, g: 0.3, b: 0.3, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &6309082147905731789

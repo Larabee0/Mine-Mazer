@@ -27,6 +27,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public Dictionary<Item, Texture2D> icons = new();
     public Dictionary<Item, int> inventory = new();
     public Dictionary<Item, List<MapResource>> assets = new();
     public Item? CurHeldItem => inventoryOrder.Count > 0 ? inventoryOrder[curIndex] : null;
@@ -103,6 +104,8 @@ public class Inventory : MonoBehaviour
     {
         itemInstance.SetColliderActive(false);
         itemInstance.SetMapResourceActive(false);
+        itemInstance.SetOutlineFader(false);
+        itemInstance.SetRainbowOpacity(0);
         if (inventory.ContainsKey(itemType))
         {
             inventory[itemType] += quantity;
@@ -113,6 +116,10 @@ public class Inventory : MonoBehaviour
             inventory.Add(itemType, quantity);
             assets.Add(itemType, new() { itemInstance });
             UpdateInventory();
+        }
+        if (!icons.ContainsKey(itemType) && itemInstance.icon != null)
+        {
+            icons[itemType] = itemInstance.icon;
         }
         
         itemInstance.transform.parent = virtualhands;

@@ -133,7 +133,7 @@ public class Eudie_Tutorial : NPCTrade
         else
         {
             InteractMessage.Instance.SetObjective("Speak to the Lumenite");
-            eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Lumenite", eudieWaypoint.position, Color.yellow);
+            eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Lumenite", eudieWaypoint.position, Color.white,5);
         }
     }
 
@@ -150,7 +150,7 @@ public class Eudie_Tutorial : NPCTrade
     public void PickupLumen()
     {
         
-        eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Lumen Crystal", lumen.transform.position, Color.green);
+        eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Lumen Crystal", lumen.transform.position, Color.white,3);
         lumen.OnItemPickedUp += RemoveLumenWaypoint;
         eudieState = EudieContext.LumenGather;
         InteractMessage.Instance.SetObjective("Mine & Give Lumen to Eudie");
@@ -165,9 +165,11 @@ public class Eudie_Tutorial : NPCTrade
     public void GivenLumen()
     {
         InteractMessage.Instance.SetObjective("Open the Gate with the Gate Activator and Lumen Torch");
-        eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Gate Activator",gateButton.transform.position,Color.green);
+        eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Gate Activator",gateButton.transform.position,Color.white,2);
         eudieState = EudieContext.MineWall;
         gateButton.GetComponent<ButtonInteractable>().SetRainbowOpacity(0.6f);
+        gateButton.GetComponent<ButtonInteractable>().SetOutlineFader(true);
+        gateButton.GetComponent<ButtonInteractable>().fader = true;
         gateButton.GetComponent<ButtonInteractable>().interactable=true;
     }
 
@@ -196,7 +198,7 @@ public class Eudie_Tutorial : NPCTrade
     {
         eudieState = EudieContext.PickUpEudie;
         eudieItem.pickUpEudie = true;
-        eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Eudie", eudieWaypoint.position, Color.yellow);
+        eudieWWP = WorldWayPointsController.Instance.AddwayPoint("Eudie", eudieWaypoint.position, Color.white,4);
         InteractMessage.Instance.SetObjective("Pick up Eudie");
         var comp = GetComponent<Follow_Player>();
         comp.OnHitPlayer += OnHitPlayer;

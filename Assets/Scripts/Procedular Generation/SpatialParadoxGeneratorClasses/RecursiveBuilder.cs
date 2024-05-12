@@ -19,7 +19,6 @@ public partial class SpatialParadoxGenerator
         
         if (initialArea)
         {
-            initalAreaGeneration = false;
             Debug.Log("Inital Generation complete");
         }
         OnMapUpdate?.Invoke();
@@ -44,16 +43,11 @@ public partial class SpatialParadoxGenerator
             mapTree.Add(new());
             yield return FillSectionConnectorsIncremental(startSections, mapTree.Count - 1);
             PreProcessQueue();
-            if (initialArea)
-            {
-                rejectBreakableWallAtConnections = false;
-            }
         }
     }
 
     private IEnumerator WholeTreeBuild()
     {
-        rejectBreakableWallAtConnections = false;
 
         CleanUpDeadTreeElements();
         for (int i = 0; i < mapTree.Count-1; i++)
@@ -94,6 +88,10 @@ public partial class SpatialParadoxGenerator
             while (SectionsInProcessingQueue)
             {
                 PreProcessQueue();
+                if (SectionsInProcessingQueue)
+                {
+                    yield return null;
+                }
             }
             yield return RegenRingIncremental(mapTree.Count - 2);
             yield break;

@@ -148,7 +148,14 @@ public class NPC_Interact : MonoBehaviour
             string tooltipText = interactable.GetToolTipText();
             if (!string.IsNullOrEmpty(tooltipText) && !string.IsNullOrWhiteSpace(tooltipText))
             {
-                InteractMessage.Instance.ShowInteraction(tooltipText, interactionIcon, Color.yellow);
+                if(interactable.GetType().IsSubclassOf(typeof(Interact_Example)))
+                {
+                    InteractMessage.Instance.ShowInteraction(tooltipText, 1, Color.white);
+                }
+                else
+                {
+                    InteractMessage.Instance.ShowInteraction(tooltipText, 2, Color.white);
+                }
             }
         }
     }

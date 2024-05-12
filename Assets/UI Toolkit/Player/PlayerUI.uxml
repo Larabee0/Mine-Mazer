@@ -25,7 +25,7 @@
     <ui:VisualElement name="Mote" picking-mode="Ignore" style="background-color: rgba(0, 0, 0, 0); width: 400px; height: 96px; top: 5%; position: absolute; left: 2%; align-items: flex-start; display: flex; max-width: 400px;" />
     <ui:VisualElement picking-mode="Ignore" name="Overlay" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; display: flex;">
         <ui:VisualElement name="Inventory" picking-mode="Ignore" style="background-color: rgba(0, 0, 0, 0); justify-content: center; align-items: center; display: none;">
-            <RadialMenuItem name="RadialInventory" radius="1" background="#FFFFFFFF" divisions="#FFFFFFFF" lineThickness="200" menuBackgroundColor="#434243FF" menuDivisionColor="#FFFFFFFF" focusable="true" style="width: 600px; height: 600px;" />
+            <RadialMenuItem name="RadialInventory" radius="0.72" background="#FFFFFFFF" divisions="#FFFFFFFF" lineThickness="200" menuBackgroundColor="#434243FF" menuDivisionColor="#FFFFFFFF" focusable="true" segmentsPerPage="8" style="width: 700px; height: 700px; align-items: center; display: none;" />
         </ui:VisualElement>
         <ui:VisualElement name="PauseButtonContainer" style="background-color: rgba(255, 255, 255, 0.55); padding-top: 30px; padding-right: 30px; padding-left: 30px; border-top-left-radius: 16px; border-bottom-left-radius: 16px; border-top-right-radius: 16px; border-bottom-right-radius: 16px; display: none;">
             <ui:Button text="Resume" display-tooltip-when-elided="true" name="ResumeButton" class="TradeMainbutton" style="min-width: 350px;" />
@@ -37,9 +37,10 @@
                 <ui:ScrollView name="Outline" />
             </ui:VisualElement>
             <ui:VisualElement name="Body" style="background-color: rgba(0, 0, 0, 0); width: 70%; -unity-text-align: upper-center; padding-left: 40px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px;">
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="TitleText" style="font-size: 24px; -unity-font-style: bold;" />
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="SummaryText" style="-unity-font-style: italic; font-size: 12px; white-space: normal;" />
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="BodyText" style="white-space: normal; -unity-text-align: upper-left;" />
+                <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="TitleText" style="font-size: 48px; -unity-font-style: bold;" />
+                <ui:VisualElement name="BigIcon" style="background-color: rgba(0, 0, 0, 0); width: 384px; height: 384px; background-image: url(&apos;project://database/Assets/MapItemImages/compendium_book.png?fileID=2800000&amp;guid=67a4744decbdc9c4b8e3c2a019ab2e58&amp;type=3#compendium_book&apos;); align-self: center; display: flex;" />
+                <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="SummaryText" style="-unity-font-style: italic; font-size: 24px; white-space: normal;" />
+                <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="BodyText" style="white-space: normal; -unity-text-align: upper-left; font-size: 24px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

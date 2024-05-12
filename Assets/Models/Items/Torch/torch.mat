@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: torch
-  m_Shader: {fileID: -6465566751694194690, guid: cff4ea1aae77540419307116831bac22,
+  m_Shader: {fileID: -6465566751694194690, guid: dd4dd779c4b169f48abc230b687daa2e,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -138,7 +138,10 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 10
+    - _Effect_Emission: 0
+    - _Emission_Intensity: 0
     - _EnvironmentReflections: 1
+    - _FadeMultiplier: 0.25
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
@@ -147,7 +150,9 @@ Material:
     - _NormalWeight: 1
     - _Normals_Sensitivity: 1
     - _OcclusionStrength: 1
+    - _OutlineFading: 0
     - _Outline_Thickness: 2
+    - _Overlay_Opacity: 0
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -171,6 +176,8 @@ Material:
     - _EmissionColor: {r: 2.608238, g: 2.608238, b: 2.608238, a: 1}
     - _EmissionColour: {r: 0.98225087, g: 1, b: 0.07818743, a: 1}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _OutlineColour: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineFade: {r: 0.3, g: 0.3, b: 0.3, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _emissionColour: {r: 0.98556626, g: 1.0091044, b: 0.79490775, a: 1}
   m_BuildTextureStacks: []

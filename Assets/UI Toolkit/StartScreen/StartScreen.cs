@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Cinemachine;
 
 public class StartScreen : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class StartScreen : MonoBehaviour
     [SerializeField] private VisualTreeAsset settingsMenuPrefab;
     [SerializeField] private TutorialStarter tutorialStarter;
     [SerializeField] private bool autoLoadOnPlay;
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    [SerializeField] private StartSequenceMove sequenceMove;
     private VisualElement RootVisualElement => startScreenUI.rootVisualElement;
 
     StartMenuController startScreenController;
@@ -26,18 +29,23 @@ public class StartScreen : MonoBehaviour
         startScreenController = new(RootVisualElement,this);
         InputManager.Instance.UnlockPointer();
         InputManager.Instance.SetUIToolkitFocus();
+        startScreenController.Focus();
         PlayerUIController.Instance.ShowCrosshair = false;
         PlayerUIController.Instance.SetMiniMapVisible(false);
         startScreenController.SetActive(true);
         tutorialStarter.FadeIn();
         if (autoLoadOnPlay)
         {
+            sequenceMove.EndOfTravel = true;
             LoadMainScene();
+            //sequenceMove.enabled = false;
         }
     }
 
     public void LoadMainScene()
     {
+        virtualCamera.Priority = 0;
+        sequenceMove.enabled = true;
         StartCoroutine(OpenSceneCoroutine());
     }
 
@@ -54,7 +62,7 @@ public class StartScreen : MonoBehaviour
         AsyncOperation sceneLoadOp = SceneManager.LoadSceneAsync(1);
         while (!sceneLoadOp.isDone)
         {
-            sceneLoadOp.allowSceneActivation = tutorialStarter.allowSceneChange;
+            sceneLoadOp.allowSceneActivation = tutorialStarter.allowSceneChange && sequenceMove.EndOfTravel;
             startScreenController.UpdateLoadProgress(sceneLoadOp.progress);
             yield return null;
         }

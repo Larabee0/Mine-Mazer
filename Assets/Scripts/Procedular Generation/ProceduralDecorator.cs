@@ -56,11 +56,17 @@ public class ProceduralDecorator : MonoBehaviour
             points.RemoveAt(index);
             point.UpdateMatrix(meshRayCaster.transform.localToWorldMatrix);
             MapResource trs = Instantiate(resources[Random.Range(0, resources.Length)], point.WorldPos, Quaternion.identity, transform);
-            trs.transform.up = point.Up;
+            
+
             if(trs.ItemStats.type == Item.Versicolor)
             {
+                // trs.transform.up = point.Forward;
+                // trs.transform.forward = point.Up;
+
+                trs.transform.localRotation = Quaternion.LookRotation(point.Up,Vector3.forward);
                 continue;
             }
+            trs.transform.up = point.Up;
             // trs.transform.RotateAroundLocal(Vector3.up, Random.Range(0, 359f));
             trs.transform.Rotate(Vector3.up, Random.Range(0, 359f) , Space.Self);
 

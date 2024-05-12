@@ -18,8 +18,7 @@ public class InventoryController : UIToolkitBase
 
     public override void Bind()
     {
-        inventoryUI.RegisterCallback<ClickEvent>(ev => CloseInventory());
-        inventoryUI.RegisterCallback<NavigationSubmitEvent>(ev => CloseInventory());
+        //inventoryUI.Bind();
     }
 
     public override void Query()
@@ -38,18 +37,31 @@ public class InventoryController : UIToolkitBase
     public void OpenIventory()
     {
         RootVisualElement.style.display = DisplayStyle.Flex;
+        inventoryUI.style.display = DisplayStyle.Flex;
+        if (Inventory.Instance == null) return;
         Dictionary<Item, int> inv = Inventory.Instance.inventory;
+        Dictionary<Item, List<MapResource>> assets = Inventory.Instance.assets;
         List<Item> items = new(inv.Keys);
+        List<Texture2D> icons = new() { PlayerUIController.Instance.CompendiumIcon };
+
         List<string> inventoryForDisplay = new() { "Compendium" };
-        List<Action> inventoryActions = new() { delegate () { OpenCompendium(); } };
+        List<Action> inventoryActions = new() { delegate () { CloseInventory(); OpenCompendium();  } };
         for (int i = 0; i < items.Count; i++)
         {
-            inventoryForDisplay.Add(string.Format("{0} (x{1})", items[i].ToString(), inv[items[i]]));
+            inventoryForDisplay.Add(string.Format("{0} (x{1})", assets[items[i]][0].ItemStats.name, inv[items[i]]));
             var item = items[i];
-            inventoryActions.Add(delegate () { InventorySelectAttempt(item); });
+            inventoryActions.Add(delegate () { InventorySelectAttempt(item); CloseInventory(); });
+            if (Inventory.Instance.icons.ContainsKey(item))
+            {
+                icons.Add(Inventory.Instance.icons[item]);
+            }
+            else
+            {
+                icons.Add(null);
+            }
         }
 
-        inventoryUI.PushInventory(inventoryForDisplay,inventoryActions);
+        inventoryUI.PushInventory(inventoryForDisplay,inventoryActions,icons);
         InputManager.Instance.UnlockPointer();
 
         PlayerUIController.Instance.StartCoroutine(UpdateUI());
@@ -61,19 +73,22 @@ public class InventoryController : UIToolkitBase
     {
         yield return new WaitForEndOfFrame();
         inventoryUI.UpdateLabels();
+        inventoryUI.UpdateIventoryItems();
+        yield return null;
+        inventoryUI.SetLabelVisibility(true);
     }
 
     public void CloseInventory()
     {
         RootVisualElement.style.display = DisplayStyle.None;
-        
+        inventoryUI.style.display = DisplayStyle.None;
+
         InputManager.Instance.LockPointer();
         PlayerUIController.Instance.ShowCrosshair = true;
     }
 
     public void OpenCompendium()
     {
-        CloseInventory();
         Debug.Log("Open compendium command");
         PlayerUIController.Instance.CompendiumUI.SetCompendiumUIActive(true);
     }

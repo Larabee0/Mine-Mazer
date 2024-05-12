@@ -205,6 +205,18 @@ namespace MazeGame.Navigation
             return waypoints[^1];
         }
 
+        public WorldWayPoint AddwayPoint(string text, Transform transform, Color tint, int iconIndex = 1)
+        {
+            if (root == null)
+            {
+                StartWWPC();
+            }
+            waypoints.Add(new WorldWayPoint(transform, waypointTemplate.Instantiate().Q("WorldWaypoint")));
+
+            AddWayPoint(text, iconIndex, tint);
+            return waypoints[^1];
+        }
+
         private void AddWayPoint(string text, int iconIndex,Color tint)
         {
             VisualElement wayPoint = waypoints[^1].texture;
@@ -235,7 +247,14 @@ namespace MazeGame.Navigation
         public VisualElement texture;
         public Label text;
         public Vector3 position;
-        public virtual Vector3 CurPositon => position;
+        public Transform transform;
+        public virtual Vector3 CurPositon
+        {
+            get
+            {
+                return transform != null ? transform.position : position;
+            }
+        }
 
         public string Name
         {
@@ -245,6 +264,14 @@ namespace MazeGame.Navigation
         public WorldWayPoint(Vector3 position, VisualElement wayPointRoot)
         {
             this.position = position;
+            this.wayPointRoot = wayPointRoot;
+            this.wayPointRoot.style.visibility = Visibility.Hidden;
+            texture = wayPointRoot.Q("WaypointImage");
+            text = wayPointRoot.Q<Label>("WaypointName");
+        }
+        public WorldWayPoint(Transform transform, VisualElement wayPointRoot)
+        {
+            this.transform = transform;
             this.wayPointRoot = wayPointRoot;
             this.wayPointRoot.style.visibility = Visibility.Hidden;
             texture = wayPointRoot.Q("WaypointImage");

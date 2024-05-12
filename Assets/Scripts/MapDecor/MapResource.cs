@@ -53,6 +53,7 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
     [SerializeField] protected bool requiresPickaxe = false;
     [SerializeField] protected MeshRenderer[] meshRenderers;
     [SerializeField] protected Color onSelectColour = Color.yellow;
+    public Texture2D icon;
     public Vector3 heldOrenintationOffset;
     public Vector3 heldpositonOffset;
     public Vector3 heldScaleOffset = Vector3.one;
@@ -75,17 +76,27 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
     }
 
     public ItemStats ItemStats => itemStats;
+
+    public void ForceInit()
+    {
+        Awake();
+        Start();
+    }
+
     protected virtual void Awake()
     {
         originalScale = transform.localScale;
         SetColliderActive(Interactable);
         meshRenderers = GetComponentsInChildren<MeshRenderer>(true);
+        if (Interactable)
+        {
+            SetOutlineFader(true);
+        }
     }
 
 
     protected virtual void Start()
     {
-
     }
 
     public void SetRainbowOpacity(float opacity)
@@ -107,6 +118,17 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
             List<Material> materials = new();
             renderer.GetMaterials(materials);
             materials.ForEach(mat => mat.SetColor("_OutlineColour", colour));
+        }
+    }
+
+    public void SetOutlineFader(bool fading)
+    {
+        for (int i = 0; i < meshRenderers.Length; i++)
+        {
+            MeshRenderer renderer = meshRenderers[i];
+            List<Material> materials = new();
+            renderer.GetMaterials(materials);
+            materials.ForEach(mat => mat.SetInt("_OutlineFading", fading ? 1 : 0));
         }
     }
 
@@ -210,10 +232,12 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
     public virtual void HoverOn()
     {
         SetOutlineColour(onSelectColour);
+        SetOutlineFader(false);
     }
 
     public virtual void HoverOff()
     {
         SetOutlineColour(Color.black);
+        SetOutlineFader(true);
     }
 }

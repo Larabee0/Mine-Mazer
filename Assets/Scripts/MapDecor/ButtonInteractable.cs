@@ -13,6 +13,7 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
 
     private MeshRenderer[] meshRenderers;
     public bool interactable = false;
+    public bool fader = false;
 
     private float doorTarget;
 
@@ -50,6 +51,7 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
         if (interactable && Inventory.Instance.CurHeldItem == Item.Torch)
         {
             SetRainbowOpacity(0);
+            SetOutlineFader(false);
             OnSuccessfulActivation?.Invoke();
         }
     }
@@ -68,6 +70,8 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
                 doorTarget = doorEndOfTravelPoints.y;
             }
             SetOutlineColour(selectColour);
+            fader = false;
+            SetOutlineFader(false);
         }
     }
 
@@ -80,6 +84,7 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
                 doorTarget = doorEndOfTravelPoints.x;
             }
             SetOutlineColour(Color.black);
+            SetOutlineFader(fader);
         }
     }
 
@@ -119,4 +124,17 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
             materials.ForEach(mat => mat.SetColor("_OutlineColour", colour));
         }
     }
+
+
+    public void SetOutlineFader(bool fading)
+    {
+        for (int i = 0; i < meshRenderers.Length; i++)
+        {
+            MeshRenderer renderer = meshRenderers[i];
+            List<Material> materials = new();
+            renderer.GetMaterials(materials);
+            materials.ForEach(mat => mat.SetInt("_OutlineFading", fading ? 1 : 0));
+        }
+    }
+
 }

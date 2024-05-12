@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -301,7 +302,9 @@ namespace MazeGame.Input
 
         public void SetUIToolkitFocus()
         {
-            EventSystem.current.SetSelectedGameObject(FindObjectOfType<PanelEventHandler>().gameObject);
+            PanelEventHandler[] eventHandlers = FindObjectsOfType<PanelEventHandler>();
+            GameObject go = eventHandlers.FirstOrDefault(evt => evt.gameObject.name != "MiniMap").gameObject;
+            EventSystem.current.SetSelectedGameObject(go);
         }
 
         private void ScrollInvoke(InputAction.CallbackContext context)
