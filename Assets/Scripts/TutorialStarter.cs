@@ -42,7 +42,7 @@ public class TutorialStarter : MonoBehaviour
         {
             allowSceneChange = true;
             LockPointer();
-            FadeOut();
+            //FadeOut();
             Invoke(nameof(SkipTutorial), 10f);
             // SkipTutorial();
         }

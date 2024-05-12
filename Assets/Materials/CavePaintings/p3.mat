@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DecalPainting
-  m_Shader: {fileID: -6465566751694194690, guid: 9b4e681081e2b4c469111bb649e2f7ee,
+  m_Name: p3
+  m_Shader: {fileID: -6465566751694194690, guid: ef0b5cd591bca51469d98280d28eb08b,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -38,7 +38,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Base_Map:
-        m_Texture: {fileID: 2800000, guid: 02addd21ed84ec9469e44fc6f906a704, type: 3}
+        m_Texture: {fileID: 2800000, guid: e69ba8a144e0ab94189d023f9640ffcd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Normal_Map:
@@ -121,6 +121,7 @@ Material:
     - _DrawOrder: 0
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _EmissionStrength: 0.5
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
