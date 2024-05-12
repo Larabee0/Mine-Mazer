@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682697269214061684}
-  m_LocalRotation: {x: -0.24036591, y: -0.0005364921, z: -0.1351358, w: 0.96122956}
+  m_LocalRotation: {x: -0.12628369, y: -0.040530585, z: 0.13680945, w: -0.98167855}
   m_LocalPosition: {x: -0.0274, y: 0.156, z: 0.0934}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -290,11 +290,12 @@ MonoBehaviour:
   Placeable: 1
   Interactable: 1
   requiresPickaxe: 0
+  useIdleA: 1
   meshRenderers: []
   onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   icon: {fileID: 2800000, guid: 073ae625cb193b84d81ba6d0109d1be8, type: 3}
-  heldOrenintationOffset: {x: 0, y: 0, z: 0}
-  heldpositonOffset: {x: 0, y: 0, z: 0}
+  heldpositonOffset: {x: -0.007, y: 0.133, z: 0.074}
+  heldOrenintationOffset: {x: 6.272302, y: 264.03253, z: 347.6851}
   heldScaleOffset: {x: 1, y: 1, z: 1}
   placementPositionOffset: {x: 0, y: 0.217, z: 0}
   toolTipNameOverride: 

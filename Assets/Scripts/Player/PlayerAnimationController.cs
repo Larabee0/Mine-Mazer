@@ -99,6 +99,10 @@ public class PlayerAnimationController : MonoBehaviour
     private void OnHeldItemAboutToChange()
     {
         animators[0].SetTrigger("Equip");
+        if(tempResource != null)
+        {
+            tempResource.SetMapResourceActive(false);
+        }
         tempResource = Inventory.Instance.CurHeldAsset;
         switch (handsState)
         {
@@ -127,10 +131,15 @@ public class PlayerAnimationController : MonoBehaviour
                 break;
         }
 
+
+        animators[0].SetBool("UseA", Inventory.Instance.CurHeldAsset.useIdleA); 
+
         switch (item)
         {
             case Item.Torch:
-
+                break;
+            case Item.Pickaxe:
+                break;
             default:
                 return;
         }

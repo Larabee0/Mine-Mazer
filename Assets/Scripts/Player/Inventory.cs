@@ -123,7 +123,7 @@ public class Inventory : MonoBehaviour
         }
         
         itemInstance.transform.parent = virtualhands;
-        itemInstance.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.Euler(itemInstance.heldOrenintationOffset));
+        itemInstance.transform.SetLocalPositionAndRotation(itemInstance.heldpositonOffset, Quaternion.Euler(itemInstance.heldOrenintationOffset));
         itemInstance.transform.localScale = itemInstance.heldScaleOffset;
         OnItemPickUp?.Invoke(itemType, inventory[itemType]);
         if (sfx)

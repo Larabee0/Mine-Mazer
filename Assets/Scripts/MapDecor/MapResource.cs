@@ -51,11 +51,12 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
     [SerializeField] protected bool Placeable;
     [SerializeField] protected bool Interactable = true;
     [SerializeField] protected bool requiresPickaxe = false;
+    public bool useIdleA = true;
     [SerializeField] protected MeshRenderer[] meshRenderers;
     [SerializeField] protected Color onSelectColour = Color.yellow;
     public Texture2D icon;
-    public Vector3 heldOrenintationOffset;
     public Vector3 heldpositonOffset;
+    public Vector3 heldOrenintationOffset;
     public Vector3 heldScaleOffset = Vector3.one;
     protected Vector3 originalScale;
     public Vector3 placementPositionOffset = Vector3.zero;

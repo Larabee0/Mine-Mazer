@@ -103,11 +103,12 @@ MonoBehaviour:
   Placeable: 0
   Interactable: 0
   requiresPickaxe: 0
+  useIdleA: 1
   meshRenderers: []
   onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   icon: {fileID: 0}
-  heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldpositonOffset: {x: 0, y: 0, z: 0}
+  heldOrenintationOffset: {x: 0, y: 0, z: 0}
   heldScaleOffset: {x: 1, y: 1, z: 1}
   placementPositionOffset: {x: 0, y: 0, z: 0}
   toolTipNameOverride: 
@@ -218,12 +219,13 @@ MonoBehaviour:
   Placeable: 0
   Interactable: 1
   requiresPickaxe: 0
+  useIdleA: 0
   meshRenderers: []
   onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   icon: {fileID: 2800000, guid: b7bbd528e4a10624a8e49cfc0720c294, type: 3}
-  heldOrenintationOffset: {x: 0, y: 0, z: 0}
-  heldpositonOffset: {x: 0, y: 0, z: 0}
-  heldScaleOffset: {x: 1, y: 1, z: 1}
+  heldpositonOffset: {x: 0.031, y: -0.052, z: -0.017}
+  heldOrenintationOffset: {x: 6.223009, y: 77.97914, z: 339.58096}
+  heldScaleOffset: {x: 0.63, y: 0.63, z: 0.63}
   placementPositionOffset: {x: 0, y: 0.25, z: 0}
   toolTipNameOverride: 
   variants:
