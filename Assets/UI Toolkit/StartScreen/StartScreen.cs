@@ -38,7 +38,7 @@ public class StartScreen : MonoBehaviour
         {
             sequenceMove.EndOfTravel = true;
             LoadMainScene();
-            //sequenceMove.enabled = false;
+            sequenceMove.enabled = false;
         }
     }
 

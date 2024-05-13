@@ -17,6 +17,7 @@ public class Eudie_Tutorial : NPCTrade
     [SerializeField] private MapResource lumen;
     [SerializeField] private Transform gate;
     [SerializeField] private ButtonInteractable gateButton;
+    [SerializeField] private AudioSource gateSound;
     [SerializeField] private Vector3 raisedPosition;
     [SerializeField] private float raiseSpeed;
     private bool skipToPickUpEudie = false;
@@ -177,7 +178,7 @@ public class Eudie_Tutorial : NPCTrade
     {
         gateButton.OnSuccessfulActivation -= OnGateBeginOpening;
         if(eudieWWP != null) { WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP); }
-        
+        gateSound.Play();
         StartCoroutine(OpenGate());
     }
 
