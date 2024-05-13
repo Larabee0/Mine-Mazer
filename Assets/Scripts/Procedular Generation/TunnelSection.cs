@@ -26,7 +26,10 @@ public class TunnelSection : MonoBehaviour
     [SerializeField] private bool weakKeep = false;
     [SerializeField] private Transform decorations;
     [SerializeField] private float decorCoverage;
+    [SerializeField] private float decorInteractableRatio;
     public int decorationCount;
+    private bool doFullCoverage = false;
+    private MapResource fullCoveragePrefab = null;
     // accessors 
     public Vector3 WaypointPosition => stagnationBeacon != null ? stagnationBeacon.transform.position : transform.TransformPoint(StrongKeepPosition);
     public float AmbientLightLevel => DataFromBake.AmbientLightLevel;
@@ -122,34 +125,6 @@ public class TunnelSection : MonoBehaviour
     {
         orignalInstanceId = GetInstanceID();
         GenerateNavMeshLinks();
-        //if (spawnRule == null)
-        //{
-        //    if (!TryGetComponent(out spawnRule))
-        //    {
-        //        spawnRule = gameObject.AddComponent<SectionSpawnBaseRule>();
-        //    }
-        //}
-        //if(spawnRule != null)
-        //{
-        //    spawnRule.owner = orignalInstanceId;
-        //    spawnRule.generator = generator;
-        //    InstanceCount = 0;
-        //    spawnRule.ResetRule();
-        //}
-        //if(excludeConnectorSections.Count != connectors.Length)
-        //{
-        //    for (int i = 0; i < connectors.Length; i++)
-        //    {
-        //        excludeConnectorSections.Add(new() { excludeRuntime = new() });
-        //    }
-        //}
-        //
-        //if (excludePrefabConnections == null) return;
-        //excludePrefabConnectionsIds.Clear();
-        //excludePrefabConnectionsIds = new List<int>(excludePrefabConnections.Count);
-        //excludePrefabConnections.ForEach(section=> excludePrefabConnectionsIds.Add(section.GetInstanceID()));
-        ////excludePrefabConnections.Clear();
-        ////excludePrefabConnections = null;
     }
 
     public bool UpdateRule()
@@ -198,18 +173,27 @@ public class TunnelSection : MonoBehaviour
         }
     }
 
-    public int Decorate(float coverage, MapResource[] resources)
+    public int Decorate(float coverage,float decorInteractableRatio, float fullCoverageChance, DecorContainer decorContainer)
     {
         decorCoverage = coverage;
-        if(coverage > 0)
+        doFullCoverage = Random.value < fullCoverageChance;
+        this.decorInteractableRatio = decorInteractableRatio;
+        if (doFullCoverage)
         {
-            StartCoroutine(DecorateProcess(resources));
+            coverage = 1f;
+            float chance = Random.Range(0, decorContainer.chancesFCI[^1]);
+            fullCoveragePrefab = DecorContainer.PickFromArray(decorContainer.fullCoverageItems, decorContainer.chancesFCI, chance);
+        }
+
+        if (coverage > 0)
+        {
+            StartCoroutine(DecorateProcess(decorContainer));
         }
         
         return decorationCount = (int)(DataFromBake.proceduralPoints.Count * coverage);
     }
 
-    private IEnumerator DecorateProcess(MapResource[] resources)
+    private IEnumerator DecorateProcess(DecorContainer decorContainer)
     {
         List<ProDecPoint> points = new(DataFromBake.proceduralPoints);
 
@@ -233,20 +217,21 @@ public class TunnelSection : MonoBehaviour
         yield return null;
 
         double interationTime = Time.realtimeSinceStartupAsDouble;
-        yield return DecorateIncremental(points, resources, totalPoints, interationTime);
+        yield return DecorateIncremental(points, decorContainer, totalPoints, interationTime);
 
         SetRenderersEnabled(renderersEnabled);
     }
 
-    private IEnumerator DecorateIncremental(List<ProDecPoint> points, MapResource[] resources,int totalPoints, double interationTime)
+    private IEnumerator DecorateIncremental(List<ProDecPoint> points, DecorContainer decorContainer,int totalPoints, double interationTime)
     {
         while ((float)points.Count / (float)totalPoints > 1f - decorCoverage)
         {
             int index = Random.Range(0, points.Count);
             ProDecPoint point = points[index];
             point.UpdateMatrix(transform.localToWorldMatrix);
-            MapResource trs = Instantiate(resources[Random.Range(0, resources.Length)], point.WorldPos, Quaternion.identity, decorations);
-            if (TransformDecoration(point, trs)) continue;
+            MapResource prefab = decorContainer.PickPrefab(decorInteractableRatio, doFullCoverage, fullCoveragePrefab);
+            MapResource trs = Instantiate(prefab, point.WorldPos, Quaternion.identity, decorations);
+            TransformDecoration(point, trs);
             points.RemoveAt(index);
             double timeCheck = (Time.realtimeSinceStartupAsDouble - interationTime) * 1000;
             if (timeCheck > 4)
@@ -259,7 +244,9 @@ public class TunnelSection : MonoBehaviour
         }
     }
 
-    private static bool TransformDecoration(ProDecPoint point, MapResource trs)
+
+
+    private static void TransformDecoration(ProDecPoint point, MapResource trs)
     {
         if (trs.ItemStats.type == Item.Versicolor)
         {
@@ -270,6 +257,10 @@ public class TunnelSection : MonoBehaviour
             if (trs.ItemStats.name == "ceiling_lantern")
             {
                 trs.transform.localRotation = Quaternion.LookRotation(point.Forward, Vector3.up);
+            }
+            else if(trs.ItemStats.name == "Fungal Steak")
+            {
+                trs.transform.localRotation = Quaternion.LookRotation(point.Up, Vector3.up);
             }
             else
             {
@@ -282,7 +273,6 @@ public class TunnelSection : MonoBehaviour
             trs.transform.up = point.Up;
             trs.transform.Rotate(Vector3.up, Random.Range(0, 359f), Space.Self);
         }
-        return false;
     }
 
     private JobHandle ScheduleMatrixUpdate(List<ProDecPoint> points, NativeArray<ProDecPointBurst> pointsBurst)

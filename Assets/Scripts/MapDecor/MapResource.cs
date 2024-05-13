@@ -51,6 +51,7 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
     [SerializeField] protected bool Placeable;
     [SerializeField] protected bool Interactable = true;
     [SerializeField] protected bool requiresPickaxe = false;
+    [SerializeField] protected float spawnRarity = 50;
     [SerializeField] protected MeshRenderer[] meshRenderers;
     [SerializeField] protected Color onSelectColour = Color.yellow;
     public Texture2D icon;
@@ -62,6 +63,8 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
     public Action OnItemPickedUp;
     public Action OnInventoryItemInteract;
     [SerializeField,Tooltip("If left blank, falls back to ItemStats.name")] protected string toolTipNameOverride;
+
+    public float Rarity => spawnRarity;
 
     protected virtual string ToolTipName
     {
@@ -88,10 +91,17 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
         originalScale = transform.localScale;
         SetColliderActive(Interactable);
         meshRenderers = GetComponentsInChildren<MeshRenderer>(true);
+#if UNITY_EDITOR
+        if (Interactable && Application.isPlaying)
+        {
+            SetOutlineFader(true);
+        }
+#else
         if (Interactable)
         {
             SetOutlineFader(true);
         }
+#endif
     }
 
 

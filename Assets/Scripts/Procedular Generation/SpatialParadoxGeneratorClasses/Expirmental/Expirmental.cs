@@ -223,7 +223,7 @@ public partial class SpatialParadoxGenerator
         sectionInstance.DataFromBake = item.dataFromBake;
         InstantiateBreakableWalls(item.queuedSection.pickedPrefab, sectionInstance, item.queuedSection.primaryConnector);
         item.SetInstance(sectionInstance);
-        totalDecorations += sectionInstance.Decorate(decorCoverage, decorations);
+        totalDecorations += sectionInstance.Decorate(decorCoverage,decorInteractableRatio,fullCoveragChance, decorContainer);
     }
 
     public void AddSection(TunnelSection sectionInstance, float4x4 matrix)
