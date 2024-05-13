@@ -234,6 +234,11 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
         return false;
     }
 
+    public virtual void SetRequiresPickaxe(bool requiresPickaxe)
+    {
+        this.requiresPickaxe = requiresPickaxe;
+    }
+
     public virtual bool RequiresPickaxe()
     {
         return requiresPickaxe;
