@@ -65,34 +65,37 @@ public class AutoLadder : MonoBehaviour
 
     private IEnumerator LadderProcess()
     {
+        // disable main input
         InputManager.Instance.PlayerActions.Disable();
-        FPSInput.enabled = false;
-        while (transform.position != startPos)
+        FPSInput.enabled = false; // disable character controller
+        PlayerAnimationController.Instance.FakeEmptyHand(); // empty hands of items
+        while (transform.position != startPos) // while animation plays move to start pos & climb forward
         {
             transform.position = Vector3.MoveTowards(transform.position, startPos, Time.deltaTime * speedToAlign);
             transform.forward = Vector3.MoveTowards(transform.forward, forwards, Time.deltaTime * speedToAlign);
             yield return null;
         }
 
-        while(transform.forward != forwards)
+        while(transform.forward != forwards) // ensure forward vector is correct before climbing
         {
             transform.forward = Vector3.MoveTowards(transform.forward, forwards, Time.deltaTime * speedToAlign);
             yield return null;
         }
+        yield return new WaitForSeconds(0.25f); // ensure item put away animation has  finished
+        PlayerAnimationController.Instance.LadderClimb(dir);
+        yield return new WaitForSeconds(0.3f); // allow for delay to transition to climbing animation before vertically moving
 
-        //PlayerAnimationController.Instance.LadderClimb(dir);
-
-        while(transform.position != endPos)
+        while (transform.position != endPos) // move to endPos
         {
             transform.position = Vector3.MoveTowards(transform.position, endPos, Time.deltaTime * speedUpDown);
             yield return null;
         }
 
-        //PlayerAnimationController.Instance.LadderEnd();
+        PlayerAnimationController.Instance.LadderEnd(); // kill climbing animation, animation controller auto reequips item
 
         ladderProcess = null;
         FPSInput.enabled = true;
-        InputManager.Instance.PlayerActions.Enable();
+        InputManager.Instance.PlayerActions.Enable(); // enable player input
     }
 
 }

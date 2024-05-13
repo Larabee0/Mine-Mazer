@@ -11,7 +11,8 @@ public enum HandsState
     HandsItemIdle,
     HandsItemPutAway,
     HandsItemPullOut,
-    ToEmpty
+    ToEmpty,
+    climbing
 }
 
 
@@ -109,6 +110,7 @@ public class PlayerAnimationController : MonoBehaviour
     {
         animators[0].SetFloat("LadderDir", dir);
         animators[0].SetTrigger("Ladder");
+        handsState = HandsState.climbing;
     }
 
     public void LadderEnd()
@@ -209,6 +211,9 @@ public class PlayerAnimationController : MonoBehaviour
             case HandsState.HandsItemPullOut:
                 Inventory.Instance.CurHeldAsset.SetMapResourceActive(true);
                 break;
+            case HandsState.climbing:
+                Inventory.Instance.CurHeldAsset.SetMapResourceActive(true);
+                break;
             case HandsState.ToEmpty:
                 if (tempResource != null)
                 {
@@ -232,7 +237,9 @@ public class PlayerAnimationController : MonoBehaviour
                 handsState = HandsState.HandsItemIdle;
                 break;
             case HandsState.ToEmpty:
-
+                handsState = HandsState.HandsItemIdle;
+                break;
+            case HandsState.climbing:
                 handsState = HandsState.HandsItemIdle;
                 break;
         }
