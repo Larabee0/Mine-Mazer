@@ -10,11 +10,14 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
     [SerializeField] private Vector2 doorEndOfTravelPoints;
     [SerializeField] private float doorSpeed;
     [SerializeField] private Color selectColour = Color.yellow;
+    [SerializeField] private AudioSource gateOpen;
+    [SerializeField] private AudioSource gateClose;
 
     private MeshRenderer[] meshRenderers;
     public bool interactable = false;
     public bool fader = false;
 
+    private bool hoverOn;
     private float doorTarget;
 
     public Action OnSuccessfulActivation;
@@ -63,7 +66,7 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
 
     public void HoverOn()
     {
-        if (interactable)
+        if (interactable && !hoverOn)
         {
             if (doorTarget == doorEndOfTravelPoints.x)
             {
@@ -72,12 +75,15 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
             SetOutlineColour(selectColour);
             fader = false;
             SetOutlineFader(false);
+            if (!gateOpen.isPlaying) { gateOpen.Play(); }
+            if (gateClose.isPlaying) { gateClose.Stop(); }
+            hoverOn = true;
         }
     }
 
     public void HoverOff()
     {
-        if (interactable)
+        if (interactable && hoverOn)
         {
             if (doorTarget == doorEndOfTravelPoints.y)
             {
@@ -85,6 +91,9 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
             }
             SetOutlineColour(Color.black);
             SetOutlineFader(fader);
+            if (gateOpen.isPlaying) { gateOpen.Stop(); }
+            if (!gateClose.isPlaying) { gateClose.Play(); }
+            hoverOn = false;
         }
     }
 

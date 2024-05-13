@@ -16,9 +16,9 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     public int DeadEndPlugInstanceId =>deadEndPlug.orignalInstanceId;
     [SerializeField] private BreakableWall breakableWall;
     [SerializeField] private List<TunnelSection> tunnelSections;
+    [SerializeField] private MapResource[] interactables;
     [SerializeField] private MapResource[] decorations;
-    [SerializeField] private float decorCoverage;
-    [SerializeField] private int totalDecorations;
+    [SerializeField] private MapResource[] fullCoverageItems;
     [SerializeField] private GameObject stagnationBeacon;
 
     private Dictionary<int, TunnelSection> instanceIdToSection;
@@ -27,6 +27,7 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
 
 
     [Header("Runtime Map")]
+    [SerializeField] private int totalDecorations;
     [SerializeField] private MapTreeElement curPlayerSection;
     [SerializeField] private List<List<MapTreeElement>> mapTree = new();
     // private Dictionary<int, int> sectionCounter = new();
@@ -77,6 +78,10 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private Dictionary<int, MapTreeElement> processingQueue = new();
     private List<MapTreeElement> postProcessingQueue = new();
 
+    private float[] chancesI;
+    private float[] chancesD;
+    private float[] chancesFCI;
+    private DecorContainer decorContainer;
     public bool SectionsInProcessingQueue => preProcessingQueue.Count > 0 || processingQueue.Count > 0 || postProcessingQueue.Count > 0;
 
     [Header("Generation Settings")]
@@ -84,7 +89,9 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     [SerializeField, Min(1)] private int maxDst = 3;
     [SerializeField] private int dstBetweenJunctions = 5;
     [SerializeField, Range(0, 1)] private float breakableWallAtConnectionChance = 0.5f;
-    private int sanctumPartCooldown;
+    [SerializeField] private float decorCoverage;
+    [SerializeField] private float decorInteractableRatio = 0.5f;
+    [SerializeField] private float fullCoveragChance = 0.05f;
     [Space]
     [SerializeField] private LayerMask tunnelSectionLayerMask;
     [SerializeField, Min(1000)] private int maxInterations = 1000000; /// max iterations allowed for <see cref="PickSection(TunnelSection, List{int}, out Connector, out Connector)"/>
@@ -103,9 +110,15 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
 
     private void Awake()
     {
-
-
-
+        decorContainer = new()
+        {
+            interactables = interactables,
+            decorations = decorations,
+            fullCoverageItems = fullCoverageItems,
+            chancesI = chancesI = CalculateMapResourceChances(interactables),
+            chancesD = chancesD = CalculateMapResourceChances(decorations),
+            chancesFCI = chancesFCI = CalculateMapResourceChances(fullCoverageItems),
+        };
         if (newDataSystem)
         {
             NewSectionBuild();
@@ -169,6 +182,19 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
         instanceIdToSection.TryAdd(originalInstances[^1].orignalInstanceId, originalInstances[^1]);
         instanceIdToBakedData.TryAdd(originalInstances[^1].orignalInstanceId, bakedData[^1]);
         deadEndPlug = originalInstances[^1];
+    }
+
+
+    private static float[] CalculateMapResourceChances(MapResource[] resources)
+    {
+        float[] chances = new float[resources.Length];
+        float runningTotal = 0f;
+        for (int i = 0; i < resources.Length; i++)
+        {
+            runningTotal += resources[i].Rarity;
+            chances[i] = runningTotal;
+        }
+        return chances;
     }
 
 

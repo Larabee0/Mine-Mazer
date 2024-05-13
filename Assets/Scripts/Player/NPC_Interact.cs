@@ -120,6 +120,7 @@ public class NPC_Interact : MonoBehaviour
     {
         if (interactable != null && interactable.RequiresPickaxe() && Inventory.Instance.CurHeldItem == Item.Pickaxe)
         {
+            Inventory.Instance.CurHeldAsset.InventoryInteract();
             interactable?.Interact();
         }
     }

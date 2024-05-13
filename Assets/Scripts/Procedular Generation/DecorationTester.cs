@@ -11,11 +11,16 @@ public class DecorationTester : MonoBehaviour
     [SerializeField] private TunnelSection target;
     [SerializeField] private List<GameObject> spawnedDecorations;
     [SerializeField] private MapResource[] interactables;
+    [SerializeField] private float[] chancesI;
     [SerializeField] private MapResource[] decorations;
-    [SerializeField] bool decorOrInteractables = false;
-    [SerializeField] int specificIndex = -1;
+    [SerializeField] private float[] chancesD;
+    [SerializeField] private MapResource[] fullCoverageItems;
+    [SerializeField] private float[] chancesFCI;
     [SerializeField] private float decorCoverage;
-
+    [SerializeField] private float decorInteractableRatio = 0.5f;
+    [SerializeField] private float fullCoveragChance = 0.05f;
+    private bool doFullCoverage = false;
+    private MapResource fullCoveragePrefab = null;
     private BakedTunnelSection DataFromBake => target.DataFromBake;
 
     public void Redecorate()
@@ -24,6 +29,10 @@ public class DecorationTester : MonoBehaviour
         {
             spawnedDecorations.ForEach(e=> DestroyImmediate(e));
         }
+        spawnedDecorations.Clear();
+        chancesI = CalculateChances(interactables);
+        chancesD = CalculateChances(decorations);
+        chancesFCI = CalculateChances(fullCoverageItems);
 
         List<ProDecPoint> points = new(DataFromBake.proceduralPoints);
         int totalPoints = DataFromBake.proceduralPoints.Count;
@@ -39,58 +48,114 @@ public class DecorationTester : MonoBehaviour
         }
         pointsBurst.Dispose();
 
-        MapResource[] selectedResources = decorOrInteractables ? decorations : interactables;
-        MapResource[] spawnPool;
-        if(specificIndex >= 0)
-        {
-            spawnPool = new MapResource[] { selectedResources[specificIndex] };
-        }
-        else
-        {
-            spawnPool = selectedResources;
-        }
+        DecorateIncremental(points, totalPoints,decorCoverage);
+    }
 
-        DecorateIncremental(points, spawnPool, totalPoints);
+    private static float[] CalculateChances(MapResource[] resources)
+    {
+        float[] chances = new float[resources.Length];
+        float runningTotal = 0f;
+        for (int i = 0; i < resources.Length; i++)
+        {
+            runningTotal += resources[i].Rarity;
+            chances[i] = runningTotal;
+        }
+        return chances;
     }
 
 
-    private void DecorateIncremental(List<ProDecPoint> points, MapResource[] resources, int totalPoints)
+    private void DecorateIncremental(List<ProDecPoint> points, int totalPoints, float coverage)
     {
-        while ((float)points.Count / (float)totalPoints > 1f - decorCoverage)
+        doFullCoverage = Random.value < fullCoveragChance;
+
+        if (doFullCoverage)
+        {
+            coverage = 1f;
+            float chance = Random.Range(0, chancesFCI[^1]);
+            fullCoveragePrefab = PickFromArray(fullCoverageItems, chancesFCI, chance);
+        }
+
+        while ((float)points.Count / (float)totalPoints > 1f - coverage)
         {
             int index = Random.Range(0, points.Count);
             ProDecPoint point = points[index];
             point.UpdateMatrix(transform.localToWorldMatrix);
-            MapResource trs = Instantiate(resources[Random.Range(0, resources.Length)], point.WorldPos, Quaternion.identity, transform);
+
+            MapResource prefab;
+            prefab = PickPrefab();
+
+            MapResource trs = Instantiate(prefab, point.WorldPos, Quaternion.identity, transform);
             spawnedDecorations.Add(trs.gameObject);
-            trs.ForceInit();
-            if (trs.ItemStats.type == Item.Versicolor)
+            ProcessDecoration(point, trs);
+
+            points.RemoveAt(index);
+        }
+    }
+
+    private static void ProcessDecoration(ProDecPoint point, MapResource trs)
+    {
+        trs.ForceInit();
+        if (trs.ItemStats.type == Item.Versicolor)
+        {
+            trs.transform.localRotation = Quaternion.LookRotation(point.Up, Vector3.up);
+        }
+        else if (trs.ItemStats.type == Item.None)
+        {
+            if (trs.ItemStats.name == "ceiling_lantern")
             {
-                trs.transform.localRotation = Quaternion.LookRotation(point.Up, Vector3.up);
-            }
-            else if(trs.ItemStats.type == Item.None)
-            {
-                if(trs.ItemStats.name == "ceiling_lantern")
-                {
-                    trs.transform.localRotation = Quaternion.LookRotation(point.Forward, Vector3.up);
-                }
-                else
-                {
-                    trs.transform.up = point.Up;
-                    trs.transform.Rotate(Vector3.up, Random.Range(0, 359f), Space.Self);
-                }
+                trs.transform.localRotation = Quaternion.LookRotation(point.Forward, Vector3.up);
             }
             else
             {
                 trs.transform.up = point.Up;
                 trs.transform.Rotate(Vector3.up, Random.Range(0, 359f), Space.Self);
             }
-
-
-            points.RemoveAt(index);
+        }
+        else
+        {
+            trs.transform.up = point.Up;
+            trs.transform.Rotate(Vector3.up, Random.Range(0, 359f), Space.Self);
         }
     }
 
+    private MapResource PickPrefab()
+    {
+        MapResource prefab;
+        if (doFullCoverage)
+        {
+            prefab = fullCoveragePrefab;
+        }
+        else if (decorInteractableRatio < Random.value)
+        {
+            float chance = Random.Range(0, chancesD[^1]);
+
+            prefab = PickFromArray(decorations, chancesD, chance);
+        }
+        else
+        {
+            float chance = Random.Range(0, chancesI[^1]);
+            prefab = PickFromArray(interactables, chancesI, chance);
+        }
+
+        return prefab;
+    }
+
+    private static MapResource PickFromArray(MapResource[] resources, float[] chances, float value)
+    {
+        int index = -1;
+        for (int i = chances.Length - 1; i >= 1 ; i--)
+        {
+            if (chances[i] >= value && chances[i-1] <= value)
+            {
+                index = i; break;
+            }
+        }
+        if(index < 0)
+        {
+            index = 0;
+        }
+        return resources[index];
+    }
 
     private JobHandle ScheduleMatrixUpdate(List<ProDecPoint> points, NativeArray<ProDecPointBurst> pointsBurst)
     {
@@ -109,3 +174,53 @@ public class DecorationTester : MonoBehaviour
     }
 }
 #endif
+
+public struct DecorContainer
+{
+    public MapResource[] interactables;
+    public MapResource[] decorations;
+    public MapResource[] fullCoverageItems;
+    public float[] chancesI;
+    public float[] chancesD;
+    public float[] chancesFCI;
+
+
+    public MapResource PickPrefab(float decorInteractableRatio, bool doFullCoverage, MapResource fullCoveragePrefab)
+    {
+        MapResource prefab;
+        if (doFullCoverage)
+        {
+            prefab = fullCoveragePrefab;
+        }
+        else if (decorInteractableRatio < Random.value)
+        {
+            float chance = Random.Range(0, chancesD[^1]);
+
+            prefab = PickFromArray(decorations, chancesD, chance);
+        }
+        else
+        {
+            float chance = Random.Range(0, chancesI[^1]);
+            prefab = PickFromArray(interactables, chancesI, chance);
+        }
+
+        return prefab;
+    }
+
+    public static MapResource PickFromArray(MapResource[] resources, float[] chances, float value)
+    {
+        int index = -1;
+        for (int i = chances.Length - 1; i >= 1; i--)
+        {
+            if (chances[i] >= value && chances[i - 1] <= value)
+            {
+                index = i; break;
+            }
+        }
+        if (index < 0)
+        {
+            index = 0;
+        }
+        return resources[index];
+    }
+}
