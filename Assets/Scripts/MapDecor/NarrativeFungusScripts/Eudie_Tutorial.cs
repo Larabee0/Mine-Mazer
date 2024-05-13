@@ -38,12 +38,6 @@ public class Eudie_Tutorial : NPCTrade
     // barks allowed
     private bool ladderBark = true;
 
-    private void Awake()
-    {
-        gateButton.OnSuccessfulActivation += OnGateBeginOpening;
-    }
-
-
     public override string GetToolTipText()
     {
         if (eudieState == EudieContext.EudieSleep && eudieWWP != null)
@@ -65,6 +59,8 @@ public class Eudie_Tutorial : NPCTrade
     {
         switch (eudieState)
         {
+            case EudieContext.EudieInInventory:
+                return;
             case EudieContext.LumenGather:
                 UnlockPointer();
                 AttemptTrade();
@@ -78,6 +74,7 @@ public class Eudie_Tutorial : NPCTrade
                 Dialogue.ExecuteBlock("Come Back Later");
                 break;
             default:
+                gateButton.OnSuccessfulActivation += OnGateBeginOpening;
                 InteractMessage.Instance.ClearObjective();
                 Dialogue.ExecuteBlock("Start Eudie");
                 break;
@@ -87,7 +84,7 @@ public class Eudie_Tutorial : NPCTrade
     #region barks
     private void EnterColonyBark()
     {
-        Invoke(nameof(EnterColonyDelay), 2.5f);
+        Invoke(nameof(EnterColonyDelay), 2f);
     }
 
     private void EnterColonyDelay()
@@ -180,6 +177,7 @@ public class Eudie_Tutorial : NPCTrade
         if(eudieWWP != null) { WorldWayPointsController.Instance.RemoveWaypoint(eudieWWP); }
         gateSound.Play();
         StartCoroutine(OpenGate());
+        StartCoroutine(FinishEudie());
     }
 
     private IEnumerator OpenGate()
@@ -190,6 +188,11 @@ public class Eudie_Tutorial : NPCTrade
             yield return null;
         }
         gate.gameObject.SetActive(false);
+    }
+
+    private IEnumerator FinishEudie()
+    {
+        yield return new WaitForSeconds(2);
         InteractMessage.Instance.ClearObjective();
         Dialogue.ExecuteBlock("Player Breaks Wall"); // next tutorial blocl
         PlayerUIController.Instance.SetMiniMapVisible(true);
@@ -225,7 +228,7 @@ public class Eudie_Tutorial : NPCTrade
         eudieItem.PickUpEudieItem();
 
         SpatialParadoxGenerator mapGen = FindObjectOfType<SpatialParadoxGenerator>();
-        mapGen.OnEnterLadderSection += LadderBark;
+        //mapGen.OnEnterLadderSection += LadderBark;
         mapGen.OnEnterColonySection += EnterColonyBark;
     }
 
@@ -235,7 +238,7 @@ public class Eudie_Tutorial : NPCTrade
         eudieItem.MakePlaceable();
         eudieItem.OnEudiePlaced += EudiePlaced;
         SpatialParadoxGenerator mapGen = FindObjectOfType<SpatialParadoxGenerator>();
-        mapGen.OnEnterLadderSection -= LadderBark;
+        //mapGen.OnEnterLadderSection -= LadderBark;
         mapGen.OnEnterColonySection -= EnterColonyBark;
         GetComponent<NavMeshAgent>().enabled = false;
 
