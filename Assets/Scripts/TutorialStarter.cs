@@ -55,6 +55,8 @@ public class TutorialStarter : MonoBehaviour
     private void Tutorial_Backstory()
     {
         InteractMessage.Instance.HideInteraction();
+        LockPointer();
+        InputManager.Instance.PlayerActions.Disable();
         PlayerUIController.Instance.SetMiniMapVisible(false);
         tutorialFlowChart.ExecuteBlock("Tutorial Start");
     }
@@ -62,7 +64,7 @@ public class TutorialStarter : MonoBehaviour
     private void SkipTutorial()
     {
         FadeIn();
-
+        //UnlockPointer();
         PlayerUIController.Instance.ShowCrosshair = true;
         WorldWayPointsController.Instance.StartWWPC();
         EudieHandOff();
@@ -116,6 +118,7 @@ public class TutorialStarter : MonoBehaviour
     {
         InteractMessage.Instance.AllowAutoInteract(true);
         FindObjectOfType<Eudie_Tutorial>().ShowEudieWaypoint(skipToPickUpEudie);
+        FindObjectOfType<Eudie_Tutorial>().interactable = true;
         Hunger.Instance.OnStarvedToDeath += StarvedToDeath;
         PlayerUIController.Instance.BindUnBindMotes(true);
     }

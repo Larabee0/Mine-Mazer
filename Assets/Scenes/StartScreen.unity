@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 278139903}
   - component: {fileID: 278139902}
   - component: {fileID: 278139904}
+  - component: {fileID: 278139905}
   m_Layer: 0
   m_Name: Tutorial
   m_TagString: Untagged
@@ -1708,7 +1709,7 @@ MonoBehaviour:
   itemId: 5
   indentLevel: 0
   targetObject: {fileID: 278139835}
-  methodName: LockPointer
+  methodName: UnlockPointer
   delay: 0
 --- !u!114 &278139878
 MonoBehaviour:
@@ -1769,7 +1770,7 @@ MonoBehaviour:
   EudieWayPoint: {fileID: 0}
   caveAmbience: {fileID: 278139836}
   allowSceneChange: 0
-  skipTutorial: 1
+  skipTutorial: 0
   skipToPickUpEudie: 0
 --- !u!114 &278139882
 MonoBehaviour:
@@ -1785,7 +1786,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 780
+    x: 778
     y: 259
     width: 123
     height: 40
@@ -1827,8 +1828,9 @@ MonoBehaviour:
   - {fileID: 278139886}
   - {fileID: 278139904}
   - {fileID: 278139893}
-  - {fileID: 278139880}
   - {fileID: 278139877}
+  - {fileID: 278139880}
+  - {fileID: 278139905}
   - {fileID: 278139876}
   - {fileID: 278139867}
   suppressAllAutoSelections: 0
@@ -1859,7 +1861,7 @@ MonoBehaviour:
   selectedBlocks:
   - {fileID: 278139882}
   selectedCommands:
-  - {fileID: 278139904}
+  - {fileID: 278139877}
   variables:
   - {fileID: 278139878}
   description: 
@@ -2263,6 +2265,23 @@ MonoBehaviour:
     floatRef: {fileID: 0}
     floatVal: 1.5
   durationOLD: 0
+--- !u!114 &278139905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278139835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a200dbd67304446a3019434503338a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 73
+  indentLevel: 0
+  targetObject: {fileID: 278139835}
+  methodName: LockPointer
+  delay: 0
 --- !u!1 &290947035
 GameObject:
   m_ObjectHideFlags: 0
@@ -3881,7 +3900,7 @@ MonoBehaviour:
   settingsMenuPrefab: {fileID: 9197481963319205126, guid: 91ea0259b4733844a8862e4eb470393a,
     type: 3}
   tutorialStarter: {fileID: 278139881}
-  autoLoadOnPlay: 1
+  autoLoadOnPlay: 0
   virtualCamera: {fileID: 1725372460}
   sequenceMove: {fileID: 602964132}
 --- !u!114 &1274388771

@@ -21,6 +21,7 @@ public class Eudie_Tutorial : NPCTrade
     [SerializeField] private Vector3 raisedPosition;
     [SerializeField] private float raiseSpeed;
     private bool skipToPickUpEudie = false;
+    public bool interactable = false;
 
     [SerializeField] EudieContext eudieState = EudieContext.EudieSleep;
 
@@ -57,27 +58,30 @@ public class Eudie_Tutorial : NPCTrade
 
     public override void Interact()
     {
-        switch (eudieState)
+        if (interactable)
         {
-            case EudieContext.EudieInInventory:
-                return;
-            case EudieContext.LumenGather:
-                UnlockPointer();
-                AttemptTrade();
-                break;
-            case EudieContext.MineWall:
-                return;
-            case EudieContext.PickUpEudie:
-                TransformEudieToItem();
-                break;
-            case EudieContext.AtColony:
-                Dialogue.ExecuteBlock("Come Back Later");
-                break;
-            default:
-                gateButton.OnSuccessfulActivation += OnGateBeginOpening;
-                InteractMessage.Instance.ClearObjective();
-                Dialogue.ExecuteBlock("Start Eudie");
-                break;
+            switch (eudieState)
+            {
+                case EudieContext.EudieInInventory:
+                    return;
+                case EudieContext.LumenGather:
+                    UnlockPointer();
+                    AttemptTrade();
+                    break;
+                case EudieContext.MineWall:
+                    return;
+                case EudieContext.PickUpEudie:
+                    TransformEudieToItem();
+                    break;
+                case EudieContext.AtColony:
+                    Dialogue.ExecuteBlock("Come Back Later");
+                    break;
+                default:
+                    gateButton.OnSuccessfulActivation += OnGateBeginOpening;
+                    InteractMessage.Instance.ClearObjective();
+                    Dialogue.ExecuteBlock("Start Eudie");
+                    break;
+            }
         }
     }
 
