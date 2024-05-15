@@ -48,7 +48,7 @@ public class CaveMessageController : MonoBehaviour
     public List<Hash128> unreadMessages = new();
     public HashSet<Hash128> readMesssages = new();
 
-
+    public Action onMessageClosed;
     private void Awake()
     {
         if(document == null||document.rootVisualElement == null)
@@ -218,6 +218,7 @@ public class CaveMessageController : MonoBehaviour
 
             }
         }
+        onMessageClosed?.Invoke();
     }
 
     private void UpdateReadableMessages()

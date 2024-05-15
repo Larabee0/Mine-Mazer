@@ -8,6 +8,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 507023176876229315, guid: e37c9161e520454408ee03a216c58578,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 678389460508024077, guid: e37c9161e520454408ee03a216c58578,
         type: 3}
       propertyPath: spawnRarity
@@ -33,6 +38,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 5ded9d732fc832444be6c5e242a9376e, type: 2}
+    - target: {fileID: 2367706344378827038, guid: e37c9161e520454408ee03a216c58578,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729718001813346038, guid: e37c9161e520454408ee03a216c58578,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3067982201840586469, guid: e37c9161e520454408ee03a216c58578,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6118873390865705102, guid: e37c9161e520454408ee03a216c58578,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -47,6 +67,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FungalSteak
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766665242052862073, guid: e37c9161e520454408ee03a216c58578,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766665242052862073, guid: e37c9161e520454408ee03a216c58578,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 7688758371323163826, guid: e37c9161e520454408ee03a216c58578,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7981600482841664596, guid: e37c9161e520454408ee03a216c58578,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8591890612142180429, guid: e37c9161e520454408ee03a216c58578,
         type: 3}
@@ -103,7 +143,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7298359119054477913, guid: e37c9161e520454408ee03a216c58578, type: 3}
+    - {fileID: 591558791124767149, guid: e37c9161e520454408ee03a216c58578, type: 3}
+    - {fileID: 4692997639597817216, guid: e37c9161e520454408ee03a216c58578, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

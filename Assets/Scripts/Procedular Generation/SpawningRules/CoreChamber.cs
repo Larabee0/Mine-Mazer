@@ -10,8 +10,10 @@ public class CoreChamber : DependsOnExplorationCountRule
 
     protected bool visited = false;
     protected int startIndex = -1;
+    protected bool disableSpawn = false;
     public override bool UpdateSpawnStatus()
     {
+        if (disableSpawn) return false;
         spawnable = false;
         if (!visited && ExplorationStatistics.UniqueVistedSections.Contains(dependsOnVisited.orignalInstanceId))
         {
@@ -29,13 +31,14 @@ public class CoreChamber : DependsOnExplorationCountRule
         base.ResetRule();
         startIndex = -1;
         visited = false;
+        disableSpawn = false;
     }
     public override void OnSpawned()
     {
         base.OnSpawned();
         if(disableAfterSpawn)
         {
-            spawnLimit = 0;
+            disableSpawn = true;
         }
     }
 }

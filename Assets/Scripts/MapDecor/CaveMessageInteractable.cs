@@ -1,4 +1,5 @@
 using MazeGame.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,9 @@ public class CaveMessageInteractable : MonoBehaviour, IInteractable
 
     private bool read = false;
     private Hash128 cachedMessage;
+
+    public Action onNoteClose;
+    public bool Read => read;
 
     private void Awake()
     {
@@ -45,17 +49,26 @@ public class CaveMessageInteractable : MonoBehaviour, IInteractable
             if (read)
             {
                 CaveMessageController.Instance.ShowMessage(cachedMessage);
+                CaveMessageController.Instance.onMessageClosed += OnMessageClose;
                 return;
             }
             if (string.IsNullOrEmpty(messageAssetName) || string.IsNullOrWhiteSpace(messageAssetName))
             {
                 read = CaveMessageController.Instance.ShowRandomMessage(out cachedMessage);
+                CaveMessageController.Instance.onMessageClosed += OnMessageClose;
             }
             else
             {
                 CaveMessageController.Instance.TryShowMessageByName(messageAssetName);
+                CaveMessageController.Instance.onMessageClosed += OnMessageClose;
             }
         }
+    }
+
+    private void OnMessageClose()
+    {
+        onNoteClose?.Invoke();
+        CaveMessageController.Instance.onMessageClosed -= OnMessageClose;
     }
 
     public bool RequiresPickaxe()

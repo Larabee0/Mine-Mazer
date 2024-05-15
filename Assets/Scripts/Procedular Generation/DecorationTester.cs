@@ -1,11 +1,11 @@
-#if UNITY_EDITOR
+
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
+#if UNITY_EDITOR
 public class DecorationTester : MonoBehaviour
 {
     [SerializeField] private TunnelSection target;

@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedFlowchart: {fileID: 528317543}
+  selectedFlowchart: {fileID: 0}
 --- !u!4 &229147804
 Transform:
   m_ObjectHideFlags: 1
@@ -306,7 +306,7 @@ PrefabInstance:
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
       propertyPath: ringRenderDst
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -533,7 +533,7 @@ PrefabInstance:
         type: 3}
       propertyPath: tunnelSections.Array.data[15]
       value: 
-      objectReference: {fileID: 7620240774403884024, guid: 536cf79977b17ae40bc8cc4764deef6d,
+      objectReference: {fileID: 1706208976322110943, guid: 536cf79977b17ae40bc8cc4764deef6d,
         type: 3}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -545,13 +545,13 @@ PrefabInstance:
         type: 3}
       propertyPath: tunnelSections.Array.data[17]
       value: 
-      objectReference: {fileID: 5690713400658837405, guid: f3cc95ca6faf29f4bb27eef3dbf3bef2,
+      objectReference: {fileID: 6981826647395267011, guid: f3cc95ca6faf29f4bb27eef3dbf3bef2,
         type: 3}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
       propertyPath: tunnelSections.Array.data[18]
       value: 
-      objectReference: {fileID: 81207645320716588, guid: d9c2585a374b96141b4f08f0baa5a1e6,
+      objectReference: {fileID: 4425253731281067152, guid: 4595721669d3d7d4fa68b537b41e52ff,
         type: 3}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -563,7 +563,7 @@ PrefabInstance:
         type: 3}
       propertyPath: tunnelSections.Array.data[20]
       value: 
-      objectReference: {fileID: 4425253731281067152, guid: 4595721669d3d7d4fa68b537b41e52ff,
+      objectReference: {fileID: 81207645320716588, guid: d9c2585a374b96141b4f08f0baa5a1e6,
         type: 3}
     - target: {fileID: 6372838106400907776, guid: b3c1b0889a4fa6a4491117ebf8219574,
         type: 3}
@@ -971,9 +971,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 905ba9e79279b764ba77602714bb0530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraTarget: {fileID: 500684017}
   chController: {fileID: 500684019}
   speedUpDown: 3.2
   speedToAlign: 3.2
+  speedToRotateAlign: 104
   FPSInput: {fileID: 500684018}
   layerMask:
     serializedVersion: 2

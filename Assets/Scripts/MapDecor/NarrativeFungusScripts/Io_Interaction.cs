@@ -19,12 +19,28 @@ public class Io_Interaction : NPCTrade
             {
                 Dialogue.SetBooleanVariable(ioLikesVariable, false);
             }
-            triggered = true;
+            //triggered = true;
         }
         else
         {
             Dialogue.SetBooleanVariable(ioLikesVariable, false);
         }
         base.Interact();
+    }
+
+    public void SetObjectiveLarimar()
+    {
+        if (Larmiar_Interaction.explorationStatistics == null)
+        {
+            InteractMessage.Instance.SetObjective("Speak to Larimar");
+        }
+    }
+
+    public void SetObjectiveStagnationBeacon()
+    {
+        if (Larmiar_Interaction.explorationStatistics == null)
+        {
+            InteractMessage.Instance.SetObjective("Show Larimar the Stagnation Beacon");
+        }
     }
 }

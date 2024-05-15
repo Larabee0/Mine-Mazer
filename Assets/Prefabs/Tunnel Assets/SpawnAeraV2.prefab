@@ -1797,6 +1797,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3547482718160179921, guid: 2764cc5b28e49df43a8623c9fde1c290,
         type: 3}
+      propertyPath: storyText
+      value: Please, take it! I can't use it anyway..
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547482718160179921, guid: 2764cc5b28e49df43a8623c9fde1c290,
+        type: 3}
       propertyPath: waitForClick
       value: 1
       objectReference: {fileID: 0}
@@ -1814,12 +1819,12 @@ PrefabInstance:
         type: 3}
       propertyPath: selectedBlocks.Array.data[0]
       value: 
-      objectReference: {fileID: 3690502781265945484}
+      objectReference: {fileID: 3747093091350811989}
     - target: {fileID: 3983711518670975957, guid: 2764cc5b28e49df43a8623c9fde1c290,
         type: 3}
       propertyPath: selectedCommands.Array.data[0]
       value: 
-      objectReference: {fileID: 5949724278689288808}
+      objectReference: {fileID: 7452435234255412119}
     - target: {fileID: 4038679756852483349, guid: 2764cc5b28e49df43a8623c9fde1c290,
         type: 3}
       propertyPath: waitForClick
@@ -1875,7 +1880,7 @@ PrefabInstance:
     - target: {fileID: 6506946065469862690, guid: 2764cc5b28e49df43a8623c9fde1c290,
         type: 3}
       propertyPath: storyText
-      value: 'Ah! But here, Mister Schist asked me to give these to you. '
+      value: 'Ah! But here, Mister Schist asked me to give this pickaxe to you. '
       objectReference: {fileID: 0}
     - target: {fileID: 6506946065469862690, guid: 2764cc5b28e49df43a8623c9fde1c290,
         type: 3}
@@ -1990,7 +1995,7 @@ PrefabInstance:
     - target: {fileID: 7204789686680481940, guid: 2764cc5b28e49df43a8623c9fde1c290,
         type: 3}
       propertyPath: raiseSpeed
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7204789686680481940, guid: 2764cc5b28e49df43a8623c9fde1c290,
         type: 3}
@@ -2513,9 +2518,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17a200dbd67304446a3019434503338a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3690502781265945484 stripped
+--- !u!114 &3747093091350811989 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7304876361382030026, guid: 2764cc5b28e49df43a8623c9fde1c290,
+  m_CorrespondingSourceObject: {fileID: 7086193770796506131, guid: 2764cc5b28e49df43a8623c9fde1c290,
     type: 3}
   m_PrefabInstance: {fileID: 6221563322876053830}
   m_PrefabAsset: {fileID: 0}
@@ -2588,18 +2593,6 @@ MonoBehaviour:
 --- !u!114 &5742569500191472691 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1866419235992368501, guid: 2764cc5b28e49df43a8623c9fde1c290,
-    type: 3}
-  m_PrefabInstance: {fileID: 6221563322876053830}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3163699229520849548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5949724278689288808 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 344178293599804206, guid: 2764cc5b28e49df43a8623c9fde1c290,
     type: 3}
   m_PrefabInstance: {fileID: 6221563322876053830}
   m_PrefabAsset: {fileID: 0}

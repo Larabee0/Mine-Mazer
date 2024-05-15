@@ -324,4 +324,15 @@ public class Inventory : MonoBehaviour
         yield return new WaitForSeconds(itemNameTime);
         InteractMessage.Instance.HideInteraction();
     }
+
+    public void EnsureAllDisabled()
+    {
+        List<Item> keys = new(assets.Keys);
+
+        keys.ForEach(key => assets[key].ForEach(item => item.SetMapResourceActive(false)));
+        if (heldItem != null)
+        {
+            heldItem.SetMapResourceActive(true);
+        }
+    }
 }

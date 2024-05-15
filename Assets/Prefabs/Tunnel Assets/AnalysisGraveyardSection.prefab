@@ -81,6 +81,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962,
         type: 3}
+      propertyPath: orignalInstanceId
+      value: 28264
+      objectReference: {fileID: 0}
+    - target: {fileID: 3803638923336616636, guid: 2ce418b8f3feb954ebaf3c8fced1a962,
+        type: 3}
       propertyPath: dataFromBake.spawnRule
       value: 
       objectReference: {fileID: 0}
@@ -88,7 +93,7 @@ PrefabInstance:
         type: 3}
       propertyPath: bakedData.spawnRule
       value: 
-      objectReference: {fileID: 2367409216987862035}
+      objectReference: {fileID: 527}
     - target: {fileID: 4940310785889527522, guid: 2ce418b8f3feb954ebaf3c8fced1a962,
         type: 3}
       propertyPath: bakedData.strongKeep
@@ -6651,7 +6656,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1801700286422856763, guid: 2ce418b8f3feb954ebaf3c8fced1a962,
         type: 3}
       insertIndex: 6
-      addedObject: {fileID: 2367409216987862035}
+      addedObject: {fileID: 527}
   m_SourcePrefab: {fileID: 100100000, guid: 2ce418b8f3feb954ebaf3c8fced1a962, type: 3}
 --- !u!1 &374775313650395009 stripped
 GameObject:
@@ -6659,7 +6664,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2032131636245795770}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2367409216987862035
+--- !u!114 &527
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6675,9 +6680,9 @@ MonoBehaviour:
   spawnLimit: 1
   generator: {fileID: 0}
   owner: 0
-  exploreThreshold: 1
+  exploreThreshold: 3
   aggressiveSpawning: 0
-  dependsOnVisited: {fileID: 7620240774403884024, guid: 536cf79977b17ae40bc8cc4764deef6d,
+  dependsOnVisited: {fileID: 4425253731281067152, guid: 4595721669d3d7d4fa68b537b41e52ff,
     type: 3}
   disableAfterSpawn: 1
 --- !u!4 &4183417745612128398 stripped

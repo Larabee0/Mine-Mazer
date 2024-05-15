@@ -69,7 +69,12 @@ public static class ItemUtility
         {
             Item.Torch,
             "Lumen Torch"
+        },
+        {
+            Item.LumenCrystal,
+            "Lumen Crystal"
         }
+
     };
 
     private static readonly Dictionary<ItemCategory, HashSet<Item>> categoryToItems = new()

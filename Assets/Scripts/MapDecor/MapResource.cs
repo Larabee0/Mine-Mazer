@@ -192,7 +192,7 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
             body.isKinematic = true;
         }
         OnItemPickedUp?.Invoke();
-        Inventory.Instance.AddItem(itemStats.type, 1,this);
+        Inventory.Instance.AddItem(itemStats.type, 1, this, !RequiresPickaxe());
     }
 
     public virtual void SetColliderActive(bool active)

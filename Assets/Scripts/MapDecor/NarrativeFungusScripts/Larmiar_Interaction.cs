@@ -7,7 +7,7 @@ using UnityEngine;
 public class Larmiar_Interaction : NPCTrade
 {
     [SerializeField] private ItemStats[] itemsOfInterestKeys;
-
+    [SerializeField] protected MapResource SanctumMachine;
     public static PlayerExplorationStatistics explorationStatistics;
 
     public void GetPlayerExplorationStatistics()
@@ -35,11 +35,14 @@ public class Larmiar_Interaction : NPCTrade
     protected override void TradeClose(bool newValue)
     {
         base.TradeClose(newValue);
-        if(newValue && curOption != null)
-        {
-            explorationStatistics.SetAllowSanctumPartSpawn(false, true);
-            InteractMessage.Instance.SetObjective("Take Sanctum Machine to Mother Quartz");
-        }
+    }
+
+    public void TakeSanctumMachineToMQ()
+    {
+        explorationStatistics.SetAllowSanctumPartSpawn(false, true);
+        InteractMessage.Instance.SetObjective("Take Sanctum Machine to Mother Quartz");
+        Inventory.Instance.AddItem(Item.SanctumMachine, 1, Instantiate( SanctumMachine), true);
+        Inventory.Instance.TryMoveItemToHand(Item.SanctumMachine);
     }
 
     public void Larmiar_SetMinesMove()
@@ -75,7 +78,7 @@ public class Larmiar_Interaction : NPCTrade
 
     private void OnItemPickUpLarimar(Item item, int arg2)
     {
-        if (itemsOfInterestKeys.Any(key => key.type == item))
+        if (item != Item.SanctumMachine && itemsOfInterestKeys.Any(key => key.type == item))
         {
             interacted = false;
             TryShowInteractBubble();

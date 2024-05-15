@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 7875438145863607054}
   - component: {fileID: 4575697493249359502}
   - component: {fileID: 1606485108606532387}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mushroom Soup
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,6 +125,7 @@ MonoBehaviour:
   Placeable: 0
   Interactable: 1
   requiresPickaxe: 0
+  spawnRarity: 50
   useIdleA: 0
   meshRenderers: []
   onSelectColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

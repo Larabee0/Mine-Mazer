@@ -29,6 +29,7 @@ public class Hunger : MonoBehaviour
     [SerializeField] private float hungerSpeed = 1;
     public float CurrentHungerLevel => hungerLevel;
     public Action OnStarvedToDeath;
+    public bool pause;
 
     private void Awake()
     {
@@ -58,6 +59,11 @@ public class Hunger : MonoBehaviour
     {
         while(hungerLevel > 0)
         {
+            if (pause)
+            {
+                yield return null;
+                continue;
+            }
             hungerLevel -= Time.deltaTime * hungerSpeed;
             PlayerUIController.Instance.SetHungerBarProgress(CurrentHungerLevel);
             yield return null;

@@ -19,7 +19,7 @@ public class Eudie_Item : MapResource
             }
             else
             {
-                return string.Format("Click to Place {0} on Floor", ToolTipName);
+                return string.Format("Right Click to Place {0} on Floor", ToolTipName);
             }
         }
         if (pickUpEudie)
@@ -79,5 +79,6 @@ public class Eudie_Item : MapResource
     public void MakePlaceable()
     {
         Placeable = true;
+        InteractMessage.Instance.SetObjective("Place Eudie in the colony with Right Click");
     }
 }

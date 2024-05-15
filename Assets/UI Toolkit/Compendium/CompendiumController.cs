@@ -164,7 +164,7 @@ public class CompendiumController : UIToolkitBase
             string name = ItemUtility.GetItemDisplayName(goalableItems[i]);
             if( string.IsNullOrEmpty(name))
             {
-                name = "MISSING ITEM DISPLAY NAME";
+                name = "MISSING ITEM DISPLAY NAME" + goalableItems[i].ToString();
             }
 
             goalOutline += string.Format("{2} {0} / {1}\n\n", curQuantity, ItemUtility.GetItemQuantityGoal(goalableItems[i]), name);

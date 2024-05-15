@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public enum HandsState
@@ -48,6 +47,8 @@ public class PlayerAnimationController : MonoBehaviour
     private HandsState handsState = HandsState.HandsIdleEmpty;
     private MapResource tempResource;
 
+    public Action OnEquipEnd;
+
     private void Awake()
     {
         if (instance == null)
@@ -78,12 +79,6 @@ public class PlayerAnimationController : MonoBehaviour
             animationEvents[i].ToAnimationEvent(this);
         }
         handsState = HandsState.HandsIdleEmpty;
-        //for (int i = 0; i < animators.Length; i++)
-        //{
-        //    animators[i].gameObject.SetActive(false);
-        //}
-        //
-        //animators[defaultAnimator].gameObject.SetActive(true);
     }
 
     private void OnEnable()
@@ -196,11 +191,11 @@ public class PlayerAnimationController : MonoBehaviour
     public void EquipMid()
     {
 
-        Debug.Log("EquipMid");
         switch (handsState)
         {
             case HandsState.HandsItemPutAway:
-                if(tempResource != null)
+
+                if (tempResource != null && Inventory.Instance.inventory.ContainsKey(tempResource.ItemStats.type))
                 {
                     tempResource.SetMapResourceActive(false);
                 }
@@ -235,6 +230,7 @@ public class PlayerAnimationController : MonoBehaviour
                 break;
             case HandsState.HandsItemPullOut:
                 handsState = HandsState.HandsItemIdle;
+                Inventory.Instance.EnsureAllDisabled();
                 break;
             case HandsState.ToEmpty:
                 handsState = HandsState.HandsItemIdle;
@@ -243,8 +239,17 @@ public class PlayerAnimationController : MonoBehaviour
                 handsState = HandsState.HandsItemIdle;
                 break;
         }
-        tempResource = null;
-        Debug.Log("EquipEnd");
+        OnEquipEnd?.Invoke();
+        if (tempResource != null)
+        {
+            if (!Inventory.Instance.inventory.ContainsKey(tempResource.ItemStats.type))
+            {
+                tempResource.SetMapResourceActive(true);
+            }
+
+            tempResource = null;
+        }
+
     }
     #endregion
 

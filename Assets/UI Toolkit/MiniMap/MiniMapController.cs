@@ -77,6 +77,8 @@ namespace MazeGame.Navigation
                 enabled = false;
                 return;
             }
+
+            player.GetComponent<AutoLadder>().autoLadderTransform += UpdateMiniMapForce;
             mapGenerator.OnMapUpdate += MapUpdateEvent;
             minimapZoomOffset = textureResolution * (miniMapScale - 1);
             minimapZoomOffset -= minimapCentreOffset;
@@ -86,7 +88,7 @@ namespace MazeGame.Navigation
 
         private void Start()
         {
-            ScaleMap(0.7f);
+            ScaleMap(0.3f);
             //DebugMap();
         }
 
@@ -118,6 +120,13 @@ namespace MazeGame.Navigation
                 InputManager.Instance.PlayerActions.MinimapZoomOut.canceled -= ZoomOut;
                 InputManager.Instance.PlayerActions.MinimapZoomIn.canceled -= ZoomIn;
             }
+        }
+
+        public void UpdateMiniMapForce()
+        {
+            Vector2 axis = Vector2.zero;
+            OnLook(axis);
+            OnMove(axis);
         }
 
         private void OnLook(Vector2 axis)

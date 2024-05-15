@@ -67,6 +67,7 @@ public class Interact_Example : MonoBehaviour, IInteractable
         {
             InputManager.Instance.UnlockPointer();
         }
+        Hunger.Instance.pause = true;
     }
 
     public void LockPointer()
@@ -75,6 +76,7 @@ public class Interact_Example : MonoBehaviour, IInteractable
         {
             InputManager.Instance.LockPointer();
         }
+        Hunger.Instance.pause = false;
     }
 
     public virtual void Interact()

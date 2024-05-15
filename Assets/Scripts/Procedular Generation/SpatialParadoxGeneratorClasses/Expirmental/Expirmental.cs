@@ -164,6 +164,7 @@ public partial class SpatialParadoxGenerator
 
         if (finishedQueue)
         {
+            OnMapUpdate?.Invoke();
             yield return null;
             UpdateVirtualPhysicsWorld();
 

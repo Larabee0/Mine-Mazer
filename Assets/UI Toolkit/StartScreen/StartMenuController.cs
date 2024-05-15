@@ -45,7 +45,7 @@ public class StartMenuController : UIToolkitBase
 
     public void SetActive(bool active)
     {
-        buttonContainer.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
+        RootVisualElement.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     public void Focus()
