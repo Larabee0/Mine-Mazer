@@ -70,20 +70,16 @@ public class StartScreen : MonoBehaviour
 
     public void OpenSettingsMenu()
     {
-        if (settingsMenuController == null)
-        {
-            TemplateContainer container = settingsMenuPrefab.Instantiate();
-            settingsMenuController = new SettingsMenuController(container.Q("Overlay"));
-            RootVisualElement.Q("Overlay").Add(settingsMenuController.RootVisualElement);            
-            settingsMenuController.OnSettingsMenuClose += OpenStartScreen;
-        }
+        PlayerUIController.Instance.OpenSettingsMenu();
+        settingsMenuController= PlayerUIController.Instance.SettingsMenu;
+        settingsMenuController.OnSettingsMenuClose += OpenStartScreen;
         startScreenController.SetActive(false);
-        settingsMenuController.OpenSettings();
     }
 
     private void OpenStartScreen()
     {
         settingsMenuController.OnSettingsMenuClose-=OpenStartScreen;
         startScreenController.SetActive(true);
+        PlayerUIController.Instance.SetPauseMenuActive(false);
     }
 }

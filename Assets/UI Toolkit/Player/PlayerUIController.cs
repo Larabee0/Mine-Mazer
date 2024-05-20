@@ -38,6 +38,7 @@ public class PlayerUIController : MonoBehaviour
     public CompendiumUI CompendiumUI => compendiumUI;
     public InventoryController InventoryMenuUI => inventoryMenu;
 
+    public SettingsMenuController SettingsMenu=>settingsMenu;
     private SettingsMenuController settingsMenu;
     private InventoryController inventoryMenu;
     private Motes motes;
@@ -209,11 +210,11 @@ public class PlayerUIController : MonoBehaviour
     {
         if (active)
         {
-            if (compendiumUI.CompendiumController.Open)
+            if (compendiumUI.CompendiumController != null && compendiumUI.CompendiumController.Open)
             {
                 compendiumUI.CompendiumController.SetActive(false);
             }
-            if (inventoryMenu.Open)
+            if (inventoryMenu!=null && inventoryMenu.Open)
             {
                 inventoryMenu.CloseInventory();
             }
