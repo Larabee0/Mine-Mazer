@@ -95,7 +95,7 @@ public class LadderScript : MonoBehaviour
                 float speed = 0;
                 if (newInputSystem)
                 {
-                    float axisValue = InputManager.Instance.MoveAxis.y;
+                    float axisValue = InputManager.Instance.moveAxis.AxisValue.y;
                     speed = (axisValue > 0) ? speedUpDown : ((axisValue < 0) ? -speedUpDown : speed);
                 }
                 else

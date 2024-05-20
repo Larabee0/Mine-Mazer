@@ -26,7 +26,7 @@ public class Camera_Movement : MonoBehaviour
         if(InputManager.Instance != null)
         {
             enabled = false; // disable update, will recieve input events directly.
-            InputManager.Instance.OnLookDelta += OnLookEvent; // subscribe to Look Event from new input system
+            InputManager.Instance.lookAxis.OnAxis += OnLookEvent; // subscribe to Look Event from new input system
         }
     }
 
@@ -47,7 +47,7 @@ public class Camera_Movement : MonoBehaviour
         }
         if (InputManager.Instance != null)
         {
-            InputManager.Instance.OnLookDelta -= OnLookEvent; // cleanup event binding by unsubscribing
+            InputManager.Instance.lookAxis.OnAxis -= OnLookEvent; // cleanup event binding by unsubscribing
         }
     }
 

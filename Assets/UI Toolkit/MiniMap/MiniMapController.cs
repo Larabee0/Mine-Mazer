@@ -97,8 +97,8 @@ namespace MazeGame.Navigation
 
             if (InputManager.Instance != null)
             {
-                InputManager.Instance.OnLookDelta += OnLook;
-                InputManager.Instance.OnMoveAxis += OnMove;
+                InputManager.Instance.lookAxis.OnAxis += OnLook;
+                InputManager.Instance.moveAxis.OnAxis += OnMove;
 
                 InputManager.Instance.PlayerActions.MinimapZoomOut.canceled += ZoomOut;
                 InputManager.Instance.PlayerActions.MinimapZoomIn.canceled += ZoomIn;
@@ -114,8 +114,8 @@ namespace MazeGame.Navigation
         {
             if (InputManager.Instance != null)
             {
-                InputManager.Instance.OnLookDelta -= OnLook;
-                InputManager.Instance.OnMoveAxis -= OnMove;
+                InputManager.Instance.lookAxis.OnAxis -= OnLook;
+                InputManager.Instance.moveAxis.OnAxis -= OnMove;
 
                 InputManager.Instance.PlayerActions.MinimapZoomOut.canceled -= ZoomOut;
                 InputManager.Instance.PlayerActions.MinimapZoomIn.canceled -= ZoomIn;

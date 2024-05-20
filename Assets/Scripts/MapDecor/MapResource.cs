@@ -64,9 +64,10 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
     public Action OnItemPickedUp;
     public Action OnInventoryItemInteract;
     [SerializeField,Tooltip("If left blank, falls back to ItemStats.name")] protected string toolTipNameOverride;
-
+    protected bool pickedUp = false;
     public float Rarity => spawnRarity;
-
+    public bool PickedUp => pickedUp;
+    public bool PlaceableItem => Placeable;
     protected virtual string ToolTipName
     {
         get
@@ -163,15 +164,26 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
                 return string.Format("Select Pickaxe to Mine {0}", ToolTipName);
             }
         }
+        else if (Placeable && pickedUp)
+        {
+            if(InputManager.GamePadPresent)
+            {
+                return string.Format("LT to place {0}", ToolTipName);
+            }
+            else
+            {
+                return string.Format("Right Click to place {0}", ToolTipName);
+            }
+        }
         else
         {
             if (InputManager.GamePadPresent)
             {
-                return string.Format("A to  Pick Up {0}", ToolTipName);
+                return string.Format("LT to  Pick Up {0}", ToolTipName);
             }
             else
             {
-                return string.Format("Left Click to Pick Up {0}", ToolTipName);
+                return string.Format("Right Click to Pick Up {0}", ToolTipName);
             }
         }
     }
@@ -192,6 +204,7 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
             body.isKinematic = true;
         }
         OnItemPickedUp?.Invoke();
+        pickedUp = true;
         Inventory.Instance.AddItem(itemStats.type, 1, this, !RequiresPickaxe());
     }
 
@@ -227,6 +240,7 @@ public class MapResource : MonoBehaviour, IInteractable, IHover
                     item.SetMapResourceActive(true);
                     item.SetColliderActive(true);
                     OnItemPickedUp?.Invoke();
+                    pickedUp = false;
                     //item.gameObject.transform.up = hitInfo.normal;
                     return true;
                 }

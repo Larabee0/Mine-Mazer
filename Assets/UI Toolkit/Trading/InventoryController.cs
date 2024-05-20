@@ -63,6 +63,8 @@ public class InventoryController : UIToolkitBase
 
         inventoryUI.PushInventory(inventoryForDisplay,inventoryActions,icons);
         InputManager.Instance.UnlockPointer();
+        InputManager.Instance.inventoryAxis.OnAxisAngle += inventoryUI.InputAxisAngle;
+        InputManager.Instance.inventoryCycle += inventoryUI.ChangePage;
 
         PlayerUIController.Instance.StartCoroutine(UpdateUI());
 
@@ -83,6 +85,8 @@ public class InventoryController : UIToolkitBase
         RootVisualElement.style.display = DisplayStyle.None;
         inventoryUI.style.display = DisplayStyle.None;
 
+        InputManager.Instance.inventoryAxis.OnAxisAngle -= inventoryUI.InputAxisAngle;
+        InputManager.Instance.inventoryCycle -= inventoryUI.ChangePage;
         InputManager.Instance.LockPointer();
         PlayerUIController.Instance.ShowCrosshair = true;
     }

@@ -112,7 +112,7 @@ public class PlayerAnimationController : MonoBehaviour
     {
         animators[0].SetBool("Empty", false);
         animators[0].SetTrigger("LadderEnd");
-        Inventory.Instance.TryMoveItemToHand(Inventory.Instance.CurHeldItem.GetValueOrDefault());
+        Inventory.Instance.TryMoveItemToHand(Inventory.Instance.CurHeldItem.GetValueOrDefault(),true);
     }
 
     private void OnHeldItemAboutToChange()

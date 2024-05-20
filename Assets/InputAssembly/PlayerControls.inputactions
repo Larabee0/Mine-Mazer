@@ -51,15 +51,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Reload",
-                    "type": "Button",
-                    "id": "44554ea8-38b5-4a38-b8e3-1ff29b860e99",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "MinimapZoomIn",
                     "type": "Button",
                     "id": "b44906b7-1ab2-4366-b71f-08ff501df257",
@@ -117,6 +108,33 @@
                     "name": "Inventory",
                     "type": "Button",
                     "id": "43da4ea8-b934-44fb-b7c3-3e0aec34fea2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Torch",
+                    "type": "Button",
+                    "id": "e2db521e-5bf4-446a-af98-3e878bf8c8d1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pickaxe",
+                    "type": "Button",
+                    "id": "ddd0815b-3be2-4d67-af1b-88b2e85d3fb8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Soup",
+                    "type": "Button",
+                    "id": "7260c9e5-9965-4016-8b56-260233dbe982",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -244,72 +262,6 @@
                     "action": "South",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "One Modifier",
-                    "id": "34b07140-636d-4bf3-ae6e-a46b3a5a5a21",
-                    "path": "OneModifier",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Reload",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "modifier",
-                    "id": "c12da7f5-f609-4e12-9923-7e55e5b4735c",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard & Mouse",
-                    "action": "Reload",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "binding",
-                    "id": "c32c290a-ef2d-4aed-8f52-6e5ef1cee923",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard & Mouse",
-                    "action": "Reload",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "One Modifier",
-                    "id": "4f7f3425-b433-4840-a082-e2f40d69cfdf",
-                    "path": "OneModifier",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Reload",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "modifier",
-                    "id": "73019f0f-7fef-483e-a901-1b4a1b0d0b43",
-                    "path": "<Gamepad>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Steam Deck & Controller",
-                    "action": "Reload",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "binding",
-                    "id": "7d44248c-c457-4f00-9d2e-44b1f2fe16f6",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Steam Deck & Controller",
-                    "action": "Reload",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
@@ -468,7 +420,7 @@
                 {
                     "name": "",
                     "id": "f37a38bc-a67a-4529-80fc-625e1859cffc",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Steam Deck & Controller",
@@ -479,7 +431,7 @@
                 {
                     "name": "",
                     "id": "61a543ca-82fd-46a6-a066-9776ae21269e",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
@@ -561,6 +513,83 @@
                     "processors": "",
                     "groups": "",
                     "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e5c143c-a022-491e-ab79-e29de4074d99",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "da55eaef-b453-431d-abc7-518d4e85209a",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Torch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1708b4bf-50c8-4a13-bf34-f4d15967f7ec",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Torch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "df5f1204-bb1f-4724-8806-7b4d3a00e4c9",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pickaxe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f45ce70f-c915-4253-97db-96d6632fc3bf",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pickaxe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5a3f49d0-600b-47e1-8cff-cea1b9b35f10",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Soup",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e2d5f43-7699-44d8-b519-bdb5ec237b1a",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Soup",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1171,6 +1200,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "InventorySelect",
+                    "type": "Value",
+                    "id": "20d032db-e96e-4e05-b319-5ecb1ec0d70e",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "InventoryPageCycle",
+                    "type": "Value",
+                    "id": "5ab880af-1024-4735-bdba-100ee7bd202f",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -1228,6 +1275,127 @@
                     "action": "AdvanceDialogue",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4accd2ff-d2ae-4319-8924-cd5e986f445a",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Steam Deck & Controller",
+                    "action": "InventorySelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "wasd",
+                    "id": "c83df0de-b980-491b-9252-91b8d5209c0d",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InventorySelect",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "fbe5a17d-8758-4060-873d-c44f2d561b3d",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "InventorySelect",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "19975e83-3fba-45d7-9810-ea2e354359d2",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "InventorySelect",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "6bc07b34-2364-4b26-be2a-3497960a06d1",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "InventorySelect",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "319f8886-0da5-42f3-8249-97e30b3d715b",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "InventorySelect",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "cb825b77-3375-4d7f-a46b-c92129eef0a7",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Steam Deck & Controller",
+                    "action": "InventorySelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "43582a37-66c6-40a4-8479-9c2834a77f92",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Steam Deck & Controller",
+                    "action": "InventorySelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "9dba4f1c-d416-4b3c-93b3-e3fc296d3f69",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InventoryPageCycle",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "965d666a-9529-4a17-9923-5c272043f317",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InventoryPageCycle",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "157afa6b-e0ac-4b47-a181-bf728cdd4757",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InventoryPageCycle",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

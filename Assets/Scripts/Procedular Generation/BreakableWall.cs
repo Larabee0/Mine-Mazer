@@ -1,8 +1,10 @@
 using Fungus;
 using MazeGame.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BreakableWall : MonoBehaviour, IInteractable, IHover
 {
@@ -16,7 +18,7 @@ public class BreakableWall : MonoBehaviour, IInteractable, IHover
     public Connector connector;
     private bool broken = false;
 
-    public Pluse OnWallBreak;
+    public Action OnWallBreak;
     private void Awake()
     {
         SetOutlineFader(true);

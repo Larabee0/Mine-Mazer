@@ -38,6 +38,7 @@ public class TutorialStarter : MonoBehaviour
     public void StartTutorialScript()
     { 
         tutorialFlowChart.SetBooleanVariable("Gamepad", InputManager.GamePadPresent);
+        SceneManager.activeSceneChanged += SceneChanged;
         if (skipTutorial)
         {
             allowSceneChange = true;
@@ -58,7 +59,26 @@ public class TutorialStarter : MonoBehaviour
         LockPointer();
         InputManager.Instance.PlayerActions.Disable();
         PlayerUIController.Instance.SetMiniMapVisible(false);
-        tutorialFlowChart.ExecuteBlock("Tutorial Start");
+
+        if (PlayerSettings.Instance.userSettings.skipIntro)
+        {
+            allowSceneChange = true;
+            FadeOut();
+        }
+        else
+        {
+            tutorialFlowChart.ExecuteBlock("Tutorial Start");
+        }
+    }
+
+    public void SceneChanged(Scene from,Scene two)
+    {
+        Debug.Log("Scene changed");
+        if (PlayerSettings.Instance.userSettings.skipIntro)
+        {
+            tutorialFlowChart.ExecuteBlock("TutorialEnd");
+        }
+        SceneManager.activeSceneChanged -= SceneChanged;
     }
 
     private void SkipTutorial()
@@ -78,8 +98,14 @@ public class TutorialStarter : MonoBehaviour
 
     public void Tutorial_Camera()
     {
+        LockPointer();
         PlayerUIController.Instance.ShowCrosshair = true;
-        Invoke(nameof(TutCamExecute), tutorialDelayTime);
+        if (PlayerSettings.Instance.userSettings.skipTutorial)
+        {
+            Invoke(nameof(EudieHandOff), tutorialDelayTime*0.5f);
+            return;
+        }
+        Invoke(nameof(TutCamExecute), tutorialDelayTime*0.5f);
         // flowChartDelayedExecute = StartCoroutine(DelayedFlowChartExecute("Tutorial Camera", tutorialDelayTime));
     }
 
@@ -146,6 +172,7 @@ public class TutorialStarter : MonoBehaviour
     public void GoToMainMenu()
     {
         SceneManager.LoadScene(0);
+        
     }
 
     public void UnlockPointer()

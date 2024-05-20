@@ -1,4 +1,5 @@
 using Fungus;
+using MazeGame.Input;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,6 +43,7 @@ public class NPCTrade : Interact_Example
         {
             Debug.LogError("No trade options filled out.", gameObject);
         }
+        Dialogue.SetBooleanVariable("Gamepad", InputManager.GamePadPresent);
     }
 
     public void AttemptTrade()

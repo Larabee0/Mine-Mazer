@@ -36,11 +36,11 @@ public class ButtonInteractable : MonoBehaviour, IInteractable, IHover
         {
             if(InputManager.GamePadPresent)
             {
-                return "Use Torch with A";
+                return "Use Torch with LT";
             }
             else
             {
-                return "Use Torch with Left Click";
+                return "Use Torch with Right Click";
             }
         }
         else

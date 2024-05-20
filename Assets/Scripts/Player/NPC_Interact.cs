@@ -7,7 +7,7 @@ using System;
 using System.Runtime.InteropServices;
 
 //RYTECH. 2023. How to Make a Flexible Interaction System in 2 Minutes [C#] [Unity3D]. Available at: https://www.youtube.com/watch?v=K06lVKiY-sY [accessed 28 November 2023].
-interface IInteractable
+public interface IInteractable
 {
     public void Interact();
     public bool RequiresPickaxe();
@@ -15,7 +15,7 @@ interface IInteractable
 
 }
 
-interface IHover
+public interface IHover
 {
     public void HoverOn();
     public void HoverOff();
@@ -43,13 +43,13 @@ public class NPC_Interact : MonoBehaviour
         }
     }
 
-    [SerializeField] private Transform InteractorSource;
+    public Transform InteractorSource;
     public float InteractRange;
     [SerializeField] private LayerMask npcLayer;
     [SerializeField] private Texture2D interactionIcon;
-    [SerializeField] private float boxCastSize = 0.5f;
+    public float boxCastSize = 0.5f;
     private WorldWayPoint tooltip;
-
+    private bool forceInteraction = false;
     private bool hitInteractable = false;
     public bool HitInteractable => hitInteractable;
     private bool closedToolTip = true;
@@ -84,6 +84,7 @@ public class NPC_Interact : MonoBehaviour
 
     private void Update()
     {
+        if (forceInteraction) return;
         if (!Physics.BoxCast(InteractorSource.position, transform.localScale * boxCastSize, InteractorSource.forward, out hitInfo, InteractorSource.rotation, InteractRange, npcLayer)
             || !InteractCast(hitInfo))
         {
@@ -133,13 +134,25 @@ public class NPC_Interact : MonoBehaviour
         }
         else if(interactable == null && Inventory.Instance.CurHeldAsset != null)
         {
-            return;
-            
+            return;            
         }
         else
         {
             interactable?.Interact();
         }
+    }
+
+    public void ForceInteraction(IInteractable interactable)
+    {
+        forceInteraction = true;
+        AttemptInteraction(interactable);
+    }
+
+    public void ClearInteraction()
+    {
+        forceInteraction = false;
+        hitInteractable = false;
+        interactable = null;
     }
 
     private void InteractableToolTip()

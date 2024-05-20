@@ -31,7 +31,7 @@ public class Improved_Movement : MonoBehaviour
         if (InputManager.Instance != null)
         {
             useUpdateMove = false; // disable Old input system checks in update, will recieve input events directly.
-            InputManager.Instance.OnMoveAxis += OnMoveEvent; // subscribe to Move Event from new input system
+            InputManager.Instance.moveAxis.OnAxis += OnMoveEvent; // subscribe to Move Event from new input system
             InputManager.Instance.southButton.OnButtonReleased += OnJump; // subscribe to South Button Up from new input system
         }
         if (PlayerSettings.Instance != null)
@@ -50,7 +50,7 @@ public class Improved_Movement : MonoBehaviour
         if (InputManager.Instance != null)
         {
             // cleanup events binding by unsubscribing
-            InputManager.Instance.OnMoveAxis -= OnMoveEvent;
+            InputManager.Instance.lookAxis.OnAxis -= OnMoveEvent;
             InputManager.Instance.southButton.OnButtonReleased -= OnJump;
         }
     }

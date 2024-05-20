@@ -73,15 +73,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Reload"",
-                    ""type"": ""Button"",
-                    ""id"": ""44554ea8-38b5-4a38-b8e3-1ff29b860e99"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""MinimapZoomIn"",
                     ""type"": ""Button"",
                     ""id"": ""b44906b7-1ab2-4366-b71f-08ff501df257"",
@@ -139,6 +130,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""name"": ""Inventory"",
                     ""type"": ""Button"",
                     ""id"": ""43da4ea8-b934-44fb-b7c3-3e0aec34fea2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Torch"",
+                    ""type"": ""Button"",
+                    ""id"": ""e2db521e-5bf4-446a-af98-3e878bf8c8d1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pickaxe"",
+                    ""type"": ""Button"",
+                    ""id"": ""ddd0815b-3be2-4d67-af1b-88b2e85d3fb8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Soup"",
+                    ""type"": ""Button"",
+                    ""id"": ""7260c9e5-9965-4016-8b56-260233dbe982"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -266,72 +284,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""South"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""34b07140-636d-4bf3-ae6e-a46b3a5a5a21"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Reload"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""c12da7f5-f609-4e12-9923-7e55e5b4735c"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Reload"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""c32c290a-ef2d-4aed-8f52-6e5ef1cee923"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Reload"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""4f7f3425-b433-4840-a082-e2f40d69cfdf"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Reload"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""73019f0f-7fef-483e-a901-1b4a1b0d0b43"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Steam Deck & Controller"",
-                    ""action"": ""Reload"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""7d44248c-c457-4f00-9d2e-44b1f2fe16f6"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Steam Deck & Controller"",
-                    ""action"": ""Reload"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -490,7 +442,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f37a38bc-a67a-4529-80fc-625e1859cffc"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Steam Deck & Controller"",
@@ -501,7 +453,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""61a543ca-82fd-46a6-a066-9776ae21269e"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
@@ -583,6 +535,83 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e5c143c-a022-491e-ab79-e29de4074d99"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da55eaef-b453-431d-abc7-518d4e85209a"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Torch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1708b4bf-50c8-4a13-bf34-f4d15967f7ec"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Torch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""df5f1204-bb1f-4724-8806-7b4d3a00e4c9"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pickaxe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f45ce70f-c915-4253-97db-96d6632fc3bf"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pickaxe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a3f49d0-600b-47e1-8cff-cea1b9b35f10"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Soup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e2d5f43-7699-44d8-b519-bdb5ec237b1a"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Soup"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1193,6 +1222,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventorySelect"",
+                    ""type"": ""Value"",
+                    ""id"": ""20d032db-e96e-4e05-b319-5ecb1ec0d70e"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""InventoryPageCycle"",
+                    ""type"": ""Value"",
+                    ""id"": ""5ab880af-1024-4735-bdba-100ee7bd202f"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1250,6 +1297,127 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""AdvanceDialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4accd2ff-d2ae-4319-8924-cd5e986f445a"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Steam Deck & Controller"",
+                    ""action"": ""InventorySelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""wasd"",
+                    ""id"": ""c83df0de-b980-491b-9252-91b8d5209c0d"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventorySelect"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""fbe5a17d-8758-4060-873d-c44f2d561b3d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""InventorySelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""19975e83-3fba-45d7-9810-ea2e354359d2"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""InventorySelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""6bc07b34-2364-4b26-be2a-3497960a06d1"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""InventorySelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""319f8886-0da5-42f3-8249-97e30b3d715b"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""InventorySelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb825b77-3375-4d7f-a46b-c92129eef0a7"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Steam Deck & Controller"",
+                    ""action"": ""InventorySelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43582a37-66c6-40a4-8479-9c2834a77f92"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Steam Deck & Controller"",
+                    ""action"": ""InventorySelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""9dba4f1c-d416-4b3c-93b3-e3fc296d3f69"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryPageCycle"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""965d666a-9529-4a17-9923-5c272043f317"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryPageCycle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""157afa6b-e0ac-4b47-a181-bf728cdd4757"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryPageCycle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -1301,7 +1469,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_North = m_Player.FindAction("North", throwIfNotFound: true);
         m_Player_South = m_Player.FindAction("South", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-        m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_MinimapZoomIn = m_Player.FindAction("MinimapZoomIn", throwIfNotFound: true);
         m_Player_MinimapZoomOut = m_Player.FindAction("MinimapZoomOut", throwIfNotFound: true);
         m_Player_ItemScroll = m_Player.FindAction("ItemScroll", throwIfNotFound: true);
@@ -1309,6 +1476,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_PlaceItem = m_Player.FindAction("PlaceItem", throwIfNotFound: true);
         m_Player_Mine = m_Player.FindAction("Mine", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
+        m_Player_Torch = m_Player.FindAction("Torch", throwIfNotFound: true);
+        m_Player_Pickaxe = m_Player.FindAction("Pickaxe", throwIfNotFound: true);
+        m_Player_Soup = m_Player.FindAction("Soup", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1324,6 +1494,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // DialogueControls
         m_DialogueControls = asset.FindActionMap("DialogueControls", throwIfNotFound: true);
         m_DialogueControls_AdvanceDialogue = m_DialogueControls.FindAction("AdvanceDialogue", throwIfNotFound: true);
+        m_DialogueControls_InventorySelect = m_DialogueControls.FindAction("InventorySelect", throwIfNotFound: true);
+        m_DialogueControls_InventoryPageCycle = m_DialogueControls.FindAction("InventoryPageCycle", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1390,7 +1562,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_North;
     private readonly InputAction m_Player_South;
     private readonly InputAction m_Player_Interact;
-    private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_MinimapZoomIn;
     private readonly InputAction m_Player_MinimapZoomOut;
     private readonly InputAction m_Player_ItemScroll;
@@ -1398,6 +1569,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_PlaceItem;
     private readonly InputAction m_Player_Mine;
     private readonly InputAction m_Player_Inventory;
+    private readonly InputAction m_Player_Torch;
+    private readonly InputAction m_Player_Pickaxe;
+    private readonly InputAction m_Player_Soup;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1407,7 +1581,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @North => m_Wrapper.m_Player_North;
         public InputAction @South => m_Wrapper.m_Player_South;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
-        public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputAction @MinimapZoomIn => m_Wrapper.m_Player_MinimapZoomIn;
         public InputAction @MinimapZoomOut => m_Wrapper.m_Player_MinimapZoomOut;
         public InputAction @ItemScroll => m_Wrapper.m_Player_ItemScroll;
@@ -1415,6 +1588,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @PlaceItem => m_Wrapper.m_Player_PlaceItem;
         public InputAction @Mine => m_Wrapper.m_Player_Mine;
         public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
+        public InputAction @Torch => m_Wrapper.m_Player_Torch;
+        public InputAction @Pickaxe => m_Wrapper.m_Player_Pickaxe;
+        public InputAction @Soup => m_Wrapper.m_Player_Soup;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1439,9 +1615,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
-            @Reload.started += instance.OnReload;
-            @Reload.performed += instance.OnReload;
-            @Reload.canceled += instance.OnReload;
             @MinimapZoomIn.started += instance.OnMinimapZoomIn;
             @MinimapZoomIn.performed += instance.OnMinimapZoomIn;
             @MinimapZoomIn.canceled += instance.OnMinimapZoomIn;
@@ -1463,6 +1636,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Inventory.started += instance.OnInventory;
             @Inventory.performed += instance.OnInventory;
             @Inventory.canceled += instance.OnInventory;
+            @Torch.started += instance.OnTorch;
+            @Torch.performed += instance.OnTorch;
+            @Torch.canceled += instance.OnTorch;
+            @Pickaxe.started += instance.OnPickaxe;
+            @Pickaxe.performed += instance.OnPickaxe;
+            @Pickaxe.canceled += instance.OnPickaxe;
+            @Soup.started += instance.OnSoup;
+            @Soup.performed += instance.OnSoup;
+            @Soup.canceled += instance.OnSoup;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1482,9 +1664,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
-            @Reload.started -= instance.OnReload;
-            @Reload.performed -= instance.OnReload;
-            @Reload.canceled -= instance.OnReload;
             @MinimapZoomIn.started -= instance.OnMinimapZoomIn;
             @MinimapZoomIn.performed -= instance.OnMinimapZoomIn;
             @MinimapZoomIn.canceled -= instance.OnMinimapZoomIn;
@@ -1506,6 +1685,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Inventory.started -= instance.OnInventory;
             @Inventory.performed -= instance.OnInventory;
             @Inventory.canceled -= instance.OnInventory;
+            @Torch.started -= instance.OnTorch;
+            @Torch.performed -= instance.OnTorch;
+            @Torch.canceled -= instance.OnTorch;
+            @Pickaxe.started -= instance.OnPickaxe;
+            @Pickaxe.performed -= instance.OnPickaxe;
+            @Pickaxe.canceled -= instance.OnPickaxe;
+            @Soup.started -= instance.OnSoup;
+            @Soup.performed -= instance.OnSoup;
+            @Soup.canceled -= instance.OnSoup;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1646,11 +1834,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_DialogueControls;
     private List<IDialogueControlsActions> m_DialogueControlsActionsCallbackInterfaces = new List<IDialogueControlsActions>();
     private readonly InputAction m_DialogueControls_AdvanceDialogue;
+    private readonly InputAction m_DialogueControls_InventorySelect;
+    private readonly InputAction m_DialogueControls_InventoryPageCycle;
     public struct DialogueControlsActions
     {
         private @PlayerControls m_Wrapper;
         public DialogueControlsActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @AdvanceDialogue => m_Wrapper.m_DialogueControls_AdvanceDialogue;
+        public InputAction @InventorySelect => m_Wrapper.m_DialogueControls_InventorySelect;
+        public InputAction @InventoryPageCycle => m_Wrapper.m_DialogueControls_InventoryPageCycle;
         public InputActionMap Get() { return m_Wrapper.m_DialogueControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1663,6 +1855,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @AdvanceDialogue.started += instance.OnAdvanceDialogue;
             @AdvanceDialogue.performed += instance.OnAdvanceDialogue;
             @AdvanceDialogue.canceled += instance.OnAdvanceDialogue;
+            @InventorySelect.started += instance.OnInventorySelect;
+            @InventorySelect.performed += instance.OnInventorySelect;
+            @InventorySelect.canceled += instance.OnInventorySelect;
+            @InventoryPageCycle.started += instance.OnInventoryPageCycle;
+            @InventoryPageCycle.performed += instance.OnInventoryPageCycle;
+            @InventoryPageCycle.canceled += instance.OnInventoryPageCycle;
         }
 
         private void UnregisterCallbacks(IDialogueControlsActions instance)
@@ -1670,6 +1868,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @AdvanceDialogue.started -= instance.OnAdvanceDialogue;
             @AdvanceDialogue.performed -= instance.OnAdvanceDialogue;
             @AdvanceDialogue.canceled -= instance.OnAdvanceDialogue;
+            @InventorySelect.started -= instance.OnInventorySelect;
+            @InventorySelect.performed -= instance.OnInventorySelect;
+            @InventorySelect.canceled -= instance.OnInventorySelect;
+            @InventoryPageCycle.started -= instance.OnInventoryPageCycle;
+            @InventoryPageCycle.performed -= instance.OnInventoryPageCycle;
+            @InventoryPageCycle.canceled -= instance.OnInventoryPageCycle;
         }
 
         public void RemoveCallbacks(IDialogueControlsActions instance)
@@ -1712,7 +1916,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnNorth(InputAction.CallbackContext context);
         void OnSouth(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
-        void OnReload(InputAction.CallbackContext context);
         void OnMinimapZoomIn(InputAction.CallbackContext context);
         void OnMinimapZoomOut(InputAction.CallbackContext context);
         void OnItemScroll(InputAction.CallbackContext context);
@@ -1720,6 +1923,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnPlaceItem(InputAction.CallbackContext context);
         void OnMine(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
+        void OnTorch(InputAction.CallbackContext context);
+        void OnPickaxe(InputAction.CallbackContext context);
+        void OnSoup(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1737,5 +1943,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IDialogueControlsActions
     {
         void OnAdvanceDialogue(InputAction.CallbackContext context);
+        void OnInventorySelect(InputAction.CallbackContext context);
+        void OnInventoryPageCycle(InputAction.CallbackContext context);
     }
 }

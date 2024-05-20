@@ -17,6 +17,9 @@ public class SettingsMenuController : UIToolkitBase
     private Toggle moveHInvert;
     private Toggle moveVInvert;
 
+    private Toggle skipIntro;
+    private Toggle skipTutorial;
+
     private Button calibrateScreenButton;
     private Button mainMenuButton;
 
@@ -32,7 +35,7 @@ public class SettingsMenuController : UIToolkitBase
     private Volume volume ;
     private Slider focusedSlider;
 
-    public Pluse OnSettingsMenuClose;
+    public Action OnSettingsMenuClose;
 
     public SettingsMenuController(VisualElement root) : base(root)
     {
@@ -50,6 +53,10 @@ public class SettingsMenuController : UIToolkitBase
         cameraVInvert = RootQ<Toggle>("InvertCameraVAxis");
         moveHInvert = RootQ<Toggle>("InverMoveHAxis");
         moveVInvert = RootQ<Toggle>("InvertMoveVAxis");
+
+
+        skipIntro = RootQ<Toggle>("SkipIntro");
+        skipTutorial = RootQ<Toggle>("SkipTutorial");
 
         calibrateScreenButton = RootQ<Button>("CalibrateScreen");
         mainMenuButton = RootQ<Button>("MainMenuButton");
@@ -143,6 +150,8 @@ public class SettingsMenuController : UIToolkitBase
         cameraSensitivitySlider.value = settings.cameraSens;
         contrastSlider.value  = settings.constrastAdj;
         brightnessSlider.value = settings.postExposureAdj;
+        skipIntro.value = settings.skipIntro;
+        skipTutorial.value = settings.skipTutorial;
     }
 
     private void CloseSettings()
@@ -162,6 +171,8 @@ public class SettingsMenuController : UIToolkitBase
         settings.cameraSens = cameraSensitivitySlider.value;
         settings.constrastAdj = contrastSlider.value;
         settings.postExposureAdj = brightnessSlider.value;
+        settings.skipIntro = skipIntro.value;
+        settings.skipTutorial = skipTutorial.value;
         PlayerSettings.Instance.OnSettingsChanged?.Invoke();
     }
 

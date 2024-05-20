@@ -21911,6 +21911,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 542111734287719190, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
+      propertyPath: nodeRect.y
+      value: 186
+      objectReference: {fileID: 0}
+    - target: {fileID: 542111734287719190, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
       propertyPath: commandList.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -22128,17 +22133,17 @@ PrefabInstance:
     - target: {fileID: 6858030004934602223, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: nodeRect.x
-      value: 198.5
+      value: 206.5
       objectReference: {fileID: 0}
     - target: {fileID: 6858030004934602223, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: nodeRect.y
-      value: -147
+      value: -159
       objectReference: {fileID: 0}
     - target: {fileID: 6858030004934602223, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: commandList.Array.size
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6858030004934602223, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
@@ -22149,17 +22154,17 @@ PrefabInstance:
         type: 3}
       propertyPath: commandList.Array.data[5]
       value: 
-      objectReference: {fileID: 4152871848149113128}
+      objectReference: {fileID: 8375055842425062693}
     - target: {fileID: 6858030004934602223, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: commandList.Array.data[6]
       value: 
-      objectReference: {fileID: 2891479732653372711}
+      objectReference: {fileID: 1345198453913136563}
     - target: {fileID: 6858030004934602223, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: commandList.Array.data[7]
       value: 
-      objectReference: {fileID: 1345198453913136563}
+      objectReference: {fileID: 6915638498873378501}
     - target: {fileID: 6858030004934602223, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: commandList.Array.data[8]
@@ -22248,7 +22253,7 @@ PrefabInstance:
     - target: {fileID: 8170578190277582956, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: variables.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8170578190277582956, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
@@ -22272,6 +22277,16 @@ PrefabInstance:
       objectReference: {fileID: 8835081160296259154}
     - target: {fileID: 8170578190277582956, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
+      propertyPath: variables.Array.data[5]
+      value: 
+      objectReference: {fileID: 1341190135006094365}
+    - target: {fileID: 8170578190277582956, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      propertyPath: selectedBlocks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8170578190277582956, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
       propertyPath: selectedCommands.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -22279,12 +22294,12 @@ PrefabInstance:
         type: 3}
       propertyPath: selectedBlocks.Array.data[0]
       value: 
-      objectReference: {fileID: 1336841102320270195}
+      objectReference: {fileID: 7188822602175046876}
     - target: {fileID: 8170578190277582956, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: selectedCommands.Array.data[0]
       value: 
-      objectReference: {fileID: 601869350171818643}
+      objectReference: {fileID: 4968829118872381174}
     - target: {fileID: 8439562330216214122, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       propertyPath: indentLevel
@@ -22408,15 +22423,55 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4152871848149113128}
-    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2891479732653372711}
-    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 601869350171818643}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7188822602175046876}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3666692314754444034}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4968829118872381174}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2040784606952305944}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6936239167531975952}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7257286383042054690}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5093378709781244113}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4710308038329929310}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1341190135006094365}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6823167978635669706}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8375055842425062693}
+    - targetCorrespondingSourceObject: {fileID: 4646611884927106549, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1942923702992555437}
   m_SourcePrefab: {fileID: 100100000, guid: d96ea92fe730dcb4a9cd7a0b0dce607b, type: 3}
 --- !u!114 &303430905251943519 stripped
 MonoBehaviour:
@@ -24167,7 +24222,67 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 73
   indentLevel: 0
---- !u!114 &4152871848149113128
+--- !u!114 &601869350171818643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 841589fc622bc494aa5405f416fa1301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 76
+  indentLevel: 1
+  text: Can I have some soup?
+  description: 
+  targetBlock: {fileID: 8706683968067315673}
+  hideIfVisited: 0
+  interactable:
+    booleanRef: {fileID: 0}
+    booleanVal: 1
+  setMenuDialog: {fileID: 0}
+  hideThisOption:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+--- !u!114 &7188822602175046876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeRect:
+    serializedVersion: 2
+    x: 219
+    y: -97.5
+    width: 122
+    height: 40
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  useCustomTint: 0
+  itemId: 77
+  blockName: SoupTutorial
+  description: 
+  eventHandler: {fileID: 0}
+  commandList:
+  - {fileID: 3666692314754444034}
+  - {fileID: 6936239167531975952}
+  - {fileID: 4968829118872381174}
+  - {fileID: 2040784606952305944}
+  - {fileID: 7257286383042054690}
+  - {fileID: 1942923702992555437}
+  - {fileID: 4710308038329929310}
+  - {fileID: 5093378709781244113}
+  - {fileID: 6823167978635669706}
+  suppressAllAutoSelections: 0
+--- !u!114 &3666692314754444034
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -24179,8 +24294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb77d0ce495044f6e9feb91b31798e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 74
-  indentLevel: 1
+  itemId: 78
+  indentLevel: 0
   anyVar:
     variable: {fileID: 8835081160296259154}
     data:
@@ -24319,7 +24434,7 @@ MonoBehaviour:
   vector3Data:
     vector3Ref: {fileID: 0}
     vector3Val: {x: 0, y: 0, z: 0}
---- !u!114 &2891479732653372711
+--- !u!114 &4968829118872381174
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -24331,9 +24446,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 75
+  itemId: 79
   indentLevel: 1
-  storyText: To eat soup right click with holding it
+  storyText: 'LT to eat soup while holding it.
+
+'
+  description: 
+  character: {fileID: 0}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 0
+  waitForClick: 0
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &2040784606952305944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 80
+  indentLevel: 1
+  storyText: To quickly select soup use X
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -24346,7 +24490,7 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
---- !u!114 &601869350171818643
+--- !u!114 &6936239167531975952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -24355,22 +24499,381 @@ MonoBehaviour:
   m_GameObject: {fileID: 5108427359301908174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841589fc622bc494aa5405f416fa1301, type: 3}
+  m_Script: {fileID: 11500000, guid: 70c5622b8a80845c980954170295f292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 76
-  indentLevel: 1
-  text: Can I have some soup?
-  description: 
-  targetBlock: {fileID: 8706683968067315673}
-  hideIfVisited: 0
-  interactable:
-    booleanRef: {fileID: 0}
-    booleanVal: 1
-  setMenuDialog: {fileID: 0}
-  hideThisOption:
+  itemId: 81
+  indentLevel: 0
+  anyOrAllConditions: 0
+  conditions:
+  - compareOperator: 0
+    anyVar:
+      variable: {fileID: 1341190135006094365}
+      data:
+        animatorData:
+          animatorRef: {fileID: 0}
+          animatorVal: {fileID: 0}
+        audioSourceData:
+          audioSourceRef: {fileID: 0}
+          audioSourceVal: {fileID: 0}
+        booleanData:
+          booleanRef: {fileID: 0}
+          booleanVal: 1
+        collectionData:
+          collectionRef: {fileID: 0}
+          collectionVal: {fileID: 0}
+        collider2DData:
+          collider2DRef: {fileID: 0}
+          collider2DVal: {fileID: 0}
+        colliderData:
+          colliderRef: {fileID: 0}
+          colliderVal: {fileID: 0}
+        colorData:
+          colorRef: {fileID: 0}
+          colorVal: {r: 0, g: 0, b: 0, a: 0}
+        floatData:
+          floatRef: {fileID: 0}
+          floatVal: 0
+        gameObjectData:
+          gameObjectRef: {fileID: 0}
+          gameObjectVal: {fileID: 0}
+        integerData:
+          integerRef: {fileID: 0}
+          integerVal: 0
+        materialData:
+          materialRef: {fileID: 0}
+          materialVal: {fileID: 0}
+        matrix4x4Data:
+          matrix4x4Ref: {fileID: 0}
+          matrix4x4Val:
+            e00: 0
+            e01: 0
+            e02: 0
+            e03: 0
+            e10: 0
+            e11: 0
+            e12: 0
+            e13: 0
+            e20: 0
+            e21: 0
+            e22: 0
+            e23: 0
+            e30: 0
+            e31: 0
+            e32: 0
+            e33: 0
+        objectData:
+          objectRef: {fileID: 0}
+          objectVal: {fileID: 0}
+        quaternionData:
+          quaternionRef: {fileID: 0}
+          quaternionVal: {x: 0, y: 0, z: 0, w: 0}
+        rigidbody2DData:
+          rigidbody2DRef: {fileID: 0}
+          rigidbody2DVal: {fileID: 0}
+        rigidbodyData:
+          rigidbodyRef: {fileID: 0}
+          rigidbodyVal: {fileID: 0}
+        spriteData:
+          spriteRef: {fileID: 0}
+          spriteVal: {fileID: 0}
+        stringData:
+          stringRef: {fileID: 0}
+          stringVal: 
+        textureData:
+          textureRef: {fileID: 0}
+          textureVal: {fileID: 0}
+        transformData:
+          transformRef: {fileID: 0}
+          transformVal: {fileID: 0}
+        vector2Data:
+          vector2Ref: {fileID: 0}
+          vector2Val: {x: 0, y: 0}
+        vector3Data:
+          vector3Ref: {fileID: 0}
+          vector3Val: {x: 0, y: 0, z: 0}
+        vector4Data:
+          vector4Ref: {fileID: 0}
+          vector4Val: {x: 0, y: 0, z: 0, w: 0}
+  compareOperator: 0
+  anyVar:
+    variable: {fileID: 0}
+    data:
+      animatorData:
+        animatorRef: {fileID: 0}
+        animatorVal: {fileID: 0}
+      audioSourceData:
+        audioSourceRef: {fileID: 0}
+        audioSourceVal: {fileID: 0}
+      booleanData:
+        booleanRef: {fileID: 0}
+        booleanVal: 0
+      collectionData:
+        collectionRef: {fileID: 0}
+        collectionVal: {fileID: 0}
+      collider2DData:
+        collider2DRef: {fileID: 0}
+        collider2DVal: {fileID: 0}
+      colliderData:
+        colliderRef: {fileID: 0}
+        colliderVal: {fileID: 0}
+      colorData:
+        colorRef: {fileID: 0}
+        colorVal: {r: 0, g: 0, b: 0, a: 0}
+      floatData:
+        floatRef: {fileID: 0}
+        floatVal: 0
+      gameObjectData:
+        gameObjectRef: {fileID: 0}
+        gameObjectVal: {fileID: 0}
+      integerData:
+        integerRef: {fileID: 0}
+        integerVal: 0
+      materialData:
+        materialRef: {fileID: 0}
+        materialVal: {fileID: 0}
+      matrix4x4Data:
+        matrix4x4Ref: {fileID: 0}
+        matrix4x4Val:
+          e00: 0
+          e01: 0
+          e02: 0
+          e03: 0
+          e10: 0
+          e11: 0
+          e12: 0
+          e13: 0
+          e20: 0
+          e21: 0
+          e22: 0
+          e23: 0
+          e30: 0
+          e31: 0
+          e32: 0
+          e33: 0
+      objectData:
+        objectRef: {fileID: 0}
+        objectVal: {fileID: 0}
+      quaternionData:
+        quaternionRef: {fileID: 0}
+        quaternionVal: {x: 0, y: 0, z: 0, w: 0}
+      rigidbody2DData:
+        rigidbody2DRef: {fileID: 0}
+        rigidbody2DVal: {fileID: 0}
+      rigidbodyData:
+        rigidbodyRef: {fileID: 0}
+        rigidbodyVal: {fileID: 0}
+      spriteData:
+        spriteRef: {fileID: 0}
+        spriteVal: {fileID: 0}
+      stringData:
+        stringRef: {fileID: 0}
+        stringVal: 
+      textureData:
+        textureRef: {fileID: 0}
+        textureVal: {fileID: 0}
+      transformData:
+        transformRef: {fileID: 0}
+        transformVal: {fileID: 0}
+      vector2Data:
+        vector2Ref: {fileID: 0}
+        vector2Val: {x: 0, y: 0}
+      vector3Data:
+        vector3Ref: {fileID: 0}
+        vector3Val: {x: 0, y: 0, z: 0}
+      vector4Data:
+        vector4Ref: {fileID: 0}
+        vector4Val: {x: 0, y: 0, z: 0, w: 0}
+  variable: {fileID: 0}
+  booleanData:
     booleanRef: {fileID: 0}
     booleanVal: 0
+  integerData:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  floatData:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  stringData:
+    stringRef: {fileID: 0}
+    stringVal: 
+  animatorData:
+    animatorRef: {fileID: 0}
+    animatorVal: {fileID: 0}
+  audioSourceData:
+    audioSourceRef: {fileID: 0}
+    audioSourceVal: {fileID: 0}
+  colorData:
+    colorRef: {fileID: 0}
+    colorVal: {r: 0, g: 0, b: 0, a: 0}
+  gameObjectData:
+    gameObjectRef: {fileID: 0}
+    gameObjectVal: {fileID: 0}
+  materialData:
+    materialRef: {fileID: 0}
+    materialVal: {fileID: 0}
+  objectData:
+    objectRef: {fileID: 0}
+    objectVal: {fileID: 0}
+  rigidbody2DData:
+    rigidbody2DRef: {fileID: 0}
+    rigidbody2DVal: {fileID: 0}
+  spriteData:
+    spriteRef: {fileID: 0}
+    spriteVal: {fileID: 0}
+  textureData:
+    textureRef: {fileID: 0}
+    textureVal: {fileID: 0}
+  transformData:
+    transformRef: {fileID: 0}
+    transformVal: {fileID: 0}
+  vector2Data:
+    vector2Ref: {fileID: 0}
+    vector2Val: {x: 0, y: 0}
+  vector3Data:
+    vector3Ref: {fileID: 0}
+    vector3Val: {x: 0, y: 0, z: 0}
+--- !u!114 &7257286383042054690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fa968f01a7f9496bb50e13dfe16760d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 82
+  indentLevel: 0
+--- !u!114 &5093378709781244113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93cb9773f2ca04e2bbf7a68ccfc23267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 83
+  indentLevel: 0
+--- !u!114 &4710308038329929310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 84
+  indentLevel: 1
+  storyText: To quickly select soup use 3
+  description: 
+  character: {fileID: 0}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &1341190135006094365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d02d9822eec54c98afe95bb497211b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scope: 1
+  key: Gamepad
+  value: 0
+--- !u!114 &6823167978635669706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050fb9e6e72f442b3b883da8a965bdeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 85
+  indentLevel: 0
+  targetFlowchart: {fileID: 0}
+  targetBlock: {fileID: 1336841102320270195}
+  startLabel:
+    stringRef: {fileID: 0}
+    stringVal: 
+  startIndex: 0
+  callMode: 0
+--- !u!114 &8375055842425062693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050fb9e6e72f442b3b883da8a965bdeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 86
+  indentLevel: 1
+  targetFlowchart: {fileID: 0}
+  targetBlock: {fileID: 7188822602175046876}
+  startLabel:
+    stringRef: {fileID: 0}
+    stringVal: 
+  startIndex: 0
+  callMode: 0
+--- !u!114 &1942923702992555437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108427359301908174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 87
+  indentLevel: 1
+  storyText: 'Right Click to eat soup while holding it.
+
+'
+  description: 
+  character: {fileID: 0}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 0
+  waitForClick: 0
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
 --- !u!114 &6458425077684551745 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6861300132013362042, guid: d96ea92fe730dcb4a9cd7a0b0dce607b,

@@ -84,8 +84,8 @@ namespace MazeGame.Navigation
         {
             if (InputManager.Instance != null)
             {
-                InputManager.Instance.OnLookDelta += OnLook;
-                InputManager.Instance.OnMoveAxis += OnMove;
+                InputManager.Instance.lookAxis.OnAxis += OnLook;
+                InputManager.Instance.moveAxis.OnAxis += OnMove;
 
             }
             else
@@ -99,8 +99,8 @@ namespace MazeGame.Navigation
         {
             if (InputManager.Instance != null)
             {
-                InputManager.Instance.OnLookDelta -= OnLook;
-                InputManager.Instance.OnMoveAxis -= OnMove;
+                InputManager.Instance.lookAxis.OnAxis -= OnLook;
+                InputManager.Instance.moveAxis.OnAxis -= OnMove;
 
             }
         }

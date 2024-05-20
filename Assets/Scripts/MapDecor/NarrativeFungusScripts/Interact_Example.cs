@@ -89,7 +89,7 @@ public class Interact_Example : MonoBehaviour, IInteractable
     {
         if (InputManager.GamePadPresent)
         {
-            return string.Format("A to Interact with {0}", Dialogue.GetComponent<Character>().NameText);
+            return string.Format("LT to Interact with {0}", Dialogue.GetComponent<Character>().NameText);
         }
         else
         {

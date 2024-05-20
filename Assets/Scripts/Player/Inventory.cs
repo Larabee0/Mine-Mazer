@@ -80,6 +80,9 @@ public class Inventory : MonoBehaviour
         {
             InputManager.Instance.scrollDirection += ScrollInventory;
             InputManager.Instance.inventoryButton.OnButtonReleased += OpenInventory;
+            InputManager.Instance.torchButton.OnButtonReleased += SelectTorch;
+            InputManager.Instance.pickaxeButton.OnButtonReleased += SelectPickaxe;
+            InputManager.Instance.soupButton.OnButtonReleased += SelectSoup;
         }
     }
 
@@ -89,6 +92,9 @@ public class Inventory : MonoBehaviour
         {
             InputManager.Instance.scrollDirection -= ScrollInventory;
             InputManager.Instance.inventoryButton.OnButtonReleased -= OpenInventory;
+            InputManager.Instance.torchButton.OnButtonReleased -= SelectTorch;
+            InputManager.Instance.pickaxeButton.OnButtonReleased -= SelectPickaxe;
+            InputManager.Instance.soupButton.OnButtonReleased -= SelectSoup;
         }
     }
 
@@ -297,7 +303,26 @@ public class Inventory : MonoBehaviour
             //switchTo[0].SetMapResourceActive(true);
             heldItem = switchTo[0];
             StopAllCoroutines();
-            StartCoroutine(ShowItemNameTooltip(string.Format("{0} (x{1})",heldItem.ItemStats.name, inventory[inventoryOrder[curIndex]])));
+
+            string displayName;
+            
+            if (heldItem.PickedUp && (heldItem.PlaceableItem || (heldItem is ConsumableResource && (heldItem as ConsumableResource).Consumable)))
+            {
+                displayName = heldItem.GetToolTipText();
+            }
+            else
+            {
+                displayName = ItemUtility.GetItemDisplayName(heldItem.ItemStats.type);
+            }
+
+            displayName ??= heldItem.ItemStats.name;
+
+
+            int quantity = inventory[inventoryOrder[curIndex]];
+
+            displayName = string.Format("{0} (x{1})", displayName, quantity);
+
+            StartCoroutine(ShowItemNameTooltip(displayName));
         }
         else
         {
@@ -307,8 +332,12 @@ public class Inventory : MonoBehaviour
         OnHeldItemChanged?.Invoke(CurHeldItem.Value);
     }
 
-    public void TryMoveItemToHand(Item target)
+    public void TryMoveItemToHand(Item target, bool force = false)
     {
+        if (CurHeldItem.HasValue && CurHeldItem.Value == target && !force)
+        {
+            return;
+        }
         int index = inventoryOrder.IndexOf(target);
         if(index >= 0)
         {
@@ -333,6 +362,31 @@ public class Inventory : MonoBehaviour
         if (heldItem != null)
         {
             heldItem.SetMapResourceActive(true);
+        }
+    }
+
+
+    private void SelectTorch()
+    {
+        if(inventory.ContainsKey(Item.Torch))
+        {
+            TryMoveItemToHand(Item.Torch);
+        }
+    }
+
+    private void SelectPickaxe()
+    {
+        if (inventory.ContainsKey(Item.Pickaxe))
+        {
+            TryMoveItemToHand(Item.Pickaxe);
+        }
+    }
+
+    private void SelectSoup()
+    {
+        if (inventory.ContainsKey(Item.Soup))
+        {
+            TryMoveItemToHand(Item.Soup);
         }
     }
 }

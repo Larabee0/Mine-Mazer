@@ -98,6 +98,8 @@ public class SettingsForDisk
     public bool cameraVInvert = false;
     public bool moveHInvert = false;
     public bool moveVInvert = false;
+    public bool skipIntro = false;
+    public bool skipTutorial = false;
     public float cameraSens = 1;
     public float constrastAdj = 0;
     public float postExposureAdj = 1.1f;

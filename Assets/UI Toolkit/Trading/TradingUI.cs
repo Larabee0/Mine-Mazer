@@ -46,7 +46,7 @@ public class TradingUI : MonoBehaviour
 
     private Dictionary<Item, int> specificMultiTradeTargets;
 
-    public BoolPluse OnTradeClose;
+    public Action<bool> OnTradeClose;
 
 
     private void Awake()

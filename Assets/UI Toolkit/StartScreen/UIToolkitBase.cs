@@ -1,4 +1,5 @@
 ﻿using MazeGame.Input;
+using System;
 using UnityEngine.UIElements;
 
 public abstract class UIToolkitBase
@@ -15,7 +16,7 @@ public abstract class UIToolkitBase
     public abstract void Bind();
     public abstract void Query();
 
-    public void DoubleBindButton(Button button, Pluse action)
+    public void DoubleBindButton(Button button, Action action)
     {
         button.RegisterCallback<ClickEvent>(ev=>action?.Invoke());
         button.RegisterCallback<NavigationSubmitEvent>(ev=> action?.Invoke());

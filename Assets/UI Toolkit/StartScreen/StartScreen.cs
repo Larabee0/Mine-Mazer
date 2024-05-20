@@ -45,7 +45,7 @@ public class StartScreen : MonoBehaviour
     public void LoadMainScene()
     {
         virtualCamera.Priority = 0;
-        sequenceMove.enabled = true;
+        sequenceMove.enabled = !PlayerSettings.Instance.userSettings.skipIntro;
         StartCoroutine(OpenSceneCoroutine());
     }
 
@@ -55,6 +55,7 @@ public class StartScreen : MonoBehaviour
         /// Run tutorial start during scene load.
         /// Perhaps look at blocking final scene load with allowSceneActivation if it completes
         /// before the tutorial would unfade the camera.
+        sequenceMove.EndOfTravel =PlayerSettings.Instance.userSettings.skipIntro;
         startScreenController. SetActive(false);
         tutorialStarter.StopAllCoroutines();
         tutorialStarter.StartTutorialScript();
@@ -62,9 +63,9 @@ public class StartScreen : MonoBehaviour
         AsyncOperation sceneLoadOp = SceneManager.LoadSceneAsync(1);
         while (!sceneLoadOp.isDone)
         {
+            yield return null;
             sceneLoadOp.allowSceneActivation = tutorialStarter.allowSceneChange && sequenceMove.EndOfTravel;
             startScreenController.UpdateLoadProgress(sceneLoadOp.progress);
-            yield return null;
         }
     }
 

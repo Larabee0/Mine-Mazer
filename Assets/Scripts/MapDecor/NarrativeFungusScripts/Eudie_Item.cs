@@ -1,4 +1,5 @@
 using MazeGame.Input;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,14 +9,14 @@ public class Eudie_Item : MapResource
 {
     [HideInInspector] public bool pickUpEudie =false;
     [HideInInspector] public bool putDownEudieToolTip = false;
-    public Pluse OnEudiePlaced;
+    public Action OnEudiePlaced;
     public override string GetToolTipText()
     {
         if(putDownEudieToolTip)
         {
             if (InputManager.GamePadPresent)
             {
-                return string.Format("A to Place {0} on Floor", ToolTipName);
+                return string.Format("LT to Place {0} on Floor", ToolTipName);
             }
             else
             {
@@ -79,6 +80,13 @@ public class Eudie_Item : MapResource
     public void MakePlaceable()
     {
         Placeable = true;
-        InteractMessage.Instance.SetObjective("Place Eudie in the colony with Right Click");
+        if (InputManager.GamePadPresent)
+        {
+            InteractMessage.Instance.SetObjective("Place Eudie in the colony with LT");
+        }
+        else
+        {
+            InteractMessage.Instance.SetObjective("Place Eudie in the colony with Right Click");
+        }
     }
 }

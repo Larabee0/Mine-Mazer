@@ -44,9 +44,10 @@ public partial class SpatialParadoxGenerator : MonoBehaviour
     private PlayerExplorationStatistics explorationStatistics;
     public PlayerExplorationStatistics ExplorationStatistics => explorationStatistics;
 
-    public Pluse OnMapUpdate;
-    public Pluse OnEnterLadderSection;
-    public Pluse OnEnterColonySection;
+    public Action OnMapUpdate;
+    public Action OnEnterLadderSection;
+    public Action OnEnterColonySection;
+
     public List<List<MapTreeElement>> MapTree => mapTree;
     public int TotalSections
     {

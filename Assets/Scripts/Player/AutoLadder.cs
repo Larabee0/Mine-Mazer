@@ -31,7 +31,7 @@ public class AutoLadder : MonoBehaviour
 
     public void ClimbLadder()
     {
-        List<RaycastHit> hits = new(Physics.SphereCastAll(transform.position, 0.5f, transform.forward, 2f, layerMask.value, QueryTriggerInteraction.Collide));
+        List<RaycastHit> hits = new(Physics.BoxCastAll(NPC_Interact.Instance.InteractorSource.position, transform.localScale * NPC_Interact.Instance.boxCastSize, NPC_Interact.Instance.InteractorSource.forward, NPC_Interact.Instance.InteractorSource.rotation, NPC_Interact.Instance.InteractRange, layerMask.value, QueryTriggerInteraction.Collide));
         ladder = null;
         if (hits.Count > 0 )
         {
@@ -81,8 +81,7 @@ public class AutoLadder : MonoBehaviour
         while (transform.position != startPos) // while animation plays move to start pos & climb forward
         {
             time+= Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, startPos, Time.deltaTime * speedToAlign);
-            transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, euler.y, Time.deltaTime * speedToRotateAlign), 0));
+            transform.SetPositionAndRotation(Vector3.MoveTowards(transform.position, startPos, Time.deltaTime * speedToAlign), Quaternion.Euler(new Vector3(0, Mathf.MoveTowardsAngle(transform.rotation.eulerAngles.y, euler.y, Time.deltaTime * speedToRotateAlign), 0)));
             cameraTarget.localRotation = Quaternion.Euler(new Vector3(Mathf.MoveTowardsAngle(cameraTarget.localRotation.eulerAngles.x, euler.x, Time.deltaTime * speedToRotateAlign), 0, 0));
             //transform.forward = Vector3.MoveTowards(transform.forward, forwards, Time.deltaTime * speedToAlign);
             yield return null;

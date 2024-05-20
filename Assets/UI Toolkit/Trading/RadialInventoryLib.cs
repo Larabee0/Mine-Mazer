@@ -347,11 +347,8 @@ public class RadialMenuItem : VisualElement
 
     private void UpdateSegmentHover(Vector2 localMousePosition)
     {
-
         Vector2 center = new Vector2(contentRect.width,contentRect.height) * 0.5f;
         float dstFromCenter = Unity.Mathematics.math.distance(center, localMousePosition);
-
-        
 
         float radius = center.x * 0.6f * m_radius;
         float dst = Unity.Mathematics.math.distancesq(center, localMousePosition);
@@ -359,7 +356,6 @@ public class RadialMenuItem : VisualElement
 
         if ( dst < radius * radius || dst > (radius + lineThickness)* (radius + lineThickness))
         {
-            //internalLabels.ForEach(label => label.style.color = Color.white);
             internalItems.ForEach(label => label.Color = Color.white);
             m_segmentHover = -1;
             return;
@@ -372,10 +368,30 @@ public class RadialMenuItem : VisualElement
             deg += 360f;
         }
 
-        m_segmentHover = (int)(deg / DegreesPerSegment);
-        //internalLabels.ForEach(label => label.style.color = Color.white);
-        internalItems.ForEach(label => label.Color = Color.white);
+        ProcessAxisAngle(deg);
+    }
 
+    public void InputAxisAngle(float angle)
+    {
+        if (angle < 0)
+        {
+            angle += 360f;
+        }
+        ProcessAxisAngle(angle);
+        Focus();
+        MarkDirtyRepaint();
+    }
+
+    private void ProcessAxisAngle(float angle)
+    {
+        m_segmentHover = (int)(angle / DegreesPerSegment);
+        internalItems.ForEach(label => label.Color = Color.white);
+    }
+
+
+    public void ChangePage(int dir)
+    {
+        PageAdvance(this, dir);
     }
 
     static void CustomStyleResolved(CustomStyleResolvedEvent evt)
@@ -626,6 +642,7 @@ public class RadialMenuItem : VisualElement
             inventoryActions[actionindex].Invoke();
         }
     }
+
 }
 
 public class InventoryItem

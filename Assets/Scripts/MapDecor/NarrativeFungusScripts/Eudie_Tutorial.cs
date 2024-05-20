@@ -1,3 +1,4 @@
+using MazeGame.Input;
 using MazeGame.Navigation;
 using System;
 using System.Collections;
@@ -38,6 +39,12 @@ public class Eudie_Tutorial : NPCTrade
 
     // barks allowed
     private bool ladderBark = true;
+
+    protected override void Start()
+    {
+        base.Start();
+        Dialogue.SetBooleanVariable("Gamepad", InputManager.GamePadPresent);
+    }
 
     public override string GetToolTipText()
     {
@@ -146,7 +153,7 @@ public class Eudie_Tutorial : NPCTrade
             Inventory.Instance.AddItem(starterItems[i].ItemStats.type, 1, Instantiate(starterItems[i]));
         }
 
-        Inventory.Instance.TryMoveItemToHand(Item.Pickaxe);
+        Inventory.Instance.TryMoveItemToHand(Item.Pickaxe,true);
     }
 
     public void PickupLumen()

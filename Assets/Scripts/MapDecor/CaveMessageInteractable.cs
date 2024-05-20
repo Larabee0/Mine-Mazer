@@ -34,11 +34,11 @@ public class CaveMessageInteractable : MonoBehaviour, IInteractable
         if(!interactable) return string.Empty;
         if (InputManager.GamePadPresent)
         {
-            return "B to Read";
+            return "LT to Read";
         }
         else
         {
-            return "Click to Read";
+            return "Right Click to Read";
         }
     }
 
