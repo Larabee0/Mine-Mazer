@@ -102,8 +102,10 @@ public class TradingUI : MonoBehaviour
 
     private void InternalOpen()
     {
-        InputManager.Instance.SetUIToolkitFocus();
+        //InputManager.Instance.SetUIToolkitFocus();
         tradingInstanceRoot = SpawnTradingUI();
+
+        tradingInstanceRoot.RegisterCallback<GeometryChangedEvent>(FocusOnOpen);
         buttonContainer.Clear();
         Repaint();
         playerRoot.Add(tradingInstanceRoot);
@@ -177,6 +179,14 @@ public class TradingUI : MonoBehaviour
             cur.RegisterCallback<NavigationSubmitEvent>(ev => TradeButtonPress(item));
         });
         AddCancel();
+
+
+    }
+
+    private void FocusOnOpen(GeometryChangedEvent evt)
+    {
+        //tradingInstanceRoot.UnregisterCallback<GeometryChangedEvent>(FocusOnOpen);
+        Debug.Log("trade focus");
         buttonContainer[0].Focus();
     }
 

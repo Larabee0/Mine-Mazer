@@ -34,9 +34,8 @@ public class InventoryController : UIToolkitBase
         }
     }
 
-    public void OpenIventory()
+    public override void Open()
     {
-        RootVisualElement.style.display = DisplayStyle.Flex;
         inventoryUI.style.display = DisplayStyle.Flex;
         if (Inventory.Instance == null) return;
         Dictionary<Item, int> inv = Inventory.Instance.inventory;
@@ -45,12 +44,12 @@ public class InventoryController : UIToolkitBase
         List<Texture2D> icons = new() { PlayerUIController.Instance.CompendiumIcon };
 
         List<string> inventoryForDisplay = new() { "Compendium" };
-        List<Action> inventoryActions = new() { delegate () { CloseInventory(); OpenCompendium();  } };
+        List<Action> inventoryActions = new() { delegate () { Close(); OpenCompendium();  } };
         for (int i = 0; i < items.Count; i++)
         {
             inventoryForDisplay.Add(string.Format("{0} (x{1})", assets[items[i]][0].ItemStats.name, inv[items[i]]));
             var item = items[i];
-            inventoryActions.Add(delegate () { InventorySelectAttempt(item); CloseInventory(); });
+            inventoryActions.Add(delegate () { InventorySelectAttempt(item); Close(); });
             if (Inventory.Instance.icons.ContainsKey(item))
             {
                 icons.Add(Inventory.Instance.icons[item]);
@@ -66,9 +65,18 @@ public class InventoryController : UIToolkitBase
         InputManager.Instance.inventoryAxis.OnAxisAngle += inventoryUI.InputAxisAngle;
         InputManager.Instance.inventoryCycle += inventoryUI.ChangePage;
 
-        PlayerUIController.Instance.StartCoroutine(UpdateUI());
+        // PlayerUIController.Instance.StartCoroutine(UpdateUI());
 
         PlayerUIController.Instance.ShowCrosshair = false;
+        base.Open();
+    }
+
+    protected override void FocusOnOpen(GeometryChangedEvent evt)
+    {
+        base.FocusOnOpen(evt);
+        inventoryUI.UpdateLabels();
+        inventoryUI.UpdateIventoryItems();
+        inventoryUI.SetLabelVisibility(true);
     }
 
     private IEnumerator UpdateUI()
@@ -80,9 +88,10 @@ public class InventoryController : UIToolkitBase
         inventoryUI.SetLabelVisibility(true);
     }
 
-    public void CloseInventory()
+    public override void Close()
     {
-        RootVisualElement.style.display = DisplayStyle.None;
+        base.Close();
+        
         inventoryUI.style.display = DisplayStyle.None;
 
         InputManager.Instance.inventoryAxis.OnAxisAngle -= inventoryUI.InputAxisAngle;

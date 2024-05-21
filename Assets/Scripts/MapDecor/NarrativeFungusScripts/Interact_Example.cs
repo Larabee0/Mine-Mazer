@@ -93,7 +93,7 @@ public class Interact_Example : MonoBehaviour, IInteractable
         }
         else
         {
-            return string.Format("Click to Interact with {0}",Dialogue.GetComponent<Character>().NameText);
+            return string.Format("Right Click to Interact with {0}",Dialogue.GetComponent<Character>().NameText);
         }
     }
 

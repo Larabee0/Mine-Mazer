@@ -23,6 +23,8 @@ public class StartMenuController : UIToolkitBase
         startButton = RootQ<Button>("StartButton");
         settingsButton = RootQ<Button>("SettingsButton");
         exitButton = RootQ<Button>("ExitButton");
+
+        focusOnOpen = startButton;
     }
 
     public override void Bind()
@@ -41,15 +43,5 @@ public class StartMenuController : UIToolkitBase
     public void UpdateLoadProgress(float value)
     {
 
-    }
-
-    public void SetActive(bool active)
-    {
-        RootVisualElement.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
-    }
-
-    public void Focus()
-    {
-        startButton.Focus();
     }
 }

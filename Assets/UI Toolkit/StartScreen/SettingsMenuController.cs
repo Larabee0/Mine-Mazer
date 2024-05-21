@@ -73,6 +73,8 @@ public class SettingsMenuController : UIToolkitBase
         resetBrightnessAndConstrastButton = RootQ<Button>("ResetConstrastBrightnessButton");
 
         brightnessContrastWindow = RootQ("BrightnessConstrastContainer");
+
+        focusOnOpen = calibrateScreenButton;
     }
 
     public override void Bind()
@@ -91,7 +93,7 @@ public class SettingsMenuController : UIToolkitBase
 
         hideStars.RegisterValueChangedCallback(ev=>SetStarsEnable(ev.newValue));
 
-        DoubleBindButton(mainMenuButton, delegate () { CloseSettings(); });
+        DoubleBindButton(mainMenuButton, delegate () { Close(); });
         DoubleBindButton(calibrateScreenButton, delegate () { CalibrateScreen(); });
 
         DoubleBindButton(resetBrightnessAndConstrastButton, delegate () { DefaultContrastBrightness(); });
@@ -154,9 +156,9 @@ public class SettingsMenuController : UIToolkitBase
         skipTutorial.value = settings.skipTutorial;
     }
 
-    private void CloseSettings()
+    public override void Close()
     {
-        RootVisualElement.style.display = DisplayStyle.None;
+        base.Close();
         SetSettings();
         OnSettingsMenuClose?.Invoke();
     }
@@ -176,11 +178,10 @@ public class SettingsMenuController : UIToolkitBase
         PlayerSettings.Instance.OnSettingsChanged?.Invoke();
     }
 
-    public void OpenSettings()
+    public override void Open()
     {
         GetSettings();
-        RootVisualElement.style.display = DisplayStyle.Flex;
-        calibrateScreenButton.Focus();
+        base.Open();
     }
 
     private void CloseContrastBrightnessMenu()

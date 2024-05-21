@@ -165,9 +165,9 @@ public class PlayerUIController : MonoBehaviour
     private void TogglePauseMenu()
     {
         InputManager.Instance.SetPointerLocked(PauseMenuOpen);
-        if (inventoryMenu.Open)
+        if (inventoryMenu.IsOpen)
         {
-            inventoryMenu.CloseInventory();
+            inventoryMenu.Close();
         }
         SetPauseMenuActive(!PauseMenuOpen);
         
@@ -194,14 +194,14 @@ public class PlayerUIController : MonoBehaviour
             settingsMenu.OnSettingsMenuClose += OpenPauseMenu;
         }
         SetPauseMenuActive(false);
-        settingsMenu.OpenSettings();
+        settingsMenu.Open();
     }
 
     private void OpenPauseMenu()
     {
-        if (inventoryMenu.Open)
+        if (inventoryMenu.IsOpen)
         {
-            inventoryMenu.CloseInventory();
+            inventoryMenu.Close();
         }
         SetPauseMenuActive(true);
     }
@@ -210,13 +210,13 @@ public class PlayerUIController : MonoBehaviour
     {
         if (active)
         {
-            if (compendiumUI.CompendiumController != null && compendiumUI.CompendiumController.Open)
+            if (compendiumUI.CompendiumController != null && compendiumUI.CompendiumController.IsOpen)
             {
                 compendiumUI.CompendiumController.SetActive(false);
             }
-            if (inventoryMenu!=null && inventoryMenu.Open)
+            if (inventoryMenu!=null && inventoryMenu.IsOpen)
             {
-                inventoryMenu.CloseInventory();
+                inventoryMenu.Close();
             }
         }
         pauseButtonContainer.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
@@ -226,15 +226,15 @@ public class PlayerUIController : MonoBehaviour
     {
         if (active)
         {
-            if (compendiumUI.CompendiumController.Open)
+            if (compendiumUI.CompendiumController.IsOpen)
             {
                 compendiumUI.CompendiumController.SetActive(false);
             }
-            inventoryMenu.OpenIventory();
+            inventoryMenu.Open();
         }
         else
         {
-            inventoryMenu.CloseInventory();
+            inventoryMenu.Close();
         }
     }
 

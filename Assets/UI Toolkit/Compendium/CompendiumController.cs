@@ -43,15 +43,15 @@ public class CompendiumController : UIToolkitBase
 
     private void OnAdvancedDialogue()
     {
-        if (Open)
+        if (IsOpen)
         {
             SetActive(false);
         }
     }
 
-    public void SetActive(bool active)
+    public override void SetActive(bool active)
     {
-        RootVisualElement.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
+        base.SetActive(active);
         if (active)
         {
             if (!beOpened)
@@ -59,9 +59,9 @@ public class CompendiumController : UIToolkitBase
                 OnHoverGoals();
             }
             beOpened = true;
-            if (PlayerUIController.Instance.InventoryMenuUI.Open)
+            if (PlayerUIController.Instance.InventoryMenuUI.IsOpen)
             {
-                PlayerUIController.Instance.InventoryMenuUI.CloseInventory();
+                PlayerUIController.Instance.InventoryMenuUI.Close();
             }
             InputManager.Instance.UnlockPointer();
         }
