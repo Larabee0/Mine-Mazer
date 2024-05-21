@@ -199,11 +199,12 @@ public class PlayerUIController : MonoBehaviour
 
     private void OpenPauseMenu()
     {
-        if (inventoryMenu.IsOpen)
-        {
-            inventoryMenu.Close();
-        }
         SetPauseMenuActive(true);
+    }
+
+    private void FocusResume()
+    {
+        resume.Focus();
     }
 
     public void SetPauseMenuActive(bool active)
@@ -218,6 +219,7 @@ public class PlayerUIController : MonoBehaviour
             {
                 inventoryMenu.Close();
             }
+            Invoke(nameof(FocusResume),0);
         }
         pauseButtonContainer.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
     }

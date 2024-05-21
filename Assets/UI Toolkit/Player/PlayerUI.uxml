@@ -34,7 +34,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="Compendium" style="background-color: rgb(156, 156, 156); width: 100%; height: 100%; flex-direction: row; display: none;">
             <ui:VisualElement name="Outliner" style="background-color: rgb(44, 44, 44); width: 30%;">
-                <ui:ScrollView name="Outline" />
+                <ui:ScrollView name="Outline" mouse-wheel-scroll-size="36" />
             </ui:VisualElement>
             <ui:VisualElement name="Body" style="background-color: rgba(0, 0, 0, 0); width: 70%; -unity-text-align: upper-center; padding-left: 40px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px;">
                 <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="TitleText" style="font-size: 48px; -unity-font-style: bold;" />

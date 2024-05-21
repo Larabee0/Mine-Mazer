@@ -221,7 +221,7 @@ public class SettingsMenuController : UIToolkitBase
     {
         Vector2 inputValue = context.ReadValue<Vector2>();
 
-        Debug.Log(inputValue);
+        //Debug.Log(inputValue);
 
         focusedSlider.value += inputValue.x;
     }

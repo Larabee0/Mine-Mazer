@@ -35,7 +35,12 @@ public class AutoLadder : MonoBehaviour
         ladder = null;
         if (hits.Count > 0 )
         {
-            ladder = hits.FirstOrDefault(hit => hit.collider.GetComponentInParent<LadderData>() != null).collider.GetComponentInParent<LadderData>();
+            var hit = hits.FirstOrDefault(hit => hit.collider.GetComponentInParent<LadderData>() != null);
+            if(hit.collider.GetComponentInParent<LadderData>() != null)
+            {
+                ladder = hit.collider.GetComponentInParent<LadderData>();
+            }
+                
             if(ladder != null )
             {
                 HashSet<Transform> transforms = new();

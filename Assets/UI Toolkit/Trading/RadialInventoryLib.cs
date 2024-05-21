@@ -382,7 +382,7 @@ public class RadialMenuItem : VisualElement
         MarkDirtyRepaint();
     }
 
-    private void ProcessAxisAngle(float angle)
+    public void ProcessAxisAngle(float angle)
     {
         m_segmentHover = (int)(angle / DegreesPerSegment);
         internalItems.ForEach(label => label.Color = Color.white);

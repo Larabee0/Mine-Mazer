@@ -29,3 +29,31 @@
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
 }
+
+.SettingSlider {
+    color: rgb(255, 255, 255);
+}
+
+.SettingsSlider:hover {
+    background-color: rgb(35, 168, 196);
+    color: rgb(255, 255, 255);
+}
+
+.SettingsSlider:focus {
+    background-color: rgb(35, 168, 196);
+    color: rgb(255, 255, 255);
+}
+
+.ToggleBox {
+    align-self: center;
+    width: 100%;
+    padding-left: 45%;
+}
+
+.ToggleBox:hover {
+    background-color: rgb(35, 168, 196);
+}
+
+.ToggleBox:focus {
+    background-color: rgb(35, 168, 196);
+}

@@ -17,7 +17,7 @@ public class CompendiumItem : IComparable<CompendiumItem>
     public Texture2D icon;
     private int curCount;
     private ItemMote boundLabel;
-
+    public VisualElement Root => boundLabel?.RootVisualElement;
     public bool shownMote= false;
 
     public int CompareTo(CompendiumItem other)

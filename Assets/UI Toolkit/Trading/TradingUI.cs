@@ -187,7 +187,14 @@ public class TradingUI : MonoBehaviour
     {
         //tradingInstanceRoot.UnregisterCallback<GeometryChangedEvent>(FocusOnOpen);
         Debug.Log("trade focus");
-        buttonContainer[0].Focus();
+        for (int i = 0; i < buttonContainer.childCount; i++)
+        {
+            if (buttonContainer[i].enabledInHierarchy)
+            {
+                buttonContainer[i].Focus();
+                break;
+            }
+        }        
     }
 
     private void AddCancel()

@@ -110,7 +110,8 @@ public class CompendiumController : UIToolkitBase
             for (int j = 0; j < item.motes.Count; j++)
             {
                 var compItem = item.titles[j];
-                item.motes[j].RootVisualElement.RegisterCallback<PointerOverEvent>(ev => OnHover(compItem));
+                item.motes[j].RootVisualElement.RegisterCallback<PointerOverEvent>(ev => ((VisualElement)ev.target).Focus());
+                item.motes[j].RootVisualElement.RegisterCallback<FocusInEvent>(ev => OnHover(compItem));
             }
         });
     }
@@ -119,6 +120,7 @@ public class CompendiumController : UIToolkitBase
     {
         overallGoalsMote = new ItemMote(compendiumRef.ItemMotePrefab.Instantiate());
 
+        focusOnOpen = overallGoalsMote.RootVisualElement[0];
 
         overallGoalsMote.RootVisualElement[0].AddToClassList("title");
         overallGoalsMote.RootVisualElement[0].pickingMode = PickingMode.Position;
@@ -141,7 +143,8 @@ public class CompendiumController : UIToolkitBase
         overallGoalsMote.Title = "Item Collection Goals";
         overallGoalsMote.Description = "";
         overallGoalsMote.Icon = PlayerUIController.Instance.CompendiumIcon;
-        overallGoalsMote.RootVisualElement.RegisterCallback<PointerOverEvent>(ev => OnHoverGoals());
+        overallGoalsMote.RootVisualElement.RegisterCallback<PointerOverEvent>(ev => ((VisualElement)ev.target).Focus());
+        overallGoalsMote.RootVisualElement.RegisterCallback<FocusInEvent>(ev => OnHoverGoals());
     }
 
     private void OnHoverGoals()
@@ -170,7 +173,7 @@ public class CompendiumController : UIToolkitBase
             goalOutline += string.Format("{2} {0} / {1}\n\n", curQuantity, ItemUtility.GetItemQuantityGoal(goalableItems[i]), name);
         }
         bodyText.text = goalOutline;
-
+        outline.ScrollTo(overallGoalsMote.RootVisualElement);
     }
 
     private void OnHover(CompendiumItem compendiumItem)
@@ -187,6 +190,26 @@ public class CompendiumController : UIToolkitBase
         {
             bigIcon.style.display = DisplayStyle.None;
         }
+        if(compendiumItem.Root != null)
+        {
+            outline.ScrollTo(compendiumItem.Root);
+        }
+        else
+        {
+            for (int i = 0; i < subHeadings.Count; i++)
+            {
+                var heading = subHeadings[i];
+                for (int j = 0; j < heading.motes.Count; j++)
+                {
+                    if (heading.titles[j] == compendiumItem)
+                    {
+                        outline.ScrollTo(heading.motes[i].RootVisualElement);
+                        break;
+                    }
+                }
+            }
+        }
+        
     }
 
 }

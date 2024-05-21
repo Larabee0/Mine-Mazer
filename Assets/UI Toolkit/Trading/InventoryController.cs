@@ -77,6 +77,8 @@ public class InventoryController : UIToolkitBase
         inventoryUI.UpdateLabels();
         inventoryUI.UpdateIventoryItems();
         inventoryUI.SetLabelVisibility(true);
+
+        inventoryUI.ProcessAxisAngle(0);
     }
 
     private IEnumerator UpdateUI()
