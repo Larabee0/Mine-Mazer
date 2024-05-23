@@ -6,7 +6,7 @@ public class AutoLadderActivator : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        ladder.OnTriggerEnterFromChild(other);
+        ladder.OnTriggerEnterFromChild(other,GetComponent<BoxCollider>());
     }
 
     private void OnTriggerExit(Collider other)

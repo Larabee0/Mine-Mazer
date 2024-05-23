@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class LadderData : MonoBehaviour, IInteractable
 {
-    [SerializeField] private BoxCollider ladderTop;
-    [SerializeField] private BoxCollider ladderBottom;
-    [SerializeField] private BoxCollider ladderMain;
+    public BoxCollider ladderTop;
+    public BoxCollider ladderBottom;
+    public BoxCollider ladderMain;
     private bool forceLadderInteractable;
-
+    public bool climbing = false;
+    public BoxCollider otherCollider = null;
+    private bool otherColliderHit = false;
 
     public Transform Top => ladderTop.transform;
     public Transform Bottom => ladderBottom.transform;
@@ -32,8 +34,20 @@ public class LadderData : MonoBehaviour, IInteractable
         FindAnyObjectByType<AutoLadder>().ClimbLadder();  
     }
 
-    public void OnTriggerEnterFromChild(Collider other)
+    public void OnTriggerEnterFromChild(Collider other, BoxCollider us)
     {
+        if (climbing && !otherColliderHit && otherCollider == us)
+        {
+            otherColliderHit = true;
+            NPC_Interact.Instance.ClearInteraction();
+            return;
+        }
+        if(climbing && otherColliderHit && otherCollider == us)
+        {
+            climbing = false;
+            otherColliderHit = false;
+            otherCollider = null;
+        }
         Debug.LogFormat("{0} entered ladder area", other.gameObject.name);
         forceLadderInteractable = true;
         NPC_Interact.Instance.ForceInteraction(this);

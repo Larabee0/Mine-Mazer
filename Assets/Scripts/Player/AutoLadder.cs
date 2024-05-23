@@ -49,6 +49,8 @@ public class AutoLadder : MonoBehaviour
 
                 if (transforms.Contains(ladder.Top))
                 {
+                    ladder.otherCollider = ladder.ladderBottom;
+                    ladder.climbing = true;
                     startPos = ladder.Top.transform.position;
                     endPos = ladder.Bottom.transform.position;
                     forwards = -ladder.Main.forward;
@@ -57,6 +59,8 @@ public class AutoLadder : MonoBehaviour
                 }
                 else if (transforms.Contains(ladder.Bottom))
                 {
+                    ladder.otherCollider = ladder.ladderTop;
+                    ladder.climbing = true;
                     endPos = ladder.Top.transform.position;
                     startPos = ladder.Bottom.transform.position;
                     forwards = -ladder.Main.forward;
