@@ -193,6 +193,7 @@ public class CaveMessageController : MonoBehaviour
                     InputManager.Instance.UnlockPointer();
                     InputManager.Instance.advanceDialogueButton.OnButtonReleased += CloseMessage;
                 }
+                Hunger.Instance.pause = true;
             }
             else
             {
@@ -219,6 +220,7 @@ public class CaveMessageController : MonoBehaviour
             }
         }
         onMessageClosed?.Invoke();
+        Hunger.Instance.pause = false;
     }
 
     private void UpdateReadableMessages()

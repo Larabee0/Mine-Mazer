@@ -48,6 +48,18 @@ public class CompendiumController : UIToolkitBase
             SetActive(false);
         }
     }
+    public override void Open()
+    {
+        base.Open();
+
+        Hunger.Instance.pause = true;
+    }
+    
+    public override void Close()
+    {
+        base.Close();
+        Hunger.Instance.pause = false;
+    }
 
     public override void SetActive(bool active)
     {

@@ -171,7 +171,7 @@ public class TutorialStarter : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene(0);
+        Application.Quit(); 
         
     }
 

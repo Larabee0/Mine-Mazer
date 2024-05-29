@@ -41,7 +41,7 @@ public class MotherQuartz_Interaction : Larmiar_Interaction
         InteractMessage.Instance.ClearObjective();
         InteractMessage.Instance.HideInteraction(true);
         WorldWayPointsController.Instance.ClearWaypoints();
-        SceneManager.LoadScene(0);
+        Application.Quit();
     }
 
     public void MQ_SpokenTo()

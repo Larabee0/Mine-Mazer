@@ -110,12 +110,12 @@ public class PlayerUIController : MonoBehaviour
         {
 
             SetPauseMenuActive(false);
-            SceneManager.LoadScene(0);
+            Application.Quit();
         });
         mainMenu.RegisterCallback<NavigationSubmitEvent>(ev =>
         {
             SetPauseMenuActive(false);
-            SceneManager.LoadScene(0);
+            Application.Quit();
         });
         miniMapContainer = Root.Q("MiniMap");
         screenFade = Root.Q("ScreenFade");
@@ -219,7 +219,13 @@ public class PlayerUIController : MonoBehaviour
             {
                 inventoryMenu.Close();
             }
+
+            Hunger.Instance.pause = true;
             Invoke(nameof(FocusResume),0);
+        }
+        else
+        {
+            Hunger.Instance.pause = false;
         }
         pauseButtonContainer.style.display = active ? DisplayStyle.Flex : DisplayStyle.None;
     }
