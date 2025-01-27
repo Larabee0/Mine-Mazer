@@ -17,7 +17,7 @@ Steamdeck support
 As you walk through the mine sections behind you are remove after a certain distance, if you go back they will be different.
 Some sections get saved in place, for example the Lumenite village area. The game counts the number of sections travelled from the fixed place.
 So long as the player travels back the same number of sections, it will respawn the location and keep it spawned unless it goes out of range again. 
-### Invisible
+### Invisible Technology
 Procedural decoration tool that the developers used to generate 100s of points within each section which is saved with the section.
 This is used to unqiuely decorate the inside of the cave whenever the section is spawned to help it feel less like the same few sections put together.
 Automatic Navmesh links
