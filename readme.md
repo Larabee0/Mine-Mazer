@@ -24,9 +24,15 @@ Automatic Navmesh links
 
 ## Credits
 Animation: Noah Green
+
 Character Art, Additional Environment Art: Fin Macmillan
+
 Environment Art: Christopher Hunt
+
 Writer: Ajax Bhaskar
+
 Lead Programmer: William Vickers Hastings
+
 Additional Programming: Rhys Richards
+
 Group Supervisor: Dr. Jeff Howard
