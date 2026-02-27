@@ -94,12 +94,16 @@ namespace MazeGame.Input
                 Destroy(this);
             }
             // get event system input module
-            eventSystemInput = EventSystem.current.GetComponent<InputSystemUIInputModule>();
             // create new action class and enable the player action map
             playerControls = new PlayerControls();
             Build();
             // bind internal controls to the action map.
             Bind();
+        }
+
+        void Start()
+        {
+            eventSystemInput = EventSystem.current.GetComponent<InputSystemUIInputModule>();
         }
 
         // clean up on for when class is destroyed or application quits
